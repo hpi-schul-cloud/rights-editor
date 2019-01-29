@@ -9,11 +9,6 @@
 <script>
 import RuleEditor from "./components/RuleEditor.vue";
 
-import {RightsML} from "./libs/RightsMLclasses";
-
-let it_be = new RightsML.Policy("asdf; allerdings wuerde Ivan hier jetzt Hitler hinschreiben", "set");
-
-
 export default {
   name: "app",
   components: {

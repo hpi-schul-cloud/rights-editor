@@ -1,4 +1,9 @@
-﻿import {Odrl} from './ODRLclasses'
+﻿/**
+ * This file is taken out of the iptc/rightsml-dev project (published under the 
+ * MIT license) and slightly edited. The license can be found at ./LICENSE.md.
+ */
+
+import {Odrl} from './ODRLclasses'
 
 //var __extends = this.__extends || function (d, b) { <-- original line but "this" is not available
 var __extends = function (d, b) {

@@ -1,4 +1,9 @@
 ﻿/**
+ * This file is taken out of the iptc/rightsml-dev project (published under the 
+ * MIT license) and slightly edited. The license can be found at ./LICENSE.md.
+ */
+
+ /**
 * This file of the module provides all classes of the ODRL data model
 *
 * @module: ODRL
