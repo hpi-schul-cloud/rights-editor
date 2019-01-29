@@ -1,25 +1,37 @@
 <template>
   <div id="app">
+    <h1>Elektronisches Lizenz-Bearbeitungsprogramm (ELBP)</h1>
+    <h2>erlaubt die automatische Generierung von Lizenzen in maschinenlesbarem Format</h2>
     <RuleEditor/>
   </div>
 </template>
 
 <script>
-import RuleEditor from './components/RuleEditor.vue'
+import RuleEditor from "./components/RuleEditor.vue";
 
 export default {
-  name: 'app',
-  components: {    
+  name: "app",
+  components: {
     RuleEditor
-  }  
-}
+  }
+};
 </script>
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
 
+hr {
+  border: 0.5px solid #172b4d;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
 *:focus {
   outline: none !important;
+}
+
+body {
+  background-color: rgb(248, 248, 248);
 }
 
 #app {
