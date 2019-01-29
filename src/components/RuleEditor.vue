@@ -21,6 +21,12 @@ class Rule {
   }
 }
 
+import {RightsML} from "./libs/rightsml-lib-js/RightsMLclasses";
+
+let it_be = new RightsML.Policy("asdf", "set");
+
+
+
 export default {
   name: "RuleEditor",
   components: {

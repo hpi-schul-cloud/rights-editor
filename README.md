@@ -1,44 +1,29 @@
-# Ko-nga-raihana
+# ledit2
 
-## Policy
-- [ ] neue Permission
-- [ ] neue Obligation
-- [ ] neue Prohibition
+## Project setup
+```
+npm install
+```
 
-nicht Ziele:
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-- [ ] inheritFrom Policy
+### Compiles and minifies for production
+```
+npm run build
+```
 
-## Rule (abstrakt)
-- [ ] eine Aktion setzen
-- [ ] failure
+### Run your tests
+```
+npm run test
+```
 
-nicht Ziele:
+### Lints and fixes files
+```
+npm run lint
+```
 
-- [ ] assigner/assignee Party
-- [ ] constraint
-- [ ] target
-
-## Permission
-- [ ] duty
-
-## Duty
-- [ ] consequence
-
-## Prohibition
-- [ ] remedy
-
-## Action
-- [ ] refinement
-
-nicht Ziele:
-
-- [ ] includedIn
-- [ ] implies
-
-
-
-## Offene Frage
-
-- Sind vielleicht nicht alle Constraints bei Rule UND Action sinnvoll? (-> Unterschiede beim Implementieren von Constraints je nachdem, ob Constraint constraint einer Rule ist oder als refinement einer Action dient?)
-- Was sind GUIDs und wie können wir die im Editor unterstützen?
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
