@@ -1,5 +1,8 @@
 <template>
   <div class="rule-editor">
+    <button class="new-rule-button" v-on:click="newPermission">Erlaubnis hinzufügen</button>
+    <button class="new-rule-button" v-on:click="newDuty">Verpflichtung hinzufügen</button>
+    <button class="new-rule-button" v-on:click="newProhibition">Verbot hinzufügen</button>
     <ul>
       <li is="RuleItem" v-for="(rule, index) in rules" v-bind:rule="rule" v-bind:key="index"></li>
     </ul>
