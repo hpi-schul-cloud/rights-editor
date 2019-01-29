@@ -50,10 +50,18 @@ export default {
   font-size: 1.1em;
 }
 
-input {
+input.under-cover {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid DarkGray;
+  box-shadow: none;
+}
+
+input, input.under-cover:focus {
   background-color: white;
   border-radius: 0;
   border: 0px black solid;
+  border-bottom: 1px transparent solid;
   color: black;
 
   -webkit-appearance: none;

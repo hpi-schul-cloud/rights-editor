@@ -698,7 +698,7 @@ export var Odrl;
                         break;
                     default:
                         var fieldname = "unknownfunct" + i.toString() + "party";
-                        var temp = {};
+                        //var temp = {}; <-- never used
                         thisP[fieldname] = this.parties[i].uid;
                         if (this.parties[i].scope != "") {
                             fieldname = "unknownfunct" + i.toString() + "party_scope";
@@ -802,13 +802,15 @@ export var Odrl;
             }
             if (this.permissions.length > 0) {
                 OdrlInJson.permissions = [];
-                for (var i = 0; i < this.permissions.length; i++) {
+                //for (var i = 0; i < this.permissions.length; i++) { <-- i defined globally
+                for (let i = 0; i < this.permissions.length; i++) {
                     this.permissions[i].buildOdrlInJson();
                 }
             }
             if (this.prohibitions.length > 0) {
                 OdrlInJson.permissions = [];
-                for (var i = 0; i < this.prohibitions.length; i++) {
+                // for (var i = 0; i < this.prohibitions.length; i++) { <-- i defined previously
+                for (let i = 0; i < this.prohibitions.length; i++) {
                     this.prohibitions[i].buildOdrlInJson();
                 }
             }

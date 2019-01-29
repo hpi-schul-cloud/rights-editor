@@ -1,13 +1,8 @@
 <template>
   <li>
     <div>
-      Regel:
-      <input v-model="rule.title">
-      <select class="rule-type-select">
-        <option>Erlaubnis</option>
-        <option>Verpflichtung</option>
-        <option>Verbot</option>
-      </select>
+      <span class="disabled-text">{{ ruleType }}</span>:
+      <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
     </div>
     <ul>
       <ActionItem
@@ -25,6 +20,7 @@
 
 <script>
 import ActionItem from "./ActionItem.vue";
+import {Odrl} from "../libs/rightsml-lib-js/ODRLclasses";
 
 class Action {
   constructor(id) {
@@ -54,6 +50,17 @@ export default {
         if (this.rule.actions[i].id == action_id) {
           this.rule.actions.splice(i, 1);
         }
+      }
+    }
+  },
+  computed: {
+    ruleType: function() {
+      if (this.rule.rule instanceof Odrl.Permission) {
+        return "Erlaubnis";
+      } else if (this.rule.rule instanceof Odrl.Duty) {
+        return "Verpflichtung";
+      } else {
+        return "Verbot";
       }
     }
   }

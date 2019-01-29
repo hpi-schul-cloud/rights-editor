@@ -1,12 +1,16 @@
 <template>
   <div class="rule-editor">
-    <button class="new-rule-button" v-on:click="newPermission">Erlaubnis hinzufügen</button>
-    <button class="new-rule-button" v-on:click="newDuty">Verpflichtung hinzufügen</button>
-    <button class="new-rule-button" v-on:click="newProhibition">Verbot hinzufügen</button>
+    <template v-if="rules.length > 0">
+      <button class="new-rule-button" v-on:click="newPermission">Erlaubnis hinzufügen</button>
+      <button class="new-rule-button" v-on:click="newDuty">Verpflichtung hinzufügen</button>
+      <button class="new-rule-button" v-on:click="newProhibition">Verbot hinzufügen</button>
+    </template>
     <ul>
       <li is="RuleItem" v-for="(rule, index) in rules" v-bind:rule="rule" v-bind:key="index"></li>
     </ul>
-    <button id="new-rule-button" v-on:click="newRule">Neue Regel</button>
+    <button class="new-rule-button" v-on:click="newPermission">Erlaubnis hinzufügen</button>
+      <button class="new-rule-button" v-on:click="newDuty">Verpflichtung hinzufügen</button>
+      <button class="new-rule-button" v-on:click="newProhibition">Verbot hinzufügen</button>
   </div>
 </template>
 
@@ -14,18 +18,13 @@
 import RuleItem from "./RuleItem.vue";
 
 class Rule {
-  constructor(title) {
-    this.kind = 0;
+  constructor(title, original) {
     this.title = title;
-    this.actions = [];
+    this.rule  = original;
   }
 }
 
-import {RightsML} from "./libs/rightsml-lib-js/RightsMLclasses";
-
-let it_be = new RightsML.Policy("asdf", "set");
-
-
+import {Odrl} from "../libs/rightsml-lib-js/ODRLclasses";
 
 export default {
   name: "RuleEditor",
@@ -38,9 +37,18 @@ export default {
     };
   },
   methods: {
-    newRule: function() {
-      let ruleCount = this.rules.length;
-      this.rules.push(new Rule("Regel " + ++ruleCount));
+    newPermission: function() {
+      this.newRule(new Odrl.Permission())
+    },
+    newDuty: function () {
+      this.newRule(new Odrl.Duty())
+    },
+    newProhibition: function() {
+      this.newRule(new Odrl.Prohibition())
+    },
+    newRule: function(original) {
+      let ruleCount = this.rules.length + 1;
+      this.rules.push(new Rule("Regel " + ruleCount, original))
     }
   }
 };
