@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import RuleItem from "./RuleItem.vue";
+import RuleItem, {Rule, RuleTypes} from "./RuleItem.vue";
 
 class Rule {
   constructor(id, title, original) {
@@ -34,18 +34,19 @@ export default {
   },
   data: function() {
     return {
-      rules: []
+      rules: [],
+      nextId: 1
     };
   },
   methods: {
     newPermission: function() {
-      this.newRule(new Odrl.Permission())
+      this.newRule(RuleTypes.Permission)
     },
     newDuty: function () {
-      this.newRule(new Odrl.Duty())
+      this.newRule(RuleTypes.Duty)
     },
     newProhibition: function() {
-      this.newRule(new Odrl.Prohibition())
+      this.newRule(RuleTypes.Prohibition)
     },
     newRule: function(original) {
       let ruleCount = this.rules.length + 1;

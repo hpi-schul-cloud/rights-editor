@@ -1,8 +1,16 @@
 <template>
   <div style="display: inline-block;">
+<<<<<<< HEAD
     <li>
       Aktion:
       <input placeholder="Bezeichner eingeben..." type="text" name="action">
+=======
+    <li>Aktion:
+      <input placeholder="Bezeichner eingeben..." v-bind:value="actionName" list="actions" type="text" name="action">
+      <datalist id="actions">
+        <option v-for="actionUri in possibleActionUris()" v-bind:value="actionUri" />
+      </datalist>
+>>>>>>> c3bfdbf5ea8e2e197b1815ab15c46036081de575
       <br>
       <div class="action-input">
         <input type="text" name="leftOperand" list="operand">
@@ -23,6 +31,18 @@
 </template>
 
 <script>
+import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
+
+export class Action {
+  constructor(nsVocabUri) {
+    this.nsVocabUri = nsVocabUri;
+  }
+
+  name() {
+    return this.nsVocabUri.split("/").pop()
+  }
+}
+
 export default {
   name: "ActionItem",
   props: {
@@ -30,6 +50,24 @@ export default {
       type: Object,
       required: true
     }
+<<<<<<< HEAD
+=======
+  },
+  methods: {
+    possibleActionUris: function() {
+      return [
+        Vocab.ActionsCV.use,
+        Vocab.ActionsCV.display,
+        Vocab.ActionsCV.distribute,
+        Vocab.ActionsCV.execute
+      ];
+    }
+  },
+  computed: {
+    actionName: function() {
+      return this.action.name();
+    }
+>>>>>>> c3bfdbf5ea8e2e197b1815ab15c46036081de575
   }
 };
 </script>

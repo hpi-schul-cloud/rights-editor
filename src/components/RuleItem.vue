@@ -1,66 +1,50 @@
 <template>
   <li>
     <div>
-      <span class="disabled-text">{{ ruleType }}</span>:
+      <span class="disabled-text">{{ rule.type["name"] }}</span>:
       <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
       <button class="remove-button" v-on:click="removeRule">X</button>
     </div>    
     <ul>
       <ActionItem
-        v-on:remove-action-event="updateActions($event)"
-        v-for="action in rule.actions"
-        v-bind:key="action.id"
-        v-bind:action="action"
+        v-bind:action="rule.action"
       ></ActionItem>
-    </ul>
-    <button v-on:click="newAction">Neue Aktion</button>
     <p></p>
     <hr>
   </li>
 </template>
 
 <script>
-import ActionItem from "./ActionItem.vue";
-import {Odrl} from "../libs/rightsml-lib-js/ODRLclasses";
+import ActionItem, {Action} from "./ActionItem.vue";
+import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 
-class Action {
-  constructor(id) {
+export class Rule {
+  constructor(title, id, type) {
+    this.title = title;
     this.id = id;
-    this.leftOperand = null;
-    this.rightOperand = null;
-    this.operator = null;
+    this.type = type;
+    this.action = new Action(Vocab.ActionsCV.use);
   }
 }
 
+export let RuleTypes = Object.freeze({
+  "Permission": {"name": "Erlaubnis"},
+  "Duty": {"name": "Verpflichtung"},
+  "Prohibition": {"name": "Verbot"}});
+
 export default {
   name: "RuleItem",
-  components: {
-    ActionItem
-  },
   props: {
     rule: {
-      type: Object
+      type: Object,
+      required: true
     }
   },
   methods: {
-    newAction() {
-      this.rule.actions.push(new Action(this.rule.actions.length));
-    },
     removeRule() {
       this.$emit("remove-rule-event", this.rule.id);
     }
   },
-  computed: {
-    ruleType: function() {
-      if (this.rule.rule instanceof Odrl.Permission) {
-        return "Erlaubnis";
-      } else if (this.rule.rule instanceof Odrl.Duty) {
-        return "Verpflichtung";
-      } else {
-        return "Verbot";
-      }
-    }
-  }
 };
 </script>
 
