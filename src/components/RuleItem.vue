@@ -3,7 +3,8 @@
     <div>
       <span class="disabled-text">{{ ruleType }}</span>:
       <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
-    </div>
+      <button class="remove-button" v-on:click="removeRule">X</button>
+    </div>    
     <ul>
       <ActionItem
         v-on:remove-action-event="updateActions($event)"
@@ -45,12 +46,8 @@ export default {
     newAction() {
       this.rule.actions.push(new Action(this.rule.actions.length));
     },
-    updateActions(action_id) {
-      for (let i = 0; i < this.rule.actions.length; ++i) {
-        if (this.rule.actions[i].id == action_id) {
-          this.rule.actions.splice(i, 1);
-        }
-      }
+    removeRule() {
+      this.$emit("remove-rule-event", this.rule.id);
     }
   },
   computed: {

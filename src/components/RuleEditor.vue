@@ -6,7 +6,7 @@
       <button class="new-rule-button" v-on:click="newProhibition">Verbot hinzufügen</button>
     </template>
     <ul>
-      <li is="RuleItem" v-for="(rule, index) in rules" v-bind:rule="rule" v-bind:key="index"></li>
+      <li is="RuleItem" v-on:remove-rule-event="updateRules($event)" v-for="(rule, index) in rules" v-bind:rule="rule" v-bind:key="index"></li>
     </ul>
     <button class="new-rule-button" v-on:click="newPermission">Erlaubnis hinzufügen</button>
       <button class="new-rule-button" v-on:click="newDuty">Verpflichtung hinzufügen</button>
@@ -18,9 +18,10 @@
 import RuleItem from "./RuleItem.vue";
 
 class Rule {
-  constructor(title, original) {
+  constructor(id, title, original) {
+    this.id = id;
     this.title = title;
-    this.rule  = original;
+    this.rule  = original;    
   }
 }
 
@@ -48,7 +49,14 @@ export default {
     },
     newRule: function(original) {
       let ruleCount = this.rules.length + 1;
-      this.rules.push(new Rule("Regel " + ruleCount, original))
+      this.rules.push(new Rule(this.rules.length, "Regel " + ruleCount, original))
+    },
+    updateRules(rule_id) {
+      for (let i = 0; i < this.rules.length; ++i) {
+        if (this.rules[i].id == rule_id) {
+          this.rules.splice(i, 1);
+        }
+      }
     }
   }
 };

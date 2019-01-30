@@ -1,6 +1,7 @@
 <template>
   <div style="display: inline-block;">
-    <li>Aktion:
+    <li>
+      Aktion:
       <input placeholder="Bezeichner eingeben..." type="text" name="action">
       <br>
       <div class="action-input">
@@ -16,7 +17,6 @@
           <option>Operator 3</option>
         </select>
         <input type="text" name="rightOperand" list="operand">
-        <button class="remove-button" v-on:click="removeAction">X</button>
       </div>
     </li>
   </div>
@@ -29,12 +29,6 @@ export default {
     action: {
       type: Object,
       required: true
-    }
-  },
-  methods: {
-    removeAction() {
-      console.log(this.action.id);
-      this.$emit("remove-action-event", this.action.id);
     }
   }
 };
@@ -57,7 +51,8 @@ input.under-cover {
   box-shadow: none;
 }
 
-input, input.under-cover:focus {
+input,
+input.under-cover:focus {
   background-color: white;
   border-radius: 0;
   border: 0px black solid;
@@ -73,9 +68,9 @@ input, input.under-cover:focus {
   margin: 10px;
   padding: 10px 10px;
 
-  -webkit-box-shadow:inset 0 0 1px #000;
-       -moz-box-shadow:inset 0 0 1px #000;
-            box-shadow:inset 0 0 1px #000;
+  -webkit-box-shadow: inset 0 0 1px #000;
+  -moz-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
 }
 
 .action-input {
