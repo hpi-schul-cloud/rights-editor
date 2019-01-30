@@ -1,5 +1,4 @@
 # Ko-nga-raihana
-# Ko-nga-raihana
 
 ## Policy
 - [ ] neue Permission
