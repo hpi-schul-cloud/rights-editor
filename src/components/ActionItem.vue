@@ -1,16 +1,10 @@
 <template>
   <div style="display: inline-block;">
-<<<<<<< HEAD
-    <li>
-      Aktion:
-      <input placeholder="Bezeichner eingeben..." type="text" name="action">
-=======
     <li>Aktion:
       <input placeholder="Bezeichner eingeben..." v-bind:value="actionName" list="actions" type="text" name="action">
       <datalist id="actions">
         <option v-for="actionUri in possibleActionUris()" v-bind:value="actionUri" />
       </datalist>
->>>>>>> c3bfdbf5ea8e2e197b1815ab15c46036081de575
       <br>
       <div class="action-input">
         <input type="text" name="leftOperand" list="operand">
@@ -50,8 +44,6 @@ export default {
       type: Object,
       required: true
     }
-<<<<<<< HEAD
-=======
   },
   methods: {
     possibleActionUris: function() {
@@ -67,7 +59,6 @@ export default {
     actionName: function() {
       return this.action.name();
     }
->>>>>>> c3bfdbf5ea8e2e197b1815ab15c46036081de575
   }
 };
 </script>
