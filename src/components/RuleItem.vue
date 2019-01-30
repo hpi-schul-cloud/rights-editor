@@ -9,6 +9,7 @@
       <ActionItem
         v-bind:action="rule.action"
       ></ActionItem>
+    </ul>
     <p></p>
     <hr>
   </li>

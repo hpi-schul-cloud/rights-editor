@@ -16,15 +16,6 @@
 
 <script>
 import RuleItem, {Rule, RuleTypes} from "./RuleItem.vue";
-
-class Rule {
-  constructor(id, title, original) {
-    this.id = id;
-    this.title = title;
-    this.rule  = original;    
-  }
-}
-
 import {Odrl} from "../libs/rightsml-lib-js/ODRLclasses";
 
 export default {
@@ -50,7 +41,7 @@ export default {
     },
     newRule: function(original) {
       let ruleCount = this.rules.length + 1;
-      this.rules.push(new Rule(this.rules.length, "Regel " + ruleCount, original))
+      this.rules.push(new Rule("Regel " + ruleCount, this.rules.length, original))
     },
     updateRules(rule_id) {
       for (let i = 0; i < this.rules.length; ++i) {
