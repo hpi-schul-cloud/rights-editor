@@ -105,7 +105,7 @@ export default {
   padding-right: 20px;
   margin-bottom: 20px;
   height: 125px;
-  max-width: 100%;
+  width: 700px;  
 }
 
 /* The Close Button */
