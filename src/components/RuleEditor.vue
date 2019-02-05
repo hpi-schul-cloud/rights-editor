@@ -84,8 +84,7 @@ export default {
 
         let action = "action_" + this.rules[i].title + "_" + this.rules[i].action.nsVocabUri;
         let targetAsset = "target_asset";
-        let constraintOperator = "constraint_operator";
-        let constraintTarget = "constraint_target";
+        let constraint = this.rules[i].action.constraint;
         let assigner = "assignerParty";
         let assignee = "assigneeParty";
 
@@ -94,7 +93,7 @@ export default {
           let prohibition = new Odrl.Prohibition();
           prohibition.setAction(action);
           prohibition.addAsset(targetAsset, Vocab.AssetRelationsCV.target);
-          prohibition.addConstraint(Vocab.ConstraintsCV.dateTime, constraintOperator, constraintTarget, "", "", "");
+          prohibition.addConstraint(constraint.leftOperand, constraint.operator, constraint.rightOperand, "", "", "");
           prohibition.addParty(assigner, Vocab.PartyRolesCV.assigner, Vocab.PartyRoleScopesCV.individual);
           prohibition.addParty(assignee, Vocab.PartyRolesCV.assignee, Vocab.PartyRoleScopesCV.individual);
           prohibitions.push(prohibition);
@@ -104,7 +103,7 @@ export default {
           let duty = new Odrl.Duty();
           duty.setAction(action);
           duty.addAsset(targetAsset, Vocab.AssetRelationsCV.target);
-          duty.addConstraint(Vocab.ConstraintsCV.dateTime, constraintOperator, constraintTarget, "", "", "");
+          duty.addConstraint(constraint.leftOperand, constraint.operator, constraint.rightOperand, "", "", "");
           duty.addParty(assigner, Vocab.PartyRolesCV.assigner, Vocab.PartyRoleScopesCV.individual);
           duty.addParty(assignee, Vocab.PartyRolesCV.assignee, Vocab.PartyRoleScopesCV.individual);
           duties.push(duty);
@@ -114,7 +113,7 @@ export default {
           let permission = new Odrl.Permission();
           permission.setAction(action);
           permission.addAsset(targetAsset, Vocab.AssetRelationsCV.target);
-          permission.addConstraint(Vocab.ConstraintsCV.dateTime, constraintOperator, constraintTarget, "", "", "");
+          permission.addConstraint(constraint.leftOperand, constraint.operator, constraint.rightOperand, "", "", "");
           permission.addParty(assigner, Vocab.PartyRolesCV.assigner, Vocab.PartyRoleScopesCV.individual);
           permission.addParty(assignee, Vocab.PartyRolesCV.assignee, Vocab.PartyRoleScopesCV.individual);
           permissions.push(permission);
