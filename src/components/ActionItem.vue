@@ -1,26 +1,21 @@
 <template>
-  <div style="display: inline-block;">
-    <li>Aktion:
-      <input placeholder="Bezeichner eingeben..." v-bind:value="actionName" list="actions" type="text" name="action">
-      <datalist id="actions">
-        <option v-for="actionUri in possibleActionUris()" v-bind:value="actionUri" />
+  <div>Aktion:
+    <input placeholder="Bezeichner eingeben" v-bind:value="actio-nName" type="text" name="action">
+    <br>
+    <div class="action-input">
+      <input type="text" name="leftOperand" list="operand">
+      <datalist id="operand">
+        <option value="Operand1">Operand 1</option>
+        <option value="Operand2">Operand 2</option>
+        <option value="Operand3">Operand 3</option>
       </datalist>
-      <br>
-      <div class="action-input">
-        <input type="text" name="leftOperand" list="operand">
-        <datalist id="operand">
-          <option value="Operand1">Operand 1</option>
-          <option value="Operand2">Operand 2</option>
-          <option value="Operand3">Operand 3</option>
-        </datalist>
-        <select>
-          <option>Operator 1</option>
-          <option>Operator 2</option>
-          <option>Operator 3</option>
-        </select>
-        <input type="text" name="rightOperand" list="operand">
-      </div>
-    </li>
+      <select>
+        <option>Operator 1</option>
+        <option>Operator 2</option>
+        <option>Operator 3</option>
+      </select>
+      <input type="text" name="rightOperand" list="operand">
+    </div>
   </div>
 </template>
 
