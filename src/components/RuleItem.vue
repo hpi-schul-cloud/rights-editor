@@ -18,7 +18,7 @@ export class Rule {
     this.title = title;
     this.id = id;
     this.type = type;
-    this.action = {"name": "Nutzung", "uri": Vocab.ActionsCV.use};
+    this.action = new Action("Nutzung", Vocab.ActionsCV.use);
   }
 }
 
