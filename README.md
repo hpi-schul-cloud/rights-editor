@@ -1,5 +1,7 @@
 # Ko-nga-raihana
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/schul-cloud/rights-editor.svg)](https://greenkeeper.io/)
+
 ## Project setup
 ```
 npm install
