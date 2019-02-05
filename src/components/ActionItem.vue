@@ -1,13 +1,29 @@
 <template>
-  <div>Aktion:
-    <input placeholder="Bezeichner eingeben" v-bind:value="actio-nName" type="text" name="action">
+  <div>
+    Aktion:
+    <div class="action-content">
+    <input
+      class="action-input"
+      placeholder="Bezeichner eingeben..."
+      v-bind:value="actionName"
+      list="actions"
+      type="text"
+      name="action"
+    >
+    <datalist id="actions">
+      <option
+        v-for="(actionUri, index) in possibleActionUris()"
+        v-bind:key="index"
+        v-bind:value="actionUri"
+      />
+    </datalist>
     <br>
-    <div class="action-input">
+    <div class="constraint-input">
       <input type="text" name="leftOperand" list="operand">
       <datalist id="operand">
-        <option value="Operand1">Operand 1</option>
-        <option value="Operand2">Operand 2</option>
-        <option value="Operand3">Operand 3</option>
+        <option value="Operand1"></option>
+        <option value="Operand2"></option>
+        <option value="Operand3"></option>
       </datalist>
       <select>
         <option>Operator 1</option>
@@ -15,6 +31,7 @@
         <option>Operator 3</option>
       </select>
       <input type="text" name="rightOperand" list="operand">
+    </div>
     </div>
   </div>
 </template>
@@ -28,7 +45,7 @@ export class Action {
   }
 
   name() {
-    return this.nsVocabUri.split("/").pop()
+    return this.nsVocabUri.split("/").pop();
   }
 }
 
@@ -52,13 +69,24 @@ export default {
   },
   computed: {
     actionName: function() {
-      return this.action.name();
+      return this.action.name;
     }
   }
 };
 </script>
 
 <style>
+
+.action-content {
+  margin-left: 90px;
+}
+
+.action-input {
+  margin-top: 20px;
+  margin-left: 70px;
+  width: 400px;
+}
+
 .remove-button {
   height: 42px;
   background-color: transparent;
@@ -75,7 +103,8 @@ input.under-cover {
   box-shadow: none;
 }
 
-input, input.under-cover:focus {
+input,
+input.under-cover:focus {
   background-color: white;
   border-radius: 0;
   border: 0px black solid;
@@ -91,12 +120,12 @@ input, input.under-cover:focus {
   margin: 10px;
   padding: 10px 10px;
 
-  -webkit-box-shadow:inset 0 0 1px #000;
-       -moz-box-shadow:inset 0 0 1px #000;
-            box-shadow:inset 0 0 1px #000;
+  -webkit-box-shadow: inset 0 0 1px #000;
+  -moz-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
 }
 
-.action-input {
+.constraint-input {
   margin-bottom: 35px;
   margin-left: 60px;
 }

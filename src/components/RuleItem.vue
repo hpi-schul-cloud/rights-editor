@@ -1,20 +1,16 @@
 <template>
-  <li class="rule">
-    <header>
-      <h3 class="rule-heading-type">{{ rule.type.name }}:</h3>
-      <div>{{ rule.action.name }}</div>
-      <button class="edit-button"><i class="far fa-edit"></i></button>
-      <button class="remove" type="button">[DEL]</button>
-    </header>
-      <ActionItem
-        v-bind:action="rule.action"
-      ></ActionItem>
+  <li>
+    <div class="disabled-text">{{ rule.type["name"] }}:</div>
+    <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
+    <button class="remove-button" v-on:click="removeRule">X</button>
+    <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
+    <p></p>
     <hr>
   </li>
 </template>
 
 <script>
-import ActionItem, {Action} from "./ActionItem.vue";
+import ActionItem, { Action } from "./ActionItem.vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 
 export class Rule {
@@ -27,25 +23,36 @@ export class Rule {
 }
 
 export let RuleTypes = Object.freeze({
-  "Permission": {"name": "Erlaubnis"},
-  "Duty": {"name": "Verpflichtung"},
-  "Prohibition": {"name": "Verbot"}});
+  Permission: { name: "Erlaubnis" },
+  Duty: { name: "Verpflichtung" },
+  Prohibition: { name: "Verbot" }
+});
 
 export default {
   name: "RuleItem",
+  components: {
+    ActionItem
+  },
   props: {
     rule: {
       type: Object,
       required: true
     }
   },
-  components: {
-    ActionItem
-  },
+  methods: {
+    removeRule() {
+      this.$emit("remove-rule-event", this.rule.id);
+    }
+  }
 };
 </script>
 
 <style>
+.disabled-text {
+  width: 150px;
+  display: inline-block;
+}
+
 button {
   font-family: "Montserrat", sans-serif;
   color: white;

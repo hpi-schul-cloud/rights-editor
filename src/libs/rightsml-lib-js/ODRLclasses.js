@@ -707,6 +707,7 @@ export var Odrl;
                         break;
                 }
             }
+            OdrlInJson.prohibitions.push(thisP);
         };
         return Prohibition;
     })();
@@ -801,19 +802,24 @@ export var Odrl;
                 OdrlInJson.profile = this.profile;
             }
             if (this.permissions.length > 0) {
+                console.log("make permissions!!!");
                 OdrlInJson.permissions = [];
-                //for (var i = 0; i < this.permissions.length; i++) { <-- i defined globally
+                //for (var i = 0; i < this.permissions.length; i++) { //<-- i defined globally
                 for (let i = 0; i < this.permissions.length; i++) {
                     this.permissions[i].buildOdrlInJson();
+                    console.log(i);
                 }
             }
             if (this.prohibitions.length > 0) {
-                OdrlInJson.permissions = [];
-                // for (var i = 0; i < this.prohibitions.length; i++) { <-- i defined previously
+                console.log("make prohibitions!!!");
+                OdrlInJson.prohibitions = [];
+                //for (var i = 0; i < this.prohibitions.length; i++) { //<-- i defined previously
                 for (let i = 0; i < this.prohibitions.length; i++) {
                     this.prohibitions[i].buildOdrlInJson();
+                    console.log(i);
                 }
             }
+            console.log(OdrlInJson);
         };
 
         /**
