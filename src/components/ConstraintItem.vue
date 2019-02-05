@@ -19,11 +19,12 @@ export class Constraint {
 
 export default {
   name: "ConstraintItem",
-  data: function(){
-      return {
-          constraint: new Constraint()
-      }
-  }
+  props: {
+    constraint: {
+      type: Object,
+      required: true
+    }
+  },
 };
 </script>
 

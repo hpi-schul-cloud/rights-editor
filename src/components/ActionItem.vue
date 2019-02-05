@@ -18,7 +18,7 @@
       />
     </datalist>
     <br>
-    <ConstraintItem class="constraint-input">
+    <ConstraintItem class="constraint-input" v-bind:constraint="action.constraint">
       
     </ConstraintItem>
     </div>
@@ -27,11 +27,14 @@
 
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
-import ConstraintItem from "./ConstraintItem";
+import ConstraintItem, { Constraint } from "./ConstraintItem";
+
 
 export class Action {
-  constructor(nsVocabUri) {
+  constructor(name, nsVocabUri) {
+    this.name = name;
     this.nsVocabUri = nsVocabUri;
+    this.constraint = new Constraint();
   }
 
   name() {
