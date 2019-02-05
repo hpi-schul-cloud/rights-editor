@@ -18,26 +18,16 @@
       />
     </datalist>
     <br>
-    <div class="constraint-input">
-      <input type="text" name="leftOperand" list="operand">
-      <datalist id="operand">
-        <option value="Operand1"></option>
-        <option value="Operand2"></option>
-        <option value="Operand3"></option>
-      </datalist>
-      <select>
-        <option>Operator 1</option>
-        <option>Operator 2</option>
-        <option>Operator 3</option>
-      </select>
-      <input type="text" name="rightOperand" list="operand">
-    </div>
+    <ConstraintItem class="constraint-input">
+      
+    </ConstraintItem>
     </div>
   </div>
 </template>
 
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
+import ConstraintItem from "./ConstraintItem";
 
 export class Action {
   constructor(nsVocabUri) {
@@ -51,6 +41,9 @@ export class Action {
 
 export default {
   name: "ActionItem",
+  components: {
+    ConstraintItem
+  },
   props: {
     action: {
       type: Object,
