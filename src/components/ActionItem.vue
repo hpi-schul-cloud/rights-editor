@@ -77,23 +77,23 @@ export default {
 
 <style>
 
+.action-item {
+  margin-left: 0px;
+  }
+
 .action-content {
-  margin-left: 90px;
+  margin-left: 0px;
 }
 
 .action-input {
   margin-top: 20px;
-  margin-left: 70px;
-  width: 400px;
+  margin-left: 0px;
+  width: 710px;
 }
 
-.remove-button {
-  height: 42px;
-  background-color: transparent;
-  color: #b1063a;
-  font-weight: bold;
-  padding: 0;
-  font-size: 1.1em;
+.constraint-input {
+  margin-bottom: 15px;
+  margin-left: 0px;
 }
 
 input.under-cover {
@@ -106,7 +106,6 @@ input.under-cover {
 input,
 input.under-cover:focus {
   background-color: white;
-  border-radius: 0;
   border: 0px black solid;
   border-bottom: 1px transparent solid;
   color: black;
@@ -118,6 +117,7 @@ input.under-cover:focus {
   font-size: 1em;
 
   margin: 10px;
+  margin-left: 0px;
   padding: 10px 10px;
 
   -webkit-box-shadow: inset 0 0 1px #000;
@@ -125,16 +125,11 @@ input.under-cover:focus {
   box-shadow: inset 0 0 1px #000;
 }
 
-.constraint-input {
-  margin-bottom: 35px;
-  margin-left: 60px;
-}
-
 select {
   font-family: "Montserrat", sans-serif;
   font-size: 14px;
   padding: 10px 20px;
   width: 250px;
-  /*border: 1px solid black;*/
+  margin-right: 10px;
 }
 </style>

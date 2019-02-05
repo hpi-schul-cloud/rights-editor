@@ -57,9 +57,16 @@ export default {
       this.$emit("rules-changed", this.rules);
     },
     updateRules(rule_id) {
+      let decrease = false;
       for (let i = 0; i < this.rules.length; ++i) {
         if (this.rules[i].id == rule_id) {
           this.rules.splice(i, 1);
+          decrease = true;
+        }
+        if (decrease) {
+          if (i < this.rules.length) {
+            this.rules[i].id--;
+          }
         }
       }
       console.log("emit rules changed");
