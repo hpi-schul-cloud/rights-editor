@@ -66,7 +66,6 @@ export default {
       this.$emit("rules-changed", this.rules);
     },
     generateLicence() {
-      console.log("Hello from GenerateLicense")
       // TODO: generate json file from input
       let policyGUID = "policy_guid";
       let policy = new Odrl.Policy(policyGUID, "set");
