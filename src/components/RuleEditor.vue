@@ -49,9 +49,9 @@ export default {
       this.newRule(RuleTypes.Prohibition);
     },
     newRule: function(original) {
-      let ruleCount = this.rules.length + 1;
+      let newID = this.nextId++;
       this.rules.push(
-        new Rule("Regel " + ruleCount, this.rules.length, original)
+        new Rule("Regel " + newID, newID, original)
       );
       console.log("emit rules changed");
       this.$emit("rules-changed", this.rules);
