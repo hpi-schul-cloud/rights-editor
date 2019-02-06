@@ -1,12 +1,13 @@
 <template>
-    <button class="base-button" v-bind:class="{ 'base-button-big': big }"><slot></slot></button>
+    <button class="base-button" v-bind:class="{ 'base-button-big': big }" v-on:click="onClick"><slot></slot></button>
 </template>
 
 <script>
 export default {
   name: "BaseButton",
   props: {
-    big: Boolean
+    big: Boolean,
+    onClick: { type: Function, required: true }
   },
 };
  

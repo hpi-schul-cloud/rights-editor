@@ -1,9 +1,9 @@
 <template>
   <div class="rule-editor">
     <template v-if="rules.length > 0">
-      <BaseButton class="new-rule-button" v-on:click="newPermission">Erlaubnis hinzufügen</BaseButton>
-      <BaseButton class="new-rule-BaseButton" v-on:click="newDuty">Verpflichtung hinzufügen</BaseButton>
-      <BaseButton class="new-rule-BaseButton" v-on:click="newProhibition">Verbot hinzufügen</BaseButton>
+      <BaseButton v-bind:onClick="newPermission">Erlaubnis hinzufügen</BaseButton>
+      <BaseButton v-bind:onClick="newDuty">Verpflichtung hinzufügen</BaseButton>
+      <BaseButton v-bind:onClick="newProhibition">Verbot hinzufügen</BaseButton>
     </template>
     <ul>
       <RuleItem
@@ -13,11 +13,11 @@
         v-bind:key="rule.id"
       ></RuleItem>
     </ul>
-    <BaseButton class="new-rule-BaseButton" v-on:click="newPermission">Erlaubnis hinzufügen</BaseButton>
-    <BaseButton class="new-rule-BaseButton" v-on:click="newDuty">Verpflichtung hinzufügen</BaseButton>
-    <BaseButton class="new-rule-BaseButton" v-on:click="newProhibition">Verbot hinzufügen</BaseButton>
+    <BaseButton v-bind:onClick="newPermission">Erlaubnis hinzufügen</BaseButton>
+    <BaseButton v-bind:onClick="newDuty">Verpflichtung hinzufügen</BaseButton>
+    <BaseButton v-bind:onClick="newProhibition">Verbot hinzufügen</BaseButton>
     <hr>
-    <BaseButton big v-on:click="generateLicence()">Generate Licence</BaseButton>
+    <BaseButton big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
   </div>
 </template>
 
@@ -42,6 +42,7 @@ export default {
   },
   methods: {
     newPermission: function() {
+      console.log("hallo")
       this.newRule(RuleTypes.Permission);
     },
     newDuty: function() {
