@@ -1,20 +1,23 @@
 <template>
   <li>
-    <div class="disabled-text">
+    <div class="heading-rule-name">
       <b>{{ rule.type["name"] }}:</b>
     </div>
     <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
-    <button class="remove-button" v-on:click="removeRule()">&times;</button>   
+    <button class="button-dismiss-rule" v-on:click="removeRule">&times;</button>
     <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
 
     <!-- experiments-->
-    <button class="modal-btn" v-on:click="openModal()">+</button>
+    <BaseButton v-bind:onClick="openModal">Innere Regel</BaseButton>
     <div class="modal">
       <div class="modal-content">
-        <button class="modal-close remove-button" v-on:click="closeModal()">&times;</button>
+        <button class="modal-close button-dismiss-rule" v-on:click="closeModal">&times;</button>
         <p>Füge <i>{{ rule.type["name"] }}</i> -Erweiterung hinzu:</p>
         <BaseButton
+<<<<<<< HEAD
           v-bind:onClick="function() {}"
+=======
+>>>>>>> master
           v-for="(addon, index) in getPossibleAddons()"
           v-bind:key="index">
             {{addon}}
@@ -30,6 +33,7 @@
 
 <script>
 import ActionItem, { Action } from "./ActionItem.vue";
+import BaseButton from "./BaseButton.vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 
 export class Rule {
@@ -50,6 +54,7 @@ export let RuleTypes = Object.freeze({
 export default {
   name: "RuleItem",
   components: {
+    BaseButton,
     ActionItem
   },
   props: {
@@ -86,10 +91,7 @@ export default {
 };
 </script>
 
-<style>
-.addon-btn {
-  float: left;
-}
+<style scoped>
 .modal-btn {
   display: block;
   font-size: 26px;
@@ -125,84 +127,16 @@ export default {
 
 /* --- */
 
-.disabled-text {
+.heading-rule-name {
   width: 150px;
   display: inline-block;
 }
 
-button {
-  font-family: "Montserrat", sans-serif;
-  color: white;
-  border: 0px black solid;
-  background-color: #172b4d;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  cursor: pointer;
-  margin: 10px;
-}
-
-.rule-type-select {
-  width: 170px;
-}
-
-.remove-button {
+.button-dismiss-rule {
+  border: none;
   background-color: transparent;
   color: #b1063a;
   font-weight: bold;
   font-size: 32px;
-}
-</style>
-<style scoped>
-.rule header {
-  display: grid;
-  grid-template-columns: auto auto 1fr auto;
-  grid-template-areas:
-    "rule-type action-name edit-icon icons"
-    ".         action-uri  .         .    ";
-}
-h3.rule-heading-type {
-  grid-area: rule-type;
-  margin: 10px 0em 0px;
-  font-size: 1.17em;
-}
-button.change-action {
-  grid-area: action-name;
-  background-color: transparent;
-  color: inherit;
-  font-size: inherit;
-  text-align: left;
-  margin: 0px;
-  padding: 0px;
-  align-self: end;
-  font-size: 1.17em;
-}
-button.change-action:hover {
-  background-color: #f2f2f2;
-  box-shadow: 4px 0px 1px 1px #f7f7f7 inset;
-}
-button.change-action div {
-  display: inline-block;
-  margin: 10px auto 0px 8px;
-}
-a.action-uri {
-  grid-area: action-uri;
-  padding: 0em 8px;
-  font-size: 0.8em;
-}
-button.remove {
-  grid-area: icons;
-  background-color: transparent;
-  color: inherit;
-  font-weight: bold;
-  margin: 0px;
-  padding: 0px;
-}
-.edit-button {
-  grid-area: edit-icon;
-  align-self: end;
-  margin-bottom: 0.2em;
 }
 </style>

@@ -65,12 +65,4 @@ li {
 ul {
   list-style-type: none;
 }
-
-button {
-  border-radius: 2px;
-}
-
-.big-button {
-  font-size: 1.2em;
-}
 </style>
