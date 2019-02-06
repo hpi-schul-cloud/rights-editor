@@ -84,7 +84,7 @@ export default {
 .action-input {
   margin-top: 20px;
   margin-left: 0px;
-  width: 710px;
+  width: 690px;
 }
 
 .constraint-input {

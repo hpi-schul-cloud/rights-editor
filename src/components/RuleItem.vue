@@ -4,23 +4,32 @@
       <b>{{ rule.type["name"] }}:</b>
     </div>
     <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
-    <button class="remove-button" v-on:click="removeRule()">&times;</button>   
+    <button class="remove-button" v-on:click="removeRule()">&times;</button>
     <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
 
-    <!-- experiments-->
+    <!-- addon-->
     <button class="modal-btn" v-on:click="openModal()">+</button>
     <div class="modal">
       <div class="modal-content">
         <button class="modal-close remove-button" v-on:click="closeModal()">&times;</button>
-        <p>Füge <i>{{ rule.type["name"] }}</i> -Erweiterung hinzu:</p>
+        <p>
+          Füge
+          <i>{{ rule.type["name"] }}</i> -Erweiterung hinzu:
+        </p>
         <ul>
-          <li v-for="(addon, index) in getPossibleAddons()"
-          v-bind:key="index"
-          v-bind:value="addon"><button typ="button" class="addon-btn">{{addon}}</button></li>
+          <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
+            <button typ="button" class="addon-btn" v-on:click="createAddon()">{{addon}}</button>
+          </li>
         </ul>
       </div>
     </div>
-    <!-- /experiments -->
+    <!-- /addon -->
+    <DutyItem
+      v-on:remove-duty-event="updateDuties($event)"
+      v-for="duty in duties"
+      v-bind:rule="duty"
+      v-bind:key="duty.id"
+    ></DutyItem>
 
     <p></p>
     <hr>
@@ -30,6 +39,7 @@
 <script>
 import ActionItem, { Action } from "./ActionItem.vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
+import DutyItem, { Duty, DutyTypes } from "./DutyItem.vue";
 
 export class Rule {
   constructor(title, id, type) {
@@ -49,7 +59,13 @@ export let RuleTypes = Object.freeze({
 export default {
   name: "RuleItem",
   components: {
-    ActionItem
+    ActionItem,
+    DutyItem
+  },
+  data: function() {
+    return {
+      duties: []
+    };
   },
   props: {
     rule: {
@@ -60,7 +76,7 @@ export default {
   methods: {
     getPossibleAddons: function() {
       if (this.rule.type["name"] == "Erlaubnis") {
-        return ["Pflicht", "Pflicht mit Konsequenz"];
+        return ["Pflicht"];
       } else if (this.rule.type["name"] == "Verpflichtung") {
         return ["Konsequenz"];
       } else if (this.rule.type["name"] == "Verbot") {
@@ -80,6 +96,22 @@ export default {
     closeModal() {
       document.getElementsByClassName("modal")[this.rule.id].style.display =
         "none";
+    },
+    createAddon() {
+      console.log("CREATE NEW DUTY");
+      let dutyCount = this.duties.length + 1;
+      let dutyType;
+      if (this.rule.type["name"] == "Erlaubnis") {
+        dutyType = DutyTypes.Duty;
+      } else if (this.rule.type["name"] == "Verpflichtung") {
+        dutyType = DutyTypes.Consequence;
+      } else if (this.rule.type["name"] == "Verbot") {
+        dutyType = DutyTypes.Remedy;
+      }
+
+      this.duties.push(
+        new Duty("Duty " + dutyCount, this.duties.length, dutyType)
+      );
     }
   }
 };
@@ -98,14 +130,14 @@ export default {
 }
 .modal {
   display: none; /* Hidden by default */
-  z-index: 1; /* Sit on top */
+  z-index: 1;
   border: 1px solid #172b4d;
   padding-left: 20px;
   margin-left: -2px;
   padding-right: 20px;
   margin-bottom: 20px;
   height: 125px;
-  width: 700px;  
+  width: 700px;
 }
 
 /* The Close Button */
