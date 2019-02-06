@@ -12,7 +12,7 @@
         </ul>
     </template>
     <template v-slot:footer>
-        <BaseButton v-on:click="$emit('abort')">Abbrechen</BaseButton>
+        <BaseButton v-bind:onClick="function() {$emit('abort');}">Abbrechen</BaseButton>
         <BaseButton v-bind:disabled="currentAction == ''" v-bind:onClick="function() {$emit('action', currentAction);}">Annehmen</BaseButton>
     </template>
 </BaseModal>

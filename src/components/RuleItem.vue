@@ -14,10 +14,7 @@
         <button class="modal-close button-dismiss-rule" v-on:click="closeModal">&times;</button>
         <p>Füge <i>{{ rule.type["name"] }}</i> -Erweiterung hinzu:</p>
         <BaseButton
-<<<<<<< HEAD
           v-bind:onClick="function() {}"
-=======
->>>>>>> master
           v-for="(addon, index) in getPossibleAddons()"
           v-bind:key="index">
             {{addon}}
