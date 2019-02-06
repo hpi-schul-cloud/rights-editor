@@ -5,6 +5,8 @@
     </div>
     <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
     <button class="remove-button" v-on:click="removeRule()">&times;</button>   
+    <ActionChooser> 
+    </ActionChooser>
     <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
 
     <!-- experiments-->
@@ -30,6 +32,7 @@
 <script>
 import ActionItem, { Action } from "./ActionItem.vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
+import ActionChooser from "./ActionChooser.vue";
 
 export class Rule {
   constructor(title, id, type) {
@@ -49,7 +52,8 @@ export let RuleTypes = Object.freeze({
 export default {
   name: "RuleItem",
   components: {
-    ActionItem
+    ActionItem,
+    ActionChooser
   },
   props: {
     rule: {
