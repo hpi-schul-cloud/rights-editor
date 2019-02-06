@@ -30,6 +30,6 @@ export default {
 }
 
 .base-button-big {
-  font-size: 1.7em;
+  font-size: 1.2em;
 }
 </style>
