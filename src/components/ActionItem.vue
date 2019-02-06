@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ActionChooser v-if="this.showActionChooser" v-on:action="showActionChooser = false; action.name=$event"></ActionChooser>
+    <ActionChooser v-if="this.showActionChooser" v-on:action="showActionChooser = false; action.name=$event" v-on:abort="showActionChooser = false"></ActionChooser>
     Aktion:
     <div class="action-content">
     <input
@@ -92,7 +92,7 @@ export default {
 .action-input {
   margin-top: 20px;
   margin-left: 0px;
-  width: 710px;
+  width: 690px;
 }
 
 .constraint-input {

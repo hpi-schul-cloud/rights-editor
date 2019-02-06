@@ -5,9 +5,7 @@
         <div class="modal-container">
 
           <div class="modal-header">
-            <slot name="header">
-              default header
-            </slot>
+            <slot name="header"></slot>
           </div>
 
           <div class="modal-body">

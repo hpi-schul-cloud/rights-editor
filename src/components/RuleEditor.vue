@@ -51,24 +51,17 @@ export default {
       this.newRule(RuleTypes.Prohibition);
     },
     newRule: function(original) {
-      let ruleCount = this.rules.length + 1;
+      let newID = this.nextId++;
       this.rules.push(
-        new Rule("Regel " + ruleCount, this.rules.length, original)
+        new Rule("Regel " + newID, newID, original)
       );
       console.log("emit rules changed");
       this.$emit("rules-changed", this.rules);
     },
     updateRules(rule_id) {
-      let decrease = false;
       for (let i = 0; i < this.rules.length; ++i) {
         if (this.rules[i].id == rule_id) {
           this.rules.splice(i, 1);
-          decrease = true;
-        }
-        if (decrease) {
-          if (i < this.rules.length) {
-            this.rules[i].id--;
-          }
         }
       }
       console.log("emit rules changed");
