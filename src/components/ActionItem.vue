@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ActionChooser v-if="this.showActionChooser" v-on:action="showActionChooser = false; action.name=$event"></ActionChooser>
+    <ActionChooser v-if="this.showActionChooser" v-on:action="showActionChooser = false; action.name=$event" v-on:abort="showActionChooser = false"></ActionChooser>
     Aktion:
     <div class="action-content">
     <input
