@@ -9,7 +9,10 @@
         <li v-on:click="actionClicked($event)">Kompensieren</li>
         <li v-on:click="actionClicked($event)">Löschen</li>
     </ul>
-    <button slot="footer" v-if="this.currentAction!==''" v-on:click="$emit('action', currentAction)">annehmen</button>
+    <div slot="footer">
+        <button v-on:click="$emit('abort')">abbrechen</button>
+        <button v-bind:disabled="currentAction == ''" v-on:click="$emit('action', currentAction)">annehmen</button>
+    </div>
 </BaseModal>
 </template>
 
