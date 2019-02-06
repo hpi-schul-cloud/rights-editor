@@ -1,9 +1,9 @@
 <template>
   <div class="rule-editor">
     <template v-if="rules.length > 0">
-      <button class="new-rule-button" v-on:click="newPermission">Erlaubnis hinzufügen</button>
-      <button class="new-rule-button" v-on:click="newDuty">Verpflichtung hinzufügen</button>
-      <button class="new-rule-button" v-on:click="newProhibition">Verbot hinzufügen</button>
+      <BaseButton class="new-rule-button" v-on:click="newPermission">Erlaubnis hinzufügen</BaseButton>
+      <BaseButton class="new-rule-BaseButton" v-on:click="newDuty">Verpflichtung hinzufügen</BaseButton>
+      <BaseButton class="new-rule-BaseButton" v-on:click="newProhibition">Verbot hinzufügen</BaseButton>
     </template>
     <ul>
       <RuleItem
@@ -13,15 +13,16 @@
         v-bind:key="rule.id"
       ></RuleItem>
     </ul>
-    <button class="new-rule-button" v-on:click="newPermission">Erlaubnis hinzufügen</button>
-    <button class="new-rule-button" v-on:click="newDuty">Verpflichtung hinzufügen</button>
-    <button class="new-rule-button" v-on:click="newProhibition">Verbot hinzufügen</button>
+    <BaseButton class="new-rule-BaseButton" v-on:click="newPermission">Erlaubnis hinzufügen</BaseButton>
+    <BaseButton class="new-rule-BaseButton" v-on:click="newDuty">Verpflichtung hinzufügen</BaseButton>
+    <BaseButton class="new-rule-BaseButton" v-on:click="newProhibition">Verbot hinzufügen</BaseButton>
     <hr>
     <button class="big-button" v-on:click="generateLicence()">Generate Licence</button>
   </div>
 </template>
 
 <script>
+import BaseButton from "./BaseButton";
 import Action from "./ActionItem.vue";
 import RuleItem, { Rule, RuleTypes } from "./RuleItem.vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
@@ -30,6 +31,7 @@ import { Odrl } from "../libs/rightsml-lib-js/ODRLclasses";
 export default {
   name: "RuleEditor",
   components: {
+    BaseButton,
     RuleItem
   },
   data: function() {
