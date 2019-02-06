@@ -1,7 +1,7 @@
 <template>
-  <div style="display: block;">
+  <div class="duty-container">
     Ich bin Duty {{ duty.id }}
-    <button class="button-dismiss" v-on:click="removeDuty()">&times;</button>
+    <button class="button-dismiss-duty" v-on:click="removeDuty()">&times;</button>
   </div>
 </template>
 
@@ -44,10 +44,23 @@ export default {
 </script>
 
 <style>
-.button-dismiss {
+.duty-container {
+  padding: 10px 10px 10px 10px;
+  width: 225px;
+  position: relative;
+}
+
+.button-dismiss-duty {
   background-color: transparent;
   color: #b1063a;
   font-weight: bold;
   font-size: 32px;
+  border: 0px solid;
+  cursor: pointer;
+  margin-left: 10px;
+  float: right;
+  position: absolute;
+  top: 0%;
+  right: 0%;
 }
 </style>

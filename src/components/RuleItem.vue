@@ -1,17 +1,19 @@
 <template>
   <li>
-    <div class="disabled-text">
-      <b>{{ rule.type["name"] }}:</b>
+    <div class="rule-header-container">
+      <div class="heading-rule-name">
+        <b>{{ rule.type["name"] }}:</b>
+      </div>
+      <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
+      <button class="button-dismiss-rule" v-on:click="removeRule()">&times;</button>
     </div>
-    <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
-    <button class="remove-button" v-on:click="removeRule()">&times;</button>
     <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
 
     <div class="addon-container">
       <p>Füge optional Erweiterungen hinzu:</p>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
-          <button typ="button" class="addon-btn" v-on:click="createAddon()">{{addon[0]}} hinzufügen</button>
+          <BaseButton v-bind:onClick="createAddon">{{addon[0]}} hinzufügen</BaseButton>
           <div class="addon-info">({{addon[1]}})</div>
         </li>
       </ul>
@@ -31,6 +33,7 @@
 
 <script>
 import ActionItem, { Action } from "./ActionItem.vue";
+import BaseButton from "./BaseButton.vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import DutyItem, { Duty, DutyTypes } from "./DutyItem.vue";
 
@@ -53,6 +56,7 @@ export let RuleTypes = Object.freeze({
 export default {
   name: "RuleItem",
   components: {
+    BaseButton,
     ActionItem,
     DutyItem
   },
@@ -71,7 +75,9 @@ export default {
   methods: {
     getPossibleAddons: function() {
       if (this.rule.type["name"] == "Erlaubnis") {
-        return [["Pflicht", "erlaubt wird dann nur, wenn die Pflicht erfüllt ist"]];
+        return [
+          ["Pflicht", "erlaubt wird dann nur, wenn die Pflicht erfüllt ist"]
+        ];
       } else if (this.rule.type["name"] == "Verpflichtung") {
         return [["Konsequenz", "falls die Verpflichtung nicht erfüllt wird"]];
       } else if (this.rule.type["name"] == "Verbot") {
@@ -129,84 +135,24 @@ export default {
 
 /* --- */
 
-.disabled-text {
+.heading-rule-name {
   width: 150px;
   display: inline-block;
 }
 
-button {
-  font-family: "Montserrat", sans-serif;
-  color: white;
-  border: 0px black solid;
-  background-color: #172b4d;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  cursor: pointer;
-  margin: 10px;
+.rule-header-container {
+  position: relative;
 }
 
-.rule-type-select {
-  width: 170px;
-}
-
-.remove-button {
+.button-dismiss-rule {
+  border: none;
   background-color: transparent;
   color: #b1063a;
   font-weight: bold;
   font-size: 32px;
-}
-</style>
-<style scoped>
-.rule header {
-  display: grid;
-  grid-template-columns: auto auto 1fr auto;
-  grid-template-areas:
-    "rule-type action-name edit-icon icons"
-    ".         action-uri  .         .    ";
-}
-h3.rule-heading-type {
-  grid-area: rule-type;
-  margin: 10px 0em 0px;
-  font-size: 1.17em;
-}
-button.change-action {
-  grid-area: action-name;
-  background-color: transparent;
-  color: inherit;
-  font-size: inherit;
-  text-align: left;
-  margin: 0px;
-  padding: 0px;
-  align-self: end;
-  font-size: 1.17em;
-}
-button.change-action:hover {
-  background-color: #f2f2f2;
-  box-shadow: 4px 0px 1px 1px #f7f7f7 inset;
-}
-button.change-action div {
-  display: inline-block;
-  margin: 10px auto 0px 8px;
-}
-a.action-uri {
-  grid-area: action-uri;
-  padding: 0em 8px;
-  font-size: 0.8em;
-}
-button.remove {
-  grid-area: icons;
-  background-color: transparent;
-  color: inherit;
-  font-weight: bold;
-  margin: 0px;
-  padding: 0px;
-}
-.edit-button {
-  grid-area: edit-icon;
-  align-self: end;
-  margin-bottom: 0.2em;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
 </style>
