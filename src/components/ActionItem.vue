@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ActionChooser v-if="this.showActionChooser" v-on:action="showActionChooser = false; action.name=$event"></ActionChooser>
     Aktion:
     <div class="action-content">
     <input
@@ -28,6 +29,7 @@
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
+import ActionChooser from "./ActionChooser.vue";
 
 
 export class Action {
@@ -45,7 +47,13 @@ export class Action {
 export default {
   name: "ActionItem",
   components: {
-    ConstraintItem
+    ConstraintItem,
+    ActionChooser
+  },
+  data: function() {
+    return {
+      showActionChooser: true
+    };
   },
   props: {
     action: {

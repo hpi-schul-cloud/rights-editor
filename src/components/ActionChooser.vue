@@ -9,7 +9,7 @@
         <li v-on:click="actionClicked($event)">Kompensieren</li>
         <li v-on:click="actionClicked($event)">Löschen</li>
     </ul>
-    <button slot="footer" v-if="this.currentAction!==''">auswählen</button>
+    <button slot="footer" v-if="this.currentAction!==''" v-on:click="$emit('action', currentAction)">annehmen</button>
 </BaseModal>
 </template>
 
@@ -32,6 +32,7 @@ export default {
       actionClicked: function(e) {
           this.currentAction = e.target.textContent;
       },
+
   }
 };
 </script>
