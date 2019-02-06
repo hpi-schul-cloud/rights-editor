@@ -7,27 +7,20 @@
     <button class="remove-button" v-on:click="removeRule()">&times;</button>
     <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
 
-    <!-- addon-->
-    <button class="modal-btn" v-on:click="openModal()">+</button>
-    <div class="modal">
-      <div class="modal-content">
-        <button class="modal-close remove-button" v-on:click="closeModal()">&times;</button>
-        <p>
-          Füge
-          <i>{{ rule.type["name"] }}</i> -Erweiterung hinzu:
-        </p>
-        <ul>
-          <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
-            <button typ="button" class="addon-btn" v-on:click="createAddon()">{{addon}}</button>
-          </li>
-        </ul>
-      </div>
+    <div class="addon-container">
+      <p>Füge optional Erweiterungen hinzu:</p>
+      <ul class="addon-ul">
+        <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
+          <button typ="button" class="addon-btn" v-on:click="createAddon()">{{addon[0]}} hinzufügen</button>
+          <div class="addon-info">({{addon[1]}})</div>
+        </li>
+      </ul>
     </div>
-    <!-- /addon -->
+
     <DutyItem
       v-on:remove-duty-event="updateDuties($event)"
-      v-for="duty in duties"
-      v-bind:rule="duty"
+      v-for="duty in rule.duties"
+      v-bind:duty="duty"
       v-bind:key="duty.id"
     ></DutyItem>
 
@@ -47,6 +40,7 @@ export class Rule {
     this.id = id;
     this.type = type;
     this.action = new Action("Nutzung", Vocab.ActionsCV.use);
+    this.duties = [];
   }
 }
 
@@ -64,7 +58,8 @@ export default {
   },
   data: function() {
     return {
-      duties: []
+      nextId: 1,
+      renderModal: false
     };
   },
   props: {
@@ -76,11 +71,11 @@ export default {
   methods: {
     getPossibleAddons: function() {
       if (this.rule.type["name"] == "Erlaubnis") {
-        return ["Pflicht"];
+        return [["Pflicht", "erlaubt wird dann nur, wenn die Pflicht erfüllt ist"]];
       } else if (this.rule.type["name"] == "Verpflichtung") {
-        return ["Konsequenz"];
+        return [["Konsequenz", "falls die Verpflichtung nicht erfüllt wird"]];
       } else if (this.rule.type["name"] == "Verbot") {
-        return ["Strafe"];
+        return [["Strafe", "falls das Verbot missachtet wird"]];
       }
       return ["null"];
     },
@@ -88,18 +83,12 @@ export default {
       this.$emit("remove-rule-event", this.rule.id);
     },
     openModal: function() {
-      console.log(this.getPossibleAddons());
-      console.log("rule id: " + this.rule.id);
-      document.getElementsByClassName("modal")[this.rule.id].style.display =
-        "block";
+      this.renderModal = true;
     },
     closeModal() {
-      document.getElementsByClassName("modal")[this.rule.id].style.display =
-        "none";
+      this.renderModal = false;
     },
     createAddon() {
-      console.log("CREATE NEW DUTY");
-      let dutyCount = this.duties.length + 1;
       let dutyType;
       if (this.rule.type["name"] == "Erlaubnis") {
         dutyType = DutyTypes.Duty;
@@ -108,50 +97,34 @@ export default {
       } else if (this.rule.type["name"] == "Verbot") {
         dutyType = DutyTypes.Remedy;
       }
-
-      this.duties.push(
-        new Duty("Duty " + dutyCount, this.duties.length, dutyType)
-      );
+      let newID = this.nextId++;
+      this.rule.duties.push(new Duty("Duty", newID, dutyType));
+      console.log("new duty with id: " + newID + " of type: " + dutyType.name);
+    },
+    updateDuties(duty_id) {
+      for (let i = 0; i < this.rule.duties.length; ++i) {
+        if (this.rule.duties[i].id == duty_id) {
+          this.rule.duties.splice(i, 1);
+        }
+      }
     }
   }
 };
 </script>
 
 <style>
-.addon-btn {
-  float: left;
-}
-.modal-btn {
-  display: block;
-  font-size: 26px;
-  font-weight: bold;
-  margin: 0px 50px 3px 0px;
-  padding: 4px 12px !important;
-}
-.modal {
-  display: none; /* Hidden by default */
-  z-index: 1;
-  border: 1px solid #172b4d;
-  padding-left: 20px;
-  margin-left: -2px;
-  padding-right: 20px;
+.addon-container {
   margin-bottom: 20px;
-  height: 125px;
-  width: 700px;
 }
 
-/* The Close Button */
-.modal-close {
-  float: left;
-  margin-top: -20px;
-  margin-left: -28px;
-  color: #172b4d !important;
+.addon-ul {
+  margin-left: 0px !important;
+  padding-inline-start: 00px !important;
 }
 
-.modal-close:hover,
-.modal-close:focus {
-  text-decoration: none;
-  cursor: pointer;
+.addon-info {
+  display: inline-block;
+  font-size: 0.9em;
 }
 
 /* --- */
