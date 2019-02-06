@@ -17,7 +17,7 @@
     <BaseButton class="new-rule-BaseButton" v-on:click="newDuty">Verpflichtung hinzufügen</BaseButton>
     <BaseButton class="new-rule-BaseButton" v-on:click="newProhibition">Verbot hinzufügen</BaseButton>
     <hr>
-    <button class="big-button" v-on:click="generateLicence()">Generate Licence</button>
+    <BaseButton big v-on:click="generateLicence()">Generate Licence</BaseButton>
   </div>
 </template>
 
