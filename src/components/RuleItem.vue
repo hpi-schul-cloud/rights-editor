@@ -13,11 +13,12 @@
       <div class="modal-content">
         <button class="modal-close remove-button" v-on:click="closeModal()">&times;</button>
         <p>Füge <i>{{ rule.type["name"] }}</i> -Erweiterung hinzu:</p>
-        <ul>
-          <li v-for="(addon, index) in getPossibleAddons()"
-          v-bind:key="index"
-          v-bind:value="addon"><button typ="button" class="addon-btn">{{addon}}</button></li>
-        </ul>
+        <BaseButton
+          v-bind:onClick="function() {}"
+          v-for="(addon, index) in getPossibleAddons()"
+          v-bind:key="index">
+            {{addon}}
+        </BaseButton>
       </div>
     </div>
     <!-- /experiments -->
