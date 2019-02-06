@@ -42,7 +42,6 @@ export default {
   },
   methods: {
     newPermission: function() {
-      console.log("hallo")
       this.newRule(RuleTypes.Permission);
     },
     newDuty: function() {

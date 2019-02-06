@@ -4,7 +4,7 @@
       <b>{{ rule.type["name"] }}:</b>
     </div>
     <input class="under-cover" v-model="rule.title" placeholder="Name der Regel">
-    <button class="button-dismiss-rule" v-on:click="removeRule">&times;</button>   
+    <button class="button-dismiss-rule" v-on:click="removeRule">&times;</button>
     <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
 
     <!-- experiments-->
