@@ -57,7 +57,7 @@ export default {
 }
 
 .duty-header {
-  width: 225px;
+  width: 175px;
   position: relative;
   margin-bottom: 20px;
 }
