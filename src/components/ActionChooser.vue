@@ -2,13 +2,14 @@
 <BaseModal> 
     <template v-slot:header><h1>Aktion auswählen</h1></template>
     <template v-slot:body>
-        <ul>
-            <li v-on:click="actionClicked($event)">Aggregieren</li>
-            <li v-on:click="actionClicked($event)">Annotieren</li>
-            <li v-on:click="actionClicked($event)">Annonymisieren</li>
-            <li v-on:click="actionClicked($event)">Archivieren</li>
-            <li v-on:click="actionClicked($event)">Kompensieren</li>
-            <li v-on:click="actionClicked($event)">Löschen</li>
+        <ul class="actions-list">
+            <li
+                v-for="action in actions"
+                v-bind:key="action.id"
+                v-bind:class="{selected: isSelected(action.id)}"
+                v-on:click="actionClicked(action.id)">
+                {{ action.label }}
+            </li>
         </ul>
     </template>
     <template v-slot:footer>
@@ -32,19 +33,51 @@ export default {
 
   data: function() {
       return {
-          currentAction: ""
+          currentSelected: null,
+          currentAction: "",
+          actions: {
+              1: {id: 1, label: "Aggregieren"},
+              2: {id: 2, label: "Annotieren"},
+              3: {id: 3, label: "Annotieren"},
+              4: {id: 4, label: "Annonymisieren"},
+              5: {id: 5, label: "Archivieren"},
+              6: {id: 6, label: "Kompensieren"},
+              7: {id: 7, label: "Löschen"}
+          }
       };
   },
   methods: {
-      actionClicked: function(e) {
-          this.currentAction = e.target.textContent;
+      actionClicked: function(actionId) {
+          this.currentAction = this.actions[actionId].label;
+          this.currentSelected = actionId;
       },
+      isSelected: function(identifier) {
+          return this.currentSelected == identifier;
+      }
 
   }
 };
 </script>
 
 <style>
+.actions-list {
+    margin: 0px;
+    padding: 0px;
+}
+.actions-list li {
+    padding: 0.5em;
+    border-bottom: 1px lightgray solid;
+    cursor: default;
+}
+.actions-list li:hover {
+    background-color: rgb(248, 248, 248);
+}
 
+.actions-list .selected {
+    background-color: rgb(238, 238, 238);
+}
+.actions-list .selected:hover {
+    background-color: rgb(228, 228, 228);
+}
 
 </style>

@@ -1,28 +1,21 @@
 <template>
   <div>
-    <ActionChooser v-if="this.showActionChooser" v-on:action="showActionChooser = false; action.name=$event" v-on:abort="showActionChooser = false"></ActionChooser>
+    <ActionChooser
+      v-if="showActionChooser"
+      v-on:action="showActionChooser = false; action.name=$event"
+      v-on:abort="showActionChooser = false"
+    ></ActionChooser>
     Aktion:
-    <div class="action-content">
     <input
       class="action-input"
-      placeholder="Bezeichner eingeben..."
       v-bind:value="actionName"
-      list="actions"
       type="text"
       name="action"
+      v-on:focus="showActionChooser = true"
     >
-    <datalist id="actions">
-      <option
-        v-for="(actionUri, index) in possibleActionUris()"
-        v-bind:key="index"
-        v-bind:value="actionUri"
-      />
-    </datalist>
     <br>
     <ConstraintItem class="constraint-input" v-bind:constraint="action.constraint">
-      
     </ConstraintItem>
-    </div>
   </div>
 </template>
 
@@ -52,7 +45,7 @@ export default {
   },
   data: function() {
     return {
-      showActionChooser: true
+      showActionChooser: false
     };
   },
   props: {
@@ -80,14 +73,6 @@ export default {
 </script>
 
 <style>
-
-.action-item {
-  margin-left: 0px;
-  }
-
-.action-content {
-  margin-left: 0px;
-}
 
 .action-input {
   margin-top: 20px;
