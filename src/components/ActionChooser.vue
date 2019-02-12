@@ -13,8 +13,10 @@
         </ul>
     </template>
     <template v-slot:footer>
-        <BaseButton v-bind:onClick="function() {$emit('abort');}">Abbrechen</BaseButton>
-        <BaseButton v-bind:disabled="currentAction == ''" v-bind:onClick="function() {$emit('action', currentAction);}">Annehmen</BaseButton>
+        <div class="button-footer">
+            <BaseButton textlike v-bind:onClick="function() {$emit('abort');}">Abbrechen</BaseButton>
+            <BaseButton v-bind:disabled="currentAction == ''" v-bind:onClick="function() {$emit('action', currentAction);}">Annehmen</BaseButton>
+        </div>
     </template>
 </BaseModal>
 </template>
@@ -59,7 +61,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .actions-list {
     margin: 0px;
     padding: 0px;
@@ -78,6 +80,10 @@ export default {
 }
 .actions-list .selected:hover {
     background-color: rgb(228, 228, 228);
+}
+
+.button-footer {
+    text-align: right;
 }
 
 </style>

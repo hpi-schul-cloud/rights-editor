@@ -1,5 +1,5 @@
 <template>
-    <button class="base-button" v-bind:class="{ 'base-button-big': big }" v-on:click="onClick"><slot></slot></button>
+    <button class="base-button" v-bind:class="{ 'base-button-big': big, 'base-button-textlike': textlike}" v-on:click="onClick"><slot></slot></button>
 </template>
 
 <script>
@@ -7,6 +7,7 @@ export default {
   name: "BaseButton",
   props: {
     big: Boolean,
+    textlike: Boolean,
     onClick: { type: Function, required: true }
   },
 };
@@ -32,5 +33,10 @@ export default {
 
 .base-button-big {
   font-size: 1.2em;
+}
+.base-button.base-button-textlike {
+  color: #172b4d;
+  background: none;
+  border: none;
 }
 </style>
