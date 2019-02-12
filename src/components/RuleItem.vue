@@ -103,9 +103,11 @@ export default {
       } else if (this.rule.type["name"] == "Verbot") {
         dutyType = DutyTypes.Remedy;
       }
-      let newID = this.nextId++;
-      this.rule.duties.push(new Duty("Duty", newID, dutyType));
-      console.log("new duty with id: " + newID + " of type: " + dutyType.name);
+      if (this.rule.duties.length == 0) {
+        let newID = this.nextId++;
+        this.rule.duties.push(new Duty("Duty", newID, dutyType));
+        console.log("new duty with id: " + newID + " of type: " + dutyType.name);
+      }
     },
     updateDuties(duty_id) {
       for (let i = 0; i < this.rule.duties.length; ++i) {

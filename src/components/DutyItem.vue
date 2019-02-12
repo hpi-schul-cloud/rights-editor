@@ -1,7 +1,15 @@
 <template>
   <div class="duty-container">
-    Ich bin Duty {{ duty.id }}
-    <button class="button-dismiss-duty" v-on:click="removeDuty()">&times;</button>
+    <div class="duty-header">
+      <b>{{ duty.type.name }}</b>
+      <button
+        class="button-dismiss-duty"
+        v-on:click="removeDuty()"
+      >&times;</button>
+      <br>
+    </div>
+    <ActionItem class="action-item" v-bind:action="duty.action"></ActionItem>
+    <br>
   </div>
 </template>
 
@@ -46,8 +54,12 @@ export default {
 <style>
 .duty-container {
   padding: 10px 10px 10px 10px;
+}
+
+.duty-header {
   width: 225px;
   position: relative;
+  margin-bottom: 20px;
 }
 
 .button-dismiss-duty {
@@ -60,7 +72,7 @@ export default {
   margin-left: 10px;
   float: right;
   position: absolute;
-  top: 0%;
+  top: -50%;
   right: 0%;
 }
 </style>
