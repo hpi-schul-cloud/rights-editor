@@ -1,27 +1,34 @@
 <template>
   <div>
-    <ActionChooser v-if="this.showActionChooser" v-on:action="showActionChooser = false; action.name=$event" v-on:abort="showActionChooser = false"></ActionChooser>
-    Aktion:
+    <ActionChooser
+      v-if="this.showActionChooser"
+      v-on:action="showActionChooser = false; action.name=$event"
+      v-on:abort="showActionChooser = false"
+    ></ActionChooser>Aktion:
     <div class="action-content">
-    <input
-      class="action-input"
-      placeholder="Bezeichner eingeben..."
-      v-bind:value="actionName"
-      list="actions"
-      type="text"
-      name="action"
-    >
-    <datalist id="actions">
-      <option
-        v-for="(actionUri, index) in possibleActionUris()"
-        v-bind:key="index"
-        v-bind:value="actionUri"
-      />
-    </datalist>
-    <br>
-    <ConstraintItem class="constraint-input" v-bind:constraint="action.constraint">
-      
-    </ConstraintItem>
+      <input
+        class="action-input"
+        placeholder="Bezeichner eingeben..."
+        v-bind:value="actionName"
+        list="actions"
+        type="text"
+        name="action"
+      >
+      <datalist id="actions">
+        <option
+          v-for="(actionUri, index) in possibleActionUris()"
+          v-bind:key="index"
+          v-bind:value="actionUri"
+        />
+      </datalist>
+      <br>
+      <!-- should be optional and it should also be possible to add more than one constraint
+      also constraints (and by the way refinements as well) are not bound to actions only, 
+      they can also be attached to party collections for example...
+      http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period
+      Bedingung:
+      <ConstraintItem class="constraint-input" v-bind:constraint="action.constraint"></ConstraintItem>
+      -->
     </div>
   </div>
 </template>
@@ -30,7 +37,6 @@
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
-
 
 export class Action {
   constructor(name, nsVocabUri) {
@@ -80,10 +86,9 @@ export default {
 </script>
 
 <style>
-
 .action-item {
   margin-left: 0px;
-  }
+}
 
 .action-content {
   margin-left: 0px;

@@ -10,7 +10,7 @@
     <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
 
     <div class="addon-container">
-      <p>Füge optional Erweiterungen hinzu:</p>
+      <p>Füge optional eine Erweiterung hinzu:</p>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
           <BaseButton v-bind:onClick="createAddon">{{addon[0]}} hinzufügen</BaseButton>

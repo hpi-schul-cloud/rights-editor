@@ -8,12 +8,14 @@
       >&times;</button>
       <br>
     </div>
-    <ActionItem class="action-item" v-bind:action="duty.action"></ActionItem>
+    <ActionItem v-bind:action="duty.action"></ActionItem>
+    <RefinementItem v-bind:refinement="duty.refinement"></RefinementItem>
     <br>
   </div>
 </template>
 
 <script>
+import RefinementItem, { Refinement } from "./RefinementItem.vue";
 import ActionItem, { Action } from "./ActionItem.vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 
@@ -23,6 +25,7 @@ export class Duty {
     this.id = id;
     this.type = type;
     this.action = new Action("Löschen", Vocab.ActionsCV.use);
+    this.refinement = new Refinement();
   }
 }
 
@@ -35,7 +38,8 @@ export let DutyTypes = Object.freeze({
 export default {
   name: "DutyItem",
   components: {
-    ActionItem
+    ActionItem,
+    RefinementItem
   },
   props: {
     duty: {
