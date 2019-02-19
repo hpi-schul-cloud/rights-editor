@@ -25,10 +25,8 @@
       <!-- should be optional and it should also be possible to add more than one constraint
       also constraints (and by the way refinements as well) are not bound to actions only, 
       they can also be attached to party collections for example...
-      http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period
-      Bedingung:
+      http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period -->
       <ConstraintItem class="constraint-input" v-bind:constraint="action.constraint"></ConstraintItem>
-      -->
     </div>
   </div>
 </template>

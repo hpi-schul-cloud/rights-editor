@@ -2,7 +2,7 @@
   <div id="app">
     <h1>Elektronisches Lizenz-Bearbeitungsprogramm (ELBP)</h1>
     <h2>erlaubt die automatische Generierung von Lizenzen in maschinenlesbarem Format</h2>
-    <RuleEditor v-on:rules-changed="updateLicence($event)"/>
+    <RuleEditor v-on:rules-changed="DEBUG_updateLicence($event)"/>
   </div>
 </template>
 
@@ -21,7 +21,7 @@ export default {
     RuleEditor
   },
   methods: {
-    updateLicence(rules) {
+    DEBUG_updateLicence(rules) {
       let policy = "";
       for (let i = 0; i < rules.length; ++i) {
         policy += rules[i].title + " (" + rules[i].id + "), ";
@@ -57,6 +57,7 @@ body {
   color: #000000;
   margin-left: 10%;
   margin-right: 10%;
+  margin-bottom: 100px;
 }
 
 li {

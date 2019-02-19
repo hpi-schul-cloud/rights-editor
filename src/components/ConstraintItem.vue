@@ -1,8 +1,9 @@
 <template>
     <div>
-        <input type="text" name="leftOperand" v-model="constraint.leftOperand">
-        <input type="text" name="operator" v-model="constraint.operator">
-        <input type="text" name="rightOperand" v-model="constraint.rightOperand" >
+        <input type="text" name="leftOperand" autocomplete="false" v-model="constraint.leftOperand">
+        <input type="text" name="operator" autocomplete="false" v-model="constraint.operator">
+        <input type="text" name="rightOperand" autocomplete="false" v-model="constraint.rightOperand" >
+        <input class="unit-input" type="text" autocomplete="false" v-model="constraint.unit">
     </div>
 </template>
 
@@ -14,6 +15,7 @@ export class Constraint {
       this.leftOperand = "";
       this.rightOperand = "";
       this.operator = "";
+      this.unit = "";
   }
 }
 
@@ -28,5 +30,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.unit-input {
+  width: 50px;
+}
 </style>
