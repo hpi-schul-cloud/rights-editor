@@ -18,6 +18,9 @@
     <BaseButton v-bind:onClick="newProhibition">Verbot hinzufügen</BaseButton>
     <hr>
     <BaseButton big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
+    <div style="min-height: 150px; border: dotted black 1px"><i>divider</i></div>
+    <ChooserEditor></ChooserEditor>
+    <div style="min-height: 150px;"></div>
   </div>
 </template>
 
@@ -25,6 +28,7 @@
 import BaseButton from "./BaseButton";
 import Action from "./ActionItem.vue";
 import RuleItem, { Rule, RuleTypes } from "./RuleItem.vue";
+import ChooserEditor from "./ChooserEditor"
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import { Odrl } from "../libs/rightsml-lib-js/ODRLclasses";
 
@@ -32,7 +36,8 @@ export default {
   name: "RuleEditor",
   components: {
     BaseButton,
-    RuleItem
+    RuleItem,
+    ChooserEditor
   },
   data: function() {
     return {
