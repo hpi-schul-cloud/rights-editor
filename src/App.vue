@@ -3,7 +3,6 @@
     <h1>Elektronisches Lizenz-Bearbeitungsprogramm (ELBP)</h1>
     <h2>erlaubt die automatische Generierung von Lizenzen in maschinenlesbarem Format</h2>
     <RuleEditor/>
-    <img src="./img/cc/by.png">
   </div>
 </template>
 
