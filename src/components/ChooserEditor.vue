@@ -60,7 +60,17 @@
             <button class="negative" v-bind:class="{active: !shareAlike}" v-on:click="shareAlike = false;">Nicht verlangt</button>
         </div>
     </div>
-</div>
+    <div v-if="notice" class="rule">
+        <p class="caption">CC-Lizenz</p>
+        <p class="description">Die erstellte CC-Lizenz:</p>
+        <img v-if="notice && !nonCommercialUse && !shareAlike && derivateWorks" src="../img/cc/by.png">
+        <img v-if="notice && !nonCommercialUse && shareAlike && derivateWorks" src="../img/cc/by-sa.png">
+        <img v-if="notice && !nonCommercialUse && !shareAlike && !derivateWorks" src="../img/cc/by-nd.png">
+        <img v-if="notice && nonCommercialUse && !shareAlike && derivateWorks" src="../img/cc/by-nc.eu.png">
+        <img v-if="notice && nonCommercialUse && shareAlike && derivateWorks" src="../img/cc/by-nc-sa.eu.png">
+        <img v-if="notice && nonCommercialUse && !shareAlike && !derivateWorks" src="../img/cc/by-nc-nd.eu.png">
+    </div>
+</div>   
 </template>
 
 <script>
@@ -70,7 +80,7 @@ export default {
         return {
             reproduction: true,
             distribution: true,
-            derivateWorks: false,
+            derivateWorks: true,
             sharing: true,
             nonCommercialUse: false,
             notice: true,
