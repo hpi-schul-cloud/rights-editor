@@ -56,7 +56,7 @@ export default {
   },
   data: function() {
     return {
-      showActionChooser: false
+      showActionChooser: true
     };
   },
   props: {
