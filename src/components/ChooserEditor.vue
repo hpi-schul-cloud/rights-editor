@@ -78,22 +78,6 @@ const actions = {
     ],
 }
 
-// export const actions = {
-//     "permission": [
-//         {"name": "Reproduktion", "description": "Das Werk darf reproduziert werden.", "uri": "http://creativecommons.org/ns#Reproduction"},
-//         {"name": "Distribution", "description": "Das Werk (und, sofern authorisiert, Derivate) dürfen verteilt, öffentlich gezeigt und öffentlich aufgeführt werden.", "uri": "http://creativecommons.org/ns#Distribution"},
-//         {"name": "Derivat-Werke", "description": "Derivate des Werks dürfen erstellt und reproduziert werden.", "uri": "http://creativecommons.org/ns#DerivativeWorks"},
-//         {"name": "Teilen", "description": "Nichtkommerzielle Reproduktion und Distribution (wie z.B. File-Sharing) des gesamten Werks ist erlaubt.", "uri": "http://creativecommons.org/ns#Sharing"},
-//     ],
-//     "prohibition": [
-//         {"name": "Kommerziele Nutzung", "description": "Die eingräumten Berechtigungen dürfen für kommerzielle Zwecke genutzt werden.", "uri": "http://creativecommons.org/ns#CommericalUse"},
-//     ],
-//     "duty": [
-//         {"name": "Lizenzangabe", "description": "Copyright- und Lizenzangaben müssen mit dem Werk zusammen bleiben.", "uri": "http://creativecommons.org/ns#Notice"},
-//         {"name": "Lizenzbeibehaltung", "description": "Derivate müssen mit gleichen Bedingungen lizenziert werden wie das originale Werk.", "uri": "http://creativecommons.org/ns#ShareAlike"},
-//     ]
-// };
-
 export const allowed    = "allowed";
 export const prohibited = "prohibited";
 export const demanded   = "demanded";
