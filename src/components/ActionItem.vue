@@ -10,6 +10,7 @@
         class="action-input"
         placeholder="Bezeichner eingeben..."
         v-bind:value="actionName"
+        v-on:click="showActionChooser = true"
         list="actions"
         type="text"
         name="action"
@@ -56,7 +57,7 @@ export default {
   },
   data: function() {
     return {
-      showActionChooser: false
+      showActionChooser: true
     };
   },
   props: {
