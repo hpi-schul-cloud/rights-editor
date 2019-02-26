@@ -25,7 +25,6 @@
 import BaseButton from "./BaseButton.vue";
 import BaseModal from "./BaseModal.vue";
 
-
 export default {
   name: "ActionChooser",
   components: {

@@ -1,20 +1,19 @@
 <template>
   <div>
     <ActionChooser
-      v-if="this.showActionChooser"
+      v-if="showActionChooser"
       v-on:action="showActionChooser = false; action.name=$event"
       v-on:abort="showActionChooser = false"
     ></ActionChooser>Aktion:
     <div class="action-content">
-      <input
+      <button
         class="action-input"
-        placeholder="Bezeichner eingeben..."
+        placeholder="Bezeichner auswählen..."
         v-bind:value="actionName"
         v-on:click="showActionChooser = true"
         list="actions"
-        type="text"
         name="action"
-      >
+      >{{this.action.name}}</button>
       <datalist id="actions">
         <option
           v-for="(actionUri, index) in possibleActionUris()"
@@ -26,7 +25,7 @@
       <!-- should be optional and it should also be possible to add more than one constraint
       also constraints (and by the way refinements as well) are not bound to actions only, 
       they can also be attached to party collections for example...
-      http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period -->
+      http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period-->
       <ConstraintItem class="constraint-input" v-bind:constraint="action.constraint"></ConstraintItem>
     </div>
   </div>
@@ -57,7 +56,8 @@ export default {
   },
   data: function() {
     return {
-      showActionChooser: true
+      showActionChooser: false,
+      shownOnCreation: false
     };
   },
   props: {
@@ -68,6 +68,10 @@ export default {
   },
   methods: {
     possibleActionUris: function() {
+      if (this.shownOnCreation == false) { 
+        this.showActionChooser = true;
+        this.shownOnCreation = true; 
+      }
       return [
         Vocab.ActionsCV.use,
         Vocab.ActionsCV.display,
@@ -97,6 +101,31 @@ export default {
   margin-top: 20px;
   margin-left: 0px;
   width: 690px;
+  height: 38px;
+
+  background-color: white;
+  border: 0px black solid;
+  border-bottom: 1px transparent solid;
+  color: black;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  font-family: inherit;
+  font-size: 1em;
+  text-align: left;
+
+  margin: 10px;
+  margin-left: 0px;
+  padding: 10px 10px;
+
+  -webkit-box-shadow: inset 0 0 1px #000;
+  -moz-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+}
+
+.action-input:hover {
+  cursor: text;
 }
 
 .constraint-input {
