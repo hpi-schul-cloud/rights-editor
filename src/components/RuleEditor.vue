@@ -20,7 +20,7 @@
     <BaseButton v-bind:onClick="newDuty">Verpflichtung hinzufügen</BaseButton>
     <BaseButton v-bind:onClick="newProhibition">Verbot hinzufügen</BaseButton>
     <hr>
-    <BaseButton big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
+    <BaseButton style="margin-bottom: 50px;" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
     <div style="min-height: 150px; border: dotted black 1px">
       <i>divider</i>
     </div>
@@ -100,8 +100,7 @@ export default {
 
           // permission:
           if (currentRule.type == RuleTypes.Permission) {
-            console.log(currentRule.action.name);
-
+            
             let permission = new Odrl.Permission();
             permission.setAction(currentRule.action.name);
             permission.addConstraint(

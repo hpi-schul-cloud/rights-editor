@@ -58,7 +58,6 @@ export var Odrl;
     var Action = (function () {
         function Action(name) {
             this.name = name;
-            console.log(this.name);
         }
         Action.prototype.validationResult = function () {
             var valResult = "";
@@ -699,7 +698,6 @@ export var Odrl;
                         break;
                     default:
                         var fieldname = "unknownfunct" + i.toString() + "party";
-                        //var temp = {}; <-- never used
                         thisP[fieldname] = this.parties[i].uid;
                         if (this.parties[i].scope != "") {
                             fieldname = "unknownfunct" + i.toString() + "party_scope";
@@ -817,26 +815,20 @@ export var Odrl;
                 OdrlInJson.profile = this.profile;
             }
             if (this.permissions.length > 0) {
-                console.log("make permissions!!!");
                 OdrlInJson.permissions = [];
-                //for (var i = 0; i < this.permissions.length; i++) { //<-- i defined globally
                 for (let i = 0; i < this.permissions.length; i++) {
                     this.permissions[i].buildOdrlInJson();
                 }
             }
             // ### added by Ivan [2/26/2019]
             if (this.obligations.length > 0) {
-                console.log("make obligations!!!");
                 OdrlInJson.obligations = [];
-                //for (var i = 0; i < this.prohibitions.length; i++) { //<-- i defined previously
                 for (let i = 0; i < this.obligations.length; i++) {
                     this.obligations[i].buildOdrlInJson();
                 }
             }
             if (this.prohibitions.length > 0) {
-                console.log("make prohibitions!!!");
                 OdrlInJson.prohibitions = [];
-                //for (var i = 0; i < this.prohibitions.length; i++) { //<-- i defined previously
                 for (let i = 0; i < this.prohibitions.length; i++) {
                     this.prohibitions[i].buildOdrlInJson();
                 }
