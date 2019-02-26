@@ -58,6 +58,7 @@ export var Odrl;
     var Action = (function () {
         function Action(name) {
             this.name = name;
+            console.log(this.name);
         }
         Action.prototype.validationResult = function () {
             var valResult = "";
@@ -79,7 +80,7 @@ export var Odrl;
     * Class for the Constraint of the ODRL Core Model
     * @class Constraint
     * @constructor
-    * @param {String} name The identifing name of the Constraint
+    * @param {String} leftOperand The identifyer name of the left operand
     * @param {String} operator The identifyer of the operator
     * @param {String} rightOperand The identifyer of the right operand
     * @param {String} dataType The identifyer of the data type of the right operand
@@ -87,8 +88,8 @@ export var Odrl;
     * @param {String} status The identifyer of the status
     */
     var Constraint = (function () {
-        function Constraint(name, operator, rightOperand, dataType, unit, status) {
-            this.name = name;
+        function Constraint(leftOperand, operator, rightOperand, dataType, unit, status) {
+            this.leftOperand = leftOperand;
             this.operator = operator;
             this.rightOperand = rightOperand;
             this.dataType = dataType;
@@ -97,8 +98,8 @@ export var Odrl;
         }
         Constraint.prototype.validationResult = function () {
             var valResult = "";
-            if (this.name.length < 1) {
-                valResult = "!! Constraint: required name is missing<br />";
+            if (this.leftOperand.length < 1) {
+                valResult = "!! Constraint: required leftOperand is missing<br />";
             }
             if (this.operator.length < 1) {
                 valResult += "!! Constraint: required operator is missing<br />";
@@ -110,7 +111,7 @@ export var Odrl;
         };
 
         Constraint.prototype.serializeXml = function (serStrIn) {
-            var serStrOut = serStrIn + "<constraint name=\"" + this.name + "\"";
+            var serStrOut = serStrIn + "<constraint leftOperand=\"" + this.leftOperand + "\"";
             if (this.operator !== undefined && this.operator != "") {
                 serStrOut += " operator=\"" + this.operator + "\"";
             }
@@ -222,16 +223,16 @@ export var Odrl;
         /**
         * Method for adding a constraint to the Duty
         * @method addConstraint
-        * @param {String} name The identifing name of the Constraint
+        * @param {String} leftOperand The identifyer of the left operand
         * @param {String} operator The identifyer of the operator
         * @param {String} rightOperand The identifyer of the right operand
         * @param {String} dataType The identifyer of the data type of the right operand
         * @param {String} unit The identifyer of the unit of the right operand
         * @param {String} status The identifyer of the status
         */
-        Duty.prototype.addConstraint = function (name, operator, rightOperand, dataType, unit, status) {
-            var newConstraint = new Constraint(name, operator, rightOperand, dataType, unit, status);
-            this.constraints.push(newConstraint);
+        Duty.prototype.addConstraint = function (leftOperand, operator, rightOperand, dataType, unit, status) {
+            var newConstraint = new Constraint(leftOperand, operator, rightOperand, dataType, unit, status);
+            this.constraints.push(newConstraint);            
             return this;
         };
 
@@ -299,14 +300,14 @@ export var Odrl;
                 var thisC;
                 for (i = 0; i < this.constraints.length; i++) {
                     thisC = {};
-                    thisC.name = this.constraints[i].name;
+                    thisC.leftOperand = this.constraints[i].leftOperand;
                     thisC.operator = this.constraints[i].operator;
-                    thisC.rightoperand = this.constraints[i].rightOperand;
+                    thisC.rightOperand = this.constraints[i].rightOperand;
                     if (this.constraints[i].dataType != undefined && this.constraints[i].dataType !== "") {
-                        thisC.rightoperanddatatype = this.constraints[i].dataType;
+                        thisC.datatype = this.constraints[i].dataType;
                     }
                     if (this.constraints[i].unit != undefined && this.constraints[i].unit !== "") {
-                        thisC.rightoperandunit = this.constraints[i].unit;
+                        thisC.unit = this.constraints[i].unit;
                     }
                     if (this.constraints[i].status != undefined && this.constraints[i].status !== "") {
                         thisC.status = this.constraints[i].status;
@@ -351,7 +352,7 @@ export var Odrl;
         * @param {String} actionname The identifier of the action
         */
         Permission.prototype.setAction = function (actionname) {
-            this.action = new Action(actionname);
+            this.action = new Action(actionname);            
             return this;
         };
 
@@ -415,7 +416,7 @@ export var Odrl;
         Permission.prototype.addDuty = function (newDuty) {
             this.duties.push(newDuty);
             return this;
-        };
+        };        
 
         Permission.prototype.validationResult = function () {
             var valResult = "";
@@ -481,14 +482,14 @@ export var Odrl;
                 var thisC;
                 for (i = 0; i < this.constraints.length; i++) {
                     thisC = {};
-                    thisC.name = this.constraints[i].name;
+                    thisC.leftOperand = this.constraints[i].leftOperand;
                     thisC.operator = this.constraints[i].operator;
-                    thisC.rightoperand = this.constraints[i].rightOperand;
+                    thisC.rightOperand = this.constraints[i].rightOperand;
                     if (this.constraints[i].dataType != undefined && this.constraints[i].dataType !== "") {
-                        thisC.rightoperanddatatype = this.constraints[i].dataType;
+                        thisC.datatype = this.constraints[i].dataType;
                     }
                     if (this.constraints[i].unit != undefined && this.constraints[i].unit !== "") {
-                        thisC.rightoperandunit = this.constraints[i].unit;
+                        thisC.unit = this.constraints[i].unit;
                     }
                     if (this.constraints[i].status != undefined && this.constraints[i].status !== "") {
                         thisC.status = this.constraints[i].status;
@@ -667,14 +668,14 @@ export var Odrl;
                 var thisC;
                 for (i = 0; i < this.constraints.length; i++) {
                     thisC = {};
-                    thisC.name = this.constraints[i].name;
+                    thisC.leftOperand = this.constraints[i].leftOperand;
                     thisC.operator = this.constraints[i].operator;
-                    thisC.rightoperand = this.constraints[i].rightOperand;
+                    thisC.rightOperand = this.constraints[i].rightOperand;
                     if (this.constraints[i].dataType != undefined && this.constraints[i].dataType !== "") {
-                        thisC.rightoperanddatatype = this.constraints[i].dataType;
+                        thisC.datatype = this.constraints[i].dataType;
                     }
                     if (this.constraints[i].unit != undefined && this.constraints[i].unit !== "") {
-                        thisC.rightoperandunit = this.constraints[i].unit;
+                        thisC.unit = this.constraints[i].unit;
                     }
                     if (this.constraints[i].status != undefined && this.constraints[i].status !== "") {
                         thisC.status = this.constraints[i].status;
@@ -726,6 +727,7 @@ export var Odrl;
             this.uid = pUid;
             this.type = Odrl.nsUri + pType;
             this.permissions = [];
+            this.obligations = []; // added by Ivan [2/26/2019]
             this.prohibitions = [];
         }
         /**
@@ -745,6 +747,16 @@ export var Odrl;
         */
         Policy.prototype.addPermission = function (newPerm) {
             this.permissions.push(newPerm);
+            return this;
+        };
+
+        /** #### added by Ivan [2/26/2019]
+        * Method for adding a duty to the Policy
+        * @method addDuty
+        * @param {Duty} newDuty A duty instance
+        */
+       Policy.prototype.addDuty = function (newDuty) {
+            this.obligations.push(newDuty);
             return this;
         };
 
@@ -772,6 +784,9 @@ export var Odrl;
             for (i = 0; i < this.permissions.length; i++) {
                 serStr = this.permissions[i].serializeXml(serStr);
             }
+            for (i = 0; i < this.obligations.length; i++) {
+                serStr = this.obligations[i].serializeXml(serStr);
+            }
             for (i = 0; i < this.prohibitions.length; i++) {
                 serStr = this.prohibitions[i].serializeXml(serStr);
             }
@@ -781,8 +796,8 @@ export var Odrl;
 
         Policy.prototype.buildOdrlInJson = function () {
             OdrlInJson = {};
-            OdrlInJson.policytype = this.type;
-            OdrlInJson.policyid = this.uid;
+            OdrlInJson.type = this.type;
+            OdrlInJson.uid = this.uid;
             if (this.conflict != undefined && this.conflict != "") {
                 OdrlInJson.conflict = this.conflict;
             }
@@ -807,7 +822,15 @@ export var Odrl;
                 //for (var i = 0; i < this.permissions.length; i++) { //<-- i defined globally
                 for (let i = 0; i < this.permissions.length; i++) {
                     this.permissions[i].buildOdrlInJson();
-                    console.log(i);
+                }
+            }
+            // ### added by Ivan [2/26/2019]
+            if (this.obligations.length > 0) {
+                console.log("make obligations!!!");
+                OdrlInJson.obligations = [];
+                //for (var i = 0; i < this.prohibitions.length; i++) { //<-- i defined previously
+                for (let i = 0; i < this.obligations.length; i++) {
+                    this.obligations[i].buildOdrlInJson();
                 }
             }
             if (this.prohibitions.length > 0) {
@@ -816,10 +839,8 @@ export var Odrl;
                 //for (var i = 0; i < this.prohibitions.length; i++) { //<-- i defined previously
                 for (let i = 0; i < this.prohibitions.length; i++) {
                     this.prohibitions[i].buildOdrlInJson();
-                    console.log(i);
                 }
             }
-            console.log(OdrlInJson);
         };
 
         /**
