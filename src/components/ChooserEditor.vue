@@ -31,6 +31,16 @@
     <hr>
     <h2>Provisorische Lizenz</h2>
     <pre>{{ license }}</pre>
+    <div v-if="notice" class="rule">
+        <p class="caption">CC-Lizenz</p>
+        <p class="description">Die erstellte CC-Lizenz:</p>
+        <img v-if="notice && commercialUse && !shareAlike && derivateWorks" src="../img/cc/by.png">
+        <img v-if="notice && commercialUse && shareAlike && derivateWorks" src="../img/cc/by-sa.png">
+        <img v-if="notice && commercialUse && !shareAlike && !derivateWorks" src="../img/cc/by-nd.png">
+        <img v-if="notice && !commercialUse && !shareAlike && derivateWorks" src="../img/cc/by-nc.eu.png">
+        <img v-if="notice && !commercialUse && shareAlike && derivateWorks" src="../img/cc/by-nc-sa.eu.png">
+        <img v-if="notice && !commercialUse && !shareAlike && !derivateWorks" src="../img/cc/by-nc-nd.eu.png">
+    </div>
 </div>
 </template>
 
@@ -153,6 +163,18 @@ export default {
 
             return license;
         },
+        notice: function() {
+            return this.settings[actionNotice.uri] === this.demanded;
+        },
+        commercialUse: function() {
+            return this.settings[actionCommercialUse.uri] === this.allowed;
+        },
+        shareAlike: function() {
+            return this.settings[actionShareAlike.uri] === this.demanded;
+        },
+        derivateWorks: function() {
+            return this.settings[actionDerivateWorks.uri] === this.allowed;
+        }
     },
 };
 </script>
