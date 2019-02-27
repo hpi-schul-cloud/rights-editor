@@ -39,7 +39,6 @@ export default {
           actions: {
               1: {id: 1, label: "Aggregieren"},
               2: {id: 2, label: "Annotieren"},
-              3: {id: 3, label: "Annotieren"},
               4: {id: 4, label: "Annonymisieren"},
               5: {id: 5, label: "Archivieren"},
               6: {id: 6, label: "Kompensieren"},

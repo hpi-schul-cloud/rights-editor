@@ -2,17 +2,20 @@
   <li class="rule-tree-li">
     <RuleItem
       v-on:remove-rule-event="updateRules($event)"
-      v-for="(rule, index) in ruleTree.rules"
+      v-for="rule in ruleTree.rules"
       v-bind:rule="rule"
-      v-bind:key="index"
-      v-bind:style="{ marginLeft: ((index-1) * 25) + 'px' }"
+      v-bind:key="rule.id"
+      v-bind:style="{ marginLeft: getRuleMargin(rule.id) + 'px', paddingLeft: 10 + 'px' }"
     ></RuleItem>
 
     <div class="addon-container" v-if="getPossibleAddons() != null">
       <p>Füge optional Erweiterungen hinzu:</p>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
-          <BaseButton v-bind:onClickParam="addon.name" v-bind:onClick="createAddon">{{addon.name}} hinzufügen</BaseButton>
+          <BaseButton
+            v-bind:onClickParam="addon.name"
+            v-bind:onClick="createAddon"
+          >{{addon.name}} hinzufügen</BaseButton>
           <div class="addon-info">({{addon.descr}})</div>
         </li>
       </ul>
@@ -25,9 +28,8 @@ import RuleItem, { Rule, RuleTypes } from "./RuleItem.vue";
 import BaseButton from "./BaseButton.vue";
 
 export class RuleTree {
-  constructor(id, title, type) {
+  constructor(id, type) {
     this.id = id;
-    this.title = title;
     this.rules = [];
   }
 }
@@ -47,7 +49,8 @@ export default {
   },
   data: function() {
     return {
-      nextId: 1
+      nextId: 1,
+      leftMarginFactor: 30
     };
   },
   props: {
@@ -57,15 +60,40 @@ export default {
     }
   },
   methods: {
-    updateRules(rule_id) {
+    updateRules(id) {
       for (let i = 0; i < this.ruleTree.rules.length; i++) {
-        if (this.ruleTree.rules[i].id == rule_id) {
-          this.ruleTree.rules.splice(i, this.ruleTree.rules.length - i);
+        if (this.ruleTree.rules[i].id == id) {
+          if (i == 0) {
+            this.ruleTree.rules.splice(i, this.ruleTree.rules.length);
+          } else {
+            this.ruleTree.rules.splice(i, 1);
+          }
         }
+      }
+      let bCount = 0;
+      let cCount = 0;
+      for (let i = 0; i < this.ruleTree.rules.length; i++) {
+        if (this.ruleTree.rules[i].id[0] == "b") {
+          bCount++;
+        } else if (this.ruleTree.rules[i].id[0] == "c") {
+          cCount++;
+        }
+      }
+      if (bCount == 0 && cCount > 0) {
+        this.ruleTree.rules.splice(1, this.ruleTree.rules.length);
       }
       if (this.ruleTree.rules.length == 0) {
         this.$emit("remove-tree-event", this.ruleTree.id);
       }
+    },
+    getRuleMargin(id) {
+      let x = -1;
+      if (id[0] == "b") {
+        x = 0;
+      } else if (id[0] == "c") {
+        x = 1;
+      }
+      return x * this.leftMarginFactor;
     },
     getPossibleAddons: function() {
       let addon = [];
@@ -81,7 +109,10 @@ export default {
             )
           );
           dutyAdded = true;
-        } else if (!remedyAdded && this.ruleTree.rules[i].type == RuleTypes.Prohibition) {
+        } else if (
+          !remedyAdded &&
+          this.ruleTree.rules[i].type == RuleTypes.Prohibition
+        ) {
           addon.push(
             new Addon(
               "Strafe",
@@ -89,7 +120,10 @@ export default {
             )
           );
           remedyAdded = true;
-        } else if (!consequenceAdded && this.ruleTree.rules[i].type == RuleTypes.Duty) {
+        } else if (
+          !consequenceAdded &&
+          this.ruleTree.rules[i].type == RuleTypes.Duty
+        ) {
           addon.push(
             new Addon(
               "Konsequenz",
@@ -103,16 +137,23 @@ export default {
     },
     createAddon(name) {
       let dutyType = null;
+      let char = "";
       if (name == "Konsequenz") {
         dutyType = RuleTypes.Consequence;
+        char = "c";
       } else if (name == "Verpflichtung") {
         dutyType = RuleTypes.Duty;
+        char = "b";
       } else if (name == "Strafe") {
         dutyType = RuleTypes.Remedy;
+        char = "b";
       }
       if (dutyType != null) {
         let newID = this.nextId++;
-        this.ruleTree.rules.push(new Rule(newID, dutyType));
+        this.ruleTree.rules.push(new Rule(char + newID, dutyType));
+        this.ruleTree.rules.sort((a, b) =>
+          a.id > b.id ? 1 : a.id < b.id ? -1 : 0
+        );
       }
     }
   }

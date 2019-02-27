@@ -62,10 +62,10 @@ export default {
     newProhibition: function() {
       this.newRule(RuleTypes.Prohibition);
     },
-    newRule: function(original) {
+    newRule: function(type) {
       let newID = this.nextId++;
-      let ruleTree = new RuleTree(newID, "Regel " + newID, original);
-      ruleTree.rules.push(new Rule(0, original));
+      let ruleTree = new RuleTree(newID, type);
+      ruleTree.rules.push(new Rule("a0", type));
       this.ruleTrees.push(ruleTree);
     },
     updateTrees(tree_id) {
