@@ -32,7 +32,7 @@ export default {
     BaseButton,
     BaseModal
   },
-
+  
   data: function() {
       return {
           currentSelected: null,
