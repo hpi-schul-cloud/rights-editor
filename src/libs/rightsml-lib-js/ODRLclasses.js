@@ -3,7 +3,7 @@
  * MIT license) and slightly edited. The license can be found at ./LICENSE.md.
  */
 
- /**
+/**
 * This file of the module provides all classes of the ODRL data model
 *
 * @module: ODRL
@@ -79,7 +79,7 @@ export var Odrl;
     * Class for the Constraint of the ODRL Core Model
     * @class Constraint
     * @constructor
-    * @param {String} name The identifing name of the Constraint
+    * @param {String} leftOperand The identifyer name of the left operand
     * @param {String} operator The identifyer of the operator
     * @param {String} rightOperand The identifyer of the right operand
     * @param {String} dataType The identifyer of the data type of the right operand
@@ -87,8 +87,8 @@ export var Odrl;
     * @param {String} status The identifyer of the status
     */
     var Constraint = (function () {
-        function Constraint(name, operator, rightOperand, dataType, unit, status) {
-            this.name = name;
+        function Constraint(leftOperand, operator, rightOperand, dataType, unit, status) {
+            this.leftOperand = leftOperand;
             this.operator = operator;
             this.rightOperand = rightOperand;
             this.dataType = dataType;
@@ -97,8 +97,8 @@ export var Odrl;
         }
         Constraint.prototype.validationResult = function () {
             var valResult = "";
-            if (this.name.length < 1) {
-                valResult = "!! Constraint: required name is missing<br />";
+            if (this.leftOperand.length < 1) {
+                valResult = "!! Constraint: required leftOperand is missing<br />";
             }
             if (this.operator.length < 1) {
                 valResult += "!! Constraint: required operator is missing<br />";
@@ -110,7 +110,7 @@ export var Odrl;
         };
 
         Constraint.prototype.serializeXml = function (serStrIn) {
-            var serStrOut = serStrIn + "<constraint name=\"" + this.name + "\"";
+            var serStrOut = serStrIn + "<constraint leftOperand=\"" + this.leftOperand + "\"";
             if (this.operator !== undefined && this.operator != "") {
                 serStrOut += " operator=\"" + this.operator + "\"";
             }
@@ -176,26 +176,122 @@ export var Odrl;
 
     // ****************************************************
     /**
+    * Class for the Failure of the ODRL Core Model
+    * @class Failure
+    * @constructor
+    */
+    var Failure = (function () {
+        function Failure() {
+            this.action = null;
+            this.assets = [];
+            this.parties = [];
+        }
+
+        /**
+        * Method for setting the action of the Failure
+        * @method setAction
+        * @param {String} actionname The identifier of the action
+        */
+        Failure.prototype.setAction = function (actionname) {
+            this.action = new Action(actionname);
+            return this;
+        };
+
+        /**
+        * Method for adding an asset to the Failure
+        * @method addAsset
+        * @param {String} uid The unique identifier of the asset
+        * @param {String} relation The relation of the asset to the Duty.
+        */
+        Failure.prototype.addAsset = function (uid, relation) {
+            var newAsset = new Asset(uid, relation);
+            this.assets.push(newAsset);
+            return this;
+        };
+
+        /**
+        * Method for adding a party to the Failure
+        * @method addParty
+        * @param {String} uid The Unique Identifier of the Party
+        * @param {String} pfunction The identifier of the functional role this party takes
+        * @param {String} scope The scope of the party
+        */
+        Failure.prototype.addParty = function (uid, pfunction, scope) {
+            var newParty = new Party(uid, pfunction, scope);
+            this.parties.push(newParty);
+            return this;
+        };
+
+        Failure.prototype.validationResult = function () {
+            var valResult = "";
+            if (this.action === undefined) {
+                valResult = "!! Failure: required action is missing<br />";
+            }
+            return valResult;
+        };
+
+        Failure.prototype.serializeXml = function (serStrIn) {
+            var serStrOut = serStrIn;
+            serStrOut += "<failure>"; // TODO: string replace later (either remedy or consequence)
+            var i;
+            for (i = 0; i < this.assets.length; i++) {
+                serStrOut = this.assets[i].serializeXml(serStrOut);
+            }
+            if (this.action != undefined) {
+                serStrOut = this.action.serializeXml(serStrOut);
+            }
+            for (i = 0; i < this.parties.length; i++) {
+                serStrOut = this.parties[i].serializeXml(serStrOut);
+            }
+            serStrOut += "</failure>";
+            return serStrOut;
+        };
+
+        Failure.prototype.buildDutyOdrlInJson = function () {
+            var thisF = {};
+            var i;
+            if (this.action !== undefined) {
+                thisF.action = this.action.name;
+            }
+            for (i = 0; i < this.assets.length; i++) {
+                if (this.assets[i].relation == Odrl.nsUri + "target") {
+                    thisF.target = this.assets[i].uid;
+                }
+                if (this.assets[i].relation == Odrl.nsUri + "output") {
+                    thisF.output = this.assets[i].uid;
+                }
+            }
+            for (i = 0; i < this.parties.length; i++) {
+                if (this.parties[i].pfunction == Odrl.nsUri + "assigner") {
+                    thisF.assigner = this.parties[i].uid;
+                }
+                if (this.parties[i].pfunction == Odrl.nsUri + "assignee") {
+                    thisF.assignee = this.parties[i].uid;
+                    if (this.parties[i].scope != "") {
+                        thisF.assignee_scope = this.parties[i].scope;
+                    }
+                }
+            }
+            return thisF;
+        };
+        return Failure;
+    })();
+    Odrl.Failure = Failure;
+
+    // ****************************************************
+    /**
     * Class for the Duty of the ODRL Core Model
     * @class Duty
     * @constructor
     */
     var Duty = (function () {
         function Duty() {
-            this.uid = null;
+            this.action = null;
             this.assets = [];
             this.constraints = [];
             this.parties = [];
+            this.consequences = []; // of class type Failure
         }
-        /**
-        * Method for setting the unique identifier of the Duty
-        * @method setUid
-        * @param {String} uid The unique identifier of the Duty
-        */
-        Duty.prototype.setUid = function (uid) {
-            this.uid = uid;
-            return this;
-        };
 
         /**
         * Method for setting the action of the Duty
@@ -222,15 +318,15 @@ export var Odrl;
         /**
         * Method for adding a constraint to the Duty
         * @method addConstraint
-        * @param {String} name The identifing name of the Constraint
+        * @param {String} leftOperand The identifyer of the left operand
         * @param {String} operator The identifyer of the operator
         * @param {String} rightOperand The identifyer of the right operand
         * @param {String} dataType The identifyer of the data type of the right operand
         * @param {String} unit The identifyer of the unit of the right operand
         * @param {String} status The identifyer of the status
         */
-        Duty.prototype.addConstraint = function (name, operator, rightOperand, dataType, unit, status) {
-            var newConstraint = new Constraint(name, operator, rightOperand, dataType, unit, status);
+        Duty.prototype.addConstraint = function (leftOperand, operator, rightOperand, dataType, unit, status) {
+            var newConstraint = new Constraint(leftOperand, operator, rightOperand, dataType, unit, status);
             this.constraints.push(newConstraint);
             return this;
         };
@@ -248,6 +344,16 @@ export var Odrl;
             return this;
         };
 
+        /**
+        * Method for adding a consequence to the Duty
+        * @method addConsequence
+        * @param {Failure} newFailure A Failure instance
+        */
+        Duty.prototype.addConsequence = function (newFailure) {
+            this.consequences.push(newFailure);
+            return this;
+        };
+
         Duty.prototype.validationResult = function () {
             var valResult = "";
             if (this.action === undefined) {
@@ -258,11 +364,7 @@ export var Odrl;
 
         Duty.prototype.serializeXml = function (serStrIn) {
             var serStrOut = serStrIn;
-            if (this.uid != undefined && this.uid != "") {
-                serStrOut += "<duty uid=\"" + this.uid + "\" >";
-            } else {
-                serStrOut += "<duty>";
-            }
+            serStrOut += "<duty>";
             var i;
             for (i = 0; i < this.assets.length; i++) {
                 serStrOut = this.assets[i].serializeXml(serStrOut);
@@ -275,6 +377,11 @@ export var Odrl;
             }
             for (i = 0; i < this.parties.length; i++) {
                 serStrOut = this.parties[i].serializeXml(serStrOut);
+            }
+            for (i = 0; i < this.consequences.length; i++) {
+                let s1 = this.consequences[i].serializeXml(serStrOut);
+                let s2 = s1.replace("<failure>", "<consequence>");
+                serStrOut += s2.replace("</failure>", "</consequence>");
             }
             serStrOut += "</duty>";
             return serStrOut;
@@ -299,14 +406,14 @@ export var Odrl;
                 var thisC;
                 for (i = 0; i < this.constraints.length; i++) {
                     thisC = {};
-                    thisC.name = this.constraints[i].name;
+                    thisC.leftOperand = this.constraints[i].leftOperand;
                     thisC.operator = this.constraints[i].operator;
-                    thisC.rightoperand = this.constraints[i].rightOperand;
+                    thisC.rightOperand = this.constraints[i].rightOperand;
                     if (this.constraints[i].dataType != undefined && this.constraints[i].dataType !== "") {
-                        thisC.rightoperanddatatype = this.constraints[i].dataType;
+                        thisC.datatype = this.constraints[i].dataType;
                     }
                     if (this.constraints[i].unit != undefined && this.constraints[i].unit !== "") {
-                        thisC.rightoperandunit = this.constraints[i].unit;
+                        thisC.unit = this.constraints[i].unit;
                     }
                     if (this.constraints[i].status != undefined && this.constraints[i].status !== "") {
                         thisC.status = this.constraints[i].status;
@@ -323,6 +430,12 @@ export var Odrl;
                     if (this.parties[i].scope != "") {
                         thisD.assignee_scope = this.parties[i].scope;
                     }
+                }
+            }
+            if (this.consequences.length > 0) {
+                thisD.consequences = [];
+                for (i = 0; i < this.consequnces.length; i++) {
+                    thisD.consequences.push(this.consequences[i].buildDutyOdrlInJson());
                 }
             }
             return thisD;
@@ -409,7 +522,7 @@ export var Odrl;
 
         /**
         * Method for adding a duty to the Permission
-        * @method addParty
+        * @method addDuty
         * @param {Duty} newDuty A duty instance
         */
         Permission.prototype.addDuty = function (newDuty) {
@@ -481,14 +594,14 @@ export var Odrl;
                 var thisC;
                 for (i = 0; i < this.constraints.length; i++) {
                     thisC = {};
-                    thisC.name = this.constraints[i].name;
+                    thisC.leftOperand = this.constraints[i].leftOperand;
                     thisC.operator = this.constraints[i].operator;
-                    thisC.rightoperand = this.constraints[i].rightOperand;
+                    thisC.rightOperand = this.constraints[i].rightOperand;
                     if (this.constraints[i].dataType != undefined && this.constraints[i].dataType !== "") {
-                        thisC.rightoperanddatatype = this.constraints[i].dataType;
+                        thisC.datatype = this.constraints[i].dataType;
                     }
                     if (this.constraints[i].unit != undefined && this.constraints[i].unit !== "") {
-                        thisC.rightoperandunit = this.constraints[i].unit;
+                        thisC.unit = this.constraints[i].unit;
                     }
                     if (this.constraints[i].status != undefined && this.constraints[i].status !== "") {
                         thisC.status = this.constraints[i].status;
@@ -545,6 +658,7 @@ export var Odrl;
             this.assets = [];
             this.constraints = [];
             this.parties = [];
+            this.remedies = [];
         }
         /**
         * Method for setting the action of the Prohibition
@@ -608,6 +722,16 @@ export var Odrl;
             return this;
         };
 
+        /**
+        * Method for adding a remedy to the Prohibition
+        * @method addRemedy
+        * @param {Failure} newFailure A Failure instance
+        */
+        Prohibition.prototype.addRemedy = function (newFailure) {
+            this.remedies.push(newFailure);
+            return this;
+        };
+
         Prohibition.prototype.validationResult = function () {
             var valResult = "";
             if (this.action === undefined) {
@@ -624,6 +748,9 @@ export var Odrl;
             }
             for (i = 0; i < this.constraints.length; i++) {
                 valResult += this.constraints[i].validationResult();
+            }
+            for (i = 0; i < this.remedies.length; i++) {
+                valResult += this.remedies[i].validationResult();
             }
             return valResult;
         };
@@ -642,6 +769,9 @@ export var Odrl;
             }
             for (i = 0; i < this.parties.length; i++) {
                 serStrOut = this.parties[i].serializeXml(serStrOut);
+            }
+            for (i = 0; i < this.remedies.length; i++) {
+                serStrOut = this.remedies[i].serializeXml(serStrOut);
             }
             serStrOut += "</prohibition>";
             return serStrOut;
@@ -667,14 +797,14 @@ export var Odrl;
                 var thisC;
                 for (i = 0; i < this.constraints.length; i++) {
                     thisC = {};
-                    thisC.name = this.constraints[i].name;
+                    thisC.leftOperand = this.constraints[i].leftOperand;
                     thisC.operator = this.constraints[i].operator;
-                    thisC.rightoperand = this.constraints[i].rightOperand;
+                    thisC.rightOperand = this.constraints[i].rightOperand;
                     if (this.constraints[i].dataType != undefined && this.constraints[i].dataType !== "") {
-                        thisC.rightoperanddatatype = this.constraints[i].dataType;
+                        thisC.datatype = this.constraints[i].dataType;
                     }
                     if (this.constraints[i].unit != undefined && this.constraints[i].unit !== "") {
-                        thisC.rightoperandunit = this.constraints[i].unit;
+                        thisC.unit = this.constraints[i].unit;
                     }
                     if (this.constraints[i].status != undefined && this.constraints[i].status !== "") {
                         thisC.status = this.constraints[i].status;
@@ -698,13 +828,18 @@ export var Odrl;
                         break;
                     default:
                         var fieldname = "unknownfunct" + i.toString() + "party";
-                        //var temp = {}; <-- never used
                         thisP[fieldname] = this.parties[i].uid;
                         if (this.parties[i].scope != "") {
                             fieldname = "unknownfunct" + i.toString() + "party_scope";
                             thisP[fieldname] = this.parties[i].scope;
                         }
                         break;
+                }
+            }
+            if (this.remedies.length > 0) {
+                thisP.remedies = [];
+                for (i = 0; i < this.remedies.length; i++) {
+                    thisP.remedies.push(this.remedies[i].buildDutyOdrlInJson());
                 }
             }
             OdrlInJson.prohibitions.push(thisP);
@@ -726,6 +861,7 @@ export var Odrl;
             this.uid = pUid;
             this.type = Odrl.nsUri + pType;
             this.permissions = [];
+            this.obligations = [];
             this.prohibitions = [];
         }
         /**
@@ -745,6 +881,15 @@ export var Odrl;
         */
         Policy.prototype.addPermission = function (newPerm) {
             this.permissions.push(newPerm);
+            return this;
+        };
+
+        /** Method for adding a duty to the Policy
+        * @method addObligation
+        * @param {Duty} newDuty A duty instance
+        */
+        Policy.prototype.addDuty = function (newDuty) {
+            this.obligations.push(newDuty);
             return this;
         };
 
@@ -772,6 +917,9 @@ export var Odrl;
             for (i = 0; i < this.permissions.length; i++) {
                 serStr = this.permissions[i].serializeXml(serStr);
             }
+            for (i = 0; i < this.obligations.length; i++) {
+                serStr = this.obligations[i].serializeXml(serStr);
+            }
             for (i = 0; i < this.prohibitions.length; i++) {
                 serStr = this.prohibitions[i].serializeXml(serStr);
             }
@@ -781,8 +929,8 @@ export var Odrl;
 
         Policy.prototype.buildOdrlInJson = function () {
             OdrlInJson = {};
-            OdrlInJson.policytype = this.type;
-            OdrlInJson.policyid = this.uid;
+            OdrlInJson.type = this.type;
+            OdrlInJson.uid = this.uid;
             if (this.conflict != undefined && this.conflict != "") {
                 OdrlInJson.conflict = this.conflict;
             }
@@ -802,24 +950,23 @@ export var Odrl;
                 OdrlInJson.profile = this.profile;
             }
             if (this.permissions.length > 0) {
-                console.log("make permissions!!!");
                 OdrlInJson.permissions = [];
-                //for (var i = 0; i < this.permissions.length; i++) { //<-- i defined globally
                 for (let i = 0; i < this.permissions.length; i++) {
                     this.permissions[i].buildOdrlInJson();
-                    console.log(i);
+                }
+            }
+            if (this.obligations.length > 0) {
+                OdrlInJson.obligations = [];
+                for (let i = 0; i < this.obligations.length; i++) {
+                    this.obligations[i].buildOdrlInJson();
                 }
             }
             if (this.prohibitions.length > 0) {
-                console.log("make prohibitions!!!");
                 OdrlInJson.prohibitions = [];
-                //for (var i = 0; i < this.prohibitions.length; i++) { //<-- i defined previously
                 for (let i = 0; i < this.prohibitions.length; i++) {
                     this.prohibitions[i].buildOdrlInJson();
-                    console.log(i);
                 }
             }
-            console.log(OdrlInJson);
         };
 
         /**
@@ -863,4 +1010,3 @@ export var Odrl;
     })();
     Odrl.Policy = Policy;
 })(Odrl || (Odrl = {}));
-//# sourceMappingURL=ODRLclasses.js.map

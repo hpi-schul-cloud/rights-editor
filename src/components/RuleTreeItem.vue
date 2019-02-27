@@ -2,19 +2,21 @@
   <li class="rule-tree-li">
     <RuleItem
       v-on:remove-rule-event="updateRules($event)"
-      v-for="(rule, index) in ruleTree.rules"
+      v-for="rule in ruleTree.rules"
       v-bind:rule="rule"
-      v-bind:key="index"
-      v-bind:style="{ marginLeft: ((index-1) * 25) + 'px' }"
+      v-bind:key="rule.id"
+      v-bind:style="{ marginLeft: getRuleMargin(rule.id) + 'px', paddingLeft: 10 + 'px' }"
     ></RuleItem>
 
-    <div class="addon-container"
-      v-if="getPossibleAddons() != null">
-      <p>Füge optional eine Erweiterung hinzu:</p>
+    <div class="addon-container" v-if="getPossibleAddons() != null">
+      <p>Füge optional Erweiterungen hinzu:</p>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
-          <BaseButton v-bind:onClick="createAddon">{{addon[0]}} hinzufügen</BaseButton>
-          <div class="addon-info">({{addon[1]}})</div>
+          <BaseButton
+            v-bind:name="addon.name"
+            v-bind:onClick="createAddon"
+          >{{addon.name}} hinzufügen</BaseButton>
+          <div class="addon-info">({{addon.descr}})</div>
         </li>
       </ul>
     </div>
@@ -26,10 +28,16 @@ import RuleItem, { Rule, RuleTypes } from "./RuleItem.vue";
 import BaseButton from "./BaseButton.vue";
 
 export class RuleTree {
-  constructor(id, title, type) {
+  constructor(id, type) {
     this.id = id;
-    this.title = title;
     this.rules = [];
+  }
+}
+
+class Addon {
+  constructor(name, descr) {
+    this.name = name;
+    this.descr = descr;
   }
 }
 
@@ -41,7 +49,8 @@ export default {
   },
   data: function() {
     return {
-      nextId: 1
+      nextId: 1,
+      leftMarginFactor: 30
     };
   },
   props: {
@@ -51,44 +60,102 @@ export default {
     }
   },
   methods: {
-    updateRules(rule_id) {
+    updateRules(id) {
       for (let i = 0; i < this.ruleTree.rules.length; i++) {
-        if (this.ruleTree.rules[i].id == rule_id) {
-          this.ruleTree.rules.splice(i, this.ruleTree.rules.length - i);
+        if (this.ruleTree.rules[i].id == id) {
+          if (i == 0) {
+            this.ruleTree.rules.splice(i, this.ruleTree.rules.length);
+          } else {
+            this.ruleTree.rules.splice(i, 1);
+          }
         }
+      }
+      let bCount = 0;
+      let cCount = 0;
+      for (let i = 0; i < this.ruleTree.rules.length; i++) {
+        if (this.ruleTree.rules[i].id[0] == "b") {
+          bCount++;
+        } else if (this.ruleTree.rules[i].id[0] == "c") {
+          cCount++;
+        }
+      }
+      if (bCount == 0 && cCount > 0) {
+        this.ruleTree.rules.splice(1, this.ruleTree.rules.length);
       }
       if (this.ruleTree.rules.length == 0) {
         this.$emit("remove-tree-event", this.ruleTree.id);
       }
     },
-    getPossibleAddons: function() {
-      let lastRule = this.ruleTree.rules[this.ruleTree.rules.length - 1];
-      if (lastRule.type["name"] == "Erlaubnis") {
-        return [
-          [
-            "Verpflichtung",
-            "erlaubt wird dann nur, wenn die Verpflichtung erfüllt ist"
-          ]
-        ];
-      } else if (lastRule.type["name"] == "Verpflichtung") {
-        return [["Konsequenz", "falls die Verpflichtung nicht erfüllt wird"]];
-      } else if (lastRule.type["name"] == "Verbot") {
-        return [["Strafe", "falls das Verbot missachtet wird"]];
+    getRuleMargin(id) {
+      let x = -1;
+      if (id[0] == "b") {
+        x = 0;
+      } else if (id[0] == "c") {
+        x = 1;
       }
-      return null;
+      return x * this.leftMarginFactor;
     },
-    createAddon() {
-      let dutyType;
-      let lastRule = this.ruleTree.rules[this.ruleTree.rules.length - 1];
-      if (lastRule.type["name"] == "Erlaubnis") {
-        dutyType = RuleTypes.Duty;
-      } else if (lastRule.type["name"] == "Verpflichtung") {
-        dutyType = RuleTypes.Consequence;
-      } else if (lastRule.type["name"] == "Verbot") {
-        dutyType = RuleTypes.Remedy;
+    getPossibleAddons: function() {
+      let addon = [];
+      let dutyAdded = false;
+      let remedyAdded = false;
+      let consequenceAdded = false;
+      for (let i = 0; i < this.ruleTree.rules.length; i++) {
+        if (!dutyAdded && this.ruleTree.rules[i].type == RuleTypes.Permission) {
+          addon.push(
+            new Addon(
+              "Verpflichtung",
+              "erlaubt wird dann nur, wenn alle Verpflichtungen erfüllt sind"
+            )
+          );
+          dutyAdded = true;
+        } else if (
+          !remedyAdded &&
+          this.ruleTree.rules[i].type == RuleTypes.Prohibition
+        ) {
+          addon.push(
+            new Addon(
+              "Strafe",
+              "muss geleistet werden, falls das Verbot missachtet wird"
+            )
+          );
+          remedyAdded = true;
+        } else if (
+          !consequenceAdded &&
+          this.ruleTree.rules[i].type == RuleTypes.Duty
+        ) {
+          addon.push(
+            new Addon(
+              "Konsequenz",
+              "muss geleistet werden, falls die Verpflichtungen nicht alle erfüllt sind"
+            )
+          );
+          consequenceAdded = true;
+        }
       }
-      let newID = this.nextId++;
-      this.ruleTree.rules.push(new Rule(newID, dutyType));
+      return addon;
+    },
+    createAddon(event) {
+      let name = event.target.name;
+      let dutyType = null;
+      let char = "";
+      if (name == "Konsequenz") {
+        dutyType = RuleTypes.Consequence;
+        char = "c";
+      } else if (name == "Verpflichtung") {
+        dutyType = RuleTypes.Duty;
+        char = "b";
+      } else if (name == "Strafe") {
+        dutyType = RuleTypes.Remedy;
+        char = "b";
+      }
+      if (dutyType != null) {
+        let newID = this.nextId++;
+        this.ruleTree.rules.push(new Rule(char + newID, dutyType));
+        this.ruleTree.rules.sort((a, b) =>
+          a.id > b.id ? 1 : a.id < b.id ? -1 : 0
+        );
+      }
     }
   }
 };
@@ -96,7 +163,9 @@ export default {
 
 <style>
 .addon-container {
+  margin-top: 35px;
   margin-bottom: 20px;
+  margin-left: -20px;
 }
 
 .addon-ul {
@@ -110,7 +179,7 @@ export default {
 }
 
 .rule-tree-li {
-  border: 1px solid DarkGray;;
+  border: 1px solid DarkGray;
   padding-left: 50px;
   padding-top: 20px;
   padding-bottom: 10px;

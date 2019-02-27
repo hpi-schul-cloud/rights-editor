@@ -14,8 +14,8 @@
     </template>
     <template v-slot:footer>
         <div class="button-footer">
-            <BaseButton textlike v-bind:onClick="function() {$emit('abort');}">Abbrechen</BaseButton>
-            <BaseButton v-bind:disabled="currentAction == ''" v-bind:onClick="function() {$emit('action', currentAction);}">Annehmen</BaseButton>
+            <BaseButton textlike v-if="allowAbort" v-bind:onClick="function() {$emit('abort');}">Abbrechen</BaseButton>
+            <BaseButton v-bind:disabled="currentAction == ''" v-bind:onClick="function() {$emit('chosen', currentAction);}">Annehmen</BaseButton>
         </div>
     </template>
 </BaseModal>
@@ -24,7 +24,6 @@
 <script>
 import BaseButton from "./BaseButton.vue";
 import BaseModal from "./BaseModal.vue";
-
 
 export default {
   name: "ActionChooser",
@@ -40,13 +39,18 @@ export default {
           actions: {
               1: {id: 1, label: "Aggregieren"},
               2: {id: 2, label: "Annotieren"},
-              3: {id: 3, label: "Annotieren"},
               4: {id: 4, label: "Annonymisieren"},
               5: {id: 5, label: "Archivieren"},
               6: {id: 6, label: "Kompensieren"},
               7: {id: 7, label: "Löschen"}
           }
       };
+  },
+  props: {
+      allowAbort: {
+          type: Boolean,
+          default: true,
+      }
   },
   methods: {
       actionClicked: function(actionId) {

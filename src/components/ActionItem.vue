@@ -1,32 +1,25 @@
 <template>
   <div>
     <ActionChooser
-      v-if="this.showActionChooser"
-      v-on:action="showActionChooser = false; action.name=$event"
-      v-on:abort="showActionChooser = false"
+      v-if="actionChooserSettings.displayActionChooser"
+      v-bind:allowAbort="actionChooserSettings.allowAbort"
+      v-on:chosen="hideActionChooser(); action.name=$event"
+      v-on:abort="hideActionChooser()"
     ></ActionChooser>Aktion:
     <div class="action-content">
-      <input
+      <button
         class="action-input"
-        placeholder="Bezeichner eingeben..."
         v-bind:value="actionName"
-        v-on:click="showActionChooser = true"
+        v-on:click="showActionChooser()"
         list="actions"
-        type="text"
         name="action"
-      >
-      <datalist id="actions">
-        <option
-          v-for="(actionUri, index) in possibleActionUris()"
-          v-bind:key="index"
-          v-bind:value="actionUri"
-        />
-      </datalist>
+        type="button"
+      >{{this.action.name}}</button>
       <br>
       <!-- should be optional and it should also be possible to add more than one constraint
       also constraints (and by the way refinements as well) are not bound to actions only, 
       they can also be attached to party collections for example...
-      http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period -->
+      http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period-->
       <ConstraintItem class="constraint-input" v-bind:constraint="action.constraint"></ConstraintItem>
     </div>
   </div>
@@ -36,6 +29,7 @@
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
+import { all } from 'q';
 
 export class Action {
   constructor(name, nsVocabUri) {
@@ -57,7 +51,10 @@ export default {
   },
   data: function() {
     return {
-      showActionChooser: true
+      actionChooserSettings: {
+        displayActionChooser: false,
+        allowAbort: true
+      }
     };
   },
   props: {
@@ -66,14 +63,17 @@ export default {
       required: true
     }
   },
+  mounted: function() {
+    this.showActionChooser(false);
+  },
   methods: {
-    possibleActionUris: function() {
-      return [
-        Vocab.ActionsCV.use,
-        Vocab.ActionsCV.display,
-        Vocab.ActionsCV.distribute,
-        Vocab.ActionsCV.execute
-      ];
+    showActionChooser: function(allowAbort) {
+      this.actionChooserSettings.displayActionChooser = true;
+      this.actionChooserSettings.allowAbort = allowAbort == undefined ? true : allowAbort;
+    },
+    hideActionChooser: function() {
+      this.actionChooserSettings.displayActionChooser = false;
+      this.actionChooserSettings.allowAbort = true;
     }
   },
   computed: {
@@ -96,7 +96,32 @@ export default {
 .action-input {
   margin-top: 20px;
   margin-left: 0px;
-  width: 690px;
+  width: 710px;
+  height: 38px;
+
+  background-color: white;
+  border: 0px black solid;
+  border-bottom: 1px transparent solid;
+  color: black;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  font-family: inherit;
+  font-size: 1em;
+  text-align: left;
+
+  margin: 10px;
+  margin-left: 0px;
+  padding: 10px 10px;
+
+  -webkit-box-shadow: inset 0 0 1px #000;
+  -moz-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+}
+
+.action-input:hover {
+  cursor: text;
 }
 
 .constraint-input {

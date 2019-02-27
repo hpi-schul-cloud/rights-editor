@@ -19,7 +19,7 @@ export class Rule {
   constructor(id, type) {
     this.id = id;
     this.type = type;
-    this.action = new Action("Nutzung", Vocab.ActionsCV.use);
+    this.action = new Action("", Vocab.ActionsCV.use);
   }
 }
 
