@@ -13,7 +13,7 @@
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
           <BaseButton
-            v-bind:onClickParam="addon.name"
+            v-bind:name="addon.name"
             v-bind:onClick="createAddon"
           >{{addon.name}} hinzufügen</BaseButton>
           <div class="addon-info">({{addon.descr}})</div>
@@ -135,7 +135,8 @@ export default {
       }
       return addon;
     },
-    createAddon(name) {
+    createAddon(event) {
+      let name = event.target.name;
       let dutyType = null;
       let char = "";
       if (name == "Konsequenz") {

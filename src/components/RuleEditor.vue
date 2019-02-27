@@ -1,7 +1,7 @@
 <template>
   <div class="rule-editor">
     <div>
-      <input id="licence-name" class="under-cover" placeholder="Name der Lizenz">
+      <input class="under-cover" v-model="licenceName" placeholder="Name der Lizenz">
     </div>
     <template v-if="ruleTrees.length > 0">
       <BaseButton v-bind:onClick="newPermission">Erlaubnis hinzufügen</BaseButton>
@@ -49,7 +49,8 @@ export default {
   data: function() {
     return {
       ruleTrees: [],
-      nextId: 1
+      nextId: 1,
+      licenceName: "007",
     };
   },
   methods: {
@@ -77,15 +78,7 @@ export default {
       }
     },
     generateLicence() {
-      let licenceName = document.getElementById("licence-name").value;
-      let policyGUID = "";
-      if (licenceName == "") {
-        policyGUID = "001";
-      } else {
-        policyGUID = licenceName;
-      }
-
-      let policy = new Odrl.Policy(policyGUID, "set");
+      let policy = new Odrl.Policy(this.licenceName, "set");
       let targetAsset = "target_asset";
       let assigner = "assigner_party";
       let assignee = "assignee_party";

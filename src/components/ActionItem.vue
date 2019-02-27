@@ -1,26 +1,20 @@
 <template>
   <div>
     <ActionChooser
-      v-if="showActionChooser"
-      v-on:action="showActionChooser = false; action.name=$event"
-      v-on:abort="showActionChooser = false"
+      v-if="actionChooserSettings.displayActionChooser"
+      v-bind:allowAbort="actionChooserSettings.allowAbort"
+      v-on:chosen="hideActionChooser(); action.name=$event"
+      v-on:abort="hideActionChooser()"
     ></ActionChooser>Aktion:
     <div class="action-content">
       <button
         class="action-input"
-        placeholder="Bezeichner auswählen..."
         v-bind:value="actionName"
-        v-on:click="showActionChooser = true"
+        v-on:click="showActionChooser()"
         list="actions"
         name="action"
+        type="button"
       >{{this.action.name}}</button>
-      <datalist id="actions">
-        <option
-          v-for="(actionUri, index) in possibleActionUris()"
-          v-bind:key="index"
-          v-bind:value="actionUri"
-        />
-      </datalist>
       <br>
       <!-- should be optional and it should also be possible to add more than one constraint
       also constraints (and by the way refinements as well) are not bound to actions only, 
@@ -35,6 +29,7 @@
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
+import { all } from 'q';
 
 export class Action {
   constructor(name, nsVocabUri) {
@@ -56,8 +51,10 @@ export default {
   },
   data: function() {
     return {
-      showActionChooser: false,
-      shownOnCreation: false
+      actionChooserSettings: {
+        displayActionChooser: false,
+        allowAbort: true
+      }
     };
   },
   props: {
@@ -66,18 +63,17 @@ export default {
       required: true
     }
   },
+  mounted: function() {
+    this.showActionChooser(false);
+  },
   methods: {
-    possibleActionUris: function() {
-      if (this.shownOnCreation == false) { 
-        this.showActionChooser = true;
-        this.shownOnCreation = true; 
-      }
-      return [
-        Vocab.ActionsCV.use,
-        Vocab.ActionsCV.display,
-        Vocab.ActionsCV.distribute,
-        Vocab.ActionsCV.execute
-      ];
+    showActionChooser: function(allowAbort) {
+      this.actionChooserSettings.displayActionChooser = true;
+      this.actionChooserSettings.allowAbort = allowAbort == undefined ? true : allowAbort;
+    },
+    hideActionChooser: function() {
+      this.actionChooserSettings.displayActionChooser = false;
+      this.actionChooserSettings.allowAbort = true;
     }
   },
   computed: {

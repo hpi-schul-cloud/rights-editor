@@ -2,7 +2,7 @@
   <button
     class="base-button"
     v-bind:class="{ 'base-button-big': big, 'base-button-textlike': textlike}"
-    v-on:click="callback()"
+    v-on:click="onClick"
   >
     <slot></slot>
   </button>
@@ -15,17 +15,7 @@ export default {
     big: Boolean,
     textlike: Boolean,
     onClick: { type: Function, required: true },
-    onClickParam: { default: null, required: false }
   },
-  methods: {
-    callback: function() {
-      if (this.onClickParam != null) {
-        this.onClick(this.onClickParam);
-      } else {
-        this.onClick();
-      }
-    }
-  }
 };
 </script>
 
