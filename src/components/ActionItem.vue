@@ -100,7 +100,7 @@ export default {
 .action-input {
   margin-top: 20px;
   margin-left: 0px;
-  width: 690px;
+  width: 710px;
   height: 38px;
 
   background-color: white;

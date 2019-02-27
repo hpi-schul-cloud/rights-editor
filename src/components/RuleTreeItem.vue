@@ -8,13 +8,12 @@
       v-bind:style="{ marginLeft: ((index-1) * 25) + 'px' }"
     ></RuleItem>
 
-    <div class="addon-container"
-      v-if="getPossibleAddons() != null">
-      <p>Füge optional eine Erweiterung hinzu:</p>
+    <div class="addon-container" v-if="getPossibleAddons() != null">
+      <p>Füge optional Erweiterungen hinzu:</p>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
-          <BaseButton v-bind:onClick="createAddon">{{addon[0]}} hinzufügen</BaseButton>
-          <div class="addon-info">({{addon[1]}})</div>
+          <BaseButton v-bind:onClickParam="addon.name" v-bind:onClick="createAddon">{{addon.name}} hinzufügen</BaseButton>
+          <div class="addon-info">({{addon.descr}})</div>
         </li>
       </ul>
     </div>
@@ -30,6 +29,13 @@ export class RuleTree {
     this.id = id;
     this.title = title;
     this.rules = [];
+  }
+}
+
+class Addon {
+  constructor(name, descr) {
+    this.name = name;
+    this.descr = descr;
   }
 }
 
@@ -62,33 +68,52 @@ export default {
       }
     },
     getPossibleAddons: function() {
-      let lastRule = this.ruleTree.rules[this.ruleTree.rules.length - 1];
-      if (lastRule.type["name"] == "Erlaubnis") {
-        return [
-          [
-            "Verpflichtung",
-            "erlaubt wird dann nur, wenn die Verpflichtung erfüllt ist"
-          ]
-        ];
-      } else if (lastRule.type["name"] == "Verpflichtung") {
-        return [["Konsequenz", "falls die Verpflichtung nicht erfüllt wird"]];
-      } else if (lastRule.type["name"] == "Verbot") {
-        return [["Strafe", "falls das Verbot missachtet wird"]];
+      let addon = [];
+      let dutyAdded = false;
+      let remedyAdded = false;
+      let consequenceAdded = false;
+      for (let i = 0; i < this.ruleTree.rules.length; i++) {
+        if (!dutyAdded && this.ruleTree.rules[i].type == RuleTypes.Permission) {
+          addon.push(
+            new Addon(
+              "Verpflichtung",
+              "erlaubt wird dann nur, wenn alle Verpflichtungen erfüllt sind"
+            )
+          );
+          dutyAdded = true;
+        } else if (!remedyAdded && this.ruleTree.rules[i].type == RuleTypes.Prohibition) {
+          addon.push(
+            new Addon(
+              "Strafe",
+              "muss geleistet werden, falls das Verbot missachtet wird"
+            )
+          );
+          remedyAdded = true;
+        } else if (!consequenceAdded && this.ruleTree.rules[i].type == RuleTypes.Duty) {
+          addon.push(
+            new Addon(
+              "Konsequenz",
+              "muss geleistet werden, falls die Verpflichtungen nicht alle erfüllt sind"
+            )
+          );
+          consequenceAdded = true;
+        }
       }
-      return null;
+      return addon;
     },
-    createAddon() {
-      let dutyType;
-      let lastRule = this.ruleTree.rules[this.ruleTree.rules.length - 1];
-      if (lastRule.type["name"] == "Erlaubnis") {
-        dutyType = RuleTypes.Duty;
-      } else if (lastRule.type["name"] == "Verpflichtung") {
+    createAddon(name) {
+      let dutyType = null;
+      if (name == "Konsequenz") {
         dutyType = RuleTypes.Consequence;
-      } else if (lastRule.type["name"] == "Verbot") {
+      } else if (name == "Verpflichtung") {
+        dutyType = RuleTypes.Duty;
+      } else if (name == "Verbot") {
         dutyType = RuleTypes.Remedy;
       }
-      let newID = this.nextId++;
-      this.ruleTree.rules.push(new Rule(newID, dutyType));
+      if (dutyType != null) {
+        let newID = this.nextId++;
+        this.ruleTree.rules.push(new Rule(newID, dutyType));
+      }
     }
   }
 };
@@ -96,7 +121,9 @@ export default {
 
 <style>
 .addon-container {
+  margin-top: 35px;
   margin-bottom: 20px;
+  margin-left: -20px;
 }
 
 .addon-ul {
@@ -110,7 +137,7 @@ export default {
 }
 
 .rule-tree-li {
-  border: 1px solid DarkGray;;
+  border: 1px solid DarkGray;
   padding-left: 50px;
   padding-top: 20px;
   padding-bottom: 10px;
