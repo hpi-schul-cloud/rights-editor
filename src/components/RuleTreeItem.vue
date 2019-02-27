@@ -107,7 +107,7 @@ export default {
         dutyType = RuleTypes.Consequence;
       } else if (name == "Verpflichtung") {
         dutyType = RuleTypes.Duty;
-      } else if (name == "Verbot") {
+      } else if (name == "Strafe") {
         dutyType = RuleTypes.Remedy;
       }
       if (dutyType != null) {
