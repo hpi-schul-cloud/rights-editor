@@ -87,9 +87,12 @@ export default {
 
       for (let i = 0; i < this.ruleTrees.length; i++) {
         for (let j = 0; j < this.ruleTrees[i].rules.length; j++) {
-          // permission
-          if (this.ruleTrees[i].rules[j].type == RuleTypes.Permission) {
+          let currentRule = this.ruleTrees[i].rules[j];
+
+          if (currentRule.type == RuleTypes.Permission) {
             this.addPermissionToPolicy(i, policy);
+          } else if (currentRule.type == RuleTypes.Obligation) {
+            this.addObligationToPolicy(i, policy);
           }
         }
       }
@@ -116,22 +119,16 @@ export default {
         let currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
         if (currentRule.type == RuleTypes.Duty) {
           duties.push(new Odrl.Duty());
-          duties[duties.length - 1].setAction(
-            currentRule.action.name
-          );
+          duties[duties.length - 1].setAction(currentRule.action.name);
           duties[duties.length - 1].addConstraint(
-            currentRule.action.constraint
-              .leftOperand,
+            currentRule.action.constraint.leftOperand,
             currentRule.action.constraint.operator,
-            currentRule.action.constraint
-              .rightOperand,
+            currentRule.action.constraint.rightOperand,
             null,
             currentRule.action.constraint.unit,
             null
           );
-        } else if (
-          currentRule.type == RuleTypes.Consequence
-        ) {
+        } else if (currentRule.type == RuleTypes.Consequence) {
           let cons = new Odrl.Failure();
           cons.setAction(currentRule.action.name);
           duties[duties.length - 1].addConsequence(cons);
@@ -141,6 +138,30 @@ export default {
         permission.addDuty(duties[k]);
       }
       policy.addPermission(permission);
+    },
+    addObligationToPolicy(ruleTreeIndex, policy) {
+      let obligation = new Odrl.Duty();
+      let firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
+
+      obligation.setAction(firstRule.action.name);
+      obligation.addConstraint(
+        firstRule.action.constraint.leftOperand,
+        firstRule.action.constraint.operator,
+        firstRule.action.constraint.rightOperand,
+        null,
+        firstRule.action.constraint.unit,
+        null
+      );
+
+      for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
+        let currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
+        if (currentRule.type == RuleTypes.Consequence) {
+          let cons = new Odrl.Failure();
+          cons.setAction(currentRule.action.name);
+          obligation.addConsequence(cons);
+        }
+      }
+      policy.addDuty(obligation);
     }
   }
 };

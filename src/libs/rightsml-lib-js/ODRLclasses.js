@@ -247,9 +247,10 @@ export var Odrl;
             return serStrOut;
         };
 
-        Failure.prototype.buildDutyOdrlInJson = function () {
+        Failure.prototype.buildOdrlInJson = function () {
             var thisF = {};
             var i;
+            console.log(this.action);
             if (this.action !== undefined) {
                 thisF.action = this.action.name;
             }
@@ -387,7 +388,7 @@ export var Odrl;
             return serStrOut;
         };
 
-        Duty.prototype.buildDutyOdrlInJson = function () {
+        Duty.prototype.buildOdrlInJson = function (addAsObligation) {
             var thisD = {};
             var i;
             if (this.action !== undefined) {
@@ -434,11 +435,16 @@ export var Odrl;
             }
             if (this.consequences.length > 0) {
                 thisD.consequences = [];
+                console.log(this.consequences.length);
                 for (i = 0; i < this.consequences.length; i++) {
-                    thisD.consequences.push(this.consequences[i].buildDutyOdrlInJson());
+                    thisD.consequences.push(this.consequences[i].buildOdrlInJson());
                 }
             }
-            return thisD;
+            if (addAsObligation) {
+                OdrlInJson.obligations.push(thisD);                
+            } else {
+                return thisD;
+            }
         };
         return Duty;
     })();
@@ -637,7 +643,7 @@ export var Odrl;
             if (this.duties.length > 0) {
                 thisP.duties = [];
                 for (i = 0; i < this.duties.length; i++) {
-                    thisP.duties.push(this.duties[i].buildDutyOdrlInJson());
+                    thisP.duties.push(this.duties[i].buildOdrlInJson(false));
                 }
             }
             OdrlInJson.permissions.push(thisP);
@@ -839,7 +845,7 @@ export var Odrl;
             if (this.remedies.length > 0) {
                 thisP.remedies = [];
                 for (i = 0; i < this.remedies.length; i++) {
-                    thisP.remedies.push(this.remedies[i].buildDutyOdrlInJson());
+                    thisP.remedies.push(this.remedies[i].buildOdrlInJson());
                 }
             }
             OdrlInJson.prohibitions.push(thisP);
@@ -885,7 +891,7 @@ export var Odrl;
         };
 
         /** Method for adding a duty to the Policy
-        * @method addObligation
+        * @method addDuty
         * @param {Duty} newDuty A duty instance
         */
         Policy.prototype.addDuty = function (newDuty) {
@@ -956,9 +962,11 @@ export var Odrl;
                 }
             }
             if (this.obligations.length > 0) {
+                console.log(this.obligations.length);
                 OdrlInJson.obligations = [];
                 for (let i = 0; i < this.obligations.length; i++) {
-                    this.obligations[i].buildOdrlInJson();
+                    console.log(this.obligations[i]);
+                    this.obligations[i].buildOdrlInJson(true);
                 }
             }
             if (this.prohibitions.length > 0) {
