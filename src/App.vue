@@ -19,13 +19,6 @@ export default {
   name: "app",
   components: {
     RuleEditor
-  },
-  data: function() {
-    return {
-      isActive: false,
-      activeClass: 'noscroll',
-      errorClass: 'scroll'
-    }
   }
 };
 </script>
