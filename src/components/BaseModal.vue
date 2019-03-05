@@ -17,7 +17,7 @@
           <div class="modal-footer">
             <slot name="footer">
               default footer
-              <button class="modal-default-button" @click="$emit('close')">
+              <button class="modal-default-button">
                 OK
               </button>
             </slot>
@@ -30,11 +30,18 @@
 
 <script>
 export default {
-  name: "BaseModal"
+  name: "BaseModal",
+  created: function() {
+    document.body.style.overflow = "hidden";
+  },
+  destroyed: function() {
+    document.body.style.overflow = "auto";
+  }
 };
 </script>
 
 <style scoped>
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
