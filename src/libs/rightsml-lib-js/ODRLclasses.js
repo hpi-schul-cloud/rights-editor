@@ -434,7 +434,7 @@ export var Odrl;
             }
             if (this.consequences.length > 0) {
                 thisD.consequences = [];
-                for (i = 0; i < this.consequnces.length; i++) {
+                for (i = 0; i < this.consequences.length; i++) {
                     thisD.consequences.push(this.consequences[i].buildDutyOdrlInJson());
                 }
             }

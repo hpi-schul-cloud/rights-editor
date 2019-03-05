@@ -5,7 +5,7 @@
     </div>
     <template v-if="ruleTrees.length > 0">
       <BaseButton v-bind:onClick="newPermission">Erlaubnis hinzufügen</BaseButton>
-      <BaseButton v-bind:onClick="newDuty">Verpflichtung hinzufügen</BaseButton>
+      <BaseButton v-bind:onClick="newObligation">Verpflichtung hinzufügen</BaseButton>
       <BaseButton v-bind:onClick="newProhibition">Verbot hinzufügen</BaseButton>
     </template>
     <ul>
@@ -17,7 +17,7 @@
       ></RuleTreeItem>
     </ul>
     <BaseButton v-bind:onClick="newPermission">Erlaubnis hinzufügen</BaseButton>
-    <BaseButton v-bind:onClick="newDuty">Verpflichtung hinzufügen</BaseButton>
+    <BaseButton v-bind:onClick="newObligation">Verpflichtung hinzufügen</BaseButton>
     <BaseButton v-bind:onClick="newProhibition">Verbot hinzufügen</BaseButton>
     <hr>
     <BaseButton style="margin-bottom: 50px;" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
@@ -49,16 +49,16 @@ export default {
   data: function() {
     return {
       ruleTrees: [],
-      nextId: 1,
-      licenceName: "007",
+      nextId: 0,
+      licenceName: "007"
     };
   },
   methods: {
     newPermission: function() {
       this.newRule(RuleTypes.Permission);
     },
-    newDuty: function() {
-      this.newRule(RuleTypes.Duty);
+    newObligation: function() {
+      this.newRule(RuleTypes.Obligation);
     },
     newProhibition: function() {
       this.newRule(RuleTypes.Prohibition);
@@ -66,7 +66,7 @@ export default {
     newRule: function(type) {
       let newID = this.nextId++;
       let ruleTree = new RuleTree(newID, type);
-      ruleTree.rules.push(new Rule("a0", type));
+      ruleTree.rules.push(new Rule(0, type));
       this.ruleTrees.push(ruleTree);
     },
     updateTrees(tree_id) {
@@ -82,47 +82,65 @@ export default {
       let targetAsset = "target_asset";
       let assigner = "assigner_party";
       let assignee = "assignee_party";
-      
-      let duty = new Array();
+
       let prohibition = new Odrl.Prohibition();
 
       for (let i = 0; i < this.ruleTrees.length; i++) {
-        for (let j = 0; j < this.ruleTrees[i].rules.length; j++) {          
-          let currentRule = this.ruleTrees[i].rules[j];
-          let constraint = currentRule.action.constraint;
-
-          // permission:
-          if (currentRule.type == RuleTypes.Permission) {
-            
-            let permission = new Odrl.Permission();
-            permission.setAction(currentRule.action.name);
-            permission.addConstraint(
-              constraint.leftOperand,
-              constraint.operator,
-              constraint.rightOperand,
-              null,
-              constraint.unit,
-              null
-            );
-            permission.addAsset(targetAsset, Vocab.AssetRelationsCV.target);
-            permission.addParty(
-              assigner,
-              Vocab.PartyRolesCV.assigner,
-              Vocab.PartyRoleScopesCV.individual
-            );
-            permission.addParty(
-              assignee,
-              Vocab.PartyRolesCV.assignee,
-              Vocab.PartyRoleScopesCV.individual
-            );
-
-            policy.addPermission(permission);
+        for (let j = 0; j < this.ruleTrees[i].rules.length; j++) {
+          // permission
+          if (this.ruleTrees[i].rules[j].type == RuleTypes.Permission) {
+            this.addPermissionToPolicy(i, policy);
           }
         }
       }
 
       let outStr = policy.serializeJson();
       console.log(outStr);
+    },
+    addPermissionToPolicy(ruleTreeIndex, policy) {
+      let permission = new Odrl.Permission();
+      let firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
+
+      permission.setAction(firstRule.action.name);
+      permission.addConstraint(
+        firstRule.action.constraint.leftOperand,
+        firstRule.action.constraint.operator,
+        firstRule.action.constraint.rightOperand,
+        null,
+        firstRule.action.constraint.unit,
+        null
+      );
+
+      let duties = [];
+      for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
+        let currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
+        if (currentRule.type == RuleTypes.Duty) {
+          duties.push(new Odrl.Duty());
+          duties[duties.length - 1].setAction(
+            currentRule.action.name
+          );
+          duties[duties.length - 1].addConstraint(
+            currentRule.action.constraint
+              .leftOperand,
+            currentRule.action.constraint.operator,
+            currentRule.action.constraint
+              .rightOperand,
+            null,
+            currentRule.action.constraint.unit,
+            null
+          );
+        } else if (
+          currentRule.type == RuleTypes.Consequence
+        ) {
+          let cons = new Odrl.Failure();
+          cons.setAction(currentRule.action.name);
+          duties[duties.length - 1].addConsequence(cons);
+        }
+      }
+      for (let k = 0; k < duties.length; k++) {
+        permission.addDuty(duties[k]);
+      }
+      policy.addPermission(permission);
     }
   }
 };

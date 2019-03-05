@@ -5,7 +5,7 @@
       v-for="rule in ruleTree.rules"
       v-bind:rule="rule"
       v-bind:key="rule.id"
-      v-bind:style="{ marginLeft: getRuleMargin(rule.id) + 'px', paddingLeft: 10 + 'px' }"
+      v-bind:style="{ marginLeft: getRuleMargin(rule.type) + 'px', paddingLeft: 10 + 'px' }"
     ></RuleItem>
 
     <div class="addon-container" v-if="getPossibleAddons() != null">
@@ -66,31 +66,31 @@ export default {
           if (i == 0) {
             this.ruleTree.rules.splice(i, this.ruleTree.rules.length);
           } else {
-            this.ruleTree.rules.splice(i, 1);
+            let deleteCount = 1;
+            let r = this.ruleTree.rules[i];     
+            if (r.type == RuleTypes.Duty) {
+              for (let j = i + 1; j < this.ruleTree.rules.length; j++) {
+                if (this.ruleTree.rules[j].type != RuleTypes.Consequence) {
+                  break;
+                }
+                if (this.ruleTree.rules[j].type == RuleTypes.Consequence) {
+                  deleteCount++;
+                }
+              }
+            }
+            this.ruleTree.rules.splice(i, deleteCount);
           }
         }
-      }
-      let bCount = 0;
-      let cCount = 0;
-      for (let i = 0; i < this.ruleTree.rules.length; i++) {
-        if (this.ruleTree.rules[i].id[0] == "b") {
-          bCount++;
-        } else if (this.ruleTree.rules[i].id[0] == "c") {
-          cCount++;
-        }
-      }
-      if (bCount == 0 && cCount > 0) {
-        this.ruleTree.rules.splice(1, this.ruleTree.rules.length);
       }
       if (this.ruleTree.rules.length == 0) {
         this.$emit("remove-tree-event", this.ruleTree.id);
       }
     },
-    getRuleMargin(id) {
+    getRuleMargin(type) {
       let x = -1;
-      if (id[0] == "b") {
+      if (type == RuleTypes.Duty || type == RuleTypes.Remedy) {
         x = 0;
-      } else if (id[0] == "c") {
+      } else if (type == RuleTypes.Consequence) {
         x = 1;
       }
       return x * this.leftMarginFactor;
@@ -122,12 +122,13 @@ export default {
           remedyAdded = true;
         } else if (
           !consequenceAdded &&
-          this.ruleTree.rules[i].type == RuleTypes.Duty
+          (this.ruleTree.rules[i].type == RuleTypes.Duty ||
+            this.ruleTree.rules[i].type == RuleTypes.Obligation)
         ) {
           addon.push(
             new Addon(
               "Konsequenz",
-              "muss geleistet werden, falls die Verpflichtungen nicht alle erfüllt sind"
+              "muss geleistet werden, falls die dazugehörige Verpflichtung nicht erfüllt wird"
             )
           );
           consequenceAdded = true;
@@ -138,23 +139,16 @@ export default {
     createAddon(event) {
       let name = event.target.name;
       let dutyType = null;
-      let char = "";
       if (name == "Konsequenz") {
         dutyType = RuleTypes.Consequence;
-        char = "c";
       } else if (name == "Verpflichtung") {
         dutyType = RuleTypes.Duty;
-        char = "b";
       } else if (name == "Strafe") {
         dutyType = RuleTypes.Remedy;
-        char = "b";
       }
       if (dutyType != null) {
         let newID = this.nextId++;
-        this.ruleTree.rules.push(new Rule(char + newID, dutyType));
-        this.ruleTree.rules.sort((a, b) =>
-          a.id > b.id ? 1 : a.id < b.id ? -1 : 0
-        );
+        this.ruleTree.rules.push(new Rule(newID, dutyType));
       }
     }
   }
