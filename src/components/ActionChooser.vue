@@ -42,7 +42,11 @@ export default {
               4: {id: 4, label: "Annonymisieren"},
               5: {id: 5, label: "Archivieren"},
               6: {id: 6, label: "Kompensieren"},
-              7: {id: 7, label: "Löschen"}
+              7: {id: 7, label: "Löschen"},
+              8: {id: 8, label: "Drucken"},
+              9: {id: 9, label: "Speichern"},
+              10: {id: 10, label: "Verbreiten"},
+              11: {id: 11, label: "Zitieren"}
           }
       };
   },
