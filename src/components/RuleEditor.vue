@@ -83,8 +83,6 @@ export default {
       let assigner = "assigner_party";
       let assignee = "assignee_party";
 
-      let prohibition = new Odrl.Prohibition();
-
       for (let i = 0; i < this.ruleTrees.length; i++) {
         for (let j = 0; j < this.ruleTrees[i].rules.length; j++) {
           let currentRule = this.ruleTrees[i].rules[j];
@@ -93,6 +91,8 @@ export default {
             this.addPermissionToPolicy(i, policy);
           } else if (currentRule.type == RuleTypes.Obligation) {
             this.addObligationToPolicy(i, policy);
+          } else if (currentRule.type == RuleTypes.Prohibition) {
+            this.addProhibitionToPolicy(i, policy);
           }
         }
       }
@@ -162,6 +162,30 @@ export default {
         }
       }
       policy.addDuty(obligation);
+    },
+    addProhibitionToPolicy(ruleTreeIndex, policy) {
+      let prohibition = new Odrl.Prohibition();
+      let firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
+
+      prohibition.setAction(firstRule.action.name);
+      prohibition.addConstraint(
+        firstRule.action.constraint.leftOperand,
+        firstRule.action.constraint.operator,
+        firstRule.action.constraint.rightOperand,
+        null,
+        firstRule.action.constraint.unit,
+        null
+      );
+
+      for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
+        let currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
+        if (currentRule.type == RuleTypes.Remedy) {
+          let rem = new Odrl.Failure();
+          rem.setAction(currentRule.action.name);
+          prohibition.addRemedy(rem);
+        }
+      }
+      policy.addProhibition(prohibition);
     }
   }
 };

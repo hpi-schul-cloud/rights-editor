@@ -250,7 +250,6 @@ export var Odrl;
         Failure.prototype.buildOdrlInJson = function () {
             var thisF = {};
             var i;
-            console.log(this.action);
             if (this.action !== undefined) {
                 thisF.action = this.action.name;
             }
@@ -435,7 +434,6 @@ export var Odrl;
             }
             if (this.consequences.length > 0) {
                 thisD.consequences = [];
-                console.log(this.consequences.length);
                 for (i = 0; i < this.consequences.length; i++) {
                     thisD.consequences.push(this.consequences[i].buildOdrlInJson());
                 }
@@ -962,10 +960,8 @@ export var Odrl;
                 }
             }
             if (this.obligations.length > 0) {
-                console.log(this.obligations.length);
                 OdrlInJson.obligations = [];
                 for (let i = 0; i < this.obligations.length; i++) {
-                    console.log(this.obligations[i]);
                     this.obligations[i].buildOdrlInJson(true);
                 }
             }
