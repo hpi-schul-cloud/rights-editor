@@ -3,10 +3,10 @@
     <div>
       <input class="under-cover" v-model="licenceName" placeholder="Name der Lizenz">
     </div>
-    <template v-if="ruleTrees.length > 0">
-      <BaseButton v-bind:onClick="newPermission">Erlaubnis hinzufügen</BaseButton>
-      <BaseButton v-bind:onClick="newObligation">Verpflichtung hinzufügen</BaseButton>
-      <BaseButton v-bind:onClick="newProhibition">Verbot hinzufügen</BaseButton>
+    <template v-if="ruleTrees.length > 0">      
+      <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
+      <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
+      <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
     </template>
     <ul>
       <RuleTreeItem
@@ -16,11 +16,16 @@
         v-bind:key="ruleTree.id"
       ></RuleTreeItem>
     </ul>
-    <BaseButton v-bind:onClick="newPermission">Erlaubnis hinzufügen</BaseButton>
-    <BaseButton v-bind:onClick="newObligation">Verpflichtung hinzufügen</BaseButton>
-    <BaseButton v-bind:onClick="newProhibition">Verbot hinzufügen</BaseButton>
+    <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
+    <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
+    <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
+    
     <hr>
     <BaseButton style="margin-bottom: 50px;" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
+    <div class="json-textarea-container">
+      <textarea class="json-textarea" readonly=true rows="5"></textarea>
+    </div>
+
     <div style="min-height: 150px; border: dotted black 1px">
       <i>divider</i>
     </div>
@@ -98,7 +103,7 @@ export default {
       }
 
       let outStr = policy.serializeJson();
-      console.log(outStr);
+      document.getElementsByClassName("json-textarea")[0].value = outStr;
     },
     addPermissionToPolicy(ruleTreeIndex, policy) {
       let permission = new Odrl.Permission();
@@ -194,5 +199,22 @@ export default {
 <style>
 ul {
   padding-inline-start: 0px;
+}
+
+.fas-left {  
+  margin-right: 8px;
+}
+
+.fas-right {
+  margin-left: 8px;
+}
+
+.json-textarea {
+  width: 800px;
+  height: 400px;
+}
+
+.json-textarea-container {
+  margin-bottom: 40px;
 }
 </style>

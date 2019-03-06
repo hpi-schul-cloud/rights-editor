@@ -25,6 +25,7 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
+@import url("https://use.fontawesome.com/releases/v5.7.2/css/all.css");
 
 hr {
   border: 0.5px solid #172b4d;

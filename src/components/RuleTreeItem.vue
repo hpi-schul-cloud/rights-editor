@@ -15,7 +15,7 @@
           <BaseButton
             v-bind:name="addon.name"
             v-bind:onClick="createAddon"
-          >{{addon.name}} hinzufügen</BaseButton>
+          >{{addon.name}}</BaseButton>
           <div class="addon-info">({{addon.descr}})</div>
         </li>
       </ul>
