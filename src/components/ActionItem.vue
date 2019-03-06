@@ -115,9 +115,7 @@ export default {
   margin-left: 0px;
   padding: 10px 10px;
 
-  -webkit-box-shadow: inset 0 0 1px #000;
-  -moz-box-shadow: inset 0 0 1px #000;
-  box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1.5px #000;
 }
 
 .action-input:hover {
@@ -153,9 +151,7 @@ input.under-cover:focus {
   margin-left: 0px;
   padding: 10px 10px;
 
-  -webkit-box-shadow: inset 0 0 1px #000;
-  -moz-box-shadow: inset 0 0 1px #000;
-  box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1.5px #000;
 }
 
 select {

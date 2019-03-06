@@ -25,8 +25,9 @@ export class Rule {
 
 export let RuleTypes = Object.freeze({
   Permission: { name: "Erlaubnis" },
-  Duty: { name: "Verpflichtung" },
+  Obligation: { name: "Verpflichtung" },  
   Prohibition: { name: "Verbot" },
+  Duty: { name: "Verpflichtung" },
   Consequence: { name: "Konsequenz" },
   Remedy: { name: "Strafe" }
 });
