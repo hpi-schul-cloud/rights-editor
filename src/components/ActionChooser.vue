@@ -89,7 +89,6 @@ export default {
 .actions-list li:hover {
   background-color: rgb(248, 248, 248);
 }
-
 .actions-list .selected {
   background-color: rgb(238, 238, 238);
 }

@@ -5,7 +5,12 @@
     </template>
     <template v-slot:body>
       <ul class="left-operands-list">
-        <li v-for="leftOperand in leftOperands" v-bind:key="leftOperand.id">{{leftOperand.name}}</li>
+        <li
+          v-for="leftOperand in leftOperands"
+          v-bind:key="leftOperand.id"
+          v-bind:class="{selected: leftOperandIsSelected(leftOperand.id)}"
+          v-on:click="leftOperandClicked(leftOperand.id)"
+        >{{leftOperand.name}}</li>
       </ul>
     </template>
     <template v-slot:footer>
@@ -29,31 +34,50 @@ export default {
     BaseButton,
     BaseModal
   },
-
   data: function() {
     return {
+      currentLeftOperandId: 0,
+      currentLeftOperand: "",
       leftOperands: {
-        1: { name: "Bundesland" },
-        2: { name: "Gruppenzugehörigkeit" },
-        3: { name: "Alter" }
+        1: { id: 1, name: "Bundesland" },
+        2: { id: 2, name: "Gruppenzugehörigkeit" },
+        3: { id: 3, name: "Alter" }
       }
     };
   },
   props: {},
-  methods: {}
+  methods: {
+    leftOperandClicked: function(id) {
+      this.currentLeftOperand = this.leftOperands[id].name;
+      this.currentLeftOperandId = id;
+    },
+    leftOperandIsSelected: function(id) {
+      return this.currentLeftOperandId == id;
+    }
+  }
 };
 </script>
 
 <style scoped>
-
 .left-operands-list {
   margin: 0px;
   padding: 0px;
+  width: 200px;
+  font-size: 13px;
 }
 .left-operands-list li {
   padding: 0.5em;
   border-bottom: 1px lightgray solid;
   cursor: default;
+}
+.left-operands-list li:hover {
+  background-color: rgb(248, 248, 248);
+}
+.left-operands-list .selected {
+  background-color: rgb(238, 238, 238);
+}
+.left-operands-list .selected:hover {
+  background-color: rgb(228, 228, 228);
 }
 
 .modal-footer {
