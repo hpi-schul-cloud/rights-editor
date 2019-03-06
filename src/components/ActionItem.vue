@@ -20,7 +20,7 @@
       also constraints (and by the way refinements as well) are not bound to actions only, 
       they can also be attached to party collections for example...
       http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period-->
-      <ConstraintItem class="constraint-input" v-bind:constraint="action.constraint"></ConstraintItem>
+      <ConstraintItem v-bind:constraint="action.constraint"></ConstraintItem>
     </div>
   </div>
 </template>
@@ -96,7 +96,7 @@ export default {
 .action-input {
   margin-top: 20px;
   margin-left: 0px;
-  width: 710px;
+  width: 700px;
   height: 38px;
 
   background-color: white;
@@ -120,11 +120,6 @@ export default {
 
 .action-input:hover {
   cursor: text;
-}
-
-.constraint-input {
-  margin-bottom: 15px;
-  margin-left: 0px;
 }
 
 input.under-cover {
