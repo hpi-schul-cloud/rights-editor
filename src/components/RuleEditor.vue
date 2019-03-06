@@ -212,6 +212,7 @@ ul {
 .json-textarea {
   width: 800px;
   height: 400px;
+  resize: none;
 }
 
 .json-textarea-container {
