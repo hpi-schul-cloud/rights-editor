@@ -2,44 +2,39 @@
 <div style="font-family: 'Helvetica';">
     <h1>Lizenzeditor</h1>
     <h2>Erlaubnisse</h2>
-    <div class="rule" v-for="action in actions.permissions">
+    <div class="rule" v-for="action in actions.permissions" v-bind:key="action.uri">
         <p class="caption">{{ action.name }}</p>
         <p class="description">{{ action.description }}</p>
         <div class="button-group">
-            <button class="negative" v-bind:class="{active: settings[action.uri] !== allowed}" v-on:click="settings[action.uri] = 'not allowed'">Nicht erlaubt</button>
-            <button class="positive" v-bind:class="{active: settings[action.uri] === allowed}" v-on:click="settings[action.uri] = allowed">Erlaubt</button>
+            <button class="negative" v-bind:class="{active: settings[action.uri] !== allowed}" v-on:click="settings[action.uri] = 'not allowed'; displayCCLicense();">Nicht erlaubt</button>
+            <button class="positive" v-bind:class="{active: settings[action.uri] === allowed}" v-on:click="settings[action.uri] = allowed; displayCCLicense();">Erlaubt</button>
         </div>
     </div>
     <h2>Einschränkungen</h2>
-    <div class="rule" v-for="action in actions.prohibitions">
+    <div class="rule" v-for="action in actions.prohibitions" v-bind:key="action.uri">
         <p class="caption">{{ action.name }}</p>
         <p class="description">{{ action.description }}</p>
         <div class="button-group">
-            <button class="negative" v-bind:class="{active: settings[action.uri] !== allowed}" v-on:click="settings[action.uri] = prohibited">Verboten</button>
-            <button class="positive" v-bind:class="{active: settings[action.uri] === allowed}" v-on:click="settings[action.uri] = allowed">Uneingeschränkt</button>
+            <button class="negative" v-bind:class="{active: settings[action.uri] !== allowed}" v-on:click="settings[action.uri] = prohibited; displayCCLicence();">Verboten</button>
+            <button class="positive" v-bind:class="{active: settings[action.uri] === allowed}" v-on:click="settings[action.uri] = allowed; displayCCLicence();">Uneingeschränkt</button>
         </div>
     </div>
     <h2>Anforderung</h2>
-    <div class="rule" v-for="action in actions.duties">
+    <div class="rule" v-for="action in actions.duties" v-bind:key="action.uri">
         <p class="caption">{{ action.name }}</p>
         <p class="description">{{ action.description }}</p>
         <div class="button-group">
-            <button class="negative" v-bind:class="{active: settings[action.uri] === demanded}" v-on:click="settings[action.uri] = demanded">Verlangt</button>
-            <button class="positive" v-bind:class="{active: settings[action.uri] !== demanded}" v-on:click="settings[action.uri] = 'optional'">Optional</button>
+            <button class="negative" v-bind:class="{active: settings[action.uri] === demanded}" v-on:click="settings[action.uri] = demanded; displayCCLicence()">Verlangt</button>
+            <button class="positive" v-bind:class="{active: settings[action.uri] !== demanded}" v-on:click="settings[action.uri] = 'optional'; displayCCLicence()">Optional</button>
         </div>
     </div>
     <hr>
     <h2>Provisorische Lizenz</h2>
     <pre>{{ license }}</pre>
-    <div v-if="notice" class="rule">
+    <div v-if="isDemanded({uri: noticeURI})" class="rule">
         <p class="caption">CC-Lizenz</p>
-        <p class="description">Die erstellte CC-Lizenz:</p>
-        <img v-if="notice && commercialUse  && !shareAlike && derivateWorks"  src="../img/cc/by.png">
-        <img v-if="notice && commercialUse  && shareAlike  && derivateWorks"  src="../img/cc/by-sa.png">
-        <img v-if="notice && commercialUse  && !shareAlike && !derivateWorks" src="../img/cc/by-nd.png">
-        <img v-if="notice && !commercialUse && !shareAlike && derivateWorks"  src="../img/cc/by-nc.eu.png">
-        <img v-if="notice && !commercialUse && shareAlike  && derivateWorks"  src="../img/cc/by-nc-sa.eu.png">
-        <img v-if="notice && !commercialUse && !shareAlike && !derivateWorks" src="../img/cc/by-nc-nd.eu.png">
+        <p id="imageText" class="description">Die erstellte CC-Lizenz: {{ imageText }}</p>
+        <img v-bind:src="image" />
     </div>
 </div>
 </template>
@@ -96,8 +91,50 @@ export default {
         settings[actionShareAlike.uri] =     "optional";
         return {
             actions,
-            settings
+            settings,
+            imageText: "Namensnennung 4.0 International",
+            image: require("../img/cc/by.png"),
+        
+            // initialize constants
+            allowed,
+            prohibited,
+            demanded,
+            noticeURI: "http://creativecommons.org/ns#Notice"
         };
+    },
+    methods: {
+        isAllowed(action) {
+            return this.settings[action.uri] === this.allowed;
+        },
+        isDemanded(action) {
+            return this.settings[action.uri] === this.demanded;
+        },
+        displayCCLicence() {
+            if (this.isDemanded(actionNotice) && this.isAllowed(actionCommercialUse) && !this.isDemanded(actionShareAlike) && this.isAllowed(actionDerivateWorks)) {
+                this.imageText = "Namensnennung 4.0 International";
+                this.image = require("../img/cc/by.png");
+            }
+            else if(this.isDemanded(actionNotice) && this.isAllowed(actionCommercialUse) && this.isDemanded(actionShareAlike) && this.isAllowed(actionDerivateWorks)) {
+                this.imageText = "Namensnennung-Share Alike 4.0 International";
+                this.image = require("../img/cc/by-sa.png");
+            }
+            else if(this.isDemanded(actionNotice) && this.isAllowed(actionCommercialUse) && !this.isDemanded(actionShareAlike) && !this.isAllowed(actionDerivateWorks)) {
+                this.imageText = "Namensnennung-Keine Bearbeitungen 4.0 International";
+                this.image = require("../img/cc/by-nd.png");
+            }
+            else if(this.isDemanded(actionNotice) && !this.isAllowed(actionCommercialUse) && !this.isDemanded(actionShareAlike) && this.isAllowed(actionDerivateWorks)) {
+                this.imageText = "Namensnennung-Nicht kommerziell 4.0 International";
+                this.image = require("../img/cc/by-nc.eu.png");
+            }
+            else if(this.isDemanded(actionNotice) && !this.isAllowed(actionCommercialUse) && this.isDemanded(actionShareAlike) && this.isAllowed(actionDerivateWorks)) {
+                this.imageText = "Namensnennung-Nicht kommerziell-Share Alike 4.0 International";
+                this.image = require("../img/cc/by-nc-sa.eu.png");
+            }
+            else if(this.isDemanded(actionNotice) && !this.isAllowed(actionCommercialUse) && !this.isDemanded(actionShareAlike) && !this.isAllowed(actionDerivateWorks)) {
+                this.imageText = "Namensnennung-Nicht kommerziell-Keine Bearbeitungen 4.0 International";
+                this.image = require("../img/cc/by-nc-nd.eu.png");
+            }          
+        },
     },
     created: function() {
         // initialize constants
@@ -147,19 +184,7 @@ export default {
 
             return license;
         },
-        notice: function() {
-            return this.settings[actionNotice.uri] === this.demanded;
-        },
-        commercialUse: function() {
-            return this.settings[actionCommercialUse.uri] === this.allowed;
-        },
-        shareAlike: function() {
-            return this.settings[actionShareAlike.uri] === this.demanded;
-        },
-        derivateWorks: function() {
-            return this.settings[actionDerivateWorks.uri] === this.allowed;
-        }
-    },
+    }
 };
 </script>
 

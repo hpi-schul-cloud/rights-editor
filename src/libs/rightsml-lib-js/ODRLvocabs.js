@@ -3,7 +3,6 @@
  * MIT license) and slightly edited. The license can be found at ./LICENSE.md.
  */
 
-/// <reference path="ODRLclasses.ts"/>
 /**
 * This module provides each currently defined ODRL Controlled Vocabulary
 * as a class.

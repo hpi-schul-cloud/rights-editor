@@ -3,23 +3,18 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-
           <div class="modal-header">
             <slot name="header"></slot>
           </div>
 
           <div class="modal-body">
-            <slot name="body">
-              default body
-            </slot>
+            <slot name="body">default body</slot>
           </div>
 
           <div class="modal-footer">
             <slot name="footer">
               default footer
-              <button class="modal-default-button" @click="$emit('close')">
-                OK
-              </button>
+              <button class="modal-default-button">OK</button>
             </slot>
           </div>
         </div>
@@ -30,11 +25,18 @@
 
 <script>
 export default {
-  name: "BaseModal"
+  name: "BaseModal",
+  created: function() {
+    document.body.style.overflow = "hidden";
+  },
+  destroyed: function() {
+    document.body.style.overflow = "auto";
+  }
 };
 </script>
 
 <style scoped>
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -42,9 +44,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity 0.25s ease;
 }
 
 .modal-wrapper {
@@ -58,17 +60,14 @@ export default {
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
-}
-
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.25s ease;
 }
 
 .modal-body {
   margin: 20px 0;
+  overflow-y: scroll;
+  max-height: 275px;
 }
 
 .modal-default-button {
@@ -98,4 +97,23 @@ export default {
   transform: scale(1.1);
 }
 
+/* The following style creates a custom scroll bar 
+ * for the modal to fit better into our custom ui design
+*/
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #999; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
 </style>

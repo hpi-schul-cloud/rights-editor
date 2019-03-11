@@ -19,14 +19,15 @@ export class Rule {
   constructor(id, type) {
     this.id = id;
     this.type = type;
-    this.action = new Action("Nutzung", Vocab.ActionsCV.use);
+    this.action = new Action("", Vocab.ActionsCV.use);
   }
 }
 
 export let RuleTypes = Object.freeze({
   Permission: { name: "Erlaubnis" },
-  Duty: { name: "Verpflichtung" },
+  Obligation: { name: "Verpflichtung" },  
   Prohibition: { name: "Verbot" },
+  Duty: { name: "Verpflichtung" },
   Consequence: { name: "Konsequenz" },
   Remedy: { name: "Strafe" }
 });
