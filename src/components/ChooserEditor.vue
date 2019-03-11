@@ -34,11 +34,11 @@
     <div v-if="notice" class="rule">
         <p class="caption">CC-Lizenz</p>
         <p class="description">Die erstellte CC-Lizenz:</p>
-        <img v-if="notice && commercialUse && !shareAlike && derivateWorks" src="../img/cc/by.png">
-        <img v-if="notice && commercialUse && shareAlike && derivateWorks" src="../img/cc/by-sa.png">
-        <img v-if="notice && commercialUse && !shareAlike && !derivateWorks" src="../img/cc/by-nd.png">
-        <img v-if="notice && !commercialUse && !shareAlike && derivateWorks" src="../img/cc/by-nc.eu.png">
-        <img v-if="notice && !commercialUse && shareAlike && derivateWorks" src="../img/cc/by-nc-sa.eu.png">
+        <img v-if="notice && commercialUse  && !shareAlike && derivateWorks"  src="../img/cc/by.png">
+        <img v-if="notice && commercialUse  && shareAlike  && derivateWorks"  src="../img/cc/by-sa.png">
+        <img v-if="notice && commercialUse  && !shareAlike && !derivateWorks" src="../img/cc/by-nd.png">
+        <img v-if="notice && !commercialUse && !shareAlike && derivateWorks"  src="../img/cc/by-nc.eu.png">
+        <img v-if="notice && !commercialUse && shareAlike  && derivateWorks"  src="../img/cc/by-nc-sa.eu.png">
         <img v-if="notice && !commercialUse && !shareAlike && !derivateWorks" src="../img/cc/by-nc-nd.eu.png">
     </div>
 </div>
@@ -195,12 +195,13 @@ p {
 }
 .button-group button {
     border: none;
-    border-top: black solid 0px;
-    border-bottom: black solid 0px;
     float: left;
     font-size: 1em;
     padding: 0.5em;
-    background-color: #EEE;
+    background-color: #DDD;
+    color: #555;
+    transition: background-color 0.2s;
+    cursor: pointer;
 }
 .button-group button:first-child {
     border-left: black solid 0px;
@@ -212,21 +213,26 @@ p {
     border-top-right-radius: 0.5em;
     border-bottom-right-radius: 0.5em;
 }
-.button-group button.positive {
+.button-group button.active.positive, .button-group button.positive:active {
     color: darkgreen;
-    border-color: darkgreen;
 }
-.button-group button.negative {
+.button-group button.active.negative, .button-group button.negative:active {
     color: rgb(160, 0, 0);
-    border-color: rgb(160, 0, 0);
 }
 .button-group button.active {
-    background-color: #DDD;
-    box-shadow: 0px 0px 1px gray;
+    background-color: #EEE;
+    box-shadow: 0px 0px 3px gray;
     position: relative;
     z-index: 1;
 }
-.button-group button:hover {
-    background-color: #e0e0e0;
+.button-group button:hover:active {
+    background-color: #EEE;
+    box-shadow: 0px 0px 3px gray;
+    position: relative;
+    z-index: 2;
+}
+.button-group button:not(.active):not(:active):hover {
+    background-color: #d0d0d0;
+    box-shadow: 0px 0px 1px gray inset;
 }
 </style>
