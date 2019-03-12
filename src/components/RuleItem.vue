@@ -63,9 +63,10 @@ export default {
   display: inline-block;
 }
 
-.rule-header-container {
+.rule-header-container {  
   position: relative;
   margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .button-dismiss-rule {

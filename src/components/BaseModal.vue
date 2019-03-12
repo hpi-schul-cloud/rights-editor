@@ -2,12 +2,12 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div v-bind:style="{ width: this.width + 'px' }" class="modal-container">
           <div class="modal-header">
             <slot name="header"></slot>
           </div>
 
-          <div class="modal-body">
+          <div v-bind:class="{ scrollable: scrollbar }" class="modal-body">
             <slot name="body">default body</slot>
           </div>
 
@@ -31,12 +31,23 @@ export default {
   },
   destroyed: function() {
     document.body.style.overflow = "auto";
+  },
+  props: {
+    width: {
+      default: 600,
+      type: Number,
+      required: false
+    },
+    scrollbar: {
+      default: true,
+      type: Boolean,
+      required: false
+    }
   }
 };
 </script>
 
 <style scoped>
-
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -54,8 +65,11 @@ export default {
   vertical-align: middle;
 }
 
+.scrollable {
+  overflow-y: scroll !important;
+}
+
 .modal-container {
-  width: 600px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -66,7 +80,8 @@ export default {
 
 .modal-body {
   margin: 20px 0;
-  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: hidden;
   max-height: 275px;
 }
 
@@ -110,7 +125,7 @@ export default {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #999; 
+  background: #999;
 }
 
 ::-webkit-scrollbar-thumb:hover {
