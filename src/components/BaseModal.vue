@@ -82,7 +82,8 @@ export default {
   margin: 20px 0;
   overflow-x: hidden;
   overflow-y: hidden;
-  max-height: 275px;
+  height: 250px;
+  max-height: 250px;
 }
 
 .modal-default-button {

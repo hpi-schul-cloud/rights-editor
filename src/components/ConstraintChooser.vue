@@ -26,10 +26,20 @@
           </ul>
         </div>
         <div class="value-input-container">
-          <input v-if="displayNumberInput" class="value-input-input">
+          <!-- input is number -->
+          <div v-if="displayNumberInput" class="value-input-number-container">Zahl eingeben:
+            <br>
+            <input class="value-input-number" v-bind:value="inputNumber">
+          </div>
+          <!-- input is selection from list -->
           <div v-if="displayListInput" class="value-input-list-container">
             <ul class="value-input-list list">
-              <li v-for="state in states" v-bind:key="state.id">{{state.name}}</li>
+              <li
+                v-for="item in currentValueList"
+                v-bind:key="item.id"
+                v-bind:class="{selected: isCurrentValueListItemChosen(item.id) }"
+                v-on:click="currentValueListItemClicked(item.id)"
+              >{{ item.name }}</li>
             </ul>
           </div>
         </div>
@@ -60,15 +70,26 @@ export default {
     return {
       displayNumberInput: false,
       displayListInput: true,
-      currentLeftOperandId: 0,
-      currentLeftOperand: "",
-      currentOperatorId: 0,
-      currentOperator: "",
+      numberInputSet: null,
+
+      inputNumber: 0,
+      currentLeftOperandId: 1,
+      currentOperatorId: 1,
+      currentValueList: null,
+      chosenStates: [],
+      chosenGroups: [],
+
       leftOperands: {
         1: { id: 1, name: "Bundesland" },
         2: { id: 2, name: "Gruppenzugehörigkeit" },
         3: { id: 3, name: "Alter" },
         4: { id: 4, name: "Nutzungsdauer" }
+      },
+      operators: {
+        1: { id: 1, name: "=" },
+        2: { id: 2, name: "≠" },
+        3: { id: 3, name: "<" },
+        4: { id: 4, name: ">" }
       },
       states: {
         1: { id: 1, name: "Baden-Württemberg" },
@@ -88,29 +109,86 @@ export default {
         15: { id: 15, name: "Schleswig-Holstein" },
         16: { id: 16, name: "Thüringen" }
       },
-      operators: {
-        1: { id: 1, name: "=" },
-        2: { id: 2, name: "≠" },
-        3: { id: 3, name: "<" },
-        4: { id: 4, name: ">" }
-      }
+      statesCount: 16,
+      groups: {
+        1: { id: 1, name: "Lehrer" },
+        2: { id: 2, name: "Schüler" }
+      },
+      groupsCount: 2
     };
   },
-  props: {},
+  created: function() {
+    // initialize the array of chosen states
+    this.numberInputSet = new Set();
+    this.numberInputSet.add(3);
+    this.numberInputSet.add(4);
+
+    for (let i = 0; i < this.statesCount; i++) {
+      this.chosenStates.push(false);
+    }
+    for (let i = 0; i < this.groupsCount; i++) {
+      this.chosenGroups.push(false);
+    }
+    this.currentValueList = this.states;
+  },
   methods: {
     leftOperandClicked: function(id) {
-      this.currentLeftOperand = this.leftOperands[id].name;
       this.currentLeftOperandId = id;
+      // determine possible operators and value input options based on the chosen left operand
+      if (this.numberInputSet.has(id)) {
+        this.displayNumberInput = true;
+        this.displayListInput = false;
+      } else {
+        this.displayNumberInput = false;
+        this.displayListInput = true;
+
+        if (id == 1) {
+          this.currentValueList = this.states;
+        } else if (id == 2) {
+          this.currentValueList = this.groups;
+        }
+      }
     },
     isLeftOperandSelected: function(id) {
       return this.currentLeftOperandId == id;
     },
     operatorClicked: function(id) {
-      this.currentLeftOperand = this.operators[id].name;
       this.currentOperatorId = id;
     },
     isOperatorSelected: function(id) {
       return this.currentOperatorId == id;
+    },
+    stateClicked: function(id) {
+      this.chosenStates[id] = !this.chosenStates[id];
+      // this is a hack to force vue js to redraw the list
+      this.chosenStates.push(undefined);
+      this.chosenStates.pop();
+    },
+    groupClicked: function(id) {
+      this.chosenGroups[id] = !this.chosenGroups[id];
+      // this is a hack to force vue js to redraw the list
+      this.chosenGroups.push(undefined);
+      this.chosenGroups.pop();
+    },
+    isStateChosen: function(id) {
+      return this.chosenStates[id] == true;
+    },
+    isGroupChosen: function(id) {
+      return this.chosenGroups[id] == true;
+    },
+    isCurrentValueListItemChosen: function(id) {
+      if (this.currentValueList == this.states) {
+        return this.isStateChosen(id);
+      } else if (this.currentValueList == this.groups) {
+        return this.isGroupChosen(id);
+      }
+    },
+    currentValueListItemClicked: function(id) {
+      if (this.currentValueList == this.states) {
+        this.stateClicked(id);
+      } else if (this.currentValueList == this.groups) {
+        this.groupClicked(id);
+      }
     }
   }
 };
@@ -130,6 +208,7 @@ export default {
 }
 .list li:hover {
   background-color: rgb(238, 238, 238);
+  cursor: pointer;
 }
 .list .selected {
   background-color: rgb(218, 218, 218);
@@ -145,7 +224,7 @@ export default {
   width: 300px;
 }
 
-.value-input-container {  
+.value-input-container {
   float: right;
   margin-right: 10px;
 }
@@ -156,10 +235,18 @@ export default {
   width: 335px;
 }
 
-.value-input-input {
-  width: 100%;
+.value-input-number-container {
+  float: left;
+  width: 275px;
+  margin-left: 50px;
+}
+
+.value-input-number {
+  width: 200px;
   font-size: 16px;
   height: 16px;
+  margin: 0;
+  margin-top: 5px;
 }
 
 .modal-footer {
@@ -174,7 +261,7 @@ export default {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background-color: rgb(218, 218, 218);
 }
 
 ::-webkit-scrollbar-thumb {

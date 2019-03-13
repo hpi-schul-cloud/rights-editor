@@ -87,13 +87,14 @@ export default {
   cursor: default;
 }
 .actions-list li:hover {
-  background-color: rgb(248, 248, 248);
+  background-color: rgb(238, 238, 238);
+  cursor: pointer;
 }
 .actions-list .selected {
-  background-color: rgb(238, 238, 238);
+  background-color: rgb(218, 218, 218);
 }
 .actions-list .selected:hover {
-  background-color: rgb(228, 228, 228);
+  background-color: rgb(218, 218, 218);
 }
 
 .modal-footer {
