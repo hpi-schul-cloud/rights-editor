@@ -2,24 +2,14 @@
   <div id="app">
     <h1>Elektronisches Lizenz-Bearbeitungsprogramm (ELBP)</h1>
     <h2>erlaubt die automatische Generierung von Lizenzen in maschinenlesbarem Format</h2>
-    <RuleEditor/>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import Rule from "./components/RuleItem.vue";
-import RuleEditor from "./components/RuleEditor.vue";
-import { Odrl } from "./libs/rightsml-lib-js/ODRLclasses";
-
-class Policy {
-  constructor() {}
-}
 
 export default {
   name: "app",
-  components: {
-    RuleEditor
-  }
 };
 </script>
 
@@ -35,10 +25,6 @@ hr {
 
 *:focus {
   outline: none !important;
-}
-
-body {
-  background-color: rgb(248, 248, 248);
 }
 
 #app {

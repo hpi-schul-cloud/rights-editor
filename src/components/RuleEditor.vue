@@ -22,15 +22,7 @@
     
     <hr>
     <BaseButton style="margin-bottom: 50px;" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
-    <div class="json-textarea-container">
-      <textarea class="json-textarea" readonly=true rows="5"></textarea>
-    </div>
-
-    <div style="min-height: 150px; border: dotted black 1px">
-      <i>divider</i>
-    </div>
-    <ChooserEditor></ChooserEditor>
-    <div style="min-height: 150px;"></div>
+    <pre class="json-textarea">{{policy}}</pre>
   </div>
 </template>
 
@@ -55,7 +47,8 @@ export default {
     return {
       ruleTrees: [],
       nextId: 0,
-      licenceName: "007"
+      licenceName: "007",
+      policy: ""
     };
   },
   methods: {
@@ -102,8 +95,7 @@ export default {
         }
       }
 
-      let outStr = policy.serializeJson();
-      document.getElementsByClassName("json-textarea")[0].value = outStr;
+      this.policy = policy.serializeJson();
     },
     addPermissionToPolicy(ruleTreeIndex, policy) {
       let permission = new Odrl.Permission();
@@ -213,9 +205,6 @@ ul {
   width: 800px;
   height: 400px;
   resize: none;
-}
-
-.json-textarea-container {
-  margin-bottom: 40px;
+  border: 1px solid gray;
 }
 </style>
