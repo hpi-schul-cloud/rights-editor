@@ -3,23 +3,20 @@
     <div>
       <input class="under-cover" v-model="licenceName" placeholder="Name der Lizenz">
     </div>
-    <template v-if="ruleTrees.length > 0">      
-      <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
-      <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
-      <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
-    </template>
-    <ul>
-      <RuleTreeItem
-        v-on:remove-tree-event="updateTrees($event)"
-        v-for="ruleTree in ruleTrees"
-        v-bind:ruleTree="ruleTree"
-        v-bind:key="ruleTree.id"
-      ></RuleTreeItem>
-    </ul>
+    <hr>
+    <div id="container" style="max-height:600px; overflow-y: auto;">
+      <ul>
+        <RuleTreeItem
+          v-on:remove-tree-event="updateTrees($event)"
+          v-for="ruleTree in ruleTrees"
+          v-bind:ruleTree="ruleTree"
+          v-bind:key="ruleTree.id"
+        ></RuleTreeItem>
+      </ul>
+    </div>
     <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
     <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
     <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
-    
     <hr>
     <BaseButton style="margin-bottom: 50px;" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
     <pre class="json-textarea">{{policy}}</pre>
@@ -66,6 +63,7 @@ export default {
       let ruleTree = new RuleTree(newID, type);
       ruleTree.rules.push(new Rule(0, type));
       this.ruleTrees.push(ruleTree);
+      this.scrollToEnd();
     },
     updateTrees(tree_id) {
       for (let i = 0; i < this.ruleTrees.length; i++) {
@@ -74,6 +72,11 @@ export default {
           this.ruleTrees.splice(i, 1);
         }
       }
+      this.scrollToEnd();
+    },
+    scrollToEnd: function() {    	
+      let container = this.$el.querySelector("#container");
+      container.scrollTop = container.scrollHeight;
     },
     generateLicence() {
       let policy = new Odrl.Policy(this.licenceName, "set");

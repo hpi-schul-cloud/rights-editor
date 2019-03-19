@@ -25,14 +25,14 @@ export default {
   color: white;
   display: inline-block;
 
-  border: 0px black solid;
+  border: 0px rgb(0, 0, 0) solid;
   border-radius: 2px;
-  background-color: #172b4d;
+  background-color: #ff5943;
   margin: 10px;
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
 }
 
@@ -40,7 +40,7 @@ export default {
   font-size: 1.2em;
 }
 .base-button.base-button-textlike {
-  color: #172b4d;
+  color: #ff5943;
   background: none;
   border: none;
 }
