@@ -29,7 +29,7 @@
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
-import { all } from 'q';
+import { all } from "q";
 
 export class Action {
   constructor(name, nsVocabUri) {
@@ -69,7 +69,8 @@ export default {
   methods: {
     showActionChooser: function(allowAbort) {
       this.actionChooserSettings.displayActionChooser = true;
-      this.actionChooserSettings.allowAbort = allowAbort == undefined ? true : allowAbort;
+      this.actionChooserSettings.allowAbort =
+        allowAbort == undefined ? true : allowAbort;
     },
     hideActionChooser: function() {
       this.actionChooserSettings.displayActionChooser = false;
@@ -127,6 +128,7 @@ input.under-cover {
   border: none;
   border-bottom: 1px solid DarkGray;
   box-shadow: none;
+  margin-left: 10px;
 }
 
 input,
@@ -143,7 +145,7 @@ input.under-cover:focus {
   font-size: 1em;
 
   margin: 10px;
-  margin-left: 0px;
+  margin-left: 10px;
   padding: 10px 10px;
 
   box-shadow: inset 0 0 1.5px #000;

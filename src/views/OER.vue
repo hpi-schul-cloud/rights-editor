@@ -1,22 +1,21 @@
 <template>
-<div class="oer-page">
-  <ChooserEditor></ChooserEditor>
-</div>
+  <div class="oer-page">
+    <ChooserEditor></ChooserEditor>
+  </div>
 </template>
 
 <script>
-import ChooserEditor from '../components/ChooserEditor.vue';
+import ChooserEditor from "../components/ChooserEditor.vue";
 
 export default {
-  name: 'oer',
+  name: "oer",
   components: {
     ChooserEditor
   },
   data: function() {
-    return {
-    };
-  },
-}
+    return {};
+  }
+};
 </script>
 
 
