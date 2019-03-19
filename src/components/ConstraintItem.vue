@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- ???? -->
     <ConstraintChooser
       v-if="this.displayConstraintChooser"
       v-on:chosen="constraintChosen($event)"
@@ -13,7 +12,7 @@
         v-on:click="showConstraintChooser()"
         name="constraint"
         type="button"
-      >Bedingung festlegen...</button>
+      >{{ constraint.name }}</button>
     </div>
   </div>
 </template>
@@ -40,14 +39,9 @@ export default {
   },
   data: function() {
     return {
-      displayConstraintChooser: false
+      displayConstraintChooser: false,
+      constraint: new Constraint()
     };
-  },
-  props: {
-    constraint: {
-      type: Object,
-      required: true
-    }
   },
   methods: {
     showConstraintChooser: function() {
@@ -57,8 +51,10 @@ export default {
       this.displayConstraintChooser = false;
     },
     constraintChosen: function(constraint) {
-      this.hideConstraintChooser();
       console.log(constraint);
+      this.hideConstraintChooser();
+      this.constraint = constraint;
+      this.$emit("constraint-set", this.constraint);
     }
   }
 };
