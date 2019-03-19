@@ -12,7 +12,7 @@
         v-on:click="showConstraintChooser()"
         name="constraint"
         type="button"
-      >Bedingung festlegen...</button> <!-- TODO: geht besser -->
+      >Bedingung festlegen...</button>
     </div>
   </div>
 </template>
@@ -28,6 +28,7 @@ export class Constraint {
     this.rightOperand = "";
     this.operator = "";
     this.unit = "";
+    this.type = "";
   }
 }
 

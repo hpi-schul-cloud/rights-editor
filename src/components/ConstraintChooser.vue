@@ -22,23 +22,23 @@
               v-bind:key="operator.id"
               v-bind:class="{selected: isOperatorSelected(operator.id)}"
               v-on:click="operatorClicked(operator.id)"
-            >{{operator.name}}</li>
+            >{{operator.symbol}}</li>
           </ul>
         </div>
         <div class="value-input-container">
           <!-- input is number -->
           <div v-if="displayNumberInput" class="value-input-number-container">Zahl eingeben:
             <br>
-            <input class="value-input-number" v-bind:value="inputNumber">
+            <input class="value-input-number" type="number" v-model.number="inputNumber">
           </div>
           <!-- input is selection from list -->
           <div v-if="displayListInput" class="value-input-list-container">
             <ul class="value-input-list list">
               <li
-                v-for="item in currentValueList"
+                v-for="item in valueList"
                 v-bind:key="item.id"
-                v-bind:class="{selected: isCurrentValueListItemChosen(item.id) }"
-                v-on:click="currentValueListItemClicked(item.id)"
+                v-bind:class="{selected: isValueListItemChosen(item.id) }"
+                v-on:click="valueListItemClicked(item.id)"
               >{{ item.name }}</li>
             </ul>
           </div>
@@ -48,9 +48,7 @@
     <template v-slot:footer>
       <div class="modal-footer">
         <BaseButton textlike v-bind:onClick="function() {$emit('abort');}">Abbrechen</BaseButton>
-        <BaseButton
-          v-bind:onClick="function() {$emit('chosen' /*, additional parameter: the chosen constraint*/);}"
-        >Annehmen</BaseButton>
+        <BaseButton v-bind:onClick="accept">Annehmen</BaseButton>
       </div>
     </template>
   </BaseModal>
@@ -59,6 +57,17 @@
 <script>
 import BaseButton from "./BaseButton.vue";
 import BaseModal from "./BaseModal.vue";
+
+class Constraint {
+  constructor() {
+    this.name = "";
+    this.leftOperand = "";
+    this.rightOperand = "";
+    this.operator = "";
+    this.unit = "";
+    this.type = "";
+  }
+}
 
 export default {
   name: "ConstraintChooser",
@@ -70,12 +79,14 @@ export default {
     return {
       displayNumberInput: false,
       displayListInput: true,
-      numberInputSet: null,
+      setOfNumericOperands: null,
 
       inputNumber: 0,
       currentLeftOperandId: 1,
       currentOperatorId: 1,
-      currentValueList: null,
+      backupOperatorId: 1,
+      operators: null,
+      valueList: null,
       chosenStates: [],
       chosenGroups: [],
 
@@ -85,11 +96,15 @@ export default {
         3: { id: 3, name: "Alter" },
         4: { id: 4, name: "Nutzungsdauer" }
       },
-      operators: {
-        1: { id: 1, name: "=" },
-        2: { id: 2, name: "≠" },
-        3: { id: 3, name: "<" },
-        4: { id: 4, name: ">" }
+      numericOperators: {
+        1: { id: 1, symbol: "=", short: "eq" },
+        2: { id: 2, symbol: "<", short: "lt" },
+        3: { id: 3, symbol: "≤", short: "lteq" },
+        4: { id: 4, symbol: ">", short: "gt" },
+        5: { id: 5, symbol: "≥", short: "gteq" }
+      },
+      listOperators: {
+        1: { id: 1, symbol: "=", short: "eq" }
       },
       states: {
         1: { id: 1, name: "Baden-Württemberg" },
@@ -119,33 +134,38 @@ export default {
   },
   created: function() {
     // initialize the array of chosen states
-    this.numberInputSet = new Set();
-    this.numberInputSet.add(3);
-    this.numberInputSet.add(4);
+    this.setOfNumericOperands = new Set();
+    this.setOfNumericOperands.add(3);
+    this.setOfNumericOperands.add(4);
 
-    for (let i = 0; i < this.statesCount; i++) {
+    for (let i = 1; i <= this.statesCount; i++) {
       this.chosenStates.push(false);
     }
-    for (let i = 0; i < this.groupsCount; i++) {
+    for (let i = 1; i <= this.groupsCount; i++) {
       this.chosenGroups.push(false);
     }
-    this.currentValueList = this.states;
+    this.valueList = this.states;
+    this.operators = this.listOperators;
   },
   methods: {
     leftOperandClicked: function(id) {
       this.currentLeftOperandId = id;
       // determine possible operators and value input options based on the chosen left operand
-      if (this.numberInputSet.has(id)) {
+      if (this.setOfNumericOperands.has(id)) {
         this.displayNumberInput = true;
         this.displayListInput = false;
+        this.operators = this.numericOperators;
+        this.currentOperatorId = this.backupOperatorId;
       } else {
         this.displayNumberInput = false;
         this.displayListInput = true;
+        this.operators = this.listOperators;
+        this.currentOperatorId = 1;
 
         if (id == 1) {
-          this.currentValueList = this.states;
+          this.valueList = this.states;
         } else if (id == 2) {
-          this.currentValueList = this.groups;
+          this.valueList = this.groups;
         }
       }
     },
@@ -154,6 +174,9 @@ export default {
     },
     operatorClicked: function(id) {
       this.currentOperatorId = id;
+      if (this.displayNumberInput) {
+        this.backupOperatorId = id;
+      }
     },
     isOperatorSelected: function(id) {
       return this.currentOperatorId == id;
@@ -176,19 +199,51 @@ export default {
     isGroupChosen: function(id) {
       return this.chosenGroups[id] == true;
     },
-    isCurrentValueListItemChosen: function(id) {
-      if (this.currentValueList == this.states) {
+    isValueListItemChosen: function(id) {
+      if (this.valueList == this.states) {
         return this.isStateChosen(id);
-      } else if (this.currentValueList == this.groups) {
+      } else if (this.valueList == this.groups) {
         return this.isGroupChosen(id);
       }
     },
-    currentValueListItemClicked: function(id) {
-      if (this.currentValueList == this.states) {
+    valueListItemClicked: function(id) {
+      if (this.valueList == this.states) {
         this.stateClicked(id);
-      } else if (this.currentValueList == this.groups) {
+      } else if (this.valueList == this.groups) {
         this.groupClicked(id);
       }
+    },
+    accept: function() {
+      let constraint = new Constraint();
+      constraint.leftOperand = this.leftOperands[
+        this.currentLeftOperandId
+      ].name;
+
+      constraint.operator = this.operators[this.currentOperatorId].short;
+      if (this.displayNumberInput) {
+        // for numeric input the right operand is just a number
+        constraint.rightOperand = this.inputNumber.toString();
+      } else {
+        // create array of chosen names from the value list
+        let values = [];
+        if (this.valueList == this.states) {
+          for (let i = 1; i <= this.statesCount; i++) {
+            if (this.chosenStates[i] == true) {
+              values.push(this.states[i].name);
+            }
+          }
+        } else if (this.valueList == this.groups) {
+          for (let i = 1; i <= this.groupsCount; i++) {
+            if (this.chosenGroups[i] == true) {
+              values.push(this.groups[i].name);
+            }
+          }
+        }
+        console.log(values);
+        constraint.rightOperand = values.toString();
+      }
+      console.log(constraint);
+      this.$emit("chosen", constraint);
     }
   }
 };
@@ -226,7 +281,7 @@ export default {
 
 .value-input-container {
   float: right;
-  margin-right: 10px;
+  margin-right: 15px;
 }
 
 .value-input-list {
