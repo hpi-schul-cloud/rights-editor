@@ -239,7 +239,6 @@ export default {
             }
           }
         }
-        console.log(values);
         constraint.rightOperand = values.toString();
       }
       console.log(constraint);

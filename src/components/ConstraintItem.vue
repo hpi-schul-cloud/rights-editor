@@ -1,8 +1,9 @@
 <template>
   <div>
+    <!-- ???? -->
     <ConstraintChooser
       v-if="this.displayConstraintChooser"
-      v-on:chosen="hideConstraintChooser()"
+      v-on:chosen="constraintChosen($event)"
       v-on:abort="hideConstraintChooser()"
     ></ConstraintChooser>
     <div class="constraint-content">Bedingung:
@@ -54,6 +55,10 @@ export default {
     },
     hideConstraintChooser: function() {
       this.displayConstraintChooser = false;
+    },
+    constraintChosen: function(constraint) {
+      this.hideConstraintChooser();
+      console.log(constraint);
     }
   }
 };
