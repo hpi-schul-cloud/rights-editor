@@ -26,7 +26,6 @@ import BaseButton from "./BaseButton";
 import Action from "./ActionItem.vue";
 
 import { Rule, RuleTypes } from "./RuleItem.vue";
-import ChooserEditor from "./ChooserEditor";
 import RuleTreeItem, { RuleTree } from "./RuleTreeItem.vue";
 import { Odrl } from "../libs/rightsml-lib-js/ODRLclasses";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
@@ -35,8 +34,7 @@ export default {
   name: "RuleEditor",
   components: {
     BaseButton,
-    RuleTreeItem,
-    ChooserEditor
+    RuleTreeItem
   },
   data: function() {
     return {

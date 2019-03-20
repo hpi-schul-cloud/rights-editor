@@ -16,11 +16,7 @@
         type="button"
       >{{this.action.name}}</button>
       <br>
-      <!-- should be optional and it should also be possible to add more than one constraint
-      also constraints (and by the way refinements as well) are not bound to actions only, 
-      they can also be attached to party collections for example...
-      http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period-->
-      <ConstraintItem v-bind:constraint="action.constraint"></ConstraintItem>
+      <ConstraintItem v-on:constraint-set="setConstraint($event)"></ConstraintItem>
     </div>
   </div>
 </template>
@@ -74,6 +70,9 @@ export default {
     hideActionChooser: function() {
       this.actionChooserSettings.displayActionChooser = false;
       this.actionChooserSettings.allowAbort = true;
+    },
+    setConstraint: function(constraint) {
+      this.action.constraint = constraint;
     }
   },
   computed: {
@@ -84,7 +83,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .action-item {
   margin-left: 0px;
 }
