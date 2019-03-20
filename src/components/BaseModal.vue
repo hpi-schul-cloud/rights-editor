@@ -7,7 +7,7 @@
             <slot name="header"></slot>
           </div>
 
-          <div v-bind:class="{ scrollable: scrollable }" class="modal-body">
+          <div v-bind:class="{ 'base-modal-scrollable': scrollable }" class="modal-body">
             <slot name="body">default body</slot>
           </div>
 
@@ -74,16 +74,16 @@ export default {
   transition: all 0.25s ease;
 }
 
+.base-modal-scrollable {
+  overflow-y: scroll !important;
+}
+
 .modal-body {
   margin: 20px 0;
   overflow-x: hidden;
   overflow-y: hidden;
   height: 250px;
   max-height: 250px;
-}
-
-.scrollable {
-  overflow-y: scroll !important;
 }
 
 .modal-default-button {

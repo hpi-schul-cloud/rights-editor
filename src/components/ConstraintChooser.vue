@@ -1,5 +1,5 @@
 <template>
-  <BaseModal v-bind:width="'1000px'" v-bind:scrollbar="false">
+  <BaseModal v-bind:width="'1000px'" v-bind:scrollable="false">
     <template v-slot:header>
       <h1>Bedingung festlegen</h1>
     </template>
