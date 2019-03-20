@@ -84,7 +84,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .action-item {
   margin-left: 0px;
 }
