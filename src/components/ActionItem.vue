@@ -16,11 +16,7 @@
         type="button"
       >{{this.action.name}}</button>
       <br>
-      <!-- should be optional and it should also be possible to add more than one constraint
-      also constraints (and by the way refinements as well) are not bound to actions only, 
-      they can also be attached to party collections for example...
-      http://dev.iptc.org/RightsML-Combined-Example-geographic-and-time-period-->
-      <ConstraintItem v-bind:constraint="action.constraint"></ConstraintItem>
+      <ConstraintItem v-on:constraint-set="setConstraint($event)"></ConstraintItem>
     </div>
   </div>
 </template>
@@ -29,7 +25,6 @@
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
-import { all } from 'q';
 
 export class Action {
   constructor(name, nsVocabUri) {
@@ -69,11 +64,15 @@ export default {
   methods: {
     showActionChooser: function(allowAbort) {
       this.actionChooserSettings.displayActionChooser = true;
-      this.actionChooserSettings.allowAbort = allowAbort == undefined ? true : allowAbort;
+      this.actionChooserSettings.allowAbort =
+        allowAbort == undefined ? true : allowAbort;
     },
     hideActionChooser: function() {
       this.actionChooserSettings.displayActionChooser = false;
       this.actionChooserSettings.allowAbort = true;
+    },
+    setConstraint: function(constraint) {
+      this.action.constraint = constraint;
     }
   },
   computed: {

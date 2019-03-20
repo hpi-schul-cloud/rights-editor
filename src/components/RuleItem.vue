@@ -25,7 +25,7 @@ export class Rule {
 
 export let RuleTypes = Object.freeze({
   Permission: { name: "Erlaubnis" },
-  Obligation: { name: "Verpflichtung" },  
+  Obligation: { name: "Verpflichtung" },
   Prohibition: { name: "Verbot" },
   Duty: { name: "Verpflichtung" },
   Consequence: { name: "Konsequenz" },
@@ -63,7 +63,7 @@ export default {
   display: inline-block;
 }
 
-.rule-header-container {  
+.rule-header-container {
   position: relative;
   margin-bottom: 20px;
   margin-top: 10px;
