@@ -9,7 +9,6 @@
     <div>
       <BaseButton
         input
-        class="flat-input"
         v-bind:width="'600px'"
         v-bind:value="actionName"
         v-bind:onClick="showActionChooser"

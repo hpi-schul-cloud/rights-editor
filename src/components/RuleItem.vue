@@ -57,12 +57,7 @@ export default {
 };
 </script>
 
-<style>
-.rule-header-name {
-  width: 755px;
-  display: inline-block;
-}
-
+<style scoped>
 .rule-header-container {
   position: relative;
   margin-bottom: 20px;

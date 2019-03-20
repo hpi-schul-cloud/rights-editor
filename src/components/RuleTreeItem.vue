@@ -12,10 +12,7 @@
       <p>Füge optional Erweiterungen hinzu:</p>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
-          <BaseButton
-            v-bind:name="addon.name"
-            v-bind:onClick="createAddon"
-          >{{addon.name}}</BaseButton>
+          <BaseButton v-bind:name="addon.name" v-bind:onClick="createAddon">{{addon.name}}</BaseButton>
           <div class="addon-info">({{addon.descr}})</div>
         </li>
       </ul>
@@ -67,7 +64,7 @@ export default {
             this.ruleTree.rules.splice(i, this.ruleTree.rules.length);
           } else {
             let deleteCount = 1;
-            let r = this.ruleTree.rules[i];     
+            let r = this.ruleTree.rules[i];
             if (r.type == RuleTypes.Duty) {
               for (let j = i + 1; j < this.ruleTree.rules.length; j++) {
                 if (this.ruleTree.rules[j].type != RuleTypes.Consequence) {
@@ -155,7 +152,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .addon-container {
   margin-top: 35px;
   margin-bottom: 20px;

@@ -73,6 +73,7 @@ export default {
       }
     },
     scrollToEnd: function() {
+      // TODO: make this work
       let container = this.$el.querySelector("#container");
       console.log(container);
       container.scrollTop = container.scrollHeight;
@@ -190,7 +191,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 ul {
   padding-inline-start: 0px;
 }
