@@ -14,8 +14,8 @@ export default {
   props: {
     big: Boolean,
     textlike: Boolean,
-    onClick: { type: Function, required: true },
-  },
+    onClick: { type: Function, required: true }
+  }
 };
 </script>
 

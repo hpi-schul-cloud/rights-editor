@@ -1,11 +1,14 @@
 <template>
   <div class="rule-editor">
-    <div class="header">      
+    <div class="header">
       <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
       <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
       <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
-      <span class="licence-name">GUID der Lizenz: <input class="under-cover" v-model="licenceName" placeholder="Name der Lizenz"></span>
-      <BaseButton class="generate-btn" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
+      <span class="licence-name">
+        GUID der Lizenz:
+        <input class="under-cover flat-input" v-model="licenceName">
+      </span>
+      <BaseButton class="float-right" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
     </div>
     <div class="container">
       <ul>
@@ -16,7 +19,7 @@
           v-bind:key="ruleTree.id"
         ></RuleTreeItem>
       </ul>
-    </div>    
+    </div>
     <pre>{{policy}}</pre>
   </div>
 </template>
@@ -186,7 +189,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 ul {
   padding-inline-start: 0px;
 }
@@ -194,17 +197,17 @@ ul {
 .header {
   z-index: 100;
   background-color: white;
-  border-bottom: 5px solid gray;  
+  border-bottom: 5px solid gray;
   overflow: hidden;
   position: fixed;
-  
-  padding-bottom: 20px;  
+
+  padding-bottom: 20px;
   padding-top: 20px;
-  top: 0;  
-  width: calc(100% - 115px);
+  top: 0;
+  width: calc(100% - 116px);
 }
 
-.container {  
+.container {
   margin-top: 100px;
 }
 
@@ -212,7 +215,50 @@ ul {
   margin-left: 20px;
 }
 
-.generate-btn {
+button.float-right {
   float: right;
+}
+
+.flat-input {
+  background-color: white;
+  border: 0px black solid;
+  border-bottom: 1px transparent solid;
+  color: black;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  font-family: inherit;
+  font-size: 1em;
+  text-align: left;
+
+  margin: 10px;
+  padding: 10px;
+
+  border-bottom: none;
+  box-shadow: inset 0 0 1.5px #000;
+}
+
+.flat-input:hover {
+  cursor: text;
+}
+
+input.flat-input {
+  width: 200px;
+}
+
+button.flat-input {
+  width: 600px;
+  margin-left: 0px;
+}
+
+input.under-cover {
+  box-shadow: none;
+  border-bottom: 1px solid DarkGray;
+}
+
+input.under-cover:focus {
+  box-shadow: inset 0 0 1.5px #000;
+  border-bottom: none;
 }
 </style>

@@ -31,7 +31,7 @@
             <div class="number-container">
               <div class="numeric-input-header">Zahl:</div>
               <br>
-              <input class="number-input" type="number" v-model.number="number">
+              <input class="number-input flat-input" type="number" v-model.number="number">
             </div>
             <div class="unit-container">
               <div class="numeric-input-header">Einheit:</div>
@@ -339,7 +339,6 @@ export default {
 
 .numeric-input-container {
   width: 335px;
-  padding: 5px;
   overflow: hidden;
 }
 
