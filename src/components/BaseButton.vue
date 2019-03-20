@@ -1,7 +1,8 @@
 <template>
   <button
     class="base-button"
-    v-bind:class="{ 'base-button-big': big, 'base-button-textlike': textlike}"
+    v-bind:class="{ 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input }"
+    v-bind:style="{ width: this.width }"
     v-on:click="onClick"
   >
     <slot></slot>
@@ -12,8 +13,14 @@
 export default {
   name: "BaseButton",
   props: {
+    width: {
+      default: "",
+      type: String,
+      required: false
+    },
     big: Boolean,
     textlike: Boolean,
+    input: Boolean,
     onClick: { type: Function, required: true }
   }
 };
@@ -39,9 +46,30 @@ export default {
 .base-button-big {
   font-size: 1.2em;
 }
-.base-button.base-button-textlike {
+.base-button-textlike {
   color: #ff5943;
   background: none;
   border: none;
+}
+.base-button-input {
+  background-color: white;
+  border: 0px black solid;
+  border-bottom: 1px transparent solid;
+  color: black;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  font-family: inherit;
+  font-size: 1em;
+  text-align: left;
+
+  margin: 10px;
+  padding: 10px;
+  margin-left: 0px;
+
+  border-bottom: none;
+  box-shadow: inset 0 0 1.5px #000;
+  cursor: text;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <BaseModal v-bind:width="1000" v-bind:scrollbar="false">
+  <BaseModal v-bind:width="'1000px'" v-bind:scrollbar="false">
     <template v-slot:header>
       <h1>Bedingung festlegen</h1>
     </template>
@@ -31,7 +31,7 @@
             <div class="number-container">
               <div class="numeric-input-header">Zahl:</div>
               <br>
-              <input class="number-input flat-input" type="number" v-model.number="number">
+              <BaseInput class="number-input flat-input" type="number" v-model.number="number"></BaseInput>
             </div>
             <div class="unit-container">
               <div class="numeric-input-header">Einheit:</div>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import BaseInput from "./BaseInput.vue";
 import BaseButton from "./BaseButton.vue";
 import BaseModal from "./BaseModal.vue";
 
@@ -87,6 +88,7 @@ class Constraint {
 export default {
   name: "ConstraintChooser",
   components: {
+    BaseInput,
     BaseButton,
     BaseModal
   },

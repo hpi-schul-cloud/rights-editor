@@ -7,12 +7,14 @@
     ></ConstraintChooser>
     <div>Bedingung:
       <br>
-      <button
+      <BaseButton
+        input
         class="flat-input"
-        v-on:click="showConstraintChooser()"
+        v-bind:width="'600px'"
+        v-bind:onClick="showConstraintChooser"
         name="constraint"
         type="button"
-      >{{ constraint.name }}</button>
+      >{{ constraint.name }}</BaseButton>
     </div>
   </div>
 </template>
@@ -20,6 +22,7 @@
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintChooser from "./ConstraintChooser.vue";
+import BaseButton from "./BaseButton.vue";
 
 export class Constraint {
   constructor() {
@@ -35,7 +38,8 @@ export class Constraint {
 export default {
   name: "ConstraintItem",
   components: {
-    ConstraintChooser
+    ConstraintChooser,
+    BaseButton
   },
   data: function() {
     return {

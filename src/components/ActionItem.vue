@@ -7,14 +7,16 @@
       v-on:abort="hideActionChooser()"
     ></ActionChooser>Aktion:
     <div>
-      <button
+      <BaseButton
+        input
         class="flat-input"
+        v-bind:width="'600px'"
         v-bind:value="actionName"
-        v-on:click="showActionChooser()"
+        v-bind:onClick="showActionChooser"
         list="actions"
         name="action"
         type="button"
-      >{{this.action.name}}</button>
+      >{{this.action.name}}</BaseButton>
       <br>
       <ConstraintItem v-on:constraint-set="setConstraint($event)"></ConstraintItem>
     </div>
@@ -23,6 +25,7 @@
 
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
+import BaseButton from "./BaseButton.vue";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
 
@@ -42,7 +45,8 @@ export default {
   name: "ActionItem",
   components: {
     ConstraintItem,
-    ActionChooser
+    ActionChooser,
+    BaseButton
   },
   data: function() {
     return {

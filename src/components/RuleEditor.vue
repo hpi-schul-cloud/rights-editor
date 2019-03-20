@@ -4,9 +4,8 @@
       <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
       <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
       <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
-      <span class="licence-name">
-        GUID der Lizenz:
-        <input class="under-cover flat-input" v-model="licenceName">
+      <span class="licence-name">GUID der Lizenz:
+        <BaseInput undercover v-model="licenceName" class="guid-input"></BaseInput>
       </span>
       <BaseButton class="float-right" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
     </div>
@@ -25,7 +24,8 @@
 </template>
 
 <script>
-import BaseButton from "./BaseButton";
+import BaseButton from "./BaseButton.vue";
+import BaseInput from "./BaseInput.vue";
 import Action from "./ActionItem.vue";
 
 import { Rule, RuleTypes } from "./RuleItem.vue";
@@ -37,6 +37,7 @@ export default {
   name: "RuleEditor",
   components: {
     BaseButton,
+    BaseInput,
     RuleTreeItem
   },
   data: function() {
@@ -219,46 +220,8 @@ button.float-right {
   float: right;
 }
 
-.flat-input {
-  background-color: white;
-  border: 0px black solid;
-  border-bottom: 1px transparent solid;
-  color: black;
-
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  font-family: inherit;
-  font-size: 1em;
-  text-align: left;
-
-  margin: 10px;
-  padding: 10px;
-
-  border-bottom: none;
-  box-shadow: inset 0 0 1.5px #000;
-}
-
-.flat-input:hover {
-  cursor: text;
-}
-
-input.flat-input {
-  width: 200px;
-}
-
-button.flat-input {
-  width: 600px;
-  margin-left: 0px;
-}
-
-input.under-cover {
-  box-shadow: none;
-  border-bottom: 1px solid DarkGray;
-}
-
-input.under-cover:focus {
-  box-shadow: inset 0 0 1.5px #000;
-  border-bottom: none;
+input.guid-input {
+  margin-left: 10px;
+  width: 175px;
 }
 </style>
