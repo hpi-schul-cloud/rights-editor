@@ -1,7 +1,7 @@
 <template>
   <img
     v-bind:src="imageSource"
-    v-on:click="$emit('licenseClicked', this.licenseID)"
+    v-on:click="$emit('licenseClicked', licenseID)"
     v-bind:class="{active: isActive}"
   >
 </template>
