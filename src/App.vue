@@ -1,15 +1,12 @@
 <template>
-  <div id="app">
-    <h1>Elektronisches Lizenz-Bearbeitungsprogramm (ELBP)</h1>
-    <h2>erlaubt die automatische Generierung von Lizenzen in maschinenlesbarem Format</h2>
+  <div id="app">    
     <router-view/>
   </div>
 </template>
 
 <script>
-
 export default {
-  name: "app",
+  name: "app"
 };
 </script>
 
@@ -17,14 +14,14 @@ export default {
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
 @import url("https://use.fontawesome.com/releases/v5.7.2/css/all.css");
 
-hr {
-  border: 0.5px solid #172b4d;
-  margin-top: 40px;
-  margin-bottom: 20px;
-}
-
 *:focus {
   outline: none !important;
+}
+li {
+  list-style-type: none;
+}
+ul {
+  list-style-type: none;
 }
 
 #app {
@@ -33,15 +30,8 @@ hr {
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   color: #000000;
-  margin-left: 10%;
-  margin-right: 10%;
   margin-bottom: 100px;
-}
-
-li {
-  list-style-type: none !important;
-}
-ul {
-  list-style-type: none;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 </style>

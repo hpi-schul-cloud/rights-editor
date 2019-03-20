@@ -1,10 +1,13 @@
 <template>
   <div class="rule-editor">
-    <div>
-      <input class="under-cover" v-model="licenceName" placeholder="Name der Lizenz">
+    <div class="header">      
+      <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
+      <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
+      <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
+      <span class="licence-name">GUID der Lizenz: <input class="under-cover" v-model="licenceName" placeholder="Name der Lizenz"></span>
+      <BaseButton class="generate-btn" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
     </div>
-    <hr>
-    <div id="container" style="max-height:600px; overflow-y: auto;">
+    <div class="container">
       <ul>
         <RuleTreeItem
           v-on:remove-tree-event="updateTrees($event)"
@@ -13,13 +16,8 @@
           v-bind:key="ruleTree.id"
         ></RuleTreeItem>
       </ul>
-    </div>
-    <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
-    <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
-    <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
-    <hr>
-    <BaseButton style="margin-bottom: 50px;" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
-    <pre class="json-textarea">{{policy}}</pre>
+    </div>    
+    <pre>{{policy}}</pre>
   </div>
 </template>
 
@@ -61,7 +59,6 @@ export default {
       let ruleTree = new RuleTree(newID, type);
       ruleTree.rules.push(new Rule(0, type));
       this.ruleTrees.push(ruleTree);
-      this.scrollToEnd();
     },
     updateTrees(tree_id) {
       for (let i = 0; i < this.ruleTrees.length; i++) {
@@ -70,10 +67,10 @@ export default {
           this.ruleTrees.splice(i, 1);
         }
       }
-      this.scrollToEnd();
     },
-    scrollToEnd: function() {    	
+    scrollToEnd: function() {
       let container = this.$el.querySelector("#container");
+      console.log(container);
       container.scrollTop = container.scrollHeight;
     },
     generateLicence() {
@@ -189,23 +186,33 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 ul {
   padding-inline-start: 0px;
 }
 
-.fas-left {  
-  margin-right: 8px;
+.header {
+  z-index: 100;
+  background-color: white;
+  border-bottom: 5px solid gray;  
+  overflow: hidden;
+  position: fixed;
+  
+  padding-bottom: 20px;  
+  padding-top: 20px;
+  top: 0;  
+  width: calc(100% - 115px);
 }
 
-.fas-right {
-  margin-left: 8px;
+.container {  
+  margin-top: 100px;
 }
 
-.json-textarea {
-  width: 800px;
-  height: 400px;
-  resize: none;
-  border: 1px solid gray;
+.licence-name {
+  margin-left: 20px;
+}
+
+.generate-btn {
+  float: right;
 }
 </style>

@@ -126,6 +126,7 @@ input.under-cover {
   border: none;
   border-bottom: 1px solid DarkGray;
   box-shadow: none;
+  margin-left: 10px;
 }
 
 input,
@@ -142,7 +143,7 @@ input.under-cover:focus {
   font-size: 1em;
 
   margin: 10px;
-  margin-left: 0px;
+  margin-left: 10px;
   padding: 10px 10px;
 
   box-shadow: inset 0 0 1.5px #000;
