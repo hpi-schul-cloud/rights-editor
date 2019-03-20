@@ -29,7 +29,6 @@
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
-import { all } from "q";
 
 export class Action {
   constructor(name, nsVocabUri) {
