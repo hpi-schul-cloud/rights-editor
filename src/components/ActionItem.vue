@@ -11,7 +11,7 @@
         input
         v-bind:width="'600px'"
         v-bind:value="actionName"
-        v-bind:onClick="showActionChooser"
+        v-bind:onClick="showActionChooserWithAbort"
         list="actions"
         name="action"
         type="button"
@@ -65,10 +65,12 @@ export default {
     this.showActionChooser(false);
   },
   methods: {
+    showActionChooserWithAbort: function() {
+      this.showActionChooser(true);
+    },
     showActionChooser: function(allowAbort) {
       this.actionChooserSettings.displayActionChooser = true;
-      this.actionChooserSettings.allowAbort =
-        allowAbort == undefined ? true : allowAbort;
+      this.actionChooserSettings.allowAbort = allowAbort;
     },
     hideActionChooser: function() {
       this.actionChooserSettings.displayActionChooser = false;
