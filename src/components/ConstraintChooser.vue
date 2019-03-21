@@ -182,21 +182,20 @@ export default {
         this.displayListInput = false;
         this.operators = this.numericOperators;
 
+        this.units = [];
         if (id == 2) {
           // age
-          this.units = new Array();
           this.units.push(this.allUnits[0]);
           this.selectedUnitId = 0;
         } else if (id == 3) {
           // time period of use
-          this.units = new Array();
           this.units.push(this.allUnits[0]);
           this.units.push(this.allUnits[1]);
           this.units.push(this.allUnits[2]);
         } else if (id == 4) {
           // amount of users
-          this.units = new Array();
           this.units.push(this.allUnits[3]);
+          this.selectedUnitId = 3;
         }
       } else {
         this.displayNumberInput = false;
