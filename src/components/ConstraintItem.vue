@@ -8,7 +8,7 @@
     <div>Bedingung:
       <br>
       <BaseButton
-        input        
+        input
         v-bind:width="'600px'"
         v-bind:onClick="showConstraintChooser"
         name="constraint"

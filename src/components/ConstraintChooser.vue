@@ -113,7 +113,8 @@ export default {
         { id: 0, name: "Bundesland" },
         { id: 1, name: "Gruppenzugehörigkeit" },
         { id: 2, name: "Alter" },
-        { id: 3, name: "Nutzungsdauer" }
+        { id: 3, name: "Nutzungsdauer" },
+        { id: 4, name: "Nutzeranzahl" }
       ],
       numericOperators: [
         { id: 0, symbol: "=", short: "eq" },
@@ -148,8 +149,9 @@ export default {
       ],
       allUnits: [
         { id: 0, name: "Jahre" },
-        { id: 1, name: "Stunden" },
-        { id: 2, name: "Benutzer" }
+        { id: 1, name: "Tage" },
+        { id: 2, name: "Stunden" },
+        { id: 3, name: "Nutzer" }
       ]
     };
   },
@@ -158,6 +160,7 @@ export default {
     this.setOfNumericOperands = new Set();
     this.setOfNumericOperands.add(2);
     this.setOfNumericOperands.add(3);
+    this.setOfNumericOperands.add(4);
 
     this.chosenStates = new Array();
     this.chosenGroups = new Array();
@@ -189,6 +192,11 @@ export default {
           this.units = new Array();
           this.units.push(this.allUnits[0]);
           this.units.push(this.allUnits[1]);
+          this.units.push(this.allUnits[2]);
+        } else if (id == 4) {
+          // amount of users
+          this.units = new Array();
+          this.units.push(this.allUnits[3]);
         }
       } else {
         this.displayNumberInput = false;
