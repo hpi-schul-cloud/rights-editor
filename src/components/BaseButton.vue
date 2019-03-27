@@ -79,11 +79,11 @@ export default {
 .base-button-remove {
   display: inline-block;
   background-color: transparent;
-  color: #222222;
+  color: #880000;
   font-weight: bold;
   font-size: 32px;
   width: 20px;
-  height: 20px;
+  height: 32px;
   margin: 0;
   padding: 0;
 }
