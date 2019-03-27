@@ -44,18 +44,18 @@ export default {
     return {
       currentSelected: null,
       currentAction: "",
-      actions: {
-        1: { id: 1, label: "Aggregieren" },
-        2: { id: 2, label: "Annotieren" },
-        4: { id: 4, label: "Annonymisieren" },
-        5: { id: 5, label: "Archivieren" },
-        6: { id: 6, label: "Kompensieren" },
-        7: { id: 7, label: "Löschen" },
-        8: { id: 8, label: "Drucken" },
-        9: { id: 9, label: "Speichern" },
-        10: { id: 10, label: "Verbreiten" },
-        11: { id: 11, label: "Zitieren" }
-      }
+      actions: [
+        { id: 0, label: "Aggregieren" },
+        { id: 1, label: "Annotieren" },
+        { id: 2, label: "Annonymisieren" },
+        { id: 3, label: "Archivieren" },
+        { id: 4, label: "Kompensieren" },
+        { id: 5, label: "Löschen" },
+        { id: 6, label: "Drucken" },
+        { id: 7, label: "Speichern" },
+        { id: 8, label: "Verbreiten" },
+        { id: 9, label: "Zitieren" }
+      ]
     };
   },
   props: {

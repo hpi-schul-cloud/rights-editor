@@ -5,14 +5,21 @@
       v-on:chosen="constraintChosen($event)"
       v-on:abort="hideConstraintChooser()"
     ></ConstraintChooser>
-    <div class="constraint-content">Bedingung:
+    <div>
+      Bedingung:
       <br>
-      <button
-        class="constraint-input"
-        v-on:click="showConstraintChooser()"
+      <BaseButton
+        input
+        v-bind:width="'600px'"
+        v-bind:onClick="showConstraintChooser"
         name="constraint"
         type="button"
-      >{{ constraint.name }}</button>
+      >{{ constraint.name }}</BaseButton>
+      <BaseButton
+        remove
+        v-if="constraint.name != '<leer>'"
+        v-bind:onClick="function () {$emit('remove-constraint', constraint.id);}"
+      >&times;</BaseButton>
     </div>
   </div>
 </template>
@@ -20,10 +27,12 @@
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintChooser from "./ConstraintChooser.vue";
+import BaseButton from "./BaseButton.vue";
 
 export class Constraint {
-  constructor() {
-    this.name = "";
+  constructor(id) {
+    this.id = id;
+    this.name = "<leer>";
     this.leftOperand = "";
     this.rightOperand = "";
     this.operator = "";
@@ -35,13 +44,19 @@ export class Constraint {
 export default {
   name: "ConstraintItem",
   components: {
-    ConstraintChooser
+    ConstraintChooser,
+    BaseButton
   },
   data: function() {
     return {
-      displayConstraintChooser: false,
-      constraint: new Constraint()
+      displayConstraintChooser: false
     };
+  },
+  props: {
+    constraint: {
+      type: Object,
+      required: true
+    }
   },
   methods: {
     showConstraintChooser: function() {
@@ -50,43 +65,10 @@ export default {
     hideConstraintChooser: function() {
       this.displayConstraintChooser = false;
     },
-    constraintChosen: function(constraint) {
-      console.log(constraint);
+    constraintChosen: function(chosenConstraint) {
       this.hideConstraintChooser();
-      this.constraint = constraint;
-      this.$emit("constraint-set", this.constraint);
+      this.$emit("constraint-chosen", chosenConstraint);
     }
   }
 };
 </script>
-
-<style scoped>
-.constraint-input {
-  margin-top: 20px;
-  margin-left: 0px;
-  width: 700px;
-  height: 38px;
-
-  background-color: white;
-  border: 0px black solid;
-  border-bottom: 1px transparent solid;
-  color: black;
-
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  font-family: inherit;
-  font-size: 1em;
-  text-align: left;
-
-  margin: 10px;
-  margin-left: 0px;
-  padding: 10px 10px;
-
-  box-shadow: inset 0 0 1.5px #000;
-}
-
-.constraint-input:hover {
-  cursor: text;
-}
-</style>

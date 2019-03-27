@@ -4,7 +4,7 @@
       <div class="rule-header-name">
         <b>{{ rule.type["name"] }}</b>
       </div>
-      <button class="button-dismiss-rule" v-on:click="removeRule()">&times;</button>
+      <BaseButton remove v-bind:onClick="removeRule">&times;</BaseButton>
     </div>
     <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
   </li>
@@ -19,7 +19,7 @@ export class Rule {
   constructor(id, type) {
     this.id = id;
     this.type = type;
-    this.action = new Action("", Vocab.ActionsCV.use);
+    this.action = new Action("<leer>", Vocab.ActionsCV.use);
   }
 }
 
@@ -38,11 +38,6 @@ export default {
     BaseButton,
     ActionItem
   },
-  data: function() {
-    return {
-      nextId: 1
-    };
-  },
   props: {
     rule: {
       type: Object,
@@ -50,35 +45,17 @@ export default {
     }
   },
   methods: {
-    removeRule() {
-      this.$emit("remove-rule-event", this.rule.id);
+    removeRule: function() {
+      this.$emit("remove-rule", this.rule.id);
     }
   }
 };
 </script>
 
-<style>
-.rule-header-name {
-  width: 755px;
-  display: inline-block;
-}
-
+<style scoped>
 .rule-header-container {
   position: relative;
   margin-bottom: 20px;
   margin-top: 10px;
-}
-
-.button-dismiss-rule {
-  border: none;
-  background-color: transparent;
-  color: #b1063a;
-  font-weight: bold;
-  font-size: 32px;
-  position: absolute;
-  top: 50%;
-  left: 15%;
-  transform: translateY(-50%);
-  cursor: pointer;
 }
 </style>

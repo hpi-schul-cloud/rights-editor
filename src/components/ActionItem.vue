@@ -6,23 +6,31 @@
       v-on:chosen="hideActionChooser(); action.name=$event"
       v-on:abort="hideActionChooser()"
     ></ActionChooser>Aktion:
-    <div class="action-content">
-      <button
-        class="action-input"
+    <div>
+      <BaseButton
+        input
+        v-bind:width="'600px'"
         v-bind:value="actionName"
-        v-on:click="showActionChooser()"
+        v-bind:onClick="showActionChooserWithAbort"
         list="actions"
         name="action"
         type="button"
-      >{{this.action.name}}</button>
+      >{{this.action.name}}</BaseButton>
       <br>
-      <ConstraintItem v-on:constraint-set="setConstraint($event)"></ConstraintItem>
+      <ConstraintItem
+        v-for="constraint in constraints"
+        v-bind:key="constraint.id"
+        v-bind:constraint="constraint"
+        v-on:constraint-chosen="setConstraint($event)"
+        v-on:remove-constraint="removeConstraint($event)"
+      ></ConstraintItem>
     </div>
   </div>
 </template>
 
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
+import BaseButton from "./BaseButton.vue";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
 
@@ -42,10 +50,13 @@ export default {
   name: "ActionItem",
   components: {
     ConstraintItem,
-    ActionChooser
+    ActionChooser,
+    BaseButton
   },
   data: function() {
     return {
+      nextId: 0,
+      constraints: [],
       actionChooserSettings: {
         displayActionChooser: false,
         allowAbort: true
@@ -58,21 +69,37 @@ export default {
       required: true
     }
   },
+  created: function() {
+    this.constraints.push(new Constraint(this.nextId));
+    this.nextId++;
+  },
   mounted: function() {
     this.showActionChooser(false);
   },
   methods: {
+    showActionChooserWithAbort: function() {
+      this.showActionChooser(true);
+    },
     showActionChooser: function(allowAbort) {
       this.actionChooserSettings.displayActionChooser = true;
-      this.actionChooserSettings.allowAbort =
-        allowAbort == undefined ? true : allowAbort;
+      this.actionChooserSettings.allowAbort = allowAbort;
     },
     hideActionChooser: function() {
       this.actionChooserSettings.displayActionChooser = false;
       this.actionChooserSettings.allowAbort = true;
     },
     setConstraint: function(constraint) {
+      constraint.id = this.nextId;
       this.action.constraint = constraint;
+      this.constraints.push(constraint);
+      this.nextId++;
+    },
+    removeConstraint: function(id) {
+      for (let i = 0; i < this.constraints.length; i++) {
+        if (this.constraints[i].id == id) {
+          this.constraints.splice(i, 1);
+        }
+      }
     }
   },
   computed: {
@@ -82,78 +109,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.action-item {
-  margin-left: 0px;
-}
-
-.action-content {
-  margin-left: 0px;
-}
-
-.action-input {
-  margin-top: 20px;
-  margin-left: 0px;
-  width: 700px;
-  height: 38px;
-
-  background-color: white;
-  border: 0px black solid;
-  border-bottom: 1px transparent solid;
-  color: black;
-
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  font-family: inherit;
-  font-size: 1em;
-  text-align: left;
-
-  margin: 10px;
-  margin-left: 0px;
-  padding: 10px 10px;
-
-  box-shadow: inset 0 0 1.5px #000;
-}
-
-.action-input:hover {
-  cursor: text;
-}
-
-input.under-cover {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid DarkGray;
-  box-shadow: none;
-  margin-left: 10px;
-}
-
-input,
-input.under-cover:focus {
-  background-color: white;
-  border: 0px black solid;
-  border-bottom: 1px transparent solid;
-  color: black;
-
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  font-family: inherit;
-  font-size: 1em;
-
-  margin: 10px;
-  margin-left: 10px;
-  padding: 10px 10px;
-
-  box-shadow: inset 0 0 1.5px #000;
-}
-
-select {
-  font-family: "Montserrat", sans-serif;
-  font-size: 14px;
-  padding: 10px 20px;
-  width: 250px;
-  margin-right: 10px;
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <BaseModal v-bind:width="1000" v-bind:scrollbar="false">
+  <BaseModal v-bind:width="'1000px'" v-bind:scrollable="false">
     <template v-slot:header>
       <h1>Bedingung festlegen</h1>
     </template>
@@ -31,7 +31,7 @@
             <div class="number-container">
               <div class="numeric-input-header">Zahl:</div>
               <br>
-              <input class="number-input" type="number" v-model.number="number">
+              <BaseInput class="number-input flat-input" type="number" v-model.number="number"></BaseInput>
             </div>
             <div class="unit-container">
               <div class="numeric-input-header">Einheit:</div>
@@ -70,25 +70,17 @@
 </template>
 
 <script>
-import BaseButton from "./BaseButton.vue";
+import BaseInput from "./BaseInput.vue";
 import BaseModal from "./BaseModal.vue";
-
-class Constraint {
-  constructor() {
-    this.name = "";
-    this.leftOperand = "";
-    this.rightOperand = "";
-    this.operator = "";
-    this.unit = "";
-    this.type = "";
-  }
-}
+import BaseButton from "./BaseButton.vue";
+import { Constraint } from "./ConstraintItem.vue";
 
 export default {
   name: "ConstraintChooser",
   components: {
-    BaseButton,
-    BaseModal
+    BaseInput,
+    BaseModal,
+    BaseButton
   },
   data: function() {
     return {
@@ -111,7 +103,8 @@ export default {
         { id: 0, name: "Bundesland" },
         { id: 1, name: "Gruppenzugehörigkeit" },
         { id: 2, name: "Alter" },
-        { id: 3, name: "Nutzungsdauer" }
+        { id: 3, name: "Nutzungsdauer" },
+        { id: 4, name: "Nutzeranzahl" }
       ],
       numericOperators: [
         { id: 0, symbol: "=", short: "eq" },
@@ -146,16 +139,17 @@ export default {
       ],
       allUnits: [
         { id: 0, name: "Jahre" },
-        { id: 1, name: "Stunden" },
-        { id: 2, name: "Benutzer" }
+        { id: 1, name: "Tage" },
+        { id: 2, name: "Stunden" },
+        { id: 3, name: "Nutzer" }
       ]
     };
   },
   created: function() {
-    // initialize the array of chosen states
     this.setOfNumericOperands = new Set();
     this.setOfNumericOperands.add(2);
     this.setOfNumericOperands.add(3);
+    this.setOfNumericOperands.add(4);
 
     this.chosenStates = new Array();
     this.chosenGroups = new Array();
@@ -176,17 +170,23 @@ export default {
         this.displayNumberInput = true;
         this.displayListInput = false;
         this.operators = this.numericOperators;
+        this.number = 0;
 
+        this.units = [];
         if (id == 2) {
           // age
-          this.units = new Array();
           this.units.push(this.allUnits[0]);
           this.selectedUnitId = 0;
         } else if (id == 3) {
-          // time period of use
-          this.units = new Array();
+          // time of use
           this.units.push(this.allUnits[0]);
           this.units.push(this.allUnits[1]);
+          this.units.push(this.allUnits[2]);
+          this.selectedUnitId = 0;
+        } else if (id == 4) {
+          // amount of users
+          this.units.push(this.allUnits[3]);
+          this.selectedUnitId = 3;
         }
       } else {
         this.displayNumberInput = false;
@@ -194,11 +194,20 @@ export default {
         this.operators = this.listOperators;
         this.selectedOperatorId = 0;
 
+        this.chosenStates = new Array();
+        this.chosenGroups = new Array();
+        for (let i = 0; i < this.states.length; i++) {
+          this.chosenStates.push(false);
+        }
+        for (let i = 0; i < this.groups.length; i++) {
+          this.chosenGroups.push(false);
+        }
+
         if (id == 0) {
           // state
           this.valueList = this.states;
         } else if (id == 1) {
-          // group identity
+          // group
           this.valueList = this.groups;
         }
       }
@@ -251,7 +260,7 @@ export default {
       return this.selectedUnitId == id;
     },
     accept: function() {
-      let constraint = new Constraint();
+      let constraint = new Constraint(-1);
       constraint.leftOperand = this.leftOperands[
         this.selectedLeftOperandId
       ].name;
@@ -260,7 +269,7 @@ export default {
       if (this.displayNumberInput) {
         // for numeric input the right operand is just a number, also add the unit though
         constraint.rightOperand = this.number.toString();
-        constraint.unit = this.units[this.selectedUnitId].name;
+        constraint.unit = this.allUnits[this.selectedUnitId].name;
       } else {
         // create array of chosen names from the value list
         let values = [];
@@ -339,7 +348,6 @@ export default {
 
 .numeric-input-container {
   width: 335px;
-  padding: 5px;
   overflow: hidden;
 }
 

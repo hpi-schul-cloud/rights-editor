@@ -2,12 +2,12 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div v-bind:style="{ width: this.width + 'px' }" class="modal-container">
+        <div v-bind:style="{ width: this.width }" class="modal-container">
           <div class="modal-header">
             <slot name="header"></slot>
           </div>
 
-          <div v-bind:class="{ scrollable: scrollbar }" class="modal-body">
+          <div v-bind:class="{ 'base-modal-scrollable': scrollable }" class="modal-body">
             <slot name="body">default body</slot>
           </div>
 
@@ -34,11 +34,11 @@ export default {
   },
   props: {
     width: {
-      default: 600,
-      type: Number,
+      default: "600px",
+      type: String,
       required: false
     },
-    scrollbar: {
+    scrollable: {
       default: true,
       type: Boolean,
       required: false
@@ -65,10 +65,6 @@ export default {
   vertical-align: middle;
 }
 
-.scrollable {
-  overflow-y: scroll !important;
-}
-
 .modal-container {
   margin: 0px auto;
   padding: 20px 30px;
@@ -76,6 +72,10 @@ export default {
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.25s ease;
+}
+
+.base-modal-scrollable {
+  overflow-y: scroll !important;
 }
 
 .modal-body {
