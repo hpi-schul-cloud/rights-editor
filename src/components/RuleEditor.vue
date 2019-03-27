@@ -12,7 +12,7 @@
     <div class="container">
       <ul>
         <RuleTreeItem
-          v-on:remove-tree-event="updateTrees($event)"
+          v-on:remove-tree="updateTrees($event)"
           v-for="ruleTree in ruleTrees"
           v-bind:ruleTree="ruleTree"
           v-bind:key="ruleTree.id"

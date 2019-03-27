@@ -5,7 +5,8 @@
       v-on:chosen="constraintChosen($event)"
       v-on:abort="hideConstraintChooser()"
     ></ConstraintChooser>
-    <div>Bedingung:
+    <div>
+      Bedingung:
       <br>
       <BaseButton
         input
@@ -14,6 +15,11 @@
         name="constraint"
         type="button"
       >{{ constraint.name }}</BaseButton>
+      <BaseButton
+        remove
+        v-if="constraint.name != '<leer>'"
+        v-bind:onClick="function () {$emit('remove-constraint', constraint.id);}"
+      >&times;</BaseButton>
     </div>
   </div>
 </template>
@@ -24,7 +30,8 @@ import ConstraintChooser from "./ConstraintChooser.vue";
 import BaseButton from "./BaseButton.vue";
 
 export class Constraint {
-  constructor() {
+  constructor(id) {
+    this.id = id;
     this.name = "<leer>";
     this.leftOperand = "";
     this.rightOperand = "";
@@ -42,9 +49,14 @@ export default {
   },
   data: function() {
     return {
-      displayConstraintChooser: false,
-      constraint: new Constraint()
+      displayConstraintChooser: false
     };
+  },
+  props: {
+    constraint: {
+      type: Object,
+      required: true
+    }
   },
   methods: {
     showConstraintChooser: function() {
@@ -53,11 +65,9 @@ export default {
     hideConstraintChooser: function() {
       this.displayConstraintChooser = false;
     },
-    constraintChosen: function(constraint) {
-      console.log(constraint);
+    constraintChosen: function(chosenConstraint) {
       this.hideConstraintChooser();
-      this.constraint = constraint;
-      this.$emit("constraint-set", this.constraint);
+      this.$emit("constraint-chosen", chosenConstraint);
     }
   }
 };

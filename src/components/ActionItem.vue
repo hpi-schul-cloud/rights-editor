@@ -17,7 +17,13 @@
         type="button"
       >{{this.action.name}}</BaseButton>
       <br>
-      <ConstraintItem v-on:constraint-set="setConstraint($event)"></ConstraintItem>
+      <ConstraintItem
+        v-for="constraint in constraints"
+        v-bind:key="constraint.id"
+        v-bind:constraint="constraint"
+        v-on:constraint-chosen="setConstraint($event)"
+        v-on:remove-constraint="removeConstraint($event)"
+      ></ConstraintItem>
     </div>
   </div>
 </template>
@@ -49,6 +55,8 @@ export default {
   },
   data: function() {
     return {
+      nextId: 0,
+      constraints: [],
       actionChooserSettings: {
         displayActionChooser: false,
         allowAbort: true
@@ -60,6 +68,10 @@ export default {
       type: Object,
       required: true
     }
+  },
+  created: function() {
+    this.constraints.push(new Constraint(this.nextId));
+    this.nextId++;
   },
   mounted: function() {
     this.showActionChooser(false);
@@ -77,7 +89,17 @@ export default {
       this.actionChooserSettings.allowAbort = true;
     },
     setConstraint: function(constraint) {
+      constraint.id = this.nextId;
       this.action.constraint = constraint;
+      this.constraints.push(constraint);
+      this.nextId++;
+    },
+    removeConstraint: function(id) {
+      for (let i = 0; i < this.constraints.length; i++) {
+        if (this.constraints[i].id == id) {
+          this.constraints.splice(i, 1);
+        }
+      }
     }
   },
   computed: {

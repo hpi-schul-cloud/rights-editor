@@ -1,7 +1,7 @@
 <template>
   <li class="rule-tree-li">
     <RuleItem
-      v-on:remove-rule-event="updateRules($event)"
+      v-on:remove-rule="updateRules($event)"
       v-for="rule in ruleTree.rules"
       v-bind:rule="rule"
       v-bind:key="rule.id"
@@ -80,7 +80,7 @@ export default {
         }
       }
       if (this.ruleTree.rules.length == 0) {
-        this.$emit("remove-tree-event", this.ruleTree.id);
+        this.$emit("remove-tree", this.ruleTree.id);
       }
     },
     getRuleMargin(type) {

@@ -1,7 +1,7 @@
 <template>
   <button
     class="base-button"
-    v-bind:class="{ 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input }"
+    v-bind:class="{ 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input, 'base-button-remove': remove }"
     v-bind:style="{ width: this.width }"
     v-on:click="onClick"
   >
@@ -21,6 +21,7 @@ export default {
     big: Boolean,
     textlike: Boolean,
     input: Boolean,
+    remove: Boolean,
     onClick: { type: Function, required: true }
   }
 };
@@ -34,7 +35,7 @@ export default {
 
   border: 0px rgb(0, 0, 0) solid;
   border-radius: 2px;
-  background-color: #ff5943;
+  background-color: #222222;
   margin: 10px;
   padding: 10px 20px;
   text-align: center;
@@ -46,14 +47,16 @@ export default {
 .base-button-big {
   font-size: 1.2em;
 }
+
 .base-button-textlike {
-  color: #ff5943;
+  color: black;
   background: none;
   border: none;
 }
+
 .base-button-input {
   background-color: white;
-  border: 0px black solid;
+  border: 0px #222222 solid;
   border-bottom: 1px transparent solid;
   color: black;
 
@@ -71,5 +74,17 @@ export default {
   border-bottom: none;
   box-shadow: inset 0 0 1.5px #000;
   cursor: text;
+}
+
+.base-button-remove {
+  display: inline-block;
+  background-color: transparent;
+  color: #222222;
+  font-weight: bold;
+  font-size: 32px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
 }
 </style>
