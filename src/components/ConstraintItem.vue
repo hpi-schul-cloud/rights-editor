@@ -1,9 +1,10 @@
 <template>
   <div>
     <ConstraintChooser
-      v-if="this.displayConstraintChooser"
+      v-if="displayConstraintChooser"
       v-on:chosen="constraintChosen($event)"
       v-on:abort="hideConstraintChooser()"
+      v-bind:constraintToEdit="constraint"
     ></ConstraintChooser>
     <div>
       Bedingung:
@@ -34,7 +35,9 @@ export class Constraint {
     this.id = id;
     this.name = "<leer>";
     this.leftOperand = "";
-    this.rightOperand = "";
+    this.rightOperandList = [];
+    this.rightOperandNumber = 0;
+    this.rightOperandStr = "";
     this.operator = "";
     this.unit = "";
     this.type = "";

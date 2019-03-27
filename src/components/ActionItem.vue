@@ -7,6 +7,7 @@
       v-on:abort="hideActionChooser()"
     ></ActionChooser>Aktion:
     <div>
+      <!-- display and edit action -->
       <BaseButton
         input
         v-bind:width="'600px'"
@@ -15,8 +16,16 @@
         list="actions"
         name="action"
         type="button"
-      >{{this.action.name}}</BaseButton>
+      >{{action.name}}</BaseButton>
       <br>
+      <!-- add new constraint -->
+      <BaseButton v-bind:onClick="showConstraintChooser">Bedingung</BaseButton>
+      <ConstraintChooser
+        v-if="displayConstraintChooser"
+        v-on:chosen="setConstraint($event)"
+        v-on:abort="hideConstraintChooser()"
+      ></ConstraintChooser>
+      <!-- display and edit constraints -->
       <ConstraintItem
         v-for="constraint in constraints"
         v-bind:key="constraint.id"
@@ -32,6 +41,7 @@
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import BaseButton from "./BaseButton.vue";
 import ConstraintItem, { Constraint } from "./ConstraintItem";
+import ConstraintChooser from "./ConstraintChooser.vue";
 import ActionChooser from "./ActionChooser.vue";
 
 export class Action {
@@ -50,6 +60,7 @@ export default {
   name: "ActionItem",
   components: {
     ConstraintItem,
+    ConstraintChooser,
     ActionChooser,
     BaseButton
   },
@@ -57,6 +68,7 @@ export default {
     return {
       nextId: 0,
       constraints: [],
+      displayConstraintChooser: false,
       actionChooserSettings: {
         displayActionChooser: false,
         allowAbort: true
@@ -68,10 +80,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  created: function() {
-    this.constraints.push(new Constraint(this.nextId));
-    this.nextId++;
   },
   mounted: function() {
     this.showActionChooser(false);
@@ -88,11 +96,18 @@ export default {
       this.actionChooserSettings.displayActionChooser = false;
       this.actionChooserSettings.allowAbort = true;
     },
+    showConstraintChooser: function() {
+      this.displayConstraintChooser = true;
+    },
+    hideConstraintChooser: function() {
+      this.displayConstraintChooser = false;
+    },
     setConstraint: function(constraint) {
       constraint.id = this.nextId;
       this.action.constraint = constraint;
       this.constraints.push(constraint);
       this.nextId++;
+      this.hideConstraintChooser();
     },
     removeConstraint: function(id) {
       for (let i = 0; i < this.constraints.length; i++) {

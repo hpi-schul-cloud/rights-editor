@@ -82,6 +82,13 @@ export default {
     BaseModal,
     BaseButton
   },
+  props: {
+    constraintToEdit: {
+      type: Object,
+      default: null,
+      required: false
+    }
+  },
   data: function() {
     return {
       displayNumberInput: false,
@@ -146,11 +153,12 @@ export default {
     };
   },
   created: function() {
+    // define what operands are numeric
     this.setOfNumericOperands = new Set();
     this.setOfNumericOperands.add(2);
     this.setOfNumericOperands.add(3);
     this.setOfNumericOperands.add(4);
-
+    // default start values
     this.chosenStates = new Array();
     this.chosenGroups = new Array();
     for (let i = 0; i < this.states.length; i++) {
@@ -159,8 +167,97 @@ export default {
     for (let i = 0; i < this.groups.length; i++) {
       this.chosenGroups.push(false);
     }
-    this.valueList = this.states;
-    this.operators = this.listOperators;
+
+    if (this.constraintToEdit == null) {
+      this.valueList = this.states;
+      this.operators = this.listOperators;
+    } else {
+      let leftOp = this.constraintToEdit.leftOperand;
+
+      if (leftOp == this.leftOperands[0].name) {
+        // Bundesland
+        this.valueList = this.states;
+        this.operators = this.listOperators;
+
+        for (let i = 0; i < this.states.length; i++) {
+          for (
+            let j = 0;
+            j < this.constraintToEdit.rightOperandList.length;
+            j++
+          ) {
+            if (
+              this.states[i].name == this.constraintToEdit.rightOperandList[j]
+            ) {
+              this.chosenStates[i] = true;
+            }
+          }
+        }
+      } else if (leftOp == this.leftOperands[1].name) {
+        // Gruppenzugehörigkeit
+        this.selectedLeftOperandId = 1;
+        this.valueList = this.groups;
+        this.operators = this.listOperators;
+
+        for (let i = 0; i < this.groups.length; i++) {
+          for (
+            let j = 0;
+            j < this.constraintToEdit.rightOperandList.length;
+            j++
+          ) {
+            if (
+              this.groups[i].name == this.constraintToEdit.rightOperandList[j]
+            ) {
+              this.chosenGroups[i] = true;
+            }
+          }
+        }
+      } else {
+        // numeric
+        this.operators = this.numericOperators;
+
+        // determine left operand
+        for (let i = 2; i < this.leftOperands.length; i++) {
+          if (leftOp == this.leftOperands[i].name) {
+            this.selectedLeftOperandId = i;
+          }
+        }
+
+        this.displayNumberInput = true;
+        this.displayListInput = false;
+        this.number = this.constraintToEdit.rightOperandNumber;
+
+        // determine operator
+        for (let i = 0; i < this.operators.length; i++) {
+          if (this.constraintToEdit.operator == this.operators[i].symbol) {
+            this.selectedOperatorId = i;
+          }
+        }
+
+        this.units = [];
+        if (this.selectedLeftOperandId == 2) {
+          // age
+          this.units.push(this.allUnits[0]);
+          this.selectedUnitId = 0;
+        } else if (this.selectedLeftOperandId == 3) {
+          // time of use
+          this.units.push(this.allUnits[0]);
+          this.units.push(this.allUnits[1]);
+          this.units.push(this.allUnits[2]);
+          this.selectedUnitId = 0;
+        } else if (this.selectedLeftOperandId == 4) {
+          // amount of users
+          this.units.push(this.allUnits[3]);
+          this.selectedUnitId = 3;
+        }
+
+        // determine unit
+        for (let i = 0; i < this.units.length; i++) {
+          if (this.constraintToEdit.unit == this.units[i].name) {
+            this.selectedUnitId = i;
+          }
+        }
+      }
+    }
   },
   methods: {
     leftOperandClicked: function(id) {
@@ -268,7 +365,8 @@ export default {
       constraint.operator = this.operators[this.selectedOperatorId].symbol;
       if (this.displayNumberInput) {
         // for numeric input the right operand is just a number, also add the unit though
-        constraint.rightOperand = this.number.toString();
+        constraint.rightOperandNumber = this.number;
+        constraint.rightOperandStr = constraint.rightOperandNumber.toString();
         constraint.unit = this.allUnits[this.selectedUnitId].name;
       } else {
         // create array of chosen names from the value list
@@ -286,20 +384,26 @@ export default {
             }
           }
         }
-        constraint.rightOperand = values.toString();
-        // adds a space after each comma
-        constraint.rightOperand = constraint.rightOperand.replace(/,/g, ", ");
+        constraint.rightOperandList = values;
+        constraint.rightOperandStr = values.toString();
+        constraint.rightOperandStr = constraint.rightOperandStr.replace(
+          /,/g,
+          ", "
+        ); // adds a space after each comma
       }
       constraint.name =
         constraint.leftOperand +
         " " +
         constraint.operator +
         " " +
-        constraint.rightOperand;
+        constraint.rightOperandStr;
       if (constraint.unit != "") {
         constraint.name += " " + constraint.unit;
       }
       this.$emit("chosen", constraint);
+    },
+    prepareEdit: function(constraint) {
+      console.log("edit-constraint RECEIVE");
     }
   }
 };
