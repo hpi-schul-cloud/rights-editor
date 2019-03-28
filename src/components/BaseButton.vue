@@ -29,13 +29,14 @@ export default {
 
 <style scoped>
 .base-button {
-  font-family: "Montserrat", sans-serif;
+  /*font-family: "Montserrat", sans-serif;*/
+  font-family: "Roboto", sans-serif;
   color: white;
   display: inline-block;
 
   border: 0px rgb(0, 0, 0) solid;
   border-radius: 2px;
-  background-color: #222222;
+  background-color: #1f3b70;
   margin: 10px;
   padding: 10px 20px;
   text-align: center;
