@@ -30,21 +30,10 @@
 
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
+import { Constraint } from "../libs/ODRL/constraint";
 import BaseButton from "./BaseButton.vue";
-import ConstraintItem, { Constraint } from "./ConstraintItem";
+import ConstraintItem from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
-
-export class Action {
-  constructor(name, nsVocabUri) {
-    this.name = name;
-    this.nsVocabUri = nsVocabUri;
-    this.constraint = new Constraint();
-  }
-
-  name() {
-    return this.nsVocabUri.split("/").pop();
-  }
-}
 
 export default {
   name: "ActionItem",

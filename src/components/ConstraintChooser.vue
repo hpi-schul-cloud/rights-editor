@@ -73,7 +73,7 @@
 import BaseInput from "./BaseInput.vue";
 import BaseModal from "./BaseModal.vue";
 import BaseButton from "./BaseButton.vue";
-import { Constraint } from "./ConstraintItem.vue";
+import { Constraint } from "../libs/ODRL/constraint";
 
 export default {
   name: "ConstraintChooser",

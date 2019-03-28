@@ -4,21 +4,15 @@
       <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
       <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
       <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
-      <span class="licence-name">GUID der Lizenz:
+      <span class="licence-name">
+        GUID der Lizenz:
         <BaseInput undercover v-model="licenceName" class="guid-input"></BaseInput>
       </span>
       <BaseButton class="float-right" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
     </div>
-    <div class="container">
-      <ul>
-        <RuleTreeItem
-          v-on:remove-tree="updateTrees($event)"
-          v-for="ruleTree in ruleTrees"
-          v-bind:ruleTree="ruleTree"
-          v-bind:key="ruleTree.id"
-        ></RuleTreeItem>
-      </ul>
-    </div>
+    <template v-for="rule in rules">
+      <RuleItem v-bind:rule="rule" v-bind:key="rule.uid"></RuleItem>
+    </template>
     <pre>{{policy}}</pre>
   </div>
 </template>
@@ -28,8 +22,8 @@ import BaseButton from "./BaseButton.vue";
 import BaseInput from "./BaseInput.vue";
 import Action from "./ActionItem.vue";
 
-import { Rule, RuleTypes } from "./RuleItem.vue";
-import RuleTreeItem, { RuleTree } from "./RuleTreeItem.vue";
+import RuleItem from "./RuleItem.vue";
+import { Permission, Duty, Prohibition } from "../libs/ODRL/rule.js";
 import { Odrl } from "../libs/rightsml-lib-js/ODRLclasses";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 
@@ -38,45 +32,24 @@ export default {
   components: {
     BaseButton,
     BaseInput,
-    RuleTreeItem
+    RuleItem
   },
   data: function() {
     return {
-      ruleTrees: [],
-      nextId: 0,
+      rules: [],
       licenceName: "007",
       policy: ""
     };
   },
   methods: {
     newPermission: function() {
-      this.newRule(RuleTypes.Permission);
+      this.rules.push(new Permission());
     },
     newObligation: function() {
-      this.newRule(RuleTypes.Obligation);
+      this.rules.push(new Duty());
     },
     newProhibition: function() {
-      this.newRule(RuleTypes.Prohibition);
-    },
-    newRule: function(type) {
-      let newID = this.nextId++;
-      let ruleTree = new RuleTree(newID, type);
-      ruleTree.rules.push(new Rule(0, type));
-      this.ruleTrees.push(ruleTree);
-    },
-    updateTrees(tree_id) {
-      for (let i = 0; i < this.ruleTrees.length; i++) {
-        if (this.ruleTrees[i].id == tree_id) {
-          this.ruleTrees[i].rules = [];
-          this.ruleTrees.splice(i, 1);
-        }
-      }
-    },
-    scrollToEnd: function() {
-      // TODO: make this work
-      let container = this.$el.querySelector("#container");
-      console.log(container);
-      container.scrollTop = container.scrollHeight;
+      this.rules.push(new Prohibition());
     },
     generateLicence() {
       let policy = new Odrl.Policy(this.licenceName, "set");
@@ -192,20 +165,13 @@ export default {
 </script>
 
 <style scoped>
-ul {
-  padding-inline-start: 0px;
-}
-
 .header {
-  z-index: 100;
   background-color: white;
   border-bottom: 5px solid gray;
   overflow: hidden;
-  position: fixed;
 
   padding-bottom: 20px;
   padding-top: 20px;
-  top: 0;
   width: calc(100% - 116px);
 }
 

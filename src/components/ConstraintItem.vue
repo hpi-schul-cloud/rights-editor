@@ -29,18 +29,6 @@ import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintChooser from "./ConstraintChooser.vue";
 import BaseButton from "./BaseButton.vue";
 
-export class Constraint {
-  constructor(id) {
-    this.id = id;
-    this.name = "<leer>";
-    this.leftOperand = "";
-    this.rightOperand = "";
-    this.operator = "";
-    this.unit = "";
-    this.type = "";
-  }
-}
-
 export default {
   name: "ConstraintItem",
   components: {
