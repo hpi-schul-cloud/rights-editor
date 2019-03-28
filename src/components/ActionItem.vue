@@ -3,19 +3,18 @@
     <ActionChooser
       v-if="actionChooserSettings.displayActionChooser"
       v-bind:allowAbort="actionChooserSettings.allowAbort"
-      v-on:chosen="hideActionChooser(); action.name=$event"
+      v-on:chosen="hideActionChooser(); action = $event"
       v-on:abort="hideActionChooser()"
     ></ActionChooser>Aktion:
     <div>
       <BaseButton
         input
         v-bind:width="'600px'"
-        v-bind:value="actionName"
         v-bind:onClick="showActionChooserWithAbort"
         list="actions"
         name="action"
         type="button"
-      >{{this.action.name}}</BaseButton>
+      >{{ action }}</BaseButton>
       <br>
       <ConstraintItem
         v-for="constraint in constraints"
@@ -29,6 +28,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import { Constraint } from "../libs/ODRL/constraint";
 import BaseButton from "./BaseButton.vue";
@@ -53,8 +53,12 @@ export default {
     };
   },
   props: {
-    action: {
+    policy: {
       type: Object,
+      required: true
+    },
+    path: {
+      type: Array,
       required: true
     }
   },
@@ -92,8 +96,21 @@ export default {
     }
   },
   computed: {
-    actionName: function() {
-      return this.action.name;
+    rule() {
+      return this.path
+        .slice(0, this.path.length - 1)
+        .reduce((result, segment) => result[segment], this.policy);
+    },
+    action: {
+      get() {
+        if (!this.rule["action"]) {
+          Vue.set(this.rule, "action", "");
+        }
+        return this.rule["action"];
+      },
+      set(newAction) {
+        this.rule["action"] = newAction;
+      }
     }
   }
 };
