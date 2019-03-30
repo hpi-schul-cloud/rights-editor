@@ -1,5 +1,5 @@
 <template>
-  <div id="app">    
+  <div id="app">
     <router-view/>
   </div>
 </template>
@@ -12,6 +12,7 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
+@import url("https://fonts.googleapis.com/css?family=Roboto");
 @import url("https://use.fontawesome.com/releases/v5.7.2/css/all.css");
 
 *:focus {
@@ -25,7 +26,8 @@ ul {
 }
 
 #app {
-  font-family: "Montserrat", sans-serif;
+  /*font-family: "Montserrat", sans-serif;*/
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
