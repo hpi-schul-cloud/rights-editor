@@ -2,6 +2,7 @@
   <BaseModal v-bind:width="'1000px'" v-bind:scrollable="false">
     <template v-slot:header>
       <h1>Bedingung festlegen</h1>
+      <div class="hidden">{{ forceRerender }}</div>
     </template>
     <template v-slot:body>
       <div class="body-container">
@@ -38,7 +39,7 @@
               <br>
               <ul class="unit-list list" type="text" name="unit">
                 <li
-                  v-for="unit in units"
+                  v-for="unit in customUnits"
                   v-bind:key="unit.id"
                   v-bind:class="{selected: isUnitSelected(unit.id)}"
                   v-on:click="unitClicked(unit.id)"
@@ -70,10 +71,18 @@
 </template>
 
 <script>
+import {
+  Constraint,
+  operands,
+  states,
+  groups,
+  units,
+  numericOperators,
+  listOperators
+} from "../libs/constraints/constraints";
 import BaseInput from "./BaseInput.vue";
 import BaseModal from "./BaseModal.vue";
 import BaseButton from "./BaseButton.vue";
-import { Constraint } from "./ConstraintItem.vue";
 
 export default {
   name: "ConstraintChooser",
@@ -91,6 +100,7 @@ export default {
   },
   data: function() {
     return {
+      forceRerender: 0,
       displayNumberInput: false,
       displayListInput: true,
       setOfNumericOperands: null,
@@ -102,9 +112,8 @@ export default {
 
       operators: null,
       valueList: null,
-      units: null,
-      chosenStates: [],
-      chosenGroups: [],
+      customUnits: null,
+      chosenValues: [],
 
       leftOperands: [
         { id: 0, name: "Bundesland" },
@@ -113,111 +122,83 @@ export default {
         { id: 3, name: "Nutzungsdauer" },
         { id: 4, name: "Nutzeranzahl" }
       ],
-      numericOperators: [
-        { id: 0, symbol: "=", short: "eq" },
-        { id: 1, symbol: "<", short: "lt" },
-        { id: 2, symbol: "≤", short: "lteq" },
-        { id: 3, symbol: ">", short: "gt" },
-        { id: 4, symbol: "≥", short: "gteq" }
-      ],
-      listOperators: [{ id: 0, symbol: "=", short: "eq" }],
-      states: [
-        { id: 0, name: "Baden-Württemberg" },
-        { id: 1, name: "Bayern" },
-        { id: 2, name: "Berlin" },
-        { id: 3, name: "Brandenburg" },
-        { id: 4, name: "Bremen" },
-        { id: 5, name: "Hamburg" },
-        { id: 6, name: "Hessen" },
-        { id: 7, name: "Mecklenburg-Vorpommern" },
-        { id: 8, name: "Niedersachsen" },
-        { id: 9, name: "Nordrhein-Westfalen" },
-        { id: 10, name: "Rheinland-Pfalz" },
-        { id: 11, name: "Saarland" },
-        { id: 12, name: "Sachsen" },
-        { id: 13, name: "Sachsen-Anhalt" },
-        { id: 14, name: "Schleswig-Holstein" },
-        { id: 15, name: "Thüringen" }
-      ],
-      groups: [
-        { id: 0, name: "Lehrer" },
-        { id: 1, name: "Schüler" },
-        { id: 2, name: "Verwaltung" }
-      ],
-      allUnits: [
-        { id: 0, name: "Jahre" },
-        { id: 1, name: "Tage" },
-        { id: 2, name: "Stunden" },
-        { id: 3, name: "Nutzer" }
+      operandValueListMapping: [
+        { id: 0, valueList: states },
+        { id: 1, valueList: groups }
       ]
     };
   },
   created: function() {
     // define what operands are numeric
     this.setOfNumericOperands = new Set();
+    for (let i = 0; i < operands.length; i++) {
+      // TODO: determine what operands are numeric automatically based on data (arrays and so on...)
+    }
     this.setOfNumericOperands.add(2);
     this.setOfNumericOperands.add(3);
     this.setOfNumericOperands.add(4);
-    // default start values
-    this.chosenStates = new Array();
-    this.chosenGroups = new Array();
-    for (let i = 0; i < this.states.length; i++) {
-      this.chosenStates.push(false);
-    }
-    for (let i = 0; i < this.groups.length; i++) {
-      this.chosenGroups.push(false);
-    }
 
     if (this.constraintToEdit == null) {
-      this.valueList = this.states;
-      this.operators = this.listOperators;
+      this.valueList = states;
+      // default value list
+      this.chosenValues = new Array();
+      for (let i = 0; i < valueList.length; i++) {
+        this.chosenStates.push(false);
+      }
+      this.operators = listOperators;
     } else {
       let leftOp = this.constraintToEdit.leftOperand;
 
-      if (leftOp == this.leftOperands[0].name) {
+      if (leftOp == operands[0].name) {
         // Bundesland
-        this.valueList = this.states;
-        this.operators = this.listOperators;
+        this.valueList = states;
+        // default value list
+        this.chosenValues = new Array();
+        for (let i = 0; i < valueList.length; i++) {
+          this.chosenStates.push(false);
+        }
+        this.operators = listOperators;
 
-        for (let i = 0; i < this.states.length; i++) {
+        for (let i = 0; i < states.length; i++) {
           for (
             let j = 0;
             j < this.constraintToEdit.rightOperandList.length;
             j++
           ) {
-            if (
-              this.states[i].name == this.constraintToEdit.rightOperandList[j]
-            ) {
+            if (states[i].name == this.constraintToEdit.rightOperandList[j]) {
               this.chosenStates[i] = true;
             }
           }
         }
-      } else if (leftOp == this.leftOperands[1].name) {
+      } else if (leftOp == operands[1].name) {
         // Gruppenzugehörigkeit
         this.selectedLeftOperandId = 1;
-        this.valueList = this.groups;
-        this.operators = this.listOperators;
+        this.valueList = groups;
+        // default value list
+        this.chosenValues = new Array();
+        for (let i = 0; i < valueList.length; i++) {
+          this.chosenStates.push(false);
+        }
+        this.operators = listOperators;
 
-        for (let i = 0; i < this.groups.length; i++) {
+        for (let i = 0; i < groups.length; i++) {
           for (
             let j = 0;
             j < this.constraintToEdit.rightOperandList.length;
             j++
           ) {
-            if (
-              this.groups[i].name == this.constraintToEdit.rightOperandList[j]
-            ) {
+            if (groups[i].name == this.constraintToEdit.rightOperandList[j]) {
               this.chosenGroups[i] = true;
             }
           }
         }
       } else {
         // numeric
-        this.operators = this.numericOperators;
+        this.operators = numericOperators;
 
         // determine left operand
-        for (let i = 2; i < this.leftOperands.length; i++) {
-          if (leftOp == this.leftOperands[i].name) {
+        for (let i = 2; i < operands.length; i++) {
+          if (leftOp == operands[i].name) {
             this.selectedLeftOperandId = i;
           }
         }
@@ -233,26 +214,26 @@ export default {
           }
         }
 
-        this.units = [];
+        this.customUnits = [];
         if (this.selectedLeftOperandId == 2) {
           // age
-          this.units.push(this.allUnits[0]);
+          this.customUnits.push(units[0]);
           this.selectedUnitId = 0;
         } else if (this.selectedLeftOperandId == 3) {
           // time of use
-          this.units.push(this.allUnits[0]);
-          this.units.push(this.allUnits[1]);
-          this.units.push(this.allUnits[2]);
+          this.customUnits.push(units[0]);
+          this.customUnits.push(units[1]);
+          this.customUnits.push(units[2]);
           this.selectedUnitId = 0;
         } else if (this.selectedLeftOperandId == 4) {
           // amount of users
-          this.units.push(this.allUnits[3]);
+          this.customUnits.push(units[3]);
           this.selectedUnitId = 3;
         }
 
         // determine unit
-        for (let i = 0; i < this.units.length; i++) {
-          if (this.constraintToEdit.unit == this.units[i].name) {
+        for (let i = 0; i < this.customUnits.length; i++) {
+          if (this.constraintToEdit.unit == this.customUnits[i].name) {
             this.selectedUnitId = i;
           }
         }
@@ -266,46 +247,46 @@ export default {
       if (this.setOfNumericOperands.has(id)) {
         this.displayNumberInput = true;
         this.displayListInput = false;
-        this.operators = this.numericOperators;
+        this.operators = numericOperators;
         this.number = 0;
 
-        this.units = [];
+        this.customUnits = [];
         if (id == 2) {
           // age
-          this.units.push(this.allUnits[0]);
+          this.customUnits.push(units[0]);
           this.selectedUnitId = 0;
         } else if (id == 3) {
           // time of use
-          this.units.push(this.allUnits[0]);
-          this.units.push(this.allUnits[1]);
-          this.units.push(this.allUnits[2]);
+          this.customUnits.push(units[0]);
+          this.customUnits.push(units[1]);
+          this.customUnits.push(units[2]);
           this.selectedUnitId = 0;
         } else if (id == 4) {
           // amount of users
-          this.units.push(this.allUnits[3]);
+          this.customUnits.push(units[3]);
           this.selectedUnitId = 3;
         }
       } else {
         this.displayNumberInput = false;
         this.displayListInput = true;
-        this.operators = this.listOperators;
+        this.operators = listOperators;
         this.selectedOperatorId = 0;
 
         this.chosenStates = new Array();
         this.chosenGroups = new Array();
-        for (let i = 0; i < this.states.length; i++) {
+        for (let i = 0; i < states.length; i++) {
           this.chosenStates.push(false);
         }
-        for (let i = 0; i < this.groups.length; i++) {
+        for (let i = 0; i < groups.length; i++) {
           this.chosenGroups.push(false);
         }
 
         if (id == 0) {
           // state
-          this.valueList = this.states;
+          this.valueList = states;
         } else if (id == 1) {
           // group
-          this.valueList = this.groups;
+          this.valueList = groups;
         }
       }
     },
@@ -320,15 +301,9 @@ export default {
     },
     stateClicked: function(id) {
       this.chosenStates[id] = !this.chosenStates[id];
-      // this is a hack to force vue js to redraw the list
-      this.chosenStates.push(undefined);
-      this.chosenStates.pop();
     },
     groupClicked: function(id) {
       this.chosenGroups[id] = !this.chosenGroups[id];
-      // this is a hack to force vue js to redraw the list
-      this.chosenGroups.push(undefined);
-      this.chosenGroups.pop();
     },
     isStateChosen: function(id) {
       return this.chosenStates[id] == true;
@@ -337,16 +312,17 @@ export default {
       return this.chosenGroups[id] == true;
     },
     valueListItemClicked: function(id) {
-      if (this.valueList == this.states) {
+      if (this.selectedLeftOperandId == 0) {
         this.stateClicked(id);
-      } else if (this.valueList == this.groups) {
+      } else if (this.selectedLeftOperandId == 1) {
         this.groupClicked(id);
       }
+      this.forceRerender++;
     },
     isValueListItemChosen: function(id) {
-      if (this.valueList == this.states) {
+      if (this.selectedLeftOperandId == 0) {
         return this.isStateChosen(id);
-      } else if (this.valueList == this.groups) {
+      } else if (this.selectedLeftOperandId == 1) {
         return this.isGroupChosen(id);
       }
     },
@@ -358,16 +334,14 @@ export default {
     },
     accept: function() {
       let constraint = new Constraint(-1);
-      constraint.leftOperand = this.leftOperands[
-        this.selectedLeftOperandId
-      ].name;
+      constraint.leftOperand = operands[this.selectedLeftOperandId].name;
 
       constraint.operator = this.operators[this.selectedOperatorId].symbol;
       if (this.displayNumberInput) {
         // for numeric input the right operand is just a number, also add the unit though
         constraint.rightOperandNumber = this.number;
         constraint.rightOperandStr = constraint.rightOperandNumber.toString();
-        constraint.unit = this.allUnits[this.selectedUnitId].name;
+        constraint.unit = units[this.selectedUnitId].name;
       } else {
         // create array of chosen names from the value list
         let values = [];
@@ -377,10 +351,10 @@ export default {
               values.push(this.states[i].name);
             }
           }
-        } else if (this.valueList == this.groups) {
-          for (let i = 0; i < this.groups.length; i++) {
+        } else if (this.valueList == groups) {
+          for (let i = 0; i < groups.length; i++) {
             if (this.chosenGroups[i] == true) {
-              values.push(this.groups[i].name);
+              values.push(groups[i].name);
             }
           }
         }
@@ -483,8 +457,15 @@ export default {
   text-align: right;
 }
 
-/* custom scroll bar */
+/* changing data that is 
+technically a visible part of the component 
+but hidden using CSS styling
+allows for easily forcing a component rerender */
+.hidden {
+  display: none;
+}
 
+/* custom scroll bar */
 ::-webkit-scrollbar {
   width: 10px;
 }

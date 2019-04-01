@@ -108,7 +108,7 @@ export default {
       permission.addConstraint(
         firstRule.action.constraint.leftOperand,
         firstRule.action.constraint.operator,
-        firstRule.action.constraint.rightOperand,
+        firstRule.action.constraint.rightOperandStr,
         null,
         firstRule.action.constraint.unit,
         null
@@ -123,7 +123,7 @@ export default {
           duties[duties.length - 1].addConstraint(
             currentRule.action.constraint.leftOperand,
             currentRule.action.constraint.operator,
-            currentRule.action.constraint.rightOperand,
+            currentRule.action.constraint.rightOperandStr,
             null,
             currentRule.action.constraint.unit,
             null
@@ -147,7 +147,7 @@ export default {
       obligation.addConstraint(
         firstRule.action.constraint.leftOperand,
         firstRule.action.constraint.operator,
-        firstRule.action.constraint.rightOperand,
+        firstRule.action.constraint.rightOperandStr,
         null,
         firstRule.action.constraint.unit,
         null
@@ -171,7 +171,7 @@ export default {
       prohibition.addConstraint(
         firstRule.action.constraint.leftOperand,
         firstRule.action.constraint.operator,
-        firstRule.action.constraint.rightOperand,
+        firstRule.action.constraint.rightOperandStrStr,
         null,
         firstRule.action.constraint.unit,
         null

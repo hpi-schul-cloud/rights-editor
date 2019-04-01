@@ -39,8 +39,9 @@
 
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
+import { Constraint } from "../libs/constraints/constraints";
 import BaseButton from "./BaseButton.vue";
-import ConstraintItem, { Constraint } from "./ConstraintItem";
+import ConstraintItem from "./ConstraintItem";
 import ConstraintChooser from "./ConstraintChooser.vue";
 import ActionChooser from "./ActionChooser.vue";
 
