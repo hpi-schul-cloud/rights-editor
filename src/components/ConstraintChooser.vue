@@ -1,7 +1,7 @@
 <template>
   <BaseModal v-bind:width="'1000px'" v-bind:scrollable="false">
     <template v-slot:header>
-      <h1>Bedingung festlegen</h1>
+      <h1>Einschränkung festlegen</h1>
       <div class="hidden">{{ forceRerender }}</div>
     </template>
     <template v-slot:body>
@@ -9,17 +9,17 @@
         <div class="list-container">
           <ul class="list">
             <li
-              v-for="leftOperand in leftOperands"
-              v-bind:key="leftOperand.id"
-              v-bind:class="{selected: isLeftOperandSelected(leftOperand.id)}"
-              v-on:click="leftOperandClicked(leftOperand.id)"
-            >{{leftOperand.name}}</li>
+              v-for="operand in _operands"
+              v-bind:key="operand.id"
+              v-bind:class="{selected: isOperandSelected(operand.id)}"
+              v-on:click="operandClicked(operand.id)"
+            >{{operand.name}}</li>
           </ul>
         </div>
         <div class="list-container">
           <ul class="list">
             <li
-              v-for="operator in operators"
+              v-for="operator in _operators"
               v-bind:key="operator.id"
               v-bind:class="{selected: isOperatorSelected(operator.id)}"
               v-on:click="operatorClicked(operator.id)"
@@ -39,7 +39,7 @@
               <br>
               <ul class="unit-list list" type="text" name="unit">
                 <li
-                  v-for="unit in customUnits"
+                  v-for="unit in _units"
                   v-bind:key="unit.id"
                   v-bind:class="{selected: isUnitSelected(unit.id)}"
                   v-on:click="unitClicked(unit.id)"
@@ -51,10 +51,10 @@
           <div v-if="displayListInput" class="value-list-container list-container">
             <ul class="value-list list">
               <li
-                v-for="item in valueList"
+                v-for="item in _list"
                 v-bind:key="item.id"
-                v-bind:class="{selected: isValueListItemChosen(item.id) }"
-                v-on:click="valueListItemClicked(item.id)"
+                v-bind:class="{selected: isListItemSelected(item.id) }"
+                v-on:click="listItemClicked(item.id)"
               >{{ item.name }}</li>
             </ul>
           </div>
@@ -74,11 +74,11 @@
 import {
   Constraint,
   operands,
+  operators,
   states,
   groups,
   units,
-  numericOperators,
-  listOperators
+  operandMapping
 } from "../libs/constraints/constraints";
 import BaseInput from "./BaseInput.vue";
 import BaseModal from "./BaseModal.vue";
@@ -101,197 +101,75 @@ export default {
   data: function() {
     return {
       forceRerender: 0,
+
       displayNumberInput: false,
       displayListInput: true,
-      setOfNumericOperands: null,
+
+      numericOperands: null,
+      _operands: null,
+      _operators: null,
+      _list: null,
+      _units: null,
+
+      selectedOperandId: 0,
+      selectedOperatorId: 0,
+      selectedUnitId: 0,
 
       number: 0,
-      selectedUnitId: 0,
-      selectedLeftOperandId: 0,
-      selectedOperatorId: 0,
-
-      operators: null,
-      valueList: null,
-      customUnits: null,
-      chosenValues: [],
-
-      leftOperands: [
-        { id: 0, name: "Bundesland" },
-        { id: 1, name: "Gruppenzugehörigkeit" },
-        { id: 2, name: "Alter" },
-        { id: 3, name: "Nutzungsdauer" },
-        { id: 4, name: "Nutzeranzahl" }
-      ],
-      operandValueListMapping: [
-        { id: 0, valueList: states },
-        { id: 1, valueList: groups }
-      ]
+      selectedListItems: []
     };
   },
   created: function() {
-    // define what operands are numeric
-    this.setOfNumericOperands = new Set();
-    for (let i = 0; i < operands.length; i++) {
-      // TODO: determine what operands are numeric automatically based on data (arrays and so on...)
+    this.numericOperands = new Set();
+    for (let i = 0; i < operandMapping.length; i++) {
+      if (operandMapping[i].units.length > 0) {
+        // if there is a unit to select, then the input is a number for sure
+        this.numericOperands.add(i);
+      }
     }
-    this.setOfNumericOperands.add(2);
-    this.setOfNumericOperands.add(3);
-    this.setOfNumericOperands.add(4);
 
     if (this.constraintToEdit == null) {
-      this.valueList = states;
-      // default value list
-      this.chosenValues = new Array();
-      for (let i = 0; i < valueList.length; i++) {
-        this.chosenStates.push(false);
-      }
-      this.operators = listOperators;
-    } else {
-      let leftOp = this.constraintToEdit.leftOperand;
-
-      if (leftOp == operands[0].name) {
-        // Bundesland
-        this.valueList = states;
-        // default value list
-        this.chosenValues = new Array();
-        for (let i = 0; i < valueList.length; i++) {
-          this.chosenStates.push(false);
-        }
-        this.operators = listOperators;
-
-        for (let i = 0; i < states.length; i++) {
-          for (
-            let j = 0;
-            j < this.constraintToEdit.rightOperandList.length;
-            j++
-          ) {
-            if (states[i].name == this.constraintToEdit.rightOperandList[j]) {
-              this.chosenStates[i] = true;
-            }
-          }
-        }
-      } else if (leftOp == operands[1].name) {
-        // Gruppenzugehörigkeit
-        this.selectedLeftOperandId = 1;
-        this.valueList = groups;
-        // default value list
-        this.chosenValues = new Array();
-        for (let i = 0; i < valueList.length; i++) {
-          this.chosenStates.push(false);
-        }
-        this.operators = listOperators;
-
-        for (let i = 0; i < groups.length; i++) {
-          for (
-            let j = 0;
-            j < this.constraintToEdit.rightOperandList.length;
-            j++
-          ) {
-            if (groups[i].name == this.constraintToEdit.rightOperandList[j]) {
-              this.chosenGroups[i] = true;
-            }
-          }
-        }
-      } else {
-        // numeric
-        this.operators = numericOperators;
-
-        // determine left operand
-        for (let i = 2; i < operands.length; i++) {
-          if (leftOp == operands[i].name) {
-            this.selectedLeftOperandId = i;
-          }
-        }
-
-        this.displayNumberInput = true;
-        this.displayListInput = false;
-        this.number = this.constraintToEdit.rightOperandNumber;
-
-        // determine operator
-        for (let i = 0; i < this.operators.length; i++) {
-          if (this.constraintToEdit.operator == this.operators[i].symbol) {
-            this.selectedOperatorId = i;
-          }
-        }
-
-        this.customUnits = [];
-        if (this.selectedLeftOperandId == 2) {
-          // age
-          this.customUnits.push(units[0]);
-          this.selectedUnitId = 0;
-        } else if (this.selectedLeftOperandId == 3) {
-          // time of use
-          this.customUnits.push(units[0]);
-          this.customUnits.push(units[1]);
-          this.customUnits.push(units[2]);
-          this.selectedUnitId = 0;
-        } else if (this.selectedLeftOperandId == 4) {
-          // amount of users
-          this.customUnits.push(units[3]);
-          this.selectedUnitId = 3;
-        }
-
-        // determine unit
-        for (let i = 0; i < this.customUnits.length; i++) {
-          if (this.constraintToEdit.unit == this.customUnits[i].name) {
-            this.selectedUnitId = i;
-          }
-        }
-      }
+      // totally new (empty) constraint chooser is going to be created
+      this.initializeDataOnOperandId(0);
     }
   },
   methods: {
-    leftOperandClicked: function(id) {
-      this.selectedLeftOperandId = id;
-      // determine possible operators and value input options based on the chosen left operand
-      if (this.setOfNumericOperands.has(id)) {
+    initializeDataOnOperandId: function(id) {
+      this.selectedOperandId = id;
+
+      // reset to default input values
+      this.selectedOperatorId = 0;
+      this.number = 0;
+
+      // set data based on chosen operand (use mapping information to do so)
+      let operandMapAtId = operandMapping[this.selectedOperandId];
+
+      this.selectedListItems = new Array();
+      for (let i = 0; i < operandMapAtId.list.length; i++) {
+        this.selectedListItems.push(false);
+      }
+
+      this._operands = operands;
+      this._operators = operandMapAtId.operators;
+      this._list = operandMapAtId.list;
+      this._units = operandMapAtId.units;
+
+      // set correct display mode (numeric or list input)
+      if (this.numericOperands.has(id)) {
         this.displayNumberInput = true;
         this.displayListInput = false;
-        this.operators = numericOperators;
-        this.number = 0;
-
-        this.customUnits = [];
-        if (id == 2) {
-          // age
-          this.customUnits.push(units[0]);
-          this.selectedUnitId = 0;
-        } else if (id == 3) {
-          // time of use
-          this.customUnits.push(units[0]);
-          this.customUnits.push(units[1]);
-          this.customUnits.push(units[2]);
-          this.selectedUnitId = 0;
-        } else if (id == 4) {
-          // amount of users
-          this.customUnits.push(units[3]);
-          this.selectedUnitId = 3;
-        }
+        this.selectedUnitId = operandMapAtId.units[0].id;
       } else {
         this.displayNumberInput = false;
         this.displayListInput = true;
-        this.operators = listOperators;
-        this.selectedOperatorId = 0;
-
-        this.chosenStates = new Array();
-        this.chosenGroups = new Array();
-        for (let i = 0; i < states.length; i++) {
-          this.chosenStates.push(false);
-        }
-        for (let i = 0; i < groups.length; i++) {
-          this.chosenGroups.push(false);
-        }
-
-        if (id == 0) {
-          // state
-          this.valueList = states;
-        } else if (id == 1) {
-          // group
-          this.valueList = groups;
-        }
       }
     },
-    isLeftOperandSelected: function(id) {
-      return this.selectedLeftOperandId == id;
+    operandClicked: function(id) {
+      this.selectedLeftOperandId = id;
+      this.initializeDataOnOperandId(id);
+    },
+    isOperandSelected: function(id) {
+      return this.selectedOperandId == id;
     },
     operatorClicked: function(id) {
       this.selectedOperatorId = id;
@@ -299,32 +177,12 @@ export default {
     isOperatorSelected: function(id) {
       return this.selectedOperatorId == id;
     },
-    stateClicked: function(id) {
-      this.chosenStates[id] = !this.chosenStates[id];
-    },
-    groupClicked: function(id) {
-      this.chosenGroups[id] = !this.chosenGroups[id];
-    },
-    isStateChosen: function(id) {
-      return this.chosenStates[id] == true;
-    },
-    isGroupChosen: function(id) {
-      return this.chosenGroups[id] == true;
-    },
-    valueListItemClicked: function(id) {
-      if (this.selectedLeftOperandId == 0) {
-        this.stateClicked(id);
-      } else if (this.selectedLeftOperandId == 1) {
-        this.groupClicked(id);
-      }
+    listItemClicked: function(id) {
+      this.selectedListItems[id] = !this.selectedListItems[id];
       this.forceRerender++;
     },
-    isValueListItemChosen: function(id) {
-      if (this.selectedLeftOperandId == 0) {
-        return this.isStateChosen(id);
-      } else if (this.selectedLeftOperandId == 1) {
-        return this.isGroupChosen(id);
-      }
+    isListItemSelected: function(id) {
+      return this.selectedListItems[id] == true;
     },
     unitClicked(id) {
       this.selectedUnitId = id;
@@ -334,9 +192,9 @@ export default {
     },
     accept: function() {
       let constraint = new Constraint(-1);
-      constraint.leftOperand = operands[this.selectedLeftOperandId].name;
+      constraint.leftOperand = operands[this.selectedOperandId].name;
+      constraint.operator = operators[this.selectedOperatorId].symbol;
 
-      constraint.operator = this.operators[this.selectedOperatorId].symbol;
       if (this.displayNumberInput) {
         // for numeric input the right operand is just a number, also add the unit though
         constraint.rightOperandNumber = this.number;
@@ -345,25 +203,18 @@ export default {
       } else {
         // create array of chosen names from the value list
         let values = [];
-        if (this.valueList == this.states) {
-          for (let i = 0; i < this.states.length; i++) {
-            if (this.chosenStates[i] == true) {
-              values.push(this.states[i].name);
-            }
-          }
-        } else if (this.valueList == groups) {
-          for (let i = 0; i < groups.length; i++) {
-            if (this.chosenGroups[i] == true) {
-              values.push(groups[i].name);
-            }
+        for (let i = 0; i < this._list.length; i++) {
+          if (this.selectedListItems[i] == true) {
+            values.push(this._list[i].name);
           }
         }
         constraint.rightOperandList = values;
         constraint.rightOperandStr = values.toString();
+        // add a space after each comma
         constraint.rightOperandStr = constraint.rightOperandStr.replace(
           /,/g,
           ", "
-        ); // adds a space after each comma
+        );
       }
       constraint.name =
         constraint.leftOperand +
@@ -371,13 +222,11 @@ export default {
         constraint.operator +
         " " +
         constraint.rightOperandStr;
+
       if (constraint.unit != "") {
         constraint.name += " " + constraint.unit;
       }
       this.$emit("chosen", constraint);
-    },
-    prepareEdit: function(constraint) {
-      console.log("edit-constraint RECEIVE");
     }
   }
 };
@@ -457,10 +306,7 @@ export default {
   text-align: right;
 }
 
-/* changing data that is 
-technically a visible part of the component 
-but hidden using CSS styling
-allows for easily forcing a component rerender */
+/* changing data that is technically a visible part of the component but hidden using CSS styling allows for easily forcing a component rerender */
 .hidden {
   display: none;
 }

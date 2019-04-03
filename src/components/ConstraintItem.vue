@@ -7,7 +7,7 @@
       v-bind:constraintToEdit="constraint"
     ></ConstraintChooser>
     <div>
-      Bedingung:
+      Einschränkung:
       <br>
       <BaseButton
         input

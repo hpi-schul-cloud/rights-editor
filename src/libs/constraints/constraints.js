@@ -20,6 +20,14 @@ export let operands = [
     { id: 4, name: "Nutzeranzahl" }
 ];
 
+export let operators = [
+    { id: 0, symbol: "=", short: "eq" },
+    { id: 1, symbol: "<", short: "lt" },
+    { id: 2, symbol: "≤", short: "lteq" },
+    { id: 3, symbol: ">", short: "gt" },
+    { id: 4, symbol: "≥", short: "gteq" }
+];
+
 export let states = [
     { id: 0, name: "Baden-Württemberg" },
     { id: 1, name: "Bayern" },
@@ -52,12 +60,40 @@ export let units = [
     { id: 3, name: "Nutzer" }
 ];
 
-export let numericOperators = [
-    { id: 0, symbol: "=", short: "eq" },
-    { id: 1, symbol: "<", short: "lt" },
-    { id: 2, symbol: "≤", short: "lteq" },
-    { id: 3, symbol: ">", short: "gt" },
-    { id: 4, symbol: "≥", short: "gteq" }
+export let operandMapping = [
+    {
+        id: 0, // Bundesland
+        operand: operands[0],
+        operators: [operators[0]],
+        list: states,
+        units: []
+    },
+    {
+        id: 1, // Gruppenzugehörigkeit
+        operand: operands[1],
+        operators: [operators[0]],
+        list: groups,
+        units: []
+    },
+    {
+        id: 2, // Alter
+        operand: operands[2],
+        operators: [operators[0], operators[1], operators[2], operators[3], operators[4]],
+        list: [],
+        units: [units[0], units[1], units[2]]
+    },
+    {
+        id: 3, // Nutzungsdauer
+        operand: operands[3],
+        operators: [operators[0], operators[1], operators[2], operators[3], operators[4]],
+        list: [],
+        units: [units[0], units[1], units[2]]
+    },
+    {
+        id: 4, // Nutzeranzahl
+        operand: operands[4],
+        operators: [operators[0], operators[1], operators[2], operators[3], operators[4]],
+        list: [],
+        units: [units[3]]
+    }
 ];
-
-export let listOperators = [{ id: 0, symbol: "=", short: "eq" }];

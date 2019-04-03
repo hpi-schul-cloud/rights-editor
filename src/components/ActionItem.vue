@@ -19,7 +19,9 @@
       >{{action.name}}</BaseButton>
       <br>
       <!-- add new constraint -->
-      <BaseButton v-bind:onClick="showConstraintChooser">Bedingung</BaseButton>
+      <br>Schränke die Aktion ein:
+      <br>
+      <BaseButton v-bind:onClick="showConstraintChooser">Einschränkung</BaseButton>
       <ConstraintChooser
         v-if="displayConstraintChooser"
         v-on:chosen="setConstraint($event)"
