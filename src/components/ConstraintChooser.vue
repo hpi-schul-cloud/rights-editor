@@ -131,6 +131,49 @@ export default {
     if (this.constraintToEdit == null) {
       // totally new (empty) constraint chooser is going to be created
       this.initializeDataOnOperandId(0);
+    } else {
+      // load data from the constraint to be edited
+
+      // determine operand
+      for (let i = 0; i < operands.length; i++) {
+        if (operands[i].name == this.constraintToEdit.leftOperand) {
+          this.selectedOperandId = i;
+        }
+      }
+
+      this.initializeDataOnOperandId(this.selectedOperandId);
+
+      // determine operator
+      for (let i = 0; i < operators.length; i++) {
+        if (operators[i].symbol == this.constraintToEdit.operator) {
+          this.selectedOperatorId = operators[i].id;
+        }
+      }
+
+      if (this.constraintToEdit.unit == "") {
+        // list items
+        for (let i = 0; i < this._list.length; i++) {
+          for (
+            let j = 0;
+            j < this.constraintToEdit.rightOperandList.length;
+            j++
+          ) {
+            if (
+              this._list[i].name == this.constraintToEdit.rightOperandList[j]
+            ) {
+              this.selectedListItems[i] = true;
+            }
+          }
+        }
+      } else {
+        // number with unit
+        for (let i = 0; i < units.length; i++) {
+          if (units[i].name == this.constraintToEdit.unit) {
+            this.selectedUnitId = i;
+          }
+        }
+        this.number = this.constraintToEdit.rightOperandNumber;
+      }
     }
   },
   methods: {
@@ -165,7 +208,6 @@ export default {
       }
     },
     operandClicked: function(id) {
-      this.selectedLeftOperandId = id;
       this.initializeDataOnOperandId(id);
     },
     isOperandSelected: function(id) {
@@ -202,14 +244,14 @@ export default {
         constraint.unit = units[this.selectedUnitId].name;
       } else {
         // create array of chosen names from the value list
-        let values = [];
+        let listItems = [];
         for (let i = 0; i < this._list.length; i++) {
           if (this.selectedListItems[i] == true) {
-            values.push(this._list[i].name);
+            listItems.push(this._list[i].name);
           }
         }
-        constraint.rightOperandList = values;
-        constraint.rightOperandStr = values.toString();
+        constraint.rightOperandList = listItems;
+        constraint.rightOperandStr = listItems.toString();
         // add a space after each comma
         constraint.rightOperandStr = constraint.rightOperandStr.replace(
           /,/g,
@@ -226,7 +268,13 @@ export default {
       if (constraint.unit != "") {
         constraint.name += " " + constraint.unit;
       }
-      this.$emit("chosen", constraint);
+
+      if (this.constraintToEdit != null) {
+        constraint.id = this.constraintToEdit.id;
+        this.$emit("edited", constraint);
+      } else {
+        this.$emit("chosen", constraint);
+      }
     }
   }
 };

@@ -4,6 +4,7 @@
       v-if="displayConstraintChooser"
       v-on:chosen="constraintChosen($event)"
       v-on:abort="hideConstraintChooser()"
+      v-on:edited="bla($event)"
       v-bind:constraintToEdit="constraint"
     ></ConstraintChooser>
     <div>
@@ -57,6 +58,10 @@ export default {
     constraintChosen: function(chosenConstraint) {
       this.hideConstraintChooser();
       this.$emit("constraint-chosen", chosenConstraint);
+    },
+    bla: function(editedConstraint) {
+      this.hideConstraintChooser();
+      this.$emit("constraint-edited", editedConstraint);
     }
   }
 };

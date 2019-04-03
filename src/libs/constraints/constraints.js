@@ -3,9 +3,12 @@ export class Constraint {
         this.id = id;
         this.name = "<leer>";
         this.leftOperand = "";
+
+        // TODO: make this less ugly
         this.rightOperandList = [];
         this.rightOperandNumber = 0;
         this.rightOperandStr = "";
+
         this.operator = "";
         this.unit = "";
         this.type = "";
@@ -80,7 +83,7 @@ export let operandMapping = [
         operand: operands[2],
         operators: [operators[0], operators[1], operators[2], operators[3], operators[4]],
         list: [],
-        units: [units[0], units[1], units[2]]
+        units: [units[0]]
     },
     {
         id: 3, // Nutzungsdauer

@@ -29,10 +29,11 @@
       ></ConstraintChooser>
       <!-- display and edit constraints -->
       <ConstraintItem
-        v-for="constraint in constraints"
+        v-for="constraint in action.constraints"
         v-bind:key="constraint.id"
         v-bind:constraint="constraint"
         v-on:constraint-chosen="setConstraint($event)"
+        v-on:constraint-edited="editConstraint($event)"
         v-on:remove-constraint="removeConstraint($event)"
       ></ConstraintItem>
     </div>
@@ -51,7 +52,7 @@ export class Action {
   constructor(name, nsVocabUri) {
     this.name = name;
     this.nsVocabUri = nsVocabUri;
-    this.constraint = new Constraint();
+    this.constraints = new Array();
   }
 
   name() {
@@ -107,15 +108,18 @@ export default {
     },
     setConstraint: function(constraint) {
       constraint.id = this.nextId;
-      this.action.constraint = constraint;
-      this.constraints.push(constraint);
+      this.action.constraints.push(constraint);
       this.nextId++;
       this.hideConstraintChooser();
     },
+    editConstraint: function(constraint) {
+      this.action.constraints[constraint.id] = constraint;
+      this.$forceUpdate();
+    },
     removeConstraint: function(id) {
-      for (let i = 0; i < this.constraints.length; i++) {
-        if (this.constraints[i].id == id) {
-          this.constraints.splice(i, 1);
+      for (let i = 0; i < this.action.constraints.length; i++) {
+        if (this.action.constraints[i].id == id) {
+          this.action.constraints.splice(i, 1);
         }
       }
     }
