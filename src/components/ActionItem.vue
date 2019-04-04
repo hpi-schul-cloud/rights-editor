@@ -17,9 +17,19 @@
         name="action"
         type="button"
       >{{action.name}}</BaseButton>
-      <br>
+      <!-- display and edit constraints -->
+      <div>
+        <ConstraintItem
+          v-for="constraint in action.constraints"
+          v-bind:key="constraint.id"
+          v-bind:constraint="constraint"
+          v-on:constraint-chosen="setConstraint($event)"
+          v-on:constraint-edited="editConstraint($event)"
+          v-on:remove-constraint="removeConstraint($event)"
+        ></ConstraintItem>
+      </div>
       <!-- add new constraint -->
-      <br>Schränke die Aktion ein:
+      Schränke die Aktion ein:
       <br>
       <BaseButton v-bind:onClick="showConstraintChooser">Einschränkung</BaseButton>
       <ConstraintChooser
@@ -27,15 +37,6 @@
         v-on:chosen="setConstraint($event)"
         v-on:abort="hideConstraintChooser()"
       ></ConstraintChooser>
-      <!-- display and edit constraints -->
-      <ConstraintItem
-        v-for="constraint in action.constraints"
-        v-bind:key="constraint.id"
-        v-bind:constraint="constraint"
-        v-on:constraint-chosen="setConstraint($event)"
-        v-on:constraint-edited="editConstraint($event)"
-        v-on:remove-constraint="removeConstraint($event)"
-      ></ConstraintItem>
     </div>
   </div>
 </template>
