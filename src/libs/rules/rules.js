@@ -41,12 +41,12 @@ export let RuleTypes = Object.freeze({
         name: "Konsequenz",
         description:
             " muss geleistet werden, falls die dazugehörigen Pflichten nicht eingehalten wurden ",
-        icon: ""
+        icon: "fas fa-hand-holding"
     },
     Remedy: {
         name: "Strafe",
         description:
             " muss geleistet werden, falls das dazugehörigen Verbote missachtet wurden ",
-        icon: ""
+        icon: "fas fa-balance-scale"
     }
 });

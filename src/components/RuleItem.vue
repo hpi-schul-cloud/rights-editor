@@ -1,8 +1,7 @@
 <template>
-  <li>
-    <div class="rule-header">
+  <div class="container">
+    <div class="header">
       <b>{{ rule.type.name }}</b>
-      <br>
       <BaseButton remove v-bind:onClick="removeRule">
         <i class="fas fa-times"></i>
       </BaseButton>
@@ -11,7 +10,7 @@
       {{ rule.type.description }}
       <i v-bind:class="rule.type.icon"></i>
     </ActionItem>
-  </li>
+  </div>
 </template>
 
 <script>
@@ -41,7 +40,15 @@ export default {
 </script>
 
 <style scoped>
-.rule-header {
+.container {
+  border: 1px DarkGray solid;
+  width: 600px;
+  padding: 20px;
+  margin: 10px;
+  margin-left: 0px;
+}
+
+.header {
   position: relative;
   margin-bottom: 20px;
   margin-top: 10px;

@@ -10,6 +10,7 @@
     <div>
       <BaseButton
         input
+        v-bind:width="'500px'"
         v-bind:onClick="showConstraintChooser"
         class="constraint-button"
         name="constraint"

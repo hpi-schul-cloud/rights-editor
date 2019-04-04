@@ -1,11 +1,10 @@
 <template>
-  <li class="rule-tree-li">
+  <div class="container">
     <RuleItem
       v-on:remove-rule="updateRules($event)"
       v-for="rule in ruleTree.rules"
       v-bind:rule="rule"
-      v-bind:key="rule.id"
-      v-bind:style="{ marginLeft: getRuleMargin(rule.type) + 'px', paddingLeft: 10 + 'px' }"
+      v-bind:key="rule.id"      
     ></RuleItem>
 
     <div class="addon-container" v-if="getPossibleAddons() != null">
@@ -13,12 +12,12 @@
       <br>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
-          <BaseButton v-bind:name="addon.name" v-bind:onClick="createAddon">{{addon.name}}</BaseButton>
+          <BaseButton class="addon-button" v-bind:name="addon.name" v-bind:onClick="createAddon">{{addon.name}}</BaseButton>
           <div class="addon-info">({{addon.descr}})</div>
         </li>
       </ul>
     </div>
-  </li>
+  </div>
 </template>
 
 <script>
@@ -148,15 +147,17 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  padding: 10px;
+}
+
 .addon-container {
   margin-top: 35px;
-  margin-bottom: 20px;
-  margin-left: -20px;
 }
 
 .addon-ul {
-  margin-left: 0px !important;
-  padding-inline-start: 0px !important;
+  margin-left: 0px;
+  padding-inline-start: 0px;
 }
 
 .addon-info {
@@ -164,11 +165,7 @@ export default {
   font-size: 0.9em;
 }
 
-.rule-tree-li {
-  border: 1px solid DarkGray;
-  padding-left: 50px;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+.addon-button {
+  margin-left: 0px;
 }
 </style>

@@ -11,14 +11,12 @@
       <BaseButton class="float-right" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
     </div>
     <div class="container">
-      <ul>
-        <RuleTreeItem
-          v-on:remove-tree="updateTrees($event)"
-          v-for="ruleTree in ruleTrees"
-          v-bind:ruleTree="ruleTree"
-          v-bind:key="ruleTree.id"
-        ></RuleTreeItem>
-      </ul>
+      <RuleTreeItem
+        v-on:remove-tree="updateTrees($event)"
+        v-for="ruleTree in ruleTrees"
+        v-bind:ruleTree="ruleTree"
+        v-bind:key="ruleTree.id"
+      ></RuleTreeItem>
     </div>
     <pre>{{policy}}</pre>
   </div>
