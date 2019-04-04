@@ -29,8 +29,8 @@ import BaseButton from "./BaseButton.vue";
 import BaseInput from "./BaseInput.vue";
 import Action from "./ActionItem.vue";
 
-import { Rule, RuleTypes } from "./RuleItem.vue";
-import RuleTreeItem, { RuleTree } from "./RuleTreeItem.vue";
+import { Rule, RuleTypes, RuleTree } from "../libs/rules/rules.js";
+import RuleTreeItem from "./RuleTreeItem.vue";
 import { Odrl } from "../libs/rightsml-lib-js/ODRLclasses";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 

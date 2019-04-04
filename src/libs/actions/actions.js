@@ -1,6 +1,6 @@
 
 class Action {
-    constructor(definition, label, note, identifier, includedIn, includedBy){
+    constructor(definition, label, note, identifier, includedIn, includedBy) {
         this.definition = definition;
         this.label = label;
         this.note = note;

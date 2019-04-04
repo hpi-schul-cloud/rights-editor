@@ -1,12 +1,16 @@
 <template>
   <li>
-    <div class="rule-header-container">
-      <div class="rule-header-name">
-        <b>{{ rule.type["name"] }}</b>
-      </div>
-      <BaseButton remove v-bind:onClick="removeRule">&times;</BaseButton>
-    </div>
-    <ActionItem class="action-item" v-bind:action="rule.action"></ActionItem>
+    <div class="rule-header">
+      <b>{{ rule.type.name }}</b>
+      <br>
+      <BaseButton remove v-bind:onClick="removeRule">
+        <i class="fas fa-times"></i>
+      </BaseButton>
+    </div>Das
+    <ActionItem v-bind:action="rule.action">
+      {{ rule.type.description }}
+      <i v-bind:class="rule.type.icon"></i>
+    </ActionItem>
   </li>
 </template>
 
@@ -14,23 +18,7 @@
 import ActionItem, { Action } from "./ActionItem.vue";
 import BaseButton from "./BaseButton.vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
-
-export class Rule {
-  constructor(id, type) {
-    this.id = id;
-    this.type = type;
-    this.action = new Action("<leer>", Vocab.ActionsCV.use);
-  }
-}
-
-export let RuleTypes = Object.freeze({
-  Permission: { name: "Erlaubnis" },
-  Obligation: { name: "Verpflichtung" },
-  Prohibition: { name: "Verbot" },
-  Duty: { name: "Verpflichtung" },
-  Consequence: { name: "Konsequenz" },
-  Remedy: { name: "Strafe" }
-});
+import { Rule, RuleTypes } from "../libs/rules/rules.js";
 
 export default {
   name: "RuleItem",
@@ -53,7 +41,7 @@ export default {
 </script>
 
 <style scoped>
-.rule-header-container {
+.rule-header {
   position: relative;
   margin-bottom: 20px;
   margin-top: 10px;

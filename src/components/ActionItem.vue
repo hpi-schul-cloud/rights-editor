@@ -1,37 +1,43 @@
 <template>
-  <div>
+  <div class="action-container">
     <ActionChooser
       v-if="actionChooserSettings.displayActionChooser"
       v-bind:allowAbort="actionChooserSettings.allowAbort"
       v-on:chosen="hideActionChooser(); action.name=$event"
       v-on:abort="hideActionChooser()"
-    ></ActionChooser>Aktion:
-    <div>
-      <!-- display and edit action -->
-      <BaseButton
-        input
-        v-bind:width="'600px'"
-        v-bind:value="actionName"
-        v-bind:onClick="showActionChooserWithAbort"
-        list="actions"
-        name="action"
-        type="button"
-      >{{action.name}}</BaseButton>
-      <!-- display and edit constraints -->
-      <div>
-        <ConstraintItem
-          v-for="constraint in action.constraints"
-          v-bind:key="constraint.id"
-          v-bind:constraint="constraint"
-          v-on:constraint-chosen="setConstraint($event)"
-          v-on:constraint-edited="editConstraint($event)"
-          v-on:remove-constraint="removeConstraint($event)"
-        ></ConstraintItem>
+    ></ActionChooser>
+
+    <!-- display and edit action -->
+    <BaseButton
+      input
+      v-bind:value="actionName"
+      v-bind:onClick="showActionChooserWithAbort"
+      list="actions"
+      name="action"
+      type="button"
+    >{{action.name}}</BaseButton>
+    <slot></slot>
+
+    <!-- display and edit constraints -->
+    <div class="constraint-container">
+      <div class="constraint-text">
+        <span>, nur wenn...</span>
       </div>
+      <ConstraintItem
+        class="constraint-edit"
+        v-for="constraint in action.constraints"
+        v-bind:key="constraint.id"
+        v-bind:constraint="constraint"
+        v-on:constraint-chosen="setConstraint($event)"
+        v-on:constraint-edited="editConstraint($event)"
+        v-on:remove-constraint="removeConstraint($event)"
+      ></ConstraintItem>
+
       <!-- add new constraint -->
-      Schränke die Aktion ein:
-      <br>
-      <BaseButton v-bind:onClick="showConstraintChooser">Einschränkung</BaseButton>
+      <BaseButton
+        class="constraint-add"
+        v-bind:onClick="showConstraintChooser"
+      >Einschränkung hinzufügen</BaseButton>
       <ConstraintChooser
         v-if="displayConstraintChooser"
         v-on:chosen="setConstraint($event)"
@@ -132,3 +138,29 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.action-container {
+  display: inline;
+}
+
+.constraint-container {
+  display: inline;
+}
+
+.constraint-text {
+  display: inline;
+  margin-right: 10px;
+}
+
+.constraint-edit {
+  margin: 0px;
+  padding: 0px;
+}
+
+.constraint-add {
+  display: block;
+  margin-top: 10px;
+  margin-left: 0px;
+}
+</style>

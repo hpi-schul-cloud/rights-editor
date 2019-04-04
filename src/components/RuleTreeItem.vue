@@ -9,7 +9,8 @@
     ></RuleItem>
 
     <div class="addon-container" v-if="getPossibleAddons() != null">
-      Füge optional Erweiterungen hinzu:<br>
+      Füge optional Erweiterungen hinzu:
+      <br>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
           <BaseButton v-bind:name="addon.name" v-bind:onClick="createAddon">{{addon.name}}</BaseButton>
@@ -21,15 +22,9 @@
 </template>
 
 <script>
-import RuleItem, { Rule, RuleTypes } from "./RuleItem.vue";
+import { Rule, RuleTypes, RuleTree } from "../libs/rules/rules.js";
+import RuleItem from "./RuleItem.vue";
 import BaseButton from "./BaseButton.vue";
-
-export class RuleTree {
-  constructor(id, type) {
-    this.id = id;
-    this.rules = [];
-  }
-}
 
 class Addon {
   constructor(name, descr) {
