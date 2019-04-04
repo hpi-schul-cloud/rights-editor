@@ -4,7 +4,8 @@
       <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
       <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
       <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
-      <span class="licence-name">GUID der Lizenz:
+      <span class="licence-name">
+        GUID der Lizenz:
         <BaseInput undercover v-model="licenceName" class="guid-input"></BaseInput>
       </span>
       <BaseButton class="float-right" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
@@ -105,14 +106,16 @@ export default {
       let firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
 
       permission.setAction(firstRule.action.name);
-      permission.addConstraint(
-        firstRule.action.constraint.leftOperand,
-        firstRule.action.constraint.operator,
-        firstRule.action.constraint.rightOperand,
-        null,
-        firstRule.action.constraint.unit,
-        null
-      );
+      for (let i = 0; i < firstRule.action.constraints.length; i++) {
+        permission.addConstraint(
+          firstRule.action.constraints[i].leftOperand,
+          firstRule.action.constraints[i].operator,
+          firstRule.action.constraints[i].rightOperandStr,
+          null,
+          firstRule.action.constraints[i].unit,
+          null
+        );
+      }
 
       let duties = [];
       for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
@@ -120,14 +123,17 @@ export default {
         if (currentRule.type == RuleTypes.Duty) {
           duties.push(new Odrl.Duty());
           duties[duties.length - 1].setAction(currentRule.action.name);
-          duties[duties.length - 1].addConstraint(
-            currentRule.action.constraint.leftOperand,
-            currentRule.action.constraint.operator,
-            currentRule.action.constraint.rightOperand,
-            null,
-            currentRule.action.constraint.unit,
-            null
-          );
+          for (let l = 0; l < currentRule.action.constraints.length; l++) {
+            console.log(currentRule.action);
+            duties[duties.length - 1].addConstraint(
+              currentRule.action.constraints[l].leftOperand,
+              currentRule.action.constraints[l].operator,
+              currentRule.action.constraints[l].rightOperandStr,
+              null,
+              currentRule.action.constraints[l].unit,
+              null
+            );
+          }
         } else if (currentRule.type == RuleTypes.Consequence) {
           let cons = new Odrl.Failure();
           cons.setAction(currentRule.action.name);
@@ -144,15 +150,16 @@ export default {
       let firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
 
       obligation.setAction(firstRule.action.name);
-      obligation.addConstraint(
-        firstRule.action.constraint.leftOperand,
-        firstRule.action.constraint.operator,
-        firstRule.action.constraint.rightOperand,
-        null,
-        firstRule.action.constraint.unit,
-        null
-      );
-
+      for (let l = 0; l < firstRule.action.constraints.length; l++) {
+        obligation.addConstraint(
+          firstRule.action.constraints[l].leftOperand,
+          firstRule.action.constraints[l].operator,
+          firstRule.action.constraints[l].rightOperandStr,
+          null,
+          firstRule.action.constraints[l].unit,
+          null
+        );
+      }
       for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
         let currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
         if (currentRule.type == RuleTypes.Consequence) {
@@ -168,14 +175,17 @@ export default {
       let firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
 
       prohibition.setAction(firstRule.action.name);
-      prohibition.addConstraint(
-        firstRule.action.constraint.leftOperand,
-        firstRule.action.constraint.operator,
-        firstRule.action.constraint.rightOperand,
-        null,
-        firstRule.action.constraint.unit,
-        null
-      );
+
+      for (let l = 0; l < firstRule.action.constraints.length; l++) {
+        prohibition.addConstraint(
+          firstRule.action.constraints[l].leftOperand,
+          firstRule.action.constraints[l].operator,
+          firstRule.action.constraints[l].rightOperandStrStr,
+          null,
+          firstRule.action.constraints[l].unit,
+          null
+        );
+      }
 
       for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
         let currentRule = this.ruleTrees[ruleTreeIndex].rules[k];

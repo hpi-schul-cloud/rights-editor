@@ -9,7 +9,7 @@
     ></RuleItem>
 
     <div class="addon-container" v-if="getPossibleAddons() != null">
-      <p>Füge optional Erweiterungen hinzu:</p>
+      Füge optional Erweiterungen hinzu:<br>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
           <BaseButton v-bind:name="addon.name" v-bind:onClick="createAddon">{{addon.name}}</BaseButton>

@@ -1,12 +1,14 @@
 <template>
   <div>
     <ConstraintChooser
-      v-if="this.displayConstraintChooser"
+      v-if="displayConstraintChooser"
       v-on:chosen="constraintChosen($event)"
       v-on:abort="hideConstraintChooser()"
+      v-on:edited="bla($event)"
+      v-bind:constraintToEdit="constraint"
     ></ConstraintChooser>
     <div>
-      Bedingung:
+      Einschränkung:
       <br>
       <BaseButton
         input
@@ -28,18 +30,6 @@
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintChooser from "./ConstraintChooser.vue";
 import BaseButton from "./BaseButton.vue";
-
-export class Constraint {
-  constructor(id) {
-    this.id = id;
-    this.name = "<leer>";
-    this.leftOperand = "";
-    this.rightOperand = "";
-    this.operator = "";
-    this.unit = "";
-    this.type = "";
-  }
-}
 
 export default {
   name: "ConstraintItem",
@@ -68,6 +58,10 @@ export default {
     constraintChosen: function(chosenConstraint) {
       this.hideConstraintChooser();
       this.$emit("constraint-chosen", chosenConstraint);
+    },
+    bla: function(editedConstraint) {
+      this.hideConstraintChooser();
+      this.$emit("constraint-edited", editedConstraint);
     }
   }
 };
