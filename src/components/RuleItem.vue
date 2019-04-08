@@ -2,8 +2,8 @@
   <div class="container">
     <div class="header">
       <b>{{ rule.type.name }}</b>
-      <BaseButton remove v-bind:onClick="removeRule">
-        <i class="fas fa-times"></i>
+      <BaseButton remove class="remove-button" v-bind:onClick="removeRule">
+        <i class="far fa-trash-alt"></i>
       </BaseButton>
     </div>Das
     <ActionItem v-bind:action="rule.action">
@@ -43,14 +43,19 @@ export default {
 .container {
   border: 1px DarkGray solid;
   width: 600px;
-  padding: 20px;
   margin: 10px;
   margin-left: 0px;
+  padding: 20px;
 }
 
 .header {
   position: relative;
-  margin-bottom: 20px;
-  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.remove-button {
+  position: absolute;
+  left: calc(100% - 20px);
+  top: -20px;
 }
 </style>

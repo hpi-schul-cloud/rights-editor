@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="tree-container">
     <RuleItem
       v-on:remove-rule="updateRules($event)"
       v-for="rule in ruleTree.rules"
@@ -147,7 +147,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.tree-container {
   padding: 10px;
 }
 
