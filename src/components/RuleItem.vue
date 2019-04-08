@@ -41,7 +41,6 @@ export default {
 
 <style scoped>
 .container {
-  border: 1px DarkGray solid;
   width: 600px;
   margin: 10px;
   margin-left: 0px;

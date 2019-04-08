@@ -8,7 +8,7 @@
     ></RuleItem>
 
     <div class="addon-container" v-if="getPossibleAddons() != null">
-      Füge optional Erweiterungen hinzu:
+      Optional können folgende Erweiterungen hinzugefügt werden:
       <br>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">

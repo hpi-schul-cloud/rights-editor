@@ -33,14 +33,14 @@ export let RuleTypes = Object.freeze({
         icon: "fas fa-ban"
     },
     Duty: {
-        name: "Verpflichtung",
-        description: " ist Pflicht ",
+        name: "Vorbedingung",
+        description: " muss geleistet werden, damit die dazugehörige Erlaubnis gilt ",
         icon: "far fa-handshake"
     },
     Consequence: {
         name: "Konsequenz",
         description:
-            " muss geleistet werden, falls die dazugehörigen Pflichten nicht eingehalten wurden ",
+            " muss geleistet werden, falls die dazugehörigen Verpflichtungen nicht eingehalten wurden ",
         icon: "fas fa-hand-holding"
     },
     Remedy: {
