@@ -11,25 +11,29 @@
       </BaseButton>
     </div>
 
-    <!-- display Action -->
+    <!-- display action -->
     Das
     <ActionItem v-bind:action="rule.action"></ActionItem>
     {{ rule.type.descriptionBefore }}
     <a href="#">{{ rule.type.descriptionLink }}</a>
     {{ rule.type.descriptionAfter }}
+    
     <!-- add new refinement -->
     <br>
     <br>Das
     <a href="#">{{ rule.action.name }}</a> darf nur auf die folgende Art und Weise erfolgen...
     <br>
-    <BaseButton class="add-button" v-bind:onClick="function(){/* TODO: implement this functionality */}">Verfeinerung hinzufügen</BaseButton>
+    <BaseButton
+      class="add-button"
+      v-bind:onClick="function(){/* TODO: implement this functionality */}"
+    >Verfeinerung hinzufügen</BaseButton>
 
     <!-- display and edit constraints -->
     <div class="constraint-container">
       <div class="constraint-text">
         <span>
-          <br>
-          Insgesamt gilt die <a href="#">{{ rule.type.name }}</a> nur, wenn...
+          <br>Insgesamt gilt die
+          <a href="#">{{ rule.type.name }}</a> nur, wenn...
         </span>
       </div>
       <ConstraintItem

@@ -21,7 +21,6 @@
 
 <script>
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
-
 import BaseButton from "./BaseButton.vue";
 import ActionChooser from "./ActionChooser.vue";
 
