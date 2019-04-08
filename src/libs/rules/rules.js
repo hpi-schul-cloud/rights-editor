@@ -5,7 +5,7 @@ export class Rule {
     constructor(id, type) {
         this.id = id;
         this.type = type;
-        this.action = new Action("<Aktion einfügen>", Vocab.ActionsCV.use);
+        this.action = new Action("<Aktion auswählen>", Vocab.ActionsCV.use);
     }
 }
 
@@ -19,58 +19,58 @@ export class RuleTree {
 export let RuleTypes = Object.freeze({
     Permission: {
         name: "Erlaubnis",
-        descriptionBefore: " ist erlaubt",
+        descriptionBefore: " ist erlaubt.",
         descriptionLink: "",
         descriptionAfter: "",
         icon: "far fa-check-circle"
     },
     Obligation: {
         name: "Pflicht",
-        descriptionBefore: " ist Pflicht",
+        descriptionBefore: " ist Pflicht.",
         descriptionLink: "",
         descriptionAfter: "",
         icon: "far fa-handshake"
     },
     Prohibition: {
         name: "Verbot",
-        descriptionBefore: " ist verboten",
+        descriptionBefore: " ist verboten.",
         descriptionLink: "",
         descriptionAfter: "",
         icon: "fas fa-ban"
     },
     Duty: {
         name: "Pflicht",
-        description: " muss geleistet werden, damit die Erlaubnis gilt",
+        description: " muss geleistet werden, damit die Erlaubnis gilt.",
         descriptionBefore:
             " muss geleistet werden, damit die",
         descriptionLink:
             " Erlaubnis",
         descriptionAfter:
-            " gilt",
+            " gilt.",
         icon: "far fa-handshake"
     },
     Consequence: {
         name: "Konsequenz",
         description:
-            " muss geleistet werden, falls die Pflicht nicht eingehalten wurde",
+            " muss geleistet werden, falls die Pflicht nicht eingehalten wurde.",
         descriptionBefore:
             " muss geleistet werden, falls die",
         descriptionLink:
             " Pflicht",
         descriptionAfter:
-            " nicht eingehalten wurde",
+            " nicht eingehalten wurde.",
         icon: "fas fa-hand-holding"
     },
     Remedy: {
         name: "Strafe",
         description:
-            " muss geleistet werden, falls das Verbot missachtet wurde",
+            " muss geleistet werden, falls das Verbot missachtet wurde.",
         descriptionBefore:
             " muss geleistet werden, falls das",
         descriptionLink:
             " Verbot",
         descriptionAfter:
-            " missachtet wurde",
+            " missachtet wurde.",
         icon: "fas fa-balance-scale"
     }
 });

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- header with title and remove button -->
     <div class="header">
       <b>
         {{ rule.type.name }}
@@ -8,22 +9,66 @@
       <BaseButton remove class="remove-button" v-bind:onClick="removeRule">
         <i class="far fa-trash-alt"></i>
       </BaseButton>
-    </div>Das
-    <ActionItem v-bind:action="rule.action">{{rule.type.descriptionBefore}} <a href="#">{{rule.type.descriptionLink}}</a> {{rule.type.descriptionAfter}}</ActionItem>
+    </div>
+
+    <!-- display Action -->
+    Das
+    <ActionItem v-bind:action="rule.action"></ActionItem>
+    {{ rule.type.descriptionBefore }}
+    <a href="#">{{ rule.type.descriptionLink }}</a>
+    {{ rule.type.descriptionAfter }}
+    <!-- add new refinement -->
+    <br>
+    <br>Das
+    <a href="#">{{ rule.action.name }}</a> darf nur auf die folgende Art und Weise erfolgen...
+    <br>
+    <BaseButton class="add-button" v-bind:onClick="function(){/* TODO: implement this functionality */}">Verfeinerung hinzufügen</BaseButton>
+
+    <!-- display and edit constraints -->
+    <div class="constraint-container">
+      <div class="constraint-text">
+        <span>
+          <br>
+          Insgesamt gilt die <a href="#">{{ rule.type.name }}</a> nur, wenn...
+        </span>
+      </div>
+      <ConstraintItem
+        class="constraint-edit"
+        v-for="constraint in rule.action.constraints"
+        v-bind:key="constraint.id"
+        v-bind:constraint="constraint"
+        v-on:constraint-chosen="setConstraint($event)"
+        v-on:constraint-edited="editConstraint($event)"
+        v-on:remove-constraint="removeConstraint($event)"
+      ></ConstraintItem>
+
+      <!-- add new constraint -->
+      <BaseButton class="add-button" v-bind:onClick="showConstraintChooser">Einschränkung hinzufügen</BaseButton>
+      <ConstraintChooser
+        v-if="displayConstraintChooser"
+        v-on:chosen="setConstraint($event)"
+        v-on:abort="hideConstraintChooser()"
+      ></ConstraintChooser>
+    </div>
   </div>
 </template>
 
 <script>
-import ActionItem, { Action } from "./ActionItem.vue";
 import BaseButton from "./BaseButton.vue";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import { Rule, RuleTypes } from "../libs/rules/rules.js";
+import ActionItem, { Action } from "./ActionItem.vue";
+import { Constraint } from "../libs/constraints/constraints";
+import ConstraintItem from "./ConstraintItem";
+import ConstraintChooser from "./ConstraintChooser.vue";
 
 export default {
   name: "RuleItem",
   components: {
     BaseButton,
-    ActionItem
+    ActionItem,
+    ConstraintItem,
+    ConstraintChooser
   },
   props: {
     rule: {
@@ -31,9 +76,42 @@ export default {
       required: true
     }
   },
+  data: function() {
+    return {
+      displayConstraintChooser: false,
+      nextId: 0
+    };
+  },
   methods: {
     removeRule: function() {
       this.$emit("remove-rule", this.rule.id);
+    },
+    showConstraintChooser: function() {
+      this.displayConstraintChooser = true;
+    },
+    hideConstraintChooser: function() {
+      this.displayConstraintChooser = false;
+    },
+    setConstraint: function(constraint) {
+      constraint.id = this.nextId;
+      this.rule.action.constraints.push(constraint);
+      this.nextId++;
+      this.hideConstraintChooser();
+    },
+    editConstraint: function(constraint) {
+      for (let i = 0; i < this.rule.action.constraints.length; i++) {
+        if (this.rule.action.constraints[i].id == constraint.id) {
+          this.rule.action.constraints[i] = constraint;
+        }
+      }
+      this.$forceUpdate();
+    },
+    removeConstraint: function(id) {
+      for (let i = 0; i < this.rule.action.constraints.length; i++) {
+        if (this.rule.action.constraints[i].id == id) {
+          this.rule.action.constraints.splice(i, 1);
+        }
+      }
     }
   }
 };
@@ -56,5 +134,25 @@ export default {
   position: absolute;
   left: calc(100% - 20px);
   top: -20px;
+}
+
+.constraint-container {
+  display: inline;
+}
+
+.constraint-text {
+  display: inline;
+  margin-right: 10px;
+}
+
+.constraint-edit {
+  margin: 0px;
+  padding: 0px;
+}
+
+.add-button {
+  display: block;
+  margin-top: 10px;
+  margin-left: 0px;
 }
 </style>

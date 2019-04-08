@@ -19,7 +19,7 @@
             v-bind:onClick="createAddon"
           >{{addon.name}}</BaseButton>
           <!-- TODO: link to the parent rule -->
-          <div class="addon-info">{{addon.descriptionBefore}} <a href="#">{{addon.descriptionLink}}</a> {{addon.descriptionAfter}}.</div>
+          <div class="addon-info">{{addon.descriptionBefore}} <a href="#">{{addon.descriptionLink}}</a> {{addon.descriptionAfter}}</div>
         </li>
       </ul>
     </div>
