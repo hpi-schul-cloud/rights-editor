@@ -1,21 +1,21 @@
 <template>
-  <div>
+  <div class="action-container">
     <ActionChooser
       v-if="actionChooserShouldDisplay"
       v-bind:actionChooserAllowAbort="actionChooserAllowAbort"
       v-on:chosen="hideActionChooser(); action = $event"
       v-on:abort="hideActionChooser()"
-    ></ActionChooser>Aktion:
-    <div>
-      <BaseButton
-        input
-        v-bind:width="'600px'"
-        v-bind:onClick="showActionChooserWithAbort"
-        list="actions"
-        name="action"
-        type="button"
-      >{{ action }}</BaseButton>
-    </div>
+    ></ActionChooser>
+
+    <!-- display and edit action -->
+    <BaseButton
+      input
+      v-bind:value="actionName"
+      v-bind:onClick="showActionChooserWithAbort"
+      list="actions"
+      name="action"
+      type="button"
+    >{{ action }}</BaseButton>
   </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
       required: true
     }
   },
-  created: function() {
+  mounted: function() {
     this.showActionChooser(false);
   },
   methods: {
@@ -82,3 +82,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.action-container {
+  display: inline;
+}
+</style>

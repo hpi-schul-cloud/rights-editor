@@ -1,24 +1,24 @@
 <template>
   <div>
     <ConstraintChooser
-      v-if="this.displayConstraintChooser"
+      v-if="displayConstraintChooser"
       v-on:chosen="constraintChosen($event)"
       v-on:abort="hideConstraintChooser()"
+      v-on:edited="bla($event)"
+      v-bind:constraintToEdit="constraint"
     ></ConstraintChooser>
     <div>
-      Bedingung:<br>
       <BaseButton
         input
-        v-bind:width="'600px'"
+        v-bind:width="'500px'"
         v-bind:onClick="showConstraintChooser"
+        class="constraint-button"
         name="constraint"
         type="button"
-      >{{ name }}</BaseButton>
-      <BaseButton
-        remove
-        v-if="name != '<leer>'"
-        v-bind:onClick="function () {$emit('remove-constraint');}"
-      >&times;</BaseButton>
+      >{{ constraint.name }}</BaseButton>
+      <BaseButton remove v-bind:onClick="function () {$emit('remove-constraint', constraint.id);}">
+        <i class="fas fa-times"></i>
+      </BaseButton>
     </div>
   </div>
 </template>
@@ -58,6 +58,10 @@ export default {
     constraintChosen: function(chosenConstraint) {
       this.hideConstraintChooser();
       this.$emit("constraint-chosen", chosenConstraint);
+    },
+    bla: function(editedConstraint) {
+      this.hideConstraintChooser();
+      this.$emit("constraint-edited", editedConstraint);
     }
   },
   computed: {
@@ -67,3 +71,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.constraint-button {
+  margin: 0px;
+}
+</style>
