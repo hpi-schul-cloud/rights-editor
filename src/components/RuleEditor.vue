@@ -2,7 +2,7 @@
   <div class="rule-editor">
     <div class="header">
       <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
-      <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
+      <BaseButton v-bind:onClick="newObligation">Pflicht</BaseButton>
       <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
       <span class="licence-name">
         GUID der Lizenz:

@@ -4,16 +4,21 @@
       v-on:remove-rule="updateRules($event)"
       v-for="rule in ruleTree.rules"
       v-bind:rule="rule"
-      v-bind:key="rule.id"      
+      v-bind:key="rule.id"
     ></RuleItem>
 
     <div class="addon-container" v-if="getPossibleAddons() != null">
-      Optional können folgende Erweiterungen hinzugefügt werden:
+      <i>Optional können folgende Erweiterungen hinzugefügt werden:</i>
       <br>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
-          <BaseButton class="addon-button" v-bind:name="addon.name" v-bind:onClick="createAddon">{{addon.name}}</BaseButton>
-          <div class="addon-info">({{addon.descr}})</div>
+          Eine
+          <BaseButton
+            class="addon-button"
+            v-bind:name="addon.name"
+            v-bind:onClick="createAddon"
+          >{{addon.name}}</BaseButton>
+          <div class="addon-info">{{addon.descr}}.</div>
         </li>
       </ul>
     </div>
@@ -94,10 +99,7 @@ export default {
       for (let i = 0; i < this.ruleTree.rules.length; i++) {
         if (!dutyAdded && this.ruleTree.rules[i].type == RuleTypes.Permission) {
           addon.push(
-            new Addon(
-              "Verpflichtung",
-              "erlaubt wird dann nur, wenn alle Verpflichtungen erfüllt sind"
-            )
+            new Addon(RuleTypes.Duty.name, RuleTypes.Duty.description)
           );
           dutyAdded = true;
         } else if (
@@ -105,10 +107,7 @@ export default {
           this.ruleTree.rules[i].type == RuleTypes.Prohibition
         ) {
           addon.push(
-            new Addon(
-              "Strafe",
-              "muss geleistet werden, falls das Verbot missachtet wird"
-            )
+            new Addon(RuleTypes.Remedy.name, RuleTypes.Remedy.description)
           );
           remedyAdded = true;
         } else if (
@@ -118,8 +117,8 @@ export default {
         ) {
           addon.push(
             new Addon(
-              "Konsequenz",
-              "muss geleistet werden, falls die dazugehörige Verpflichtung nicht erfüllt wird"
+              RuleTypes.Consequence.name,
+              RuleTypes.Consequence.description
             )
           );
           consequenceAdded = true;
@@ -132,7 +131,7 @@ export default {
       let dutyType = null;
       if (name == "Konsequenz") {
         dutyType = RuleTypes.Consequence;
-      } else if (name == "Verpflichtung") {
+      } else if (name == "Pflicht") {
         dutyType = RuleTypes.Duty;
       } else if (name == "Strafe") {
         dutyType = RuleTypes.Remedy;
@@ -162,10 +161,9 @@ export default {
 
 .addon-info {
   display: inline-block;
-  font-size: 0.9em;
 }
 
 .addon-button {
-  margin-left: 0px;
+  margin-left: 5px;
 }
 </style>

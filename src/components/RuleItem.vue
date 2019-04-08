@@ -1,15 +1,15 @@
 <template>
   <div class="container">
     <div class="header">
-      <b>{{ rule.type.name }}</b>
+      <b>
+        {{ rule.type.name }}
+        <i v-bind:class="rule.type.icon"></i>
+      </b>
       <BaseButton remove class="remove-button" v-bind:onClick="removeRule">
         <i class="far fa-trash-alt"></i>
       </BaseButton>
     </div>Das
-    <ActionItem v-bind:action="rule.action">
-      {{ rule.type.description }}
-      <i v-bind:class="rule.type.icon"></i>
-    </ActionItem>
+    <ActionItem v-bind:action="rule.action">{{ rule.type.description }}</ActionItem>
   </div>
 </template>
 
@@ -41,7 +41,7 @@ export default {
 
 <style scoped>
 .container {
-  width: 600px;
+  width: 800px;
   margin: 10px;
   margin-left: 0px;
   padding: 20px;
