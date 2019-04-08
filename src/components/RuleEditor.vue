@@ -199,6 +199,18 @@ export default {
 };
 </script>
 
+<style>
+a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #1f3b70;
+}
+
+a:hover,
+a:focus {
+}
+</style>
+
 <style scoped>
 ul {
   padding-inline-start: 0px;
