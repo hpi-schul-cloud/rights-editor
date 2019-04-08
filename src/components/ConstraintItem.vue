@@ -6,26 +6,24 @@
       v-on:abort="hideConstraintChooser()"
     ></ConstraintChooser>
     <div>
-      Bedingung:
-      <br>
+      Bedingung:<br>
       <BaseButton
         input
         v-bind:width="'600px'"
         v-bind:onClick="showConstraintChooser"
         name="constraint"
         type="button"
-      >{{ constraint.name }}</BaseButton>
+      >{{ name }}</BaseButton>
       <BaseButton
         remove
-        v-if="constraint.name != '<leer>'"
-        v-bind:onClick="function () {$emit('remove-constraint', constraint.id);}"
+        v-if="name != '<leer>'"
+        v-bind:onClick="function () {$emit('remove-constraint');}"
       >&times;</BaseButton>
     </div>
   </div>
 </template>
 
 <script>
-import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 import ConstraintChooser from "./ConstraintChooser.vue";
 import BaseButton from "./BaseButton.vue";
 
@@ -41,10 +39,14 @@ export default {
     };
   },
   props: {
-    constraint: {
+    policy: {
       type: Object,
+      required: true,
+    },
+    path: {
+      type: Array,
       required: true
-    }
+    },
   },
   methods: {
     showConstraintChooser: function() {
@@ -56,6 +58,11 @@ export default {
     constraintChosen: function(chosenConstraint) {
       this.hideConstraintChooser();
       this.$emit("constraint-chosen", chosenConstraint);
+    }
+  },
+  computed: {
+    name() {
+
     }
   }
 };

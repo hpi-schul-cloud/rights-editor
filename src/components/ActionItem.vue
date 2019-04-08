@@ -1,8 +1,8 @@
 <template>
   <div>
     <ActionChooser
-      v-if="actionChooserSettings.displayActionChooser"
-      v-bind:allowAbort="actionChooserSettings.allowAbort"
+      v-if="actionChooserShouldDisplay"
+      v-bind:actionChooserAllowAbort="actionChooserAllowAbort"
       v-on:chosen="hideActionChooser(); action = $event"
       v-on:abort="hideActionChooser()"
     ></ActionChooser>Aktion:
@@ -15,41 +15,25 @@
         name="action"
         type="button"
       >{{ action }}</BaseButton>
-      <br>
-      <ConstraintItem
-        v-for="constraint in constraints"
-        v-bind:key="constraint.id"
-        v-bind:constraint="constraint"
-        v-on:constraint-chosen="setConstraint($event)"
-        v-on:remove-constraint="removeConstraint($event)"
-      ></ConstraintItem>
     </div>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
-import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
-import { Constraint } from "../libs/ODRL/constraint";
 import BaseButton from "./BaseButton.vue";
-import ConstraintItem from "./ConstraintItem";
 import ActionChooser from "./ActionChooser.vue";
 
 export default {
   name: "ActionItem",
   components: {
-    ConstraintItem,
     ActionChooser,
     BaseButton
   },
   data: function() {
     return {
-      nextId: 0,
-      constraints: [],
-      actionChooserSettings: {
-        displayActionChooser: false,
-        allowAbort: true
-      }
+      actionChooserShouldDisplay: false,
+      actionChooserAllowAbort: true
     };
   },
   props: {
@@ -63,10 +47,6 @@ export default {
     }
   },
   created: function() {
-    this.constraints.push(new Constraint(this.nextId));
-    this.nextId++;
-  },
-  mounted: function() {
     this.showActionChooser(false);
   },
   methods: {
@@ -74,26 +54,13 @@ export default {
       this.showActionChooser(true);
     },
     showActionChooser: function(allowAbort) {
-      this.actionChooserSettings.displayActionChooser = true;
-      this.actionChooserSettings.allowAbort = allowAbort;
+      this.actionChooserShouldDisplay = true;
+      this.actionChooserAllowAbort = allowAbort;
     },
     hideActionChooser: function() {
-      this.actionChooserSettings.displayActionChooser = false;
-      this.actionChooserSettings.allowAbort = true;
+      this.actionChooserShouldDisplay = false;
+      this.actionChooserAllowAbort = true;
     },
-    setConstraint: function(constraint) {
-      constraint.id = this.nextId;
-      this.action.constraint = constraint;
-      this.constraints.push(constraint);
-      this.nextId++;
-    },
-    removeConstraint: function(id) {
-      for (let i = 0; i < this.constraints.length; i++) {
-        if (this.constraints[i].id == id) {
-          this.constraints.splice(i, 1);
-        }
-      }
-    }
   },
   computed: {
     rule() {

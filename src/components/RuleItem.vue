@@ -2,6 +2,7 @@
   <div>
     <h3>{{ ruleLabel }}</h3>
     <ActionItem class="action-item" v-bind:policy="policy" v-bind:path="[...path, 'action']"></ActionItem>
+    <ConstraintItem v-for="(refinement, index) in refinements" v-bind:key="index" v-bind:policy="policy" v-bind:path="[...path, 'refinement', index]"></ConstraintItem>
     <BaseButton v-bind:onClick="appendNewSubrule">{{ subruleLabel }} hinzufügen</BaseButton>
 
     <div class="subrule-section">
@@ -13,11 +14,13 @@
 <script>
 import Vue from 'vue';
 import ActionItem from "./ActionItem.vue";
+import ConstraintItem from "./ConstraintItem";
 import BaseButton from "./BaseButton.vue";
 
 export default {
   name: "RuleItem",
   components: {
+    ConstraintItem,
     BaseButton,
     ActionItem
   },
@@ -59,10 +62,14 @@ export default {
     subruleKey() {
       // TODO: consequences can't have consequences, can they?
       return {'permission': 'duty', 'prohibition': 'remedy', 'obligation': 'consequence',
-        'duty': 'consequence', 'prohibition': 'consequence', 'consequence': 'consequence'}[this.ruleKey];
+        'duty': 'consequence', 'remedy': 'consequence', 'consequence': 'consequence'}[this.ruleKey];
     },
     subruleLabel() {
       return {'duty': 'Vorbedingung', 'remedy': 'Wiedergutmachung bei Regelverletzung', 'consequence': 'Zusätzliche Pflicht bei Nichteinhaltung'}[this.subruleKey];
+    },
+    refinements() {
+      let refs = this.path.reduce((result, segment) => result[segment], this.policy);
+      return refs ? refs : [];
     }
   }
 };
