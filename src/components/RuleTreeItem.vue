@@ -18,7 +18,8 @@
             v-bind:name="addon.name"
             v-bind:onClick="createAddon"
           >{{addon.name}}</BaseButton>
-          <div class="addon-info">{{addon.descr}}.</div>
+          <!-- TODO: link to the parent rule -->
+          <div class="addon-info">{{addon.descriptionBefore}} <a href="#">{{addon.descriptionLink}}</a> {{addon.descriptionAfter}}.</div>
         </li>
       </ul>
     </div>
@@ -29,13 +30,6 @@
 import { Rule, RuleTypes, RuleTree } from "../libs/rules/rules.js";
 import RuleItem from "./RuleItem.vue";
 import BaseButton from "./BaseButton.vue";
-
-class Addon {
-  constructor(name, descr) {
-    this.name = name;
-    this.descr = descr;
-  }
-}
 
 export default {
   name: "RuleTreeItem",
@@ -98,29 +92,20 @@ export default {
       let consequenceAdded = false;
       for (let i = 0; i < this.ruleTree.rules.length; i++) {
         if (!dutyAdded && this.ruleTree.rules[i].type == RuleTypes.Permission) {
-          addon.push(
-            new Addon(RuleTypes.Duty.name, RuleTypes.Duty.description)
-          );
+          addon.push(RuleTypes.Duty);
           dutyAdded = true;
         } else if (
           !remedyAdded &&
           this.ruleTree.rules[i].type == RuleTypes.Prohibition
         ) {
-          addon.push(
-            new Addon(RuleTypes.Remedy.name, RuleTypes.Remedy.description)
-          );
+          addon.push(RuleTypes.Remedy);
           remedyAdded = true;
         } else if (
           !consequenceAdded &&
           (this.ruleTree.rules[i].type == RuleTypes.Duty ||
             this.ruleTree.rules[i].type == RuleTypes.Obligation)
         ) {
-          addon.push(
-            new Addon(
-              RuleTypes.Consequence.name,
-              RuleTypes.Consequence.description
-            )
-          );
+          addon.push(RuleTypes.Consequence);
           consequenceAdded = true;
         }
       }
@@ -164,6 +149,6 @@ export default {
 }
 
 .addon-button {
-  margin-left: 5px;
+  margin-left: 6px;
 }
 </style>

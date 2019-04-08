@@ -9,7 +9,7 @@
         <i class="far fa-trash-alt"></i>
       </BaseButton>
     </div>Das
-    <ActionItem v-bind:action="rule.action">{{ rule.type.description }}</ActionItem>
+    <ActionItem v-bind:action="rule.action">{{rule.type.descriptionBefore}} <a href="#">{{rule.type.descriptionLink}}</a> {{rule.type.descriptionAfter}}</ActionItem>
   </div>
 </template>
 
@@ -41,7 +41,7 @@ export default {
 
 <style scoped>
 .container {
-  width: 800px;
+  width: 95%;
   margin: 10px;
   margin-left: 0px;
   padding: 20px;
