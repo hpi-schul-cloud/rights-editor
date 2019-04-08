@@ -14,7 +14,7 @@ export default {
   name: "BaseButton",
   props: {
     width: {
-      default: "",
+      default: "auto",
       type: String,
       required: false
     },
@@ -29,7 +29,6 @@ export default {
 
 <style scoped>
 .base-button {
-  /*font-family: "Montserrat", sans-serif;*/
   font-family: "Roboto", sans-serif;
   color: white;
   display: inline-block;
@@ -66,11 +65,11 @@ export default {
 
   font-family: inherit;
   font-size: 1em;
-  text-align: left;
 
   margin: 10px;
   padding: 10px;
-  margin-left: 0px;
+  margin-left: 5px;
+  margin-right: 5px;
 
   border-bottom: none;
   box-shadow: inset 0 0 1.5px #000;
@@ -78,14 +77,12 @@ export default {
 }
 
 .base-button-remove {
-  display: inline-block;
   background-color: transparent;
-  color: #880000;
+  color: black;
   font-weight: bold;
-  font-size: 32px;
-  width: 20px;
+  width: 22px;
   height: 32px;
-  margin: 0;
+  margin: 8px;
   padding: 0;
 }
 </style>

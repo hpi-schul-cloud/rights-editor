@@ -2,7 +2,7 @@
   <div class="rule-editor">
     <div class="header">
       <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
-      <BaseButton v-bind:onClick="newObligation">Verpflichtung</BaseButton>
+      <BaseButton v-bind:onClick="newObligation">Pflicht</BaseButton>
       <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
       <span class="licence-name">
         GUID der Lizenz:
@@ -11,14 +11,12 @@
       <BaseButton class="float-right" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
     </div>
     <div class="container">
-      <ul>
-        <RuleTreeItem
-          v-on:remove-tree="updateTrees($event)"
-          v-for="ruleTree in ruleTrees"
-          v-bind:ruleTree="ruleTree"
-          v-bind:key="ruleTree.id"
-        ></RuleTreeItem>
-      </ul>
+      <RuleTreeItem
+        v-on:remove-tree="updateTrees($event)"
+        v-for="ruleTree in ruleTrees"
+        v-bind:ruleTree="ruleTree"
+        v-bind:key="ruleTree.id"
+      ></RuleTreeItem>
     </div>
     <pre>{{policy}}</pre>
   </div>
@@ -29,8 +27,8 @@ import BaseButton from "./BaseButton.vue";
 import BaseInput from "./BaseInput.vue";
 import Action from "./ActionItem.vue";
 
-import { Rule, RuleTypes } from "./RuleItem.vue";
-import RuleTreeItem, { RuleTree } from "./RuleTreeItem.vue";
+import { Rule, RuleTypes, RuleTree } from "../libs/rules/rules.js";
+import RuleTreeItem from "./RuleTreeItem.vue";
 import { Odrl } from "../libs/rightsml-lib-js/ODRLclasses";
 import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
 
@@ -200,6 +198,18 @@ export default {
   }
 };
 </script>
+
+<style>
+a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #1f3b70;
+}
+
+a:hover,
+a:focus {
+}
+</style>
 
 <style scoped>
 ul {

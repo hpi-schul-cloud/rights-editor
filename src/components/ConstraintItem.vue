@@ -8,20 +8,17 @@
       v-bind:constraintToEdit="constraint"
     ></ConstraintChooser>
     <div>
-      Einschränkung:
-      <br>
       <BaseButton
         input
-        v-bind:width="'600px'"
+        v-bind:width="'500px'"
         v-bind:onClick="showConstraintChooser"
+        class="constraint-button"
         name="constraint"
         type="button"
       >{{ constraint.name }}</BaseButton>
-      <BaseButton
-        remove
-        v-if="constraint.name != '<leer>'"
-        v-bind:onClick="function () {$emit('remove-constraint', constraint.id);}"
-      >&times;</BaseButton>
+      <BaseButton remove v-bind:onClick="function () {$emit('remove-constraint', constraint.id);}">
+        <i class="fas fa-times"></i>
+      </BaseButton>
     </div>
   </div>
 </template>
@@ -66,3 +63,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.constraint-button {
+  margin: 0px;
+}
+</style>

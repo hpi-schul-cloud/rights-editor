@@ -1,42 +1,35 @@
 <template>
-  <li class="rule-tree-li">
+  <div class="tree-container">
     <RuleItem
       v-on:remove-rule="updateRules($event)"
       v-for="rule in ruleTree.rules"
       v-bind:rule="rule"
       v-bind:key="rule.id"
-      v-bind:style="{ marginLeft: getRuleMargin(rule.type) + 'px', paddingLeft: 10 + 'px' }"
     ></RuleItem>
 
     <div class="addon-container" v-if="getPossibleAddons() != null">
-      Füge optional Erweiterungen hinzu:<br>
+      <i>Optional können folgende Erweiterungen hinzugefügt werden:</i>
+      <br>
       <ul class="addon-ul">
         <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
-          <BaseButton v-bind:name="addon.name" v-bind:onClick="createAddon">{{addon.name}}</BaseButton>
-          <div class="addon-info">({{addon.descr}})</div>
+          Eine
+          <BaseButton
+            class="addon-button"
+            v-bind:name="addon.name"
+            v-bind:onClick="createAddon"
+          >{{addon.name}}</BaseButton>
+          <!-- TODO: link to the parent rule -->
+          <div class="addon-info">{{addon.descriptionBefore}} <a href="#">{{addon.descriptionLink}}</a> {{addon.descriptionAfter}}</div>
         </li>
       </ul>
     </div>
-  </li>
+  </div>
 </template>
 
 <script>
-import RuleItem, { Rule, RuleTypes } from "./RuleItem.vue";
+import { Rule, RuleTypes, RuleTree } from "../libs/rules/rules.js";
+import RuleItem from "./RuleItem.vue";
 import BaseButton from "./BaseButton.vue";
-
-export class RuleTree {
-  constructor(id, type) {
-    this.id = id;
-    this.rules = [];
-  }
-}
-
-class Addon {
-  constructor(name, descr) {
-    this.name = name;
-    this.descr = descr;
-  }
-}
 
 export default {
   name: "RuleTreeItem",
@@ -99,35 +92,20 @@ export default {
       let consequenceAdded = false;
       for (let i = 0; i < this.ruleTree.rules.length; i++) {
         if (!dutyAdded && this.ruleTree.rules[i].type == RuleTypes.Permission) {
-          addon.push(
-            new Addon(
-              "Verpflichtung",
-              "erlaubt wird dann nur, wenn alle Verpflichtungen erfüllt sind"
-            )
-          );
+          addon.push(RuleTypes.Duty);
           dutyAdded = true;
         } else if (
           !remedyAdded &&
           this.ruleTree.rules[i].type == RuleTypes.Prohibition
         ) {
-          addon.push(
-            new Addon(
-              "Strafe",
-              "muss geleistet werden, falls das Verbot missachtet wird"
-            )
-          );
+          addon.push(RuleTypes.Remedy);
           remedyAdded = true;
         } else if (
           !consequenceAdded &&
           (this.ruleTree.rules[i].type == RuleTypes.Duty ||
             this.ruleTree.rules[i].type == RuleTypes.Obligation)
         ) {
-          addon.push(
-            new Addon(
-              "Konsequenz",
-              "muss geleistet werden, falls die dazugehörige Verpflichtung nicht erfüllt wird"
-            )
-          );
+          addon.push(RuleTypes.Consequence);
           consequenceAdded = true;
         }
       }
@@ -138,7 +116,7 @@ export default {
       let dutyType = null;
       if (name == "Konsequenz") {
         dutyType = RuleTypes.Consequence;
-      } else if (name == "Verpflichtung") {
+      } else if (name == "Pflicht") {
         dutyType = RuleTypes.Duty;
       } else if (name == "Strafe") {
         dutyType = RuleTypes.Remedy;
@@ -153,27 +131,24 @@ export default {
 </script>
 
 <style scoped>
+.tree-container {
+  padding: 10px;
+}
+
 .addon-container {
   margin-top: 35px;
-  margin-bottom: 20px;
-  margin-left: -20px;
 }
 
 .addon-ul {
-  margin-left: 0px !important;
-  padding-inline-start: 0px !important;
+  margin-left: 0px;
+  padding-inline-start: 0px;
 }
 
 .addon-info {
   display: inline-block;
-  font-size: 0.9em;
 }
 
-.rule-tree-li {
-  border: 1px solid DarkGray;
-  padding-left: 50px;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+.addon-button {
+  margin-left: 6px;
 }
 </style>

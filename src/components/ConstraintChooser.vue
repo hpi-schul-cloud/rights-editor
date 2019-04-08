@@ -1,7 +1,8 @@
 <template>
   <BaseModal v-bind:width="'1000px'" v-bind:scrollable="false">
     <template v-slot:header>
-      <h1>Einschränkung festlegen</h1>
+      <h1 v-if="constraintToEdit == null">Einschränkung hinzufügen</h1>
+      <h1 v-else>Einschränkung bearbeiten</h1>
       <div class="hidden">{{ forceRerender }}</div>
     </template>
     <template v-slot:body>
