@@ -35,7 +35,7 @@ export default {
 <style scoped>
 .mode-choosing a {
   display: block;
-  padding: 0.5em;
+  float: left;
 }
 </style>
 
