@@ -1,6 +1,6 @@
 <template>
-  <div class="rule-editor">
-    <div class="header">
+  <div>
+    <div class="editor-header">
       <BaseButton :on-click="newPermission">
         Erlaubnis
       </BaseButton>
@@ -29,7 +29,7 @@
       :path="['obligation', index]"
     />
 
-    <pre>{{ json }}</pre>
+    <pre>{{ policy }}</pre>
   </div>
 </template>
 
@@ -65,11 +65,6 @@ export default {
       },
     };
   },
-  computed: {
-    json() {
-      return JSON.stringify(this.policy);
-    },
-  },
   methods: {
     newPermission() {
       if (!this.policy.permission) {
@@ -103,18 +98,19 @@ a {
 
 a:hover,
 a:focus {
+  text-decoration: underline;
 }
 </style>
 
 <style scoped>
-.header {
+.editor-header {
   background-color: white;
   border-bottom: 5px solid gray;
   overflow: hidden;
 
   padding-bottom: 20px;
   padding-top: 20px;
-  width: calc(100% - 116px);
+  width: calc(100% - 20px);
 }
 
 .licence-name {
@@ -124,5 +120,8 @@ a:focus {
 input.guid-input {
   margin-left: 10px;
   width: 175px;
+}
+
+pre {
 }
 </style>

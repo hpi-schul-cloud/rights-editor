@@ -56,7 +56,7 @@ export default {
     action: {
       get() {
         if (!this.rule.action) {
-          Vue.set(this.rule, 'action', '');
+          Vue.set(this.rule, 'action', '<Aktion auswählen>');
         }
         return this.rule.action;
       },

@@ -53,22 +53,35 @@ export default {
   computed: {
     constraint: {
       get() {
-        const c = this.path.reduce((result, segment) => result[segment], this.policy);
+        const c = this.path.reduce(
+          (result, segment) => result[segment],
+          this.policy,
+        );
         return c || { name: 'Einschränkung hinzufügen' };
       },
       set(newConstraint) {
-        Vue.set(this.constraintParent, this.path[this.path.length - 1], newConstraint);
+        Vue.set(
+          this.constraintParent,
+          this.path[this.path.length - 1],
+          newConstraint,
+        );
       },
     },
     constraintParent() {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
-      return pathWithoutLastElement.reduce((result, segment) => result[segment], this.policy);
+      return pathWithoutLastElement.reduce(
+        (result, segment) => result[segment],
+        this.policy,
+      );
     },
   },
   methods: {
     abortChooser() {
       this.hideConstraintChooser();
-      const c = this.path.reduce((result, segment) => result[segment], this.policy);
+      const c = this.path.reduce(
+        (result, segment) => result[segment],
+        this.policy,
+      );
       if (!c) {
         this.removeConstraint();
       }
@@ -80,6 +93,7 @@ export default {
       this.displayConstraintChooser = false;
     },
     removeConstraint() {
+      // delete in array: this.constraintParent at index: this.path[this.path.length - 1]
       Vue.delete(this.constraintParent, this.path[this.path.length - 1]);
       if (this.constraintParent.length === 0) {
         const parentsParent = this.path
