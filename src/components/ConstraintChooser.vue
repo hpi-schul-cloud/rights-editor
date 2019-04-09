@@ -313,12 +313,7 @@ export default {
         constraint.name += ` ${constraint.unit}`;
       }
 
-      if (this.constraintToEdit != null) {
-        constraint.id = this.constraintToEdit.id;
-        this.$emit('edited', constraint);
-      } else {
-        this.$emit('chosen', constraint);
-      }
+      this.$emit('chosen', constraint);
     },
   },
 };

@@ -12,39 +12,35 @@
       </BaseButton>
       <span class="licence-name">
         GUID der Lizenz:
-        <BaseInput
-          v-model="licenceName"
-          undercover
-          class="guid-input"
-        />
+        <BaseInput v-model="policy['uid']" undercover class="guid-input" />
       </span>
-      <BaseButton
-        class="float-right"
-        big
-        :on-click="generateLicence"
-      >
-        Generate Licence
-      </BaseButton>
     </div>
-    <div class="container">
-      <RuleTreeItem
-        v-for="ruleTree in ruleTrees"
-        :key="ruleTree.id"
-        :rule-tree="ruleTree"
-        @remove-tree="updateTrees($event)"
-      />
-    </div>
-    <pre>{{ policy }}</pre>
+
+    <RuleItem
+      v-for="(rule, index) in policy['permission']" :key="rule.uid" :policy="policy"
+      :path="['permission', index]"
+    />
+    <RuleItem
+      v-for="(rule, index) in policy['prohibition']" :key="rule.uid" :policy="policy"
+      :path="['prohibition', index]"
+    />
+    <RuleItem
+      v-for="(rule, index) in policy['obligation']" :key="rule.uid" :policy="policy"
+      :path="['obligation', index]"
+    />
+
+    <pre>{{ json }}</pre>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
+
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import Action from './ActionItem.vue';
 
-import { Rule, RuleTypes, RuleTree } from '../libs/rules/rules.js';
-import RuleTreeItem from './RuleTreeItem.vue';
+import RuleItem from './RuleItem.vue';
 import { Odrl } from '../libs/rightsml-lib-js/ODRLclasses';
 import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
 
@@ -53,163 +49,46 @@ export default {
   components: {
     BaseButton,
     BaseInput,
-    RuleTreeItem,
+    RuleItem,
   },
   data() {
     return {
-      ruleTrees: [],
-      nextId: 0,
-      licenceName: '007',
-      policy: '',
+      policy: {
+        uid: '007-asdf-3ddfi',
+        follow(path) {
+          let result = this;
+          path.forEach((segment) => {
+            result = result[segment];
+          });
+          return result;
+        },
+      },
     };
+  },
+  computed: {
+    json() {
+      return JSON.stringify(this.policy);
+    },
   },
   methods: {
     newPermission() {
-      this.newRule(RuleTypes.Permission);
+      if (!this.policy.permission) {
+        Vue.set(this.policy, 'permission', []);
+      }
+      const p = this.policy.permission;
+      Vue.set(p, p.length, {});
     },
     newObligation() {
-      this.newRule(RuleTypes.Obligation);
+      if (!this.policy.obligation) {
+        Vue.set(this.policy, 'obligation', []);
+      }
+      this.policy.obligation.push({});
     },
     newProhibition() {
-      this.newRule(RuleTypes.Prohibition);
-    },
-    newRule(type) {
-      const newID = this.nextId++;
-      const ruleTree = new RuleTree(newID, type);
-      ruleTree.rules.push(new Rule(0, type));
-      this.ruleTrees.push(ruleTree);
-    },
-    updateTrees(tree_id) {
-      for (let i = 0; i < this.ruleTrees.length; i++) {
-        if (this.ruleTrees[i].id == tree_id) {
-          this.ruleTrees[i].rules = [];
-          this.ruleTrees.splice(i, 1);
-        }
+      if (!this.policy.prohibition) {
+        Vue.set(this.policy, 'prohibition', []);
       }
-    },
-    scrollToEnd() {
-      // TODO: make this work
-      const container = this.$el.querySelector('#container');
-      console.log(container);
-      container.scrollTop = container.scrollHeight;
-    },
-    generateLicence() {
-      const policy = new Odrl.Policy(this.licenceName, 'set');
-      const targetAsset = 'target_asset';
-      const assigner = 'assigner_party';
-      const assignee = 'assignee_party';
-
-      for (let i = 0; i < this.ruleTrees.length; i++) {
-        for (let j = 0; j < this.ruleTrees[i].rules.length; j++) {
-          const currentRule = this.ruleTrees[i].rules[j];
-
-          if (currentRule.type == RuleTypes.Permission) {
-            this.addPermissionToPolicy(i, policy);
-          } else if (currentRule.type == RuleTypes.Obligation) {
-            this.addObligationToPolicy(i, policy);
-          } else if (currentRule.type == RuleTypes.Prohibition) {
-            this.addProhibitionToPolicy(i, policy);
-          }
-        }
-      }
-
-      this.policy = policy.serializeJson();
-    },
-    addPermissionToPolicy(ruleTreeIndex, policy) {
-      const permission = new Odrl.Permission();
-      const firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
-
-      permission.setAction(firstRule.action.name);
-      for (let i = 0; i < firstRule.action.constraints.length; i++) {
-        permission.addConstraint(
-          firstRule.action.constraints[i].leftOperand,
-          firstRule.action.constraints[i].operator,
-          firstRule.action.constraints[i].rightOperandStr,
-          null,
-          firstRule.action.constraints[i].unit,
-          null,
-        );
-      }
-
-      const duties = [];
-      for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
-        const currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
-        if (currentRule.type == RuleTypes.Duty) {
-          duties.push(new Odrl.Duty());
-          duties[duties.length - 1].setAction(currentRule.action.name);
-          for (let l = 0; l < currentRule.action.constraints.length; l++) {
-            console.log(currentRule.action);
-            duties[duties.length - 1].addConstraint(
-              currentRule.action.constraints[l].leftOperand,
-              currentRule.action.constraints[l].operator,
-              currentRule.action.constraints[l].rightOperandStr,
-              null,
-              currentRule.action.constraints[l].unit,
-              null,
-            );
-          }
-        } else if (currentRule.type == RuleTypes.Consequence) {
-          const cons = new Odrl.Failure();
-          cons.setAction(currentRule.action.name);
-          duties[duties.length - 1].addConsequence(cons);
-        }
-      }
-      for (let k = 0; k < duties.length; k++) {
-        permission.addDuty(duties[k]);
-      }
-      policy.addPermission(permission);
-    },
-    addObligationToPolicy(ruleTreeIndex, policy) {
-      const obligation = new Odrl.Duty();
-      const firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
-
-      obligation.setAction(firstRule.action.name);
-      for (let l = 0; l < firstRule.action.constraints.length; l++) {
-        obligation.addConstraint(
-          firstRule.action.constraints[l].leftOperand,
-          firstRule.action.constraints[l].operator,
-          firstRule.action.constraints[l].rightOperandStr,
-          null,
-          firstRule.action.constraints[l].unit,
-          null,
-        );
-      }
-      for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
-        const currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
-        if (currentRule.type == RuleTypes.Consequence) {
-          const cons = new Odrl.Failure();
-          cons.setAction(currentRule.action.name);
-          obligation.addConsequence(cons);
-        }
-      }
-      policy.addDuty(obligation);
-    },
-    addProhibitionToPolicy(ruleTreeIndex, policy) {
-      const prohibition = new Odrl.Prohibition();
-      const firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
-
-      prohibition.setAction(firstRule.action.name);
-
-      for (let l = 0; l < firstRule.action.constraints.length; l++) {
-        prohibition.addConstraint(
-          firstRule.action.constraints[l].leftOperand,
-          firstRule.action.constraints[l].operator,
-          firstRule.action.constraints[l].rightOperandStrStr,
-          null,
-          firstRule.action.constraints[l].unit,
-          null,
-        );
-      }
-
-      for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
-        const currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
-        if (currentRule.type == RuleTypes.Remedy) {
-          const rem = new Odrl.Failure();
-          rem.setAction(currentRule.action.name);
-          prohibition.addRemedy(rem);
-        }
-      }
-      policy.addProhibition(prohibition);
+      this.policy.prohibition.push({});
     },
   },
 };
@@ -228,33 +107,18 @@ a:focus {
 </style>
 
 <style scoped>
-ul {
-  padding-inline-start: 0px;
-}
-
 .header {
-  z-index: 100;
   background-color: white;
   border-bottom: 5px solid gray;
   overflow: hidden;
-  position: fixed;
 
   padding-bottom: 20px;
   padding-top: 20px;
-  top: 0;
   width: calc(100% - 116px);
-}
-
-.container {
-  margin-top: 100px;
 }
 
 .licence-name {
   margin-left: 20px;
-}
-
-button.float-right {
-  float: right;
 }
 
 input.guid-input {

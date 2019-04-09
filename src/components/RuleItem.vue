@@ -1,36 +1,24 @@
 <template>
-  <div class="container">
-    <!-- header with title and remove button -->
-    <div class="header">
-      <b>
-        {{ rule.type.name }}
-        <i :class="rule.type.icon" />
-      </b>
-      <BaseButton
-        remove
-        class="remove-button"
-        :on-click="removeRule"
-      >
-        <i class="far fa-trash-alt" />
-      </BaseButton>
-    </div>
+  <div>
+    <h3>{{ ruleLabel }} <i :class="ruleInfo.icon" /></h3>
+    <BaseButton remove class="remove-button" :on-click="removeRule">
+      <i class="far fa-trash-alt" />
+    </BaseButton>
 
     <!-- display action -->
     Das
-    <ActionItem :action="rule.action" />
-    {{ rule.type.descriptionBefore }}
+    <ActionItem class="action-item" :policy="policy" :path="[...path, 'action']" />
+    {{ ruleInfo.descriptionBefore }}
     <a href="#">
-      {{ rule.type.descriptionLink }}
+      {{ ruleInfo.descriptionLink }}
     </a>
-    {{ rule.type.descriptionAfter }}
+    {{ ruleInfo.descriptionAfter }}
 
     <!-- add new refinement -->
-    <br>
-    <br>Das
+    Das
     <a href="#">
-      {{ rule.action.name }}
+      {{ rule['action'] }}
     </a> darf nur auf die folgende Art und Weise erfolgen...
-    <br>
     <BaseButton
       class="add-button"
       :on-click="function(){/* TODO: implement this functionality */}"
@@ -39,61 +27,56 @@
     </BaseButton>
 
     <!-- display and edit constraints -->
-    <div class="constraint-container">
-      <div class="constraint-text">
-        <span>
-          <br>Insgesamt gilt die
-          <a href="#">
-            {{ rule.type.name }}
-          </a> nur, wenn...
-        </span>
-      </div>
-      <ConstraintItem
-        v-for="constraint in rule.action.constraints"
-        :key="constraint.id"
-        class="constraint-edit"
-        :constraint="constraint"
-        @constraint-chosen="setConstraint($event)"
-        @constraint-edited="editConstraint($event)"
-        @remove-constraint="removeConstraint($event)"
-      />
+    Insgesamt gilt die
+    <a href="#">
+      {{ ruleLabel }}
+    </a> nur, wenn...
+    <ConstraintItem
+      v-for="(constraint, index) in constraints" :key="index" :policy="policy"
+      :path="[...path, 'constraint', index]"
+    />
+    <!-- add new constraint -->
+    <BaseButton class="add-button" :on-click="addConstraint">
+      Einschränkung hinzufügen
+    </BaseButton>
+    <BaseButton :on-click="appendNewSubrule">
+      {{ subruleLabel }} hinzufügen
+    </BaseButton>
 
-      <!-- add new constraint -->
-      <BaseButton
-        class="add-button"
-        :on-click="showConstraintChooser"
-      >
-        Einschränkung hinzufügen
-      </BaseButton>
-      <ConstraintChooser
-        v-if="displayConstraintChooser"
-        @chosen="setConstraint($event)"
-        @abort="hideConstraintChooser()"
+    <div class="subrule-section">
+      <RuleItem
+        v-for="(subrule, index) in rule[subruleType]" :key="index" :policy="policy"
+        :path="[...path, subruleType, index]"
       />
     </div>
   </div>
 </template>
 
 <script>
-import BaseButton from './BaseButton.vue';
-import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
-import { Rule, RuleTypes } from '../libs/rules/rules.js';
-import ActionItem, { Action } from './ActionItem.vue';
-import { Constraint } from '../libs/constraints/constraints';
+import Vue from 'vue';
+import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem';
+import BaseButton from './BaseButton.vue';
 import ConstraintChooser from './ConstraintChooser.vue';
+
+import { RuleTypes } from '../libs/rules/rules.js';
 
 export default {
   name: 'RuleItem',
   components: {
+    ConstraintItem,
     BaseButton,
     ActionItem,
     ConstraintItem,
     ConstraintChooser,
   },
   props: {
-    rule: {
+    policy: {
       type: Object,
+      required: true,
+    },
+    path: {
+      type: Array,
       required: true,
     },
   },
@@ -103,9 +86,60 @@ export default {
       nextId: 0,
     };
   },
+  computed: {
+    rule() {
+      const r = this.path.reduce((result, segment) => result[segment], this.policy);
+      return r;
+    },
+    ruleType() {
+      return this.path[this.path.length - 2];
+    },
+    ruleLabel() {
+      return {
+        permission: 'Erlaubnis',
+        prohibition: 'Verbot',
+        obligation: 'Verpflichtung',
+        duty: 'Vorbedingung',
+        remedy: 'Wiedergutmachung',
+        consequence: 'Zusätzliche Pflicht',
+      }[this.ruleType];
+    },
+    subruleType() {
+      // TODO: consequences can't have consequences, can they?
+      return {
+        permission: 'duty',
+        prohibition: 'remedy',
+        obligation: 'consequence',
+        duty: 'consequence',
+        remedy: 'consequence',
+        consequence: 'consequence',
+      }[this.ruleType];
+    },
+    subruleLabel() {
+      return { duty: 'Vorbedingung', remedy: 'Wiedergutmachung bei Regelverletzung', consequence: 'Zusätzliche Pflicht bei Nichteinhaltung' }[this.subruleType];
+    },
+    constraints() {
+      return this.rule.constraint;
+    },
+    ruleInfo() {
+      return RuleTypes[this.ruleType];
+    },
+  },
   methods: {
+    furtherPath(nameSegment, indexSegment) {
+      const p = this.path.slice();
+      p.push(nameSegment, indexSegment);
+      return p;
+    },
+    appendNewSubrule() {
+      if (!this.rule[this.subruleType]) {
+        Vue.set(this.rule, this.subruleType, []);
+      }
+      this.rule[this.subruleType].push({});
+    },
     removeRule() {
-      this.$emit('remove-rule', this.rule.id);
+      // TODO
+      throw new Exception('not implemented yet');
     },
     showConstraintChooser() {
       this.displayConstraintChooser = true;
@@ -113,32 +147,21 @@ export default {
     hideConstraintChooser() {
       this.displayConstraintChooser = false;
     },
-    setConstraint(constraint) {
-      constraint.id = this.nextId;
-      this.rule.action.constraints.push(constraint);
-      this.nextId++;
-      this.hideConstraintChooser();
-    },
-    editConstraint(constraint) {
-      for (let i = 0; i < this.rule.action.constraints.length; i++) {
-        if (this.rule.action.constraints[i].id == constraint.id) {
-          this.rule.action.constraints[i] = constraint;
-        }
+    addConstraint() {
+      if (!this.constraints) {
+        Vue.set(this.rule, 'constraint', []);
       }
-      this.$forceUpdate();
-    },
-    removeConstraint(id) {
-      for (let i = 0; i < this.rule.action.constraints.length; i++) {
-        if (this.rule.action.constraints[i].id == id) {
-          this.rule.action.constraints.splice(i, 1);
-        }
-      }
+      this.constraints.push(null);
     },
   },
 };
 </script>
 
 <style scoped>
+.subrule-section {
+  margin-left: 20px;
+}
+
 .container {
   width: 95%;
   margin: 10px;

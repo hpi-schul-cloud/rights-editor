@@ -1,42 +1,29 @@
 <template>
   <div class="action-container">
     <ActionChooser
-      v-if="actionChooserSettings.displayActionChooser"
-      :allow-abort="actionChooserSettings.allowAbort"
-      @chosen="hideActionChooser(); action.name=$event"
+      v-if="actionChooserShouldDisplay"
+      :action-chooser-allow-abort="actionChooserAllowAbort"
+      @chosen="hideActionChooser(); action = $event"
       @abort="hideActionChooser()"
     />
 
     <!-- display and edit action -->
     <BaseButton
       input
-      :value="actionName"
       :on-click="showActionChooserWithAbort"
       list="actions"
       name="action"
       type="button"
     >
-      {{ action.name }}
+      {{ action }}
     </BaseButton>
   </div>
 </template>
 
 <script>
-import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
+import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import ActionChooser from './ActionChooser.vue';
-
-export class Action {
-  constructor(name, nsVocabUri) {
-    this.name = name;
-    this.nsVocabUri = nsVocabUri;
-    this.constraints = new Array();
-  }
-
-  name() {
-    return this.nsVocabUri.split('/').pop();
-  }
-}
 
 export default {
   name: 'ActionItem',
@@ -45,22 +32,37 @@ export default {
     BaseButton,
   },
   props: {
-    action: {
+    policy: {
       type: Object,
+      required: true,
+    },
+    path: {
+      type: Array,
       required: true,
     },
   },
   data() {
     return {
-      actionChooserSettings: {
-        displayActionChooser: false,
-        allowAbort: true,
-      },
+      actionChooserShouldDisplay: false,
+      actionChooserAllowAbort: true,
     };
   },
   computed: {
-    actionName() {
-      return this.action.name;
+    rule() {
+      return this.path
+        .slice(0, this.path.length - 1)
+        .reduce((result, segment) => result[segment], this.policy);
+    },
+    action: {
+      get() {
+        if (!this.rule.action) {
+          Vue.set(this.rule, 'action', '');
+        }
+        return this.rule.action;
+      },
+      set(newAction) {
+        this.rule.action = newAction;
+      },
     },
   },
   mounted() {
@@ -71,12 +73,12 @@ export default {
       this.showActionChooser(true);
     },
     showActionChooser(allowAbort) {
-      this.actionChooserSettings.displayActionChooser = true;
-      this.actionChooserSettings.allowAbort = allowAbort;
+      this.actionChooserShouldDisplay = true;
+      this.actionChooserAllowAbort = allowAbort;
     },
     hideActionChooser() {
-      this.actionChooserSettings.displayActionChooser = false;
-      this.actionChooserSettings.allowAbort = true;
+      this.actionChooserShouldDisplay = false;
+      this.actionChooserAllowAbort = true;
     },
   },
 };

@@ -3,9 +3,8 @@
     <ConstraintChooser
       v-if="displayConstraintChooser"
       :constraint-to-edit="constraint"
-      @chosen="constraintChosen($event)"
-      @abort="hideConstraintChooser()"
-      @edited="bla($event)"
+      @chosen="hideConstraintChooser(); constraint = $event"
+      @abort="abortChooser()"
     />
     <div>
       <BaseButton
@@ -18,10 +17,7 @@
       >
         {{ constraint.name }}
       </BaseButton>
-      <BaseButton
-        remove
-        :on-click="function () {$emit('remove-constraint', constraint.id);}"
-      >
+      <BaseButton remove :on-click="removeConstraint">
         <i class="fas fa-times" />
       </BaseButton>
     </div>
@@ -29,7 +25,7 @@
 </template>
 
 <script>
-import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
+import Vue from 'vue';
 import ConstraintChooser from './ConstraintChooser.vue';
 import BaseButton from './BaseButton.vue';
 
@@ -40,30 +36,57 @@ export default {
     BaseButton,
   },
   props: {
-    constraint: {
+    policy: {
       type: Object,
+      required: true,
+    },
+    path: {
+      type: Array,
       required: true,
     },
   },
   data() {
     return {
-      displayConstraintChooser: false,
+      displayConstraintChooser: true,
     };
   },
+  computed: {
+    constraint: {
+      get() {
+        const c = this.path.reduce((result, segment) => result[segment], this.policy);
+        return c || { name: 'Einschränkung hinzufügen' };
+      },
+      set(newConstraint) {
+        Vue.set(this.constraintParent, this.path[this.path.length - 1], newConstraint);
+      },
+    },
+    constraintParent() {
+      const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
+      return pathWithoutLastElement.reduce((result, segment) => result[segment], this.policy);
+    },
+  },
   methods: {
+    abortChooser() {
+      this.hideConstraintChooser();
+      const c = this.path.reduce((result, segment) => result[segment], this.policy);
+      if (!c) {
+        this.removeConstraint();
+      }
+    },
     showConstraintChooser() {
       this.displayConstraintChooser = true;
     },
     hideConstraintChooser() {
       this.displayConstraintChooser = false;
     },
-    constraintChosen(chosenConstraint) {
-      this.hideConstraintChooser();
-      this.$emit('constraint-chosen', chosenConstraint);
-    },
-    bla(editedConstraint) {
-      this.hideConstraintChooser();
-      this.$emit('constraint-edited', editedConstraint);
+    removeConstraint() {
+      Vue.delete(this.constraintParent, this.path[this.path.length - 1]);
+      if (this.constraintParent.length === 0) {
+        const parentsParent = this.path
+          .slice(0, this.path.length - 2)
+          .reduce((result, segment) => result[segment], this.policy);
+        Vue.delete(parentsParent, this.path[this.path.length - 2]);
+      }
     },
   },
 };
