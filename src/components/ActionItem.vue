@@ -10,7 +10,6 @@
     <!-- display and edit action -->
     <BaseButton
       input
-      v-bind:value="actionName"
       v-bind:onClick="showActionChooserWithAbort"
       list="actions"
       name="action"

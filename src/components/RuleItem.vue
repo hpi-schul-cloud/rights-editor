@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{ ruleLabel }} <i v-bind:class="ruleIcon"></i></h3>
+    <h3>{{ ruleLabel }} <i v-bind:class="ruleInfo.icon"></i></h3>
     <BaseButton remove class="remove-button" v-bind:onClick="removeRule">
       <i class="far fa-trash-alt"></i>
     </BaseButton>
@@ -8,9 +8,9 @@
     <!-- display action -->
     Das
     <ActionItem class="action-item" v-bind:policy="policy" v-bind:path="[...path, 'action']"></ActionItem>
-    {{ rule.type.descriptionBefore }}
-    <a href="#">{{ rule.type.descriptionLink }}</a>
-    {{ rule.type.descriptionAfter }}
+    {{ ruleInfo.descriptionBefore }}
+    <a href="#">{{ ruleInfo.descriptionLink }}</a>
+    {{ ruleInfo.descriptionAfter }}
     
     <!-- add new refinement -->
     Das
@@ -23,18 +23,13 @@
     <!-- display and edit constraints -->
     Insgesamt gilt die
     <a href="#">{{ ruleLabel }}</a> nur, wenn...
-    <ConstraintItem v-for="(constraint, index) in constraint" v-bind:key="index" v-bind:policy="policy" v-bind:path="[...path, 'constraint', index]"></ConstraintItem>
+    <ConstraintItem v-for="(constraint, index) in constraints" v-bind:key="index" v-bind:policy="policy" v-bind:path="[...path, 'constraint', index]"></ConstraintItem>
     <!-- add new constraint -->
-    <BaseButton class="add-button" v-bind:onClick="showConstraintChooser">Einschränkung hinzufügen</BaseButton>
-    <ConstraintChooser
-      v-if="displayConstraintChooser"
-      v-on:chosen="setConstraint($event)"
-      v-on:abort="hideConstraintChooser()"
-    ></ConstraintChooser>
+    <BaseButton class="add-button" v-bind:onClick="addConstraint">Einschränkung hinzufügen</BaseButton>
     <BaseButton v-bind:onClick="appendNewSubrule">{{ subruleLabel }} hinzufügen</BaseButton>
 
     <div class="subrule-section">
-      <RuleItem v-for="(subrule, index) in rule[subruleKey]" v-bind:policy="policy" v-bind:path="[...path, subruleKey, index]" v-bind:key="index"></RuleItem>
+      <RuleItem v-for="(subrule, index) in rule[subruleType]" v-bind:policy="policy" v-bind:path="[...path, subruleType, index]" v-bind:key="index"></RuleItem>
     </div>
   </div>
 </template>
@@ -45,6 +40,8 @@ import ActionItem from "./ActionItem.vue";
 import ConstraintItem from "./ConstraintItem";
 import BaseButton from "./BaseButton.vue";
 import ConstraintChooser from "./ConstraintChooser.vue";
+
+import { RuleTypes } from '../libs/rules/rules.js';
 
 export default {
   name: "RuleItem",
@@ -78,10 +75,26 @@ export default {
       return p;
     },
     appendNewSubrule() {
-      if (!this.rule[this.subruleKey]) {
-        Vue.set(this.rule, this.subruleKey, []);
+      if (!this.rule[this.subruleType]) {
+        Vue.set(this.rule, this.subruleType, []);
       }
-      this.rule[this.subruleKey].push({})
+      this.rule[this.subruleType].push({})
+    },
+    removeRule() {
+      // TODO
+      throw new Exception("not implemented yet");
+    },
+    showConstraintChooser: function() {
+      this.displayConstraintChooser = true;
+    },
+    hideConstraintChooser: function() {
+      this.displayConstraintChooser = false;
+    },
+    addConstraint: function() {
+      if (!this.constraints) {
+        Vue.set(this.rule, 'constraint', []);
+      }
+      this.constraints.push(null);
     }
   },
   computed: {
@@ -89,24 +102,26 @@ export default {
       let r = this.path.reduce((result, segment) => result[segment], this.policy);
       return r;
     },
-    ruleKey() {
+    ruleType() {
       return this.path[this.path.length - 2];
     },
     ruleLabel() {
       return {'permission': 'Erlaubnis', 'prohibition': 'Verbot', 'obligation': 'Verpflichtung',
-        'duty': 'Vorbedingung', 'remedy': 'Wiedergutmachung', 'consequence': 'Zusätzliche Pflicht'}[this.ruleKey];
+        'duty': 'Vorbedingung', 'remedy': 'Wiedergutmachung', 'consequence': 'Zusätzliche Pflicht'}[this.ruleType];
     },
-    subruleKey() {
+    subruleType() {
       // TODO: consequences can't have consequences, can they?
       return {'permission': 'duty', 'prohibition': 'remedy', 'obligation': 'consequence',
-        'duty': 'consequence', 'remedy': 'consequence', 'consequence': 'consequence'}[this.ruleKey];
+        'duty': 'consequence', 'remedy': 'consequence', 'consequence': 'consequence'}[this.ruleType];
     },
     subruleLabel() {
-      return {'duty': 'Vorbedingung', 'remedy': 'Wiedergutmachung bei Regelverletzung', 'consequence': 'Zusätzliche Pflicht bei Nichteinhaltung'}[this.subruleKey];
+      return {'duty': 'Vorbedingung', 'remedy': 'Wiedergutmachung bei Regelverletzung', 'consequence': 'Zusätzliche Pflicht bei Nichteinhaltung'}[this.subruleType];
     },
-    refinements() {
-      let refs = this.path.reduce((result, segment) => result[segment], this.policy);
-      return refs ? refs : [];
+    constraints() {
+      return this.rule['constraint'];
+    },
+    ruleInfo() {
+      return RuleTypes[this.ruleType];
     }
   }
 };

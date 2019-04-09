@@ -17,28 +17,28 @@ export class RuleTree {
 }
 
 export let RuleTypes = Object.freeze({
-    Permission: {
+    'permission': {
         name: "Erlaubnis",
         descriptionBefore: " ist erlaubt.",
         descriptionLink: "",
         descriptionAfter: "",
         icon: "far fa-check-circle"
     },
-    Obligation: {
+    'obligation': {
         name: "Pflicht",
         descriptionBefore: " ist Pflicht.",
         descriptionLink: "",
         descriptionAfter: "",
         icon: "far fa-handshake"
     },
-    Prohibition: {
+    'prohibition': {
         name: "Verbot",
         descriptionBefore: " ist verboten.",
         descriptionLink: "",
         descriptionAfter: "",
         icon: "fas fa-ban"
     },
-    Duty: {
+    'duty': {
         name: "Pflicht",
         description: " muss geleistet werden, damit die Erlaubnis gilt.",
         descriptionBefore:
@@ -49,7 +49,7 @@ export let RuleTypes = Object.freeze({
             " gilt.",
         icon: "far fa-handshake"
     },
-    Consequence: {
+    'consequence': {
         name: "Konsequenz",
         description:
             " muss geleistet werden, falls die Pflicht nicht eingehalten wurde.",
@@ -61,7 +61,7 @@ export let RuleTypes = Object.freeze({
             " nicht eingehalten wurde.",
         icon: "fas fa-hand-holding"
     },
-    Remedy: {
+    'remedy': {
         name: "Strafe",
         description:
             " muss geleistet werden, falls das Verbot missachtet wurde.",
