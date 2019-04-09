@@ -8,6 +8,6 @@ export class Action {
   }
 
   name() {
-    return this.nsVocabUri.split("/").pop();
+    return this.nsVocabUri.split('/').pop();
   }
 }

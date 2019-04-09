@@ -16,61 +16,61 @@ export class RuleTree {
   }
 }
 
-export let RuleTypes = Object.freeze({
-    'permission': {
-        name: "Erlaubnis",
-        descriptionBefore: " ist erlaubt.",
-        descriptionLink: "",
-        descriptionAfter: "",
-        icon: "far fa-check-circle"
-    },
-    'obligation': {
-        name: "Pflicht",
-        descriptionBefore: " ist Pflicht.",
-        descriptionLink: "",
-        descriptionAfter: "",
-        icon: "far fa-handshake"
-    },
-    'prohibition': {
-        name: "Verbot",
-        descriptionBefore: " ist verboten.",
-        descriptionLink: "",
-        descriptionAfter: "",
-        icon: "fas fa-ban"
-    },
-    'duty': {
-        name: "Pflicht",
-        description: " muss geleistet werden, damit die Erlaubnis gilt.",
-        descriptionBefore:
-            " muss geleistet werden, damit die",
-        descriptionLink:
-            " Erlaubnis",
-        descriptionAfter:
-            " gilt.",
-        icon: "far fa-handshake"
-    },
-    'consequence': {
-        name: "Konsequenz",
-        description:
-            " muss geleistet werden, falls die Pflicht nicht eingehalten wurde.",
-        descriptionBefore:
-            " muss geleistet werden, falls die",
-        descriptionLink:
-            " Pflicht",
-        descriptionAfter:
-            " nicht eingehalten wurde.",
-        icon: "fas fa-hand-holding"
-    },
-    'remedy': {
-        name: "Strafe",
-        description:
-            " muss geleistet werden, falls das Verbot missachtet wurde.",
-        descriptionBefore:
-            " muss geleistet werden, falls das",
-        descriptionLink:
-            " Verbot",
-        descriptionAfter:
-            " missachtet wurde.",
-        icon: "fas fa-balance-scale"
-    }
+export const RuleTypes = Object.freeze({
+  permission: {
+    name: 'Erlaubnis',
+    descriptionBefore: ' ist erlaubt.',
+    descriptionLink: '',
+    descriptionAfter: '',
+    icon: 'far fa-check-circle',
+  },
+  obligation: {
+    name: 'Pflicht',
+    descriptionBefore: ' ist Pflicht.',
+    descriptionLink: '',
+    descriptionAfter: '',
+    icon: 'far fa-handshake',
+  },
+  prohibition: {
+    name: 'Verbot',
+    descriptionBefore: ' ist verboten.',
+    descriptionLink: '',
+    descriptionAfter: '',
+    icon: 'fas fa-ban',
+  },
+  duty: {
+    name: 'Pflicht',
+    description: ' muss geleistet werden, damit die Erlaubnis gilt.',
+    descriptionBefore:
+            ' muss geleistet werden, damit die',
+    descriptionLink:
+            ' Erlaubnis',
+    descriptionAfter:
+            ' gilt.',
+    icon: 'far fa-handshake',
+  },
+  consequence: {
+    name: 'Konsequenz',
+    description:
+            ' muss geleistet werden, falls die Pflicht nicht eingehalten wurde.',
+    descriptionBefore:
+            ' muss geleistet werden, falls die',
+    descriptionLink:
+            ' Pflicht',
+    descriptionAfter:
+            ' nicht eingehalten wurde.',
+    icon: 'fas fa-hand-holding',
+  },
+  remedy: {
+    name: 'Strafe',
+    description:
+            ' muss geleistet werden, falls das Verbot missachtet wurde.',
+    descriptionBefore:
+            ' muss geleistet werden, falls das',
+    descriptionLink:
+            ' Verbot',
+    descriptionAfter:
+            ' missachtet wurde.',
+    icon: 'fas fa-balance-scale',
+  },
 });

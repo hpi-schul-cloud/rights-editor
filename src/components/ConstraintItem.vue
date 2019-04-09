@@ -2,10 +2,10 @@
   <div>
     <ConstraintChooser
       v-if="displayConstraintChooser"
-      v-on:chosen="hideConstraintChooser(); constraint = $event"
-      v-bind:constraintToEdit="constraint"
-      v-on:abort="abortChooser()"
-    ></ConstraintChooser>
+      :constraint-to-edit="constraint"
+      @chosen="hideConstraintChooser(); constraint = $event"
+      @abort="abortChooser()"
+    />
     <div>
       <BaseButton
         input
@@ -14,29 +14,26 @@
         class="constraint-button"
         name="constraint"
         type="button"
-      >{{ constraint.name }}</BaseButton>
-      <BaseButton remove v-bind:onClick="removeConstraint">
-        <i class="fas fa-times"></i>
+      >
+        {{ constraint.name }}
+      </BaseButton>
+      <BaseButton remove :on-click="removeConstraint">
+        <i class="fas fa-times" />
       </BaseButton>
     </div>
   </div>
 </template>
 
 <script>
-import ConstraintChooser from "./ConstraintChooser.vue";
-import BaseButton from "./BaseButton.vue";
-import Vue from "vue";
+import Vue from 'vue';
+import ConstraintChooser from './ConstraintChooser.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
   name: 'ConstraintItem',
   components: {
     ConstraintChooser,
-    BaseButton
-  },
-  data: function() {
-    return {
-      displayConstraintChooser: true
-    };
+    BaseButton,
   },
   props: {
     policy: {
@@ -45,13 +42,33 @@ export default {
     },
     path: {
       type: Array,
-      required: true
+      required: true,
+    },
+  },
+  data() {
+    return {
+      displayConstraintChooser: true,
+    };
+  },
+  computed: {
+    constraint: {
+      get() {
+        const c = this.path.reduce((result, segment) => result[segment], this.policy);
+        return c || { name: 'Einschränkung hinzufügen' };
+      },
+      set(newConstraint) {
+        Vue.set(this.constraintParent, this.path[this.path.length - 1], newConstraint);
+      },
+    },
+    constraintParent() {
+      const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
+      return pathWithoutLastElement.reduce((result, segment) => result[segment], this.policy);
     },
   },
   methods: {
     abortChooser() {
       this.hideConstraintChooser();
-      let c = this.path.reduce((result, segment) => result[segment], this.policy);
+      const c = this.path.reduce((result, segment) => result[segment], this.policy);
       if (!c) {
         this.removeConstraint();
       }
@@ -65,28 +82,13 @@ export default {
     removeConstraint() {
       Vue.delete(this.constraintParent, this.path[this.path.length - 1]);
       if (this.constraintParent.length === 0) {
-        let parentsParent = this.path
-            .slice(0, this.path.length - 2)
-            .reduce((result, segment) => result[segment], this.policy);
+        const parentsParent = this.path
+          .slice(0, this.path.length - 2)
+          .reduce((result, segment) => result[segment], this.policy);
         Vue.delete(parentsParent, this.path[this.path.length - 2]);
       }
-    }
-  },
-  computed: {
-    constraint: {
-      get() {
-        let c = this.path.reduce((result, segment) => result[segment], this.policy);
-        return c ? c : { 'name': 'Einschränkung hinzufügen' };
-      },
-      set(newConstraint) {
-        Vue.set(this.constraintParent, this.path[this.path.length - 1], newConstraint);
-      }
     },
-    constraintParent() {
-      let pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
-      return pathWithoutLastElement.reduce((result, segment) => result[segment], this.policy);
-    }
-  }
+  },
 };
 </script>
 

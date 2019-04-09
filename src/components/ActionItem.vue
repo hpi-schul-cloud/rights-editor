@@ -2,64 +2,50 @@
   <div class="action-container">
     <ActionChooser
       v-if="actionChooserShouldDisplay"
-      v-bind:actionChooserAllowAbort="actionChooserAllowAbort"
-      v-on:chosen="hideActionChooser(); action = $event"
-      v-on:abort="hideActionChooser()"
-    ></ActionChooser>
+      :action-chooser-allow-abort="actionChooserAllowAbort"
+      @chosen="hideActionChooser(); action = $event"
+      @abort="hideActionChooser()"
+    />
 
     <!-- display and edit action -->
     <BaseButton
       input
-      v-bind:onClick="showActionChooserWithAbort"
+      :on-click="showActionChooserWithAbort"
       list="actions"
       name="action"
       type="button"
-    >{{ action }}</BaseButton>
+    >
+      {{ action }}
+    </BaseButton>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-import BaseButton from "./BaseButton.vue";
-import ActionChooser from "./ActionChooser.vue";
+import Vue from 'vue';
+import BaseButton from './BaseButton.vue';
+import ActionChooser from './ActionChooser.vue';
 
 export default {
-  name: "ActionItem",
+  name: 'ActionItem',
   components: {
     ActionChooser,
-    BaseButton
-  },
-  data: function() {
-    return {
-      actionChooserShouldDisplay: false,
-      actionChooserAllowAbort: true
-    };
+    BaseButton,
   },
   props: {
     policy: {
       type: Object,
-      required: true
+      required: true,
     },
     path: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
-  mounted: function() {
-    this.showActionChooser(false);
-  },
-  methods: {
-    showActionChooserWithAbort: function() {
-      this.showActionChooser(true);
-    },
-    showActionChooser: function(allowAbort) {
-      this.actionChooserShouldDisplay = true;
-      this.actionChooserAllowAbort = allowAbort;
-    },
-    hideActionChooser: function() {
-      this.actionChooserShouldDisplay = false;
-      this.actionChooserAllowAbort = true;
-    },
+  data() {
+    return {
+      actionChooserShouldDisplay: false,
+      actionChooserAllowAbort: true,
+    };
   },
   computed: {
     rule() {
@@ -69,16 +55,32 @@ export default {
     },
     action: {
       get() {
-        if (!this.rule["action"]) {
-          Vue.set(this.rule, "action", "");
+        if (!this.rule.action) {
+          Vue.set(this.rule, 'action', '');
         }
-        return this.rule["action"];
+        return this.rule.action;
       },
       set(newAction) {
-        this.rule["action"] = newAction;
-      }
-    }
-  }
+        this.rule.action = newAction;
+      },
+    },
+  },
+  mounted() {
+    this.showActionChooser(false);
+  },
+  methods: {
+    showActionChooserWithAbort() {
+      this.showActionChooser(true);
+    },
+    showActionChooser(allowAbort) {
+      this.actionChooserShouldDisplay = true;
+      this.actionChooserAllowAbort = allowAbort;
+    },
+    hideActionChooser() {
+      this.actionChooserShouldDisplay = false;
+      this.actionChooserAllowAbort = true;
+    },
+  },
 };
 </script>
 

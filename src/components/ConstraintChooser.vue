@@ -313,9 +313,9 @@ export default {
         constraint.name += ` ${constraint.unit}`;
       }
 
-      this.$emit("chosen", constraint);
-    }
-  }
+      this.$emit('chosen', constraint);
+    },
+  },
 };
 </script>
 
