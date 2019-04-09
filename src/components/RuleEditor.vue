@@ -8,7 +8,7 @@
         GUID der Lizenz:
         <BaseInput undercover v-model="licenceName" class="guid-input"></BaseInput>
       </span>
-      <BaseButton class="float-right" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
+      <BaseButton class="float-right" big v-bind:onClick="generateLicence">Update Licence</BaseButton>
     </div>
     <div class="container">
       <RuleTreeItem
@@ -18,8 +18,10 @@
         v-bind:key="ruleTree.id"
       ></RuleTreeItem>
     </div>
-    <h2>Provisorische Lizenz</h2>
-    <pre>{{policy}}</pre>
+    <div>
+      <h2>Provisorische Lizenz</h2>
+      <pre>{{policy}}</pre>
+    </div>
   </div>
 </template>
 
@@ -51,22 +53,19 @@ export default {
   methods: {
     newPermission: function() {
       this.newRule(RuleTypes.Permission);
-      generateLicence();
     },
     newObligation: function() {
       this.newRule(RuleTypes.Obligation);
-      generateLicence();
     },
     newProhibition: function() {
       this.newRule(RuleTypes.Prohibition);
-      generateLicence();
     },
     newRule: function(type) {
       let newID = this.nextId++;
       let ruleTree = new RuleTree(newID, type);
       ruleTree.rules.push(new Rule(0, type));
       this.ruleTrees.push(ruleTree);
-      generateLicence();
+      this.generateLicence();
     },
     updateTrees(tree_id) {
       for (let i = 0; i < this.ruleTrees.length; i++) {
@@ -83,7 +82,6 @@ export default {
       container.scrollTop = container.scrollHeight;
     },
     generateLicence() {
-      document.write(5 + 6);
       let policy = new Odrl.Policy(this.licenceName, "set");
       let targetAsset = "target_asset";
       let assigner = "assigner_party";
