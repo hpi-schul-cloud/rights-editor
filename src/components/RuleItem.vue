@@ -14,17 +14,17 @@
     Das
     <ActionItem class="action-item" :policy="policy" :path="[...path, 'action']" />
     {{ ruleInfo.descriptionBefore }}
-    <a href="#">
-      {{ ruleInfo.descriptionLink }}
-    </a>
+    <span v-if="parentruleInfo != null">
+      {{ parentruleInfo.definiteArticle}}
+      <a href="#">{{ parentruleInfo.name }}</a>
+    </span>
     {{ ruleInfo.descriptionAfter }}
+
     <br>
     <br>
     <!-- add new refinement -->
     Das
-    <a href="#">
-      {{ rule['action'] }}
-    </a> darf nur auf die folgende Art und Weise erfolgen...
+    <a href="#">{{ rule['action'] }}</a> darf nur auf die folgende Art und Weise erfolgen...
     <BaseButton
       class="add-button"
       :on-click="function(){/* TODO: implement this functionality */}"
@@ -34,10 +34,8 @@
 
     <br>
     <!-- display and edit constraints -->
-    Insgesamt gilt die
-    <a href="#">
-      {{ ruleInfo.name }}
-    </a> nur, wenn...
+    Insgesamt gilt {{ruleInfo.definiteArticle}}
+    <a href="#">{{ ruleInfo.name }}</a> nur, wenn...
     <ConstraintItem
       v-for="(constraint, index) in constraints"
       :key="index"
@@ -52,7 +50,7 @@
     <!-- add subrules -->
     <div v-if="ruleInfo.subrule != ''" class="add-subrule-container">
       <i>Optional können folgende Erweiterungen hinzugefügt werden:</i>
-      <br>Eine
+      <br>{{this.sentenceStart(subruleInfo.indefiniteArticle)}}
       <BaseButton
         class="add-subrule-button"
         :name="subruleInfo.name"
@@ -62,10 +60,11 @@
       </BaseButton>
       <div class="add-subrule-info">
         {{ subruleInfo.descriptionBefore }}
-        <a href="#">
-          {{ subruleInfo.descriptionLink }}
-        </a>
-        {{ subruleInfo.descriptionAfter }}
+    <span>
+      {{ ruleInfo.definiteArticle}}
+      <a href="#">{{ ruleInfo.name }}</a>
+    </span>
+    {{ subruleInfo.descriptionAfter }}
       </div>
     </div>
 
@@ -134,6 +133,13 @@ export default {
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];
     },
+    parentruleInfo() {
+      if (this.ruleInfo.parentrule != '') {
+        return RuleTypes[this.ruleInfo.parentrule];
+      } else {
+        return null;
+      }
+    },
     constraints() {
       return this.rule.constraint;
     },
@@ -146,6 +152,9 @@ export default {
     },
   },
   methods: {
+    sentenceStart(string) {
+      return string[0].toUpperCase() + string.substr(1, string.length);
+    },
     furtherPath(nameSegment, indexSegment) {
       const p = this.path.slice();
       p.push(nameSegment, indexSegment);
@@ -166,7 +175,7 @@ export default {
         Vue.delete(parentsParent, this.path[this.path.length - 2]);
       }
     },
-    showConstraintChooser() {
+    showConstraintChooser() {      
       this.displayConstraintChooser = true;
     },
     hideConstraintChooser() {

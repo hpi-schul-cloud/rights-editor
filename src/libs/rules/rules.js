@@ -19,62 +19,66 @@ export class RuleTree {
 export const RuleTypes = Object.freeze({
   permission: {
     name: 'Erlaubnis',
+    definiteArticle: 'die',
+    indefiniteArticle: 'eine',
+    parentrule: '',
     subrule: 'duty',
     descriptionBefore: ' ist erlaubt.',
-    descriptionLink: '',
     descriptionAfter: '',
     icon: 'far fa-check-circle',
   },
   obligation: {
     name: 'Pflicht',
+    definiteArticle: 'die', 
+    indefiniteArticle: 'eine',
+    parentrule: '',
     subrule: 'consequence',
     descriptionBefore: ' ist Pflicht.',
-    descriptionLink: '',
     descriptionAfter: '',
     icon: 'far fa-handshake',
   },
   prohibition: {
     name: 'Verbot',
+    definiteArticle: 'das', 
+    indefiniteArticle: 'ein',
+    parentrule: '',
     subrule: 'remedy',
     descriptionBefore: ' ist verboten.',
-    descriptionLink: '',
     descriptionAfter: '',
     icon: 'fas fa-ban',
   },
   duty: {
     name: 'Pflicht',
+    definiteArticle: 'die',
+    indefiniteArticle: 'eine',
+    parentrule: 'permission',
     subrule: 'consequence',
-    description: ' muss geleistet werden, damit die Erlaubnis gilt.',
     descriptionBefore:
-            ' muss geleistet werden, damit die',
-    descriptionLink:
-            ' Erlaubnis',
+            ' muss geleistet werden, damit ',
     descriptionAfter:
             ' gilt.',
     icon: 'far fa-handshake',
   },
   consequence: {
     name: 'Konsequenz',
+    definiteArticle: 'die',
+    indefiniteArticle: 'eine',
+    parentrule: 'obligation',
     subrule: '',
-    description:
-            ' muss geleistet werden, falls die Pflicht nicht eingehalten wurde.',
     descriptionBefore:
-            ' muss geleistet werden, falls die',
-    descriptionLink:
-            ' Pflicht',
+            ' muss geleistet werden, falls ',
     descriptionAfter:
             ' nicht eingehalten wurde.',
     icon: 'fas fa-hand-holding',
   },
   remedy: {
     name: 'Strafe',
+    definiteArticle: 'die', 
+    indefiniteArticle: 'eine',
+    parentrule: 'prohibition',
     subrule: '',
-    description:
-            ' muss geleistet werden, falls das Verbot missachtet wurde.',
     descriptionBefore:
-            ' muss geleistet werden, falls das',
-    descriptionLink:
-            ' Verbot',
+            ' muss geleistet werden, falls ',
     descriptionAfter:
             ' missachtet wurde.',
     icon: 'fas fa-balance-scale',
