@@ -19,6 +19,7 @@ export class RuleTree {
 export const RuleTypes = Object.freeze({
   permission: {
     name: 'Erlaubnis',
+    subrule: 'duty',
     descriptionBefore: ' ist erlaubt.',
     descriptionLink: '',
     descriptionAfter: '',
@@ -26,6 +27,7 @@ export const RuleTypes = Object.freeze({
   },
   obligation: {
     name: 'Pflicht',
+    subrule: 'consequence',
     descriptionBefore: ' ist Pflicht.',
     descriptionLink: '',
     descriptionAfter: '',
@@ -33,6 +35,7 @@ export const RuleTypes = Object.freeze({
   },
   prohibition: {
     name: 'Verbot',
+    subrule: 'remedy',
     descriptionBefore: ' ist verboten.',
     descriptionLink: '',
     descriptionAfter: '',
@@ -40,6 +43,7 @@ export const RuleTypes = Object.freeze({
   },
   duty: {
     name: 'Pflicht',
+    subrule: 'consequence',
     description: ' muss geleistet werden, damit die Erlaubnis gilt.',
     descriptionBefore:
             ' muss geleistet werden, damit die',
@@ -51,6 +55,7 @@ export const RuleTypes = Object.freeze({
   },
   consequence: {
     name: 'Konsequenz',
+    subrule: '',
     description:
             ' muss geleistet werden, falls die Pflicht nicht eingehalten wurde.',
     descriptionBefore:
@@ -63,6 +68,7 @@ export const RuleTypes = Object.freeze({
   },
   remedy: {
     name: 'Strafe',
+    subrule: '',
     description:
             ' muss geleistet werden, falls das Verbot missachtet wurde.',
     descriptionBefore:

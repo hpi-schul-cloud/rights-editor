@@ -40,17 +40,16 @@ input {
   padding: 10px;
   margin-left: 0px;
 
-  border-bottom: none;
+  border-bottom: 1px solid DarkGray;
   box-shadow: inset 0 0 1.5px #000;
 }
 
 .base-input-undercover {
   box-shadow: none;
-  border-bottom: 1px solid DarkGray;
 }
 
 .base-input-undercover:focus {
   box-shadow: inset 0 0 1.5px #000;
-  border-bottom: none;
+  border-bottom: 1px solid #fff;
 }
 </style>
