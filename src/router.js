@@ -10,20 +10,20 @@ export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-      {
-        path: '/',
-        name: 'start',
-        component: Start,
-      },
-      {
-        path: '/oer',
-        name: 'oer',
-        component: OER
-      },
-      {
-        path: '/proprietary',
-        name: 'proprietary',
-        component: Proprietary
-      }
+    {
+      path: '/',
+      name: 'start',
+      component: Start,
+    },
+    {
+      path: '/oer',
+      name: 'oer',
+      component: OER,
+    },
+    {
+      path: '/proprietary',
+      name: 'proprietary',
+      component: Proprietary,
+    },
   ],
 });

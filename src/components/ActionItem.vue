@@ -2,27 +2,29 @@
   <div class="action-container">
     <ActionChooser
       v-if="actionChooserSettings.displayActionChooser"
-      v-bind:allowAbort="actionChooserSettings.allowAbort"
-      v-on:chosen="hideActionChooser(); action.name=$event"
-      v-on:abort="hideActionChooser()"
-    ></ActionChooser>
+      :allow-abort="actionChooserSettings.allowAbort"
+      @chosen="hideActionChooser(); action.name=$event"
+      @abort="hideActionChooser()"
+    />
 
     <!-- display and edit action -->
     <BaseButton
       input
-      v-bind:value="actionName"
-      v-bind:onClick="showActionChooserWithAbort"
+      :value="actionName"
+      :on-click="showActionChooserWithAbort"
       list="actions"
       name="action"
       type="button"
-    >{{action.name}}</BaseButton>
+    >
+      {{ action.name }}
+    </BaseButton>
   </div>
 </template>
 
 <script>
-import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
-import BaseButton from "./BaseButton.vue";
-import ActionChooser from "./ActionChooser.vue";
+import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
+import BaseButton from './BaseButton.vue';
+import ActionChooser from './ActionChooser.vue';
 
 export class Action {
   constructor(name, nsVocabUri) {
@@ -32,51 +34,51 @@ export class Action {
   }
 
   name() {
-    return this.nsVocabUri.split("/").pop();
+    return this.nsVocabUri.split('/').pop();
   }
 }
 
 export default {
-  name: "ActionItem",
+  name: 'ActionItem',
   components: {
     ActionChooser,
-    BaseButton
-  },
-  data: function() {
-    return {
-      actionChooserSettings: {
-        displayActionChooser: false,
-        allowAbort: true
-      }
-    };
+    BaseButton,
   },
   props: {
     action: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  mounted: function() {
+  data() {
+    return {
+      actionChooserSettings: {
+        displayActionChooser: false,
+        allowAbort: true,
+      },
+    };
+  },
+  computed: {
+    actionName() {
+      return this.action.name;
+    },
+  },
+  mounted() {
     this.showActionChooser(false);
   },
   methods: {
-    showActionChooserWithAbort: function() {
+    showActionChooserWithAbort() {
       this.showActionChooser(true);
     },
-    showActionChooser: function(allowAbort) {
+    showActionChooser(allowAbort) {
       this.actionChooserSettings.displayActionChooser = true;
       this.actionChooserSettings.allowAbort = allowAbort;
     },
-    hideActionChooser: function() {
+    hideActionChooser() {
       this.actionChooserSettings.displayActionChooser = false;
       this.actionChooserSettings.allowAbort = true;
-    }
+    },
   },
-  computed: {
-    actionName: function() {
-      return this.action.name;
-    }
-  }
 };
 </script>
 

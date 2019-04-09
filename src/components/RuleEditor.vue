@@ -1,65 +1,81 @@
 <template>
   <div class="rule-editor">
     <div class="header">
-      <BaseButton v-bind:onClick="newPermission">Erlaubnis</BaseButton>
-      <BaseButton v-bind:onClick="newObligation">Pflicht</BaseButton>
-      <BaseButton v-bind:onClick="newProhibition">Verbot</BaseButton>
+      <BaseButton :on-click="newPermission">
+        Erlaubnis
+      </BaseButton>
+      <BaseButton :on-click="newObligation">
+        Pflicht
+      </BaseButton>
+      <BaseButton :on-click="newProhibition">
+        Verbot
+      </BaseButton>
       <span class="licence-name">
         GUID der Lizenz:
-        <BaseInput undercover v-model="licenceName" class="guid-input"></BaseInput>
+        <BaseInput
+          v-model="licenceName"
+          undercover
+          class="guid-input"
+        />
       </span>
-      <BaseButton class="float-right" big v-bind:onClick="generateLicence">Generate Licence</BaseButton>
+      <BaseButton
+        class="float-right"
+        big
+        :on-click="generateLicence"
+      >
+        Generate Licence
+      </BaseButton>
     </div>
     <div class="container">
       <RuleTreeItem
-        v-on:remove-tree="updateTrees($event)"
         v-for="ruleTree in ruleTrees"
-        v-bind:ruleTree="ruleTree"
-        v-bind:key="ruleTree.id"
-      ></RuleTreeItem>
+        :key="ruleTree.id"
+        :rule-tree="ruleTree"
+        @remove-tree="updateTrees($event)"
+      />
     </div>
-    <pre>{{policy}}</pre>
+    <pre>{{ policy }}</pre>
   </div>
 </template>
 
 <script>
-import BaseButton from "./BaseButton.vue";
-import BaseInput from "./BaseInput.vue";
-import Action from "./ActionItem.vue";
+import BaseButton from './BaseButton.vue';
+import BaseInput from './BaseInput.vue';
+import Action from './ActionItem.vue';
 
-import { Rule, RuleTypes, RuleTree } from "../libs/rules/rules.js";
-import RuleTreeItem from "./RuleTreeItem.vue";
-import { Odrl } from "../libs/rightsml-lib-js/ODRLclasses";
-import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
+import { Rule, RuleTypes, RuleTree } from '../libs/rules/rules.js';
+import RuleTreeItem from './RuleTreeItem.vue';
+import { Odrl } from '../libs/rightsml-lib-js/ODRLclasses';
+import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
 
 export default {
-  name: "RuleEditor",
+  name: 'RuleEditor',
   components: {
     BaseButton,
     BaseInput,
-    RuleTreeItem
+    RuleTreeItem,
   },
-  data: function() {
+  data() {
     return {
       ruleTrees: [],
       nextId: 0,
-      licenceName: "007",
-      policy: ""
+      licenceName: '007',
+      policy: '',
     };
   },
   methods: {
-    newPermission: function() {
+    newPermission() {
       this.newRule(RuleTypes.Permission);
     },
-    newObligation: function() {
+    newObligation() {
       this.newRule(RuleTypes.Obligation);
     },
-    newProhibition: function() {
+    newProhibition() {
       this.newRule(RuleTypes.Prohibition);
     },
-    newRule: function(type) {
-      let newID = this.nextId++;
-      let ruleTree = new RuleTree(newID, type);
+    newRule(type) {
+      const newID = this.nextId++;
+      const ruleTree = new RuleTree(newID, type);
       ruleTree.rules.push(new Rule(0, type));
       this.ruleTrees.push(ruleTree);
     },
@@ -71,21 +87,21 @@ export default {
         }
       }
     },
-    scrollToEnd: function() {
+    scrollToEnd() {
       // TODO: make this work
-      let container = this.$el.querySelector("#container");
+      const container = this.$el.querySelector('#container');
       console.log(container);
       container.scrollTop = container.scrollHeight;
     },
     generateLicence() {
-      let policy = new Odrl.Policy(this.licenceName, "set");
-      let targetAsset = "target_asset";
-      let assigner = "assigner_party";
-      let assignee = "assignee_party";
+      const policy = new Odrl.Policy(this.licenceName, 'set');
+      const targetAsset = 'target_asset';
+      const assigner = 'assigner_party';
+      const assignee = 'assignee_party';
 
       for (let i = 0; i < this.ruleTrees.length; i++) {
         for (let j = 0; j < this.ruleTrees[i].rules.length; j++) {
-          let currentRule = this.ruleTrees[i].rules[j];
+          const currentRule = this.ruleTrees[i].rules[j];
 
           if (currentRule.type == RuleTypes.Permission) {
             this.addPermissionToPolicy(i, policy);
@@ -100,8 +116,8 @@ export default {
       this.policy = policy.serializeJson();
     },
     addPermissionToPolicy(ruleTreeIndex, policy) {
-      let permission = new Odrl.Permission();
-      let firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
+      const permission = new Odrl.Permission();
+      const firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
 
       permission.setAction(firstRule.action.name);
       for (let i = 0; i < firstRule.action.constraints.length; i++) {
@@ -111,13 +127,13 @@ export default {
           firstRule.action.constraints[i].rightOperandStr,
           null,
           firstRule.action.constraints[i].unit,
-          null
+          null,
         );
       }
 
-      let duties = [];
+      const duties = [];
       for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
-        let currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
+        const currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
         if (currentRule.type == RuleTypes.Duty) {
           duties.push(new Odrl.Duty());
           duties[duties.length - 1].setAction(currentRule.action.name);
@@ -129,11 +145,11 @@ export default {
               currentRule.action.constraints[l].rightOperandStr,
               null,
               currentRule.action.constraints[l].unit,
-              null
+              null,
             );
           }
         } else if (currentRule.type == RuleTypes.Consequence) {
-          let cons = new Odrl.Failure();
+          const cons = new Odrl.Failure();
           cons.setAction(currentRule.action.name);
           duties[duties.length - 1].addConsequence(cons);
         }
@@ -144,8 +160,8 @@ export default {
       policy.addPermission(permission);
     },
     addObligationToPolicy(ruleTreeIndex, policy) {
-      let obligation = new Odrl.Duty();
-      let firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
+      const obligation = new Odrl.Duty();
+      const firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
 
       obligation.setAction(firstRule.action.name);
       for (let l = 0; l < firstRule.action.constraints.length; l++) {
@@ -155,13 +171,13 @@ export default {
           firstRule.action.constraints[l].rightOperandStr,
           null,
           firstRule.action.constraints[l].unit,
-          null
+          null,
         );
       }
       for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
-        let currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
+        const currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
         if (currentRule.type == RuleTypes.Consequence) {
-          let cons = new Odrl.Failure();
+          const cons = new Odrl.Failure();
           cons.setAction(currentRule.action.name);
           obligation.addConsequence(cons);
         }
@@ -169,8 +185,8 @@ export default {
       policy.addDuty(obligation);
     },
     addProhibitionToPolicy(ruleTreeIndex, policy) {
-      let prohibition = new Odrl.Prohibition();
-      let firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
+      const prohibition = new Odrl.Prohibition();
+      const firstRule = this.ruleTrees[ruleTreeIndex].rules[0];
 
       prohibition.setAction(firstRule.action.name);
 
@@ -181,21 +197,21 @@ export default {
           firstRule.action.constraints[l].rightOperandStrStr,
           null,
           firstRule.action.constraints[l].unit,
-          null
+          null,
         );
       }
 
       for (let k = 1; k < this.ruleTrees[ruleTreeIndex].rules.length; k++) {
-        let currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
+        const currentRule = this.ruleTrees[ruleTreeIndex].rules[k];
         if (currentRule.type == RuleTypes.Remedy) {
-          let rem = new Odrl.Failure();
+          const rem = new Odrl.Failure();
           rem.setAction(currentRule.action.name);
           prohibition.addRemedy(rem);
         }
       }
       policy.addProhibition(prohibition);
-    }
-  }
+    },
+  },
 };
 </script>
 

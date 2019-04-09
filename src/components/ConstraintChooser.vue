@@ -1,9 +1,18 @@
 <template>
-  <BaseModal v-bind:width="'1000px'" v-bind:scrollable="false">
+  <BaseModal
+    :width="'1000px'"
+    :scrollable="false"
+  >
     <template v-slot:header>
-      <h1 v-if="constraintToEdit == null">Einschränkung hinzufügen</h1>
-      <h1 v-else>Einschränkung bearbeiten</h1>
-      <div class="hidden">{{ forceRerender }}</div>
+      <h1 v-if="constraintToEdit == null">
+        Einschränkung hinzufügen
+      </h1>
+      <h1 v-else>
+        Einschränkung bearbeiten
+      </h1>
+      <div class="hidden">
+        {{ forceRerender }}
+      </div>
     </template>
     <template v-slot:body>
       <div class="body-container">
@@ -11,52 +20,78 @@
           <ul class="list">
             <li
               v-for="operand in _operands"
-              v-bind:key="operand.id"
-              v-bind:class="{selected: isOperandSelected(operand.id)}"
-              v-on:click="operandClicked(operand.id)"
-            >{{operand.name}}</li>
+              :key="operand.id"
+              :class="{ selected: isOperandSelected(operand.id) }"
+              @click="operandClicked(operand.id)"
+            >
+              {{ operand.name }}
+            </li>
           </ul>
         </div>
         <div class="list-container">
           <ul class="list">
             <li
               v-for="operator in _operators"
-              v-bind:key="operator.id"
-              v-bind:class="{selected: isOperatorSelected(operator.id)}"
-              v-on:click="operatorClicked(operator.id)"
-            >{{operator.symbol}}</li>
+              :key="operator.id"
+              :class="{ selected: isOperatorSelected(operator.id) }"
+              @click="operatorClicked(operator.id)"
+            >
+              {{ operator.symbol }}
+            </li>
           </ul>
         </div>
         <div class="value-container">
           <!-- input is number with unit -->
-          <div v-if="displayNumberInput" class="numeric-input-container">
+          <div
+            v-if="displayNumberInput"
+            class="numeric-input-container"
+          >
             <div class="number-container">
-              <div class="numeric-input-header">Zahl:</div>
+              <div class="numeric-input-header">
+                Zahl:
+              </div>
               <br>
-              <BaseInput class="number-input flat-input" type="number" v-model.number="number"></BaseInput>
+              <BaseInput
+                v-model.number="number"
+                class="number-input flat-input"
+                type="number"
+              />
             </div>
             <div class="unit-container">
-              <div class="numeric-input-header">Einheit:</div>
+              <div class="numeric-input-header">
+                Einheit:
+              </div>
               <br>
-              <ul class="unit-list list" type="text" name="unit">
+              <ul
+                class="unit-list list"
+                type="text"
+                name="unit"
+              >
                 <li
                   v-for="unit in _units"
-                  v-bind:key="unit.id"
-                  v-bind:class="{selected: isUnitSelected(unit.id)}"
-                  v-on:click="unitClicked(unit.id)"
-                >{{ unit.name }}</li>
+                  :key="unit.id"
+                  :class="{ selected: isUnitSelected(unit.id) }"
+                  @click="unitClicked(unit.id)"
+                >
+                  {{ unit.name }}
+                </li>
               </ul>
             </div>
           </div>
           <!-- input is selection from list -->
-          <div v-if="displayListInput" class="value-list-container list-container">
+          <div
+            v-if="displayListInput"
+            class="value-list-container list-container"
+          >
             <ul class="value-list list">
               <li
                 v-for="item in _list"
-                v-bind:key="item.id"
-                v-bind:class="{selected: isListItemSelected(item.id) }"
-                v-on:click="listItemClicked(item.id)"
-              >{{ item.name }}</li>
+                :key="item.id"
+                :class="{ selected: isListItemSelected(item.id) }"
+                @click="listItemClicked(item.id)"
+              >
+                {{ item.name }}
+              </li>
             </ul>
           </div>
         </div>
@@ -64,8 +99,19 @@
     </template>
     <template v-slot:footer>
       <div class="modal-footer">
-        <BaseButton textlike v-bind:onClick="function() {$emit('abort');}">Abbrechen</BaseButton>
-        <BaseButton v-bind:onClick="accept">Annehmen</BaseButton>
+        <BaseButton
+          textlike
+          :on-click="
+            function() {
+              $emit('abort');
+            }
+          "
+        >
+          Abbrechen
+        </BaseButton>
+        <BaseButton :on-click="accept">
+          Annehmen
+        </BaseButton>
       </div>
     </template>
   </BaseModal>
@@ -79,27 +125,27 @@ import {
   states,
   groups,
   units,
-  operandMapping
-} from "../libs/constraints/constraints";
-import BaseInput from "./BaseInput.vue";
-import BaseModal from "./BaseModal.vue";
-import BaseButton from "./BaseButton.vue";
+  operandMapping,
+} from '../libs/constraints/constraints';
+import BaseInput from './BaseInput.vue';
+import BaseModal from './BaseModal.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
-  name: "ConstraintChooser",
+  name: 'ConstraintChooser',
   components: {
     BaseInput,
     BaseModal,
-    BaseButton
+    BaseButton,
   },
   props: {
     constraintToEdit: {
       type: Object,
       default: null,
-      required: false
-    }
+      required: false,
+    },
   },
-  data: function() {
+  data() {
     return {
       forceRerender: 0,
 
@@ -117,10 +163,10 @@ export default {
       selectedUnitId: 0,
 
       number: 0,
-      selectedListItems: []
+      selectedListItems: [],
     };
   },
-  created: function() {
+  created() {
     this.numericOperands = new Set();
     for (let i = 0; i < operandMapping.length; i++) {
       if (operandMapping[i].units.length > 0) {
@@ -151,7 +197,7 @@ export default {
         }
       }
 
-      if (this.constraintToEdit.unit == "") {
+      if (this.constraintToEdit.unit == '') {
         // list items
         for (let i = 0; i < this._list.length; i++) {
           for (
@@ -178,7 +224,7 @@ export default {
     }
   },
   methods: {
-    initializeDataOnOperandId: function(id) {
+    initializeDataOnOperandId(id) {
       this.selectedOperandId = id;
 
       // reset to default input values
@@ -186,7 +232,7 @@ export default {
       this.number = 0;
 
       // set data based on chosen operand (use mapping information to do so)
-      let operandMapAtId = operandMapping[this.selectedOperandId];
+      const operandMapAtId = operandMapping[this.selectedOperandId];
 
       this.selectedListItems = new Array();
       for (let i = 0; i < operandMapAtId.list.length; i++) {
@@ -208,23 +254,23 @@ export default {
         this.displayListInput = true;
       }
     },
-    operandClicked: function(id) {
+    operandClicked(id) {
       this.initializeDataOnOperandId(id);
     },
-    isOperandSelected: function(id) {
+    isOperandSelected(id) {
       return this.selectedOperandId == id;
     },
-    operatorClicked: function(id) {
+    operatorClicked(id) {
       this.selectedOperatorId = id;
     },
-    isOperatorSelected: function(id) {
+    isOperatorSelected(id) {
       return this.selectedOperatorId == id;
     },
-    listItemClicked: function(id) {
+    listItemClicked(id) {
       this.selectedListItems[id] = !this.selectedListItems[id];
-      this.forceRerender++;
+      this.forceRerender += 1;
     },
-    isListItemSelected: function(id) {
+    isListItemSelected(id) {
       return this.selectedListItems[id] == true;
     },
     unitClicked(id) {
@@ -233,8 +279,8 @@ export default {
     isUnitSelected(id) {
       return this.selectedUnitId == id;
     },
-    accept: function() {
-      let constraint = new Constraint(-1);
+    accept() {
+      const constraint = new Constraint(-1);
       constraint.leftOperand = operands[this.selectedOperandId].name;
       constraint.operator = operators[this.selectedOperatorId].symbol;
 
@@ -245,7 +291,7 @@ export default {
         constraint.unit = units[this.selectedUnitId].name;
       } else {
         // create array of chosen names from the value list
-        let listItems = [];
+        const listItems = [];
         for (let i = 0; i < this._list.length; i++) {
           if (this.selectedListItems[i] == true) {
             listItems.push(this._list[i].name);
@@ -256,28 +302,25 @@ export default {
         // add a space after each comma
         constraint.rightOperandStr = constraint.rightOperandStr.replace(
           /,/g,
-          ", "
+          ', ',
         );
       }
-      constraint.name =
-        constraint.leftOperand +
-        " " +
-        constraint.operator +
-        " " +
-        constraint.rightOperandStr;
+      constraint.name = `${constraint.leftOperand} ${constraint.operator} ${
+        constraint.rightOperandStr
+      }`;
 
-      if (constraint.unit != "") {
-        constraint.name += " " + constraint.unit;
+      if (constraint.unit != '') {
+        constraint.name += ` ${constraint.unit}`;
       }
 
       if (this.constraintToEdit != null) {
         constraint.id = this.constraintToEdit.id;
-        this.$emit("edited", constraint);
+        this.$emit('edited', constraint);
       } else {
-        this.$emit("chosen", constraint);
+        this.$emit('chosen', constraint);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

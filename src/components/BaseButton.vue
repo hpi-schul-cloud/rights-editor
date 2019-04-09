@@ -1,29 +1,29 @@
 <template>
   <button
     class="base-button"
-    v-bind:class="{ 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input, 'base-button-remove': remove }"
-    v-bind:style="{ width: this.width }"
-    v-on:click="onClick"
+    :class="{ 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input, 'base-button-remove': remove }"
+    :style="{ width: this.width }"
+    @click="onClick"
   >
-    <slot></slot>
+    <slot />
   </button>
 </template>
 
 <script>
 export default {
-  name: "BaseButton",
+  name: 'BaseButton',
   props: {
     width: {
-      default: "auto",
+      default: 'auto',
       type: String,
-      required: false
+      required: false,
     },
     big: Boolean,
     textlike: Boolean,
     input: Boolean,
     remove: Boolean,
-    onClick: { type: Function, required: true }
-  }
+    onClick: { type: Function, required: true },
+  },
 };
 </script>
 
