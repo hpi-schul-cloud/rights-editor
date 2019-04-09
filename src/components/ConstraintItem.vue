@@ -93,7 +93,6 @@ export default {
       this.displayConstraintChooser = false;
     },
     removeConstraint() {
-      // delete in array: this.constraintParent at index: this.path[this.path.length - 1]
       Vue.delete(this.constraintParent, this.path[this.path.length - 1]);
       if (this.constraintParent.length === 0) {
         const parentsParent = this.path
