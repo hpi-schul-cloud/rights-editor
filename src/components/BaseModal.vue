@@ -2,19 +2,29 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div v-bind:style="{ width: this.width }" class="modal-container">
+        <div
+          :style="{ width: this.width }"
+          class="modal-container"
+        >
           <div class="modal-header">
-            <slot name="header"></slot>
+            <slot name="header" />
           </div>
 
-          <div v-bind:class="{ 'base-modal-scrollable': scrollable }" class="modal-body">
-            <slot name="body">default body</slot>
+          <div
+            :class="{ 'base-modal-scrollable': scrollable }"
+            class="modal-body"
+          >
+            <slot name="body">
+              default body
+            </slot>
           </div>
 
           <div class="modal-footer">
             <slot name="footer">
               default footer
-              <button class="modal-default-button">OK</button>
+              <button class="modal-default-button">
+                OK
+              </button>
             </slot>
           </div>
         </div>
@@ -25,25 +35,25 @@
 
 <script>
 export default {
-  name: "BaseModal",
-  created: function() {
-    document.body.style.overflow = "hidden";
-  },
-  destroyed: function() {
-    document.body.style.overflow = "auto";
-  },
+  name: 'BaseModal',
   props: {
     width: {
-      default: "600px",
+      default: '600px',
       type: String,
-      required: false
+      required: false,
     },
     scrollable: {
       default: true,
       type: Boolean,
-      required: false
-    }
-  }
+      required: false,
+    },
+  },
+  created() {
+    document.body.style.overflow = 'hidden';
+  },
+  destroyed() {
+    document.body.style.overflow = 'auto';
+  },
 };
 </script>
 
@@ -113,7 +123,7 @@ export default {
   transform: scale(1.1);
 }
 
-/* The following style creates a custom scroll bar 
+/* The following style creates a custom scroll bar
  * for the modal to fit better into our custom ui design
 */
 

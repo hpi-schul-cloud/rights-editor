@@ -1,19 +1,19 @@
-import { Odrl as Vocab } from "../rightsml-lib-js/ODRLvocabs";
-import { Action } from "../../components/ActionItem.vue"
+import { Odrl as Vocab } from '../rightsml-lib-js/ODRLvocabs';
+import { Action } from '../../components/ActionItem.vue';
 
 export class Rule {
-    constructor(id, type) {
-        this.id = id;
-        this.type = type;
-        this.action = new Action("<Aktion auswählen>", Vocab.ActionsCV.use);
-    }
+  constructor(id, type) {
+    this.id = id;
+    this.type = type;
+    this.action = new Action('<Aktion auswählen>', Vocab.ActionsCV.use);
+  }
 }
 
 export class RuleTree {
-    constructor(id, type) {
-        this.id = id;
-        this.rules = [];
-    }
+  constructor(id, type) {
+    this.id = id;
+    this.rules = [];
+  }
 }
 
 export let RuleTypes = Object.freeze({

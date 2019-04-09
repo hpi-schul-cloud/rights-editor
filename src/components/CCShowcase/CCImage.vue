@@ -1,32 +1,32 @@
 <template>
   <img
-    v-bind:src="imageSource"
-    v-on:click="$emit('licenseClicked', licenseID)"
-    v-bind:class="{active: isActive}"
+    :src="imageSource"
+    :class="{active: isActive}"
+    @click="$emit('licenseClicked', licenseID)"
   >
 </template>
 
 <script>
 export default {
-  name: "CCImage",
+  name: 'CCImage',
   props: {
     imageSource: {
-      required: true
+      required: true,
     },
     licenseID: {
       type: String,
-      required: true
+      required: true,
     },
     activeLicense: {
       type: String,
-      default: ""
-    }
+      default: '',
+    },
   },
   computed: {
-    isActive: function() {
+    isActive() {
       return this.activeLicense === this.licenseID;
-    }
-  }
+    },
+  },
 };
 </script>
 

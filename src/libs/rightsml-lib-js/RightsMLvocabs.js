@@ -1,5 +1,5 @@
-﻿/**
- * This file is taken out of the iptc/rightsml-dev project (published under the 
+/**
+ * This file is taken out of the iptc/rightsml-dev project (published under the
  * MIT license) and slightly edited. The license can be found at ./LICENSE.md.
  */
 
@@ -13,38 +13,38 @@
 */
 export var RightsML;
 (function (RightsML) {
-    // Constant values:
-    RightsML.nsUri = "http://iptc.org/std/RightsML/2011-10-07/";
+  // Constant values:
+  RightsML.nsUri = 'http://iptc.org/std/RightsML/2011-10-07/';
 
-    var ActionsCV = (function () {
-        function ActionsCV() {
-        }
-        ActionsCV.archive = RightsML.nsUri + "archive";
-        ActionsCV.copy = RightsML.nsUri + "copy";
-        ActionsCV.distribute = RightsML.nsUri + "distribute";
-        ActionsCV.removeFromService = RightsML.nsUri + "removeFromService";
-        return ActionsCV;
-    })();
-    RightsML.ActionsCV = ActionsCV;
+  const ActionsCV = (function () {
+    function ActionsCV() {
+    }
+    ActionsCV.archive = `${RightsML.nsUri}archive`;
+    ActionsCV.copy = `${RightsML.nsUri}copy`;
+    ActionsCV.distribute = `${RightsML.nsUri}distribute`;
+    ActionsCV.removeFromService = `${RightsML.nsUri}removeFromService`;
+    return ActionsCV;
+  }());
+  RightsML.ActionsCV = ActionsCV;
 
-    var ConstraintsCV = (function () {
-        function ConstraintsCV() {
-        }
-        ConstraintsCV.actionRequestReceived = RightsML.nsUri + "actionRequestReceived";
-        ConstraintsCV.requestedActionsPerformed = RightsML.nsUri + "requestedActionsPerformed";
-        return ConstraintsCV;
-    })();
-    RightsML.ConstraintsCV = ConstraintsCV;
+  const ConstraintsCV = (function () {
+    function ConstraintsCV() {
+    }
+    ConstraintsCV.actionRequestReceived = `${RightsML.nsUri}actionRequestReceived`;
+    ConstraintsCV.requestedActionsPerformed = `${RightsML.nsUri}requestedActionsPerformed`;
+    return ConstraintsCV;
+  }());
+  RightsML.ConstraintsCV = ConstraintsCV;
 
-    var RightOperandsCV = (function () {
-        function RightOperandsCV() {
-        }
-        RightOperandsCV.requestReceivedDateTime = RightsML.nsUri + "requestReceivedDateTime";
-        RightOperandsCV.serviceDevelopment = RightsML.nsUri + "serviceDevelopment";
-        RightOperandsCV.serviceDemonstration = RightsML.nsUri + "serviceDemonstration";
-        RightOperandsCV.serviceTesting = RightsML.nsUri + "serviceTesting";
-        return RightOperandsCV;
-    })();
-    RightsML.RightOperandsCV = RightOperandsCV;
-})(RightsML || (RightsML = {}));
-//# sourceMappingURL=RightsMLvocabs.js.map
+  const RightOperandsCV = (function () {
+    function RightOperandsCV() {
+    }
+    RightOperandsCV.requestReceivedDateTime = `${RightsML.nsUri}requestReceivedDateTime`;
+    RightOperandsCV.serviceDevelopment = `${RightsML.nsUri}serviceDevelopment`;
+    RightOperandsCV.serviceDemonstration = `${RightsML.nsUri}serviceDemonstration`;
+    RightOperandsCV.serviceTesting = `${RightsML.nsUri}serviceTesting`;
+    return RightOperandsCV;
+  }());
+  RightsML.RightOperandsCV = RightOperandsCV;
+}(RightsML || (RightsML = {})));
+// # sourceMappingURL=RightsMLvocabs.js.map

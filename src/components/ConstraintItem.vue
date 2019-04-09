@@ -9,8 +9,8 @@
     <div>
       <BaseButton
         input
-        v-bind:width="'500px'"
-        v-bind:onClick="showConstraintChooser"
+        :width="'500px'"
+        :on-click="showConstraintChooser"
         class="constraint-button"
         name="constraint"
         type="button"
@@ -28,7 +28,7 @@ import BaseButton from "./BaseButton.vue";
 import Vue from "vue";
 
 export default {
-  name: "ConstraintItem",
+  name: 'ConstraintItem',
   components: {
     ConstraintChooser,
     BaseButton
