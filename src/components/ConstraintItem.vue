@@ -57,7 +57,7 @@ export default {
           (result, segment) => result[segment],
           this.policy,
         );
-        return c || { name: 'Einschränkung hinzufügen' };
+        return c || { name: '<Einschränkung hinzufügen>' };
       },
       set(newConstraint) {
         Vue.set(
