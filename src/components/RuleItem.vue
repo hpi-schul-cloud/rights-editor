@@ -4,105 +4,122 @@
     <div class="header">
       <b>
         {{ rule.type.name }}
-        <i v-bind:class="rule.type.icon"></i>
+        <i :class="rule.type.icon" />
       </b>
-      <BaseButton remove class="remove-button" v-bind:onClick="removeRule">
-        <i class="far fa-trash-alt"></i>
+      <BaseButton
+        remove
+        class="remove-button"
+        :on-click="removeRule"
+      >
+        <i class="far fa-trash-alt" />
       </BaseButton>
     </div>
 
     <!-- display action -->
     Das
-    <ActionItem v-bind:action="rule.action"></ActionItem>
+    <ActionItem :action="rule.action" />
     {{ rule.type.descriptionBefore }}
-    <a href="#">{{ rule.type.descriptionLink }}</a>
+    <a href="#">
+      {{ rule.type.descriptionLink }}
+    </a>
     {{ rule.type.descriptionAfter }}
-    
+
     <!-- add new refinement -->
     <br>
     <br>Das
-    <a href="#">{{ rule.action.name }}</a> darf nur auf die folgende Art und Weise erfolgen...
+    <a href="#">
+      {{ rule.action.name }}
+    </a> darf nur auf die folgende Art und Weise erfolgen...
     <br>
     <BaseButton
       class="add-button"
-      v-bind:onClick="function(){/* TODO: implement this functionality */}"
-    >Verfeinerung hinzufügen</BaseButton>
+      :on-click="function(){/* TODO: implement this functionality */}"
+    >
+      Verfeinerung hinzufügen
+    </BaseButton>
 
     <!-- display and edit constraints -->
     <div class="constraint-container">
       <div class="constraint-text">
         <span>
           <br>Insgesamt gilt die
-          <a href="#">{{ rule.type.name }}</a> nur, wenn...
+          <a href="#">
+            {{ rule.type.name }}
+          </a> nur, wenn...
         </span>
       </div>
       <ConstraintItem
-        class="constraint-edit"
         v-for="constraint in rule.action.constraints"
-        v-bind:key="constraint.id"
-        v-bind:constraint="constraint"
-        v-on:constraint-chosen="setConstraint($event)"
-        v-on:constraint-edited="editConstraint($event)"
-        v-on:remove-constraint="removeConstraint($event)"
-      ></ConstraintItem>
+        :key="constraint.id"
+        class="constraint-edit"
+        :constraint="constraint"
+        @constraint-chosen="setConstraint($event)"
+        @constraint-edited="editConstraint($event)"
+        @remove-constraint="removeConstraint($event)"
+      />
 
       <!-- add new constraint -->
-      <BaseButton class="add-button" v-bind:onClick="showConstraintChooser">Einschränkung hinzufügen</BaseButton>
+      <BaseButton
+        class="add-button"
+        :on-click="showConstraintChooser"
+      >
+        Einschränkung hinzufügen
+      </BaseButton>
       <ConstraintChooser
         v-if="displayConstraintChooser"
-        v-on:chosen="setConstraint($event)"
-        v-on:abort="hideConstraintChooser()"
-      ></ConstraintChooser>
+        @chosen="setConstraint($event)"
+        @abort="hideConstraintChooser()"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import BaseButton from "./BaseButton.vue";
-import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
-import { Rule, RuleTypes } from "../libs/rules/rules.js";
-import ActionItem, { Action } from "./ActionItem.vue";
-import { Constraint } from "../libs/constraints/constraints";
-import ConstraintItem from "./ConstraintItem";
-import ConstraintChooser from "./ConstraintChooser.vue";
+import BaseButton from './BaseButton.vue';
+import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
+import { Rule, RuleTypes } from '../libs/rules/rules.js';
+import ActionItem, { Action } from './ActionItem.vue';
+import { Constraint } from '../libs/constraints/constraints';
+import ConstraintItem from './ConstraintItem';
+import ConstraintChooser from './ConstraintChooser.vue';
 
 export default {
-  name: "RuleItem",
+  name: 'RuleItem',
   components: {
     BaseButton,
     ActionItem,
     ConstraintItem,
-    ConstraintChooser
+    ConstraintChooser,
   },
   props: {
     rule: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  data: function() {
+  data() {
     return {
       displayConstraintChooser: false,
-      nextId: 0
+      nextId: 0,
     };
   },
   methods: {
-    removeRule: function() {
-      this.$emit("remove-rule", this.rule.id);
+    removeRule() {
+      this.$emit('remove-rule', this.rule.id);
     },
-    showConstraintChooser: function() {
+    showConstraintChooser() {
       this.displayConstraintChooser = true;
     },
-    hideConstraintChooser: function() {
+    hideConstraintChooser() {
       this.displayConstraintChooser = false;
     },
-    setConstraint: function(constraint) {
+    setConstraint(constraint) {
       constraint.id = this.nextId;
       this.rule.action.constraints.push(constraint);
       this.nextId++;
       this.hideConstraintChooser();
     },
-    editConstraint: function(constraint) {
+    editConstraint(constraint) {
       for (let i = 0; i < this.rule.action.constraints.length; i++) {
         if (this.rule.action.constraints[i].id == constraint.id) {
           this.rule.action.constraints[i] = constraint;
@@ -110,14 +127,14 @@ export default {
       }
       this.$forceUpdate();
     },
-    removeConstraint: function(id) {
+    removeConstraint(id) {
       for (let i = 0; i < this.rule.action.constraints.length; i++) {
         if (this.rule.action.constraints[i].id == id) {
           this.rule.action.constraints.splice(i, 1);
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,25 +1,38 @@
 <template>
   <div class="tree-container">
     <RuleItem
-      v-on:remove-rule="updateRules($event)"
       v-for="rule in ruleTree.rules"
-      v-bind:rule="rule"
-      v-bind:key="rule.id"
-    ></RuleItem>
+      :key="rule.id"
+      :rule="rule"
+      @remove-rule="updateRules($event)"
+    />
 
-    <div class="addon-container" v-if="getPossibleAddons() != null">
+    <div
+      v-if="getPossibleAddons() != null"
+      class="addon-container"
+    >
       <i>Optional können folgende Erweiterungen hinzugefügt werden:</i>
       <br>
       <ul class="addon-ul">
-        <li v-for="(addon, index) in getPossibleAddons()" v-bind:key="index" v-bind:value="addon">
+        <li
+          v-for="(addon, index) in getPossibleAddons()"
+          :key="index"
+          :value="addon"
+        >
           Eine
           <BaseButton
             class="addon-button"
-            v-bind:name="addon.name"
-            v-bind:onClick="createAddon"
-          >{{addon.name}}</BaseButton>
+            :name="addon.name"
+            :on-click="createAddon"
+          >
+            {{ addon.name }}
+          </BaseButton>
           <!-- TODO: link to the parent rule -->
-          <div class="addon-info">{{addon.descriptionBefore}} <a href="#">{{addon.descriptionLink}}</a> {{addon.descriptionAfter}}</div>
+          <div class="addon-info">
+            {{ addon.descriptionBefore }} <a href="#">
+              {{ addon.descriptionLink }}
+            </a> {{ addon.descriptionAfter }}
+          </div>
         </li>
       </ul>
     </div>
@@ -27,27 +40,27 @@
 </template>
 
 <script>
-import { Rule, RuleTypes, RuleTree } from "../libs/rules/rules.js";
-import RuleItem from "./RuleItem.vue";
-import BaseButton from "./BaseButton.vue";
+import { Rule, RuleTypes, RuleTree } from '../libs/rules/rules.js';
+import RuleItem from './RuleItem.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
-  name: "RuleTreeItem",
+  name: 'RuleTreeItem',
   components: {
     RuleItem,
-    BaseButton
-  },
-  data: function() {
-    return {
-      nextId: 1,
-      leftMarginFactor: 30
-    };
+    BaseButton,
   },
   props: {
     ruleTree: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+  },
+  data() {
+    return {
+      nextId: 1,
+      leftMarginFactor: 30,
+    };
   },
   methods: {
     updateRules(id) {
@@ -57,7 +70,7 @@ export default {
             this.ruleTree.rules.splice(i, this.ruleTree.rules.length);
           } else {
             let deleteCount = 1;
-            let r = this.ruleTree.rules[i];
+            const r = this.ruleTree.rules[i];
             if (r.type == RuleTypes.Duty) {
               for (let j = i + 1; j < this.ruleTree.rules.length; j++) {
                 if (this.ruleTree.rules[j].type != RuleTypes.Consequence) {
@@ -73,7 +86,7 @@ export default {
         }
       }
       if (this.ruleTree.rules.length == 0) {
-        this.$emit("remove-tree", this.ruleTree.id);
+        this.$emit('remove-tree', this.ruleTree.id);
       }
     },
     getRuleMargin(type) {
@@ -85,8 +98,8 @@ export default {
       }
       return x * this.leftMarginFactor;
     },
-    getPossibleAddons: function() {
-      let addon = [];
+    getPossibleAddons() {
+      const addon = [];
       let dutyAdded = false;
       let remedyAdded = false;
       let consequenceAdded = false;
@@ -95,15 +108,15 @@ export default {
           addon.push(RuleTypes.Duty);
           dutyAdded = true;
         } else if (
-          !remedyAdded &&
-          this.ruleTree.rules[i].type == RuleTypes.Prohibition
+          !remedyAdded
+          && this.ruleTree.rules[i].type == RuleTypes.Prohibition
         ) {
           addon.push(RuleTypes.Remedy);
           remedyAdded = true;
         } else if (
-          !consequenceAdded &&
-          (this.ruleTree.rules[i].type == RuleTypes.Duty ||
-            this.ruleTree.rules[i].type == RuleTypes.Obligation)
+          !consequenceAdded
+          && (this.ruleTree.rules[i].type == RuleTypes.Duty
+            || this.ruleTree.rules[i].type == RuleTypes.Obligation)
         ) {
           addon.push(RuleTypes.Consequence);
           consequenceAdded = true;
@@ -112,21 +125,21 @@ export default {
       return addon;
     },
     createAddon(event) {
-      let name = event.target.name;
+      const name = event.target.name;
       let dutyType = null;
-      if (name == "Konsequenz") {
+      if (name == 'Konsequenz') {
         dutyType = RuleTypes.Consequence;
-      } else if (name == "Pflicht") {
+      } else if (name == 'Pflicht') {
         dutyType = RuleTypes.Duty;
-      } else if (name == "Strafe") {
+      } else if (name == 'Strafe') {
         dutyType = RuleTypes.Remedy;
       }
       if (dutyType != null) {
-        let newID = this.nextId++;
+        const newID = this.nextId++;
         this.ruleTree.rules.push(new Rule(newID, dutyType));
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

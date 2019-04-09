@@ -2,65 +2,70 @@
   <div>
     <ConstraintChooser
       v-if="displayConstraintChooser"
-      v-on:chosen="constraintChosen($event)"
-      v-on:abort="hideConstraintChooser()"
-      v-on:edited="bla($event)"
-      v-bind:constraintToEdit="constraint"
-    ></ConstraintChooser>
+      :constraint-to-edit="constraint"
+      @chosen="constraintChosen($event)"
+      @abort="hideConstraintChooser()"
+      @edited="bla($event)"
+    />
     <div>
       <BaseButton
         input
-        v-bind:width="'500px'"
-        v-bind:onClick="showConstraintChooser"
+        :width="'500px'"
+        :on-click="showConstraintChooser"
         class="constraint-button"
         name="constraint"
         type="button"
-      >{{ constraint.name }}</BaseButton>
-      <BaseButton remove v-bind:onClick="function () {$emit('remove-constraint', constraint.id);}">
-        <i class="fas fa-times"></i>
+      >
+        {{ constraint.name }}
+      </BaseButton>
+      <BaseButton
+        remove
+        :on-click="function () {$emit('remove-constraint', constraint.id);}"
+      >
+        <i class="fas fa-times" />
       </BaseButton>
     </div>
   </div>
 </template>
 
 <script>
-import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
-import ConstraintChooser from "./ConstraintChooser.vue";
-import BaseButton from "./BaseButton.vue";
+import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
+import ConstraintChooser from './ConstraintChooser.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
-  name: "ConstraintItem",
+  name: 'ConstraintItem',
   components: {
     ConstraintChooser,
-    BaseButton
-  },
-  data: function() {
-    return {
-      displayConstraintChooser: false
-    };
+    BaseButton,
   },
   props: {
     constraint: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+  },
+  data() {
+    return {
+      displayConstraintChooser: false,
+    };
   },
   methods: {
-    showConstraintChooser: function() {
+    showConstraintChooser() {
       this.displayConstraintChooser = true;
     },
-    hideConstraintChooser: function() {
+    hideConstraintChooser() {
       this.displayConstraintChooser = false;
     },
-    constraintChosen: function(chosenConstraint) {
+    constraintChosen(chosenConstraint) {
       this.hideConstraintChooser();
-      this.$emit("constraint-chosen", chosenConstraint);
+      this.$emit('constraint-chosen', chosenConstraint);
     },
-    bla: function(editedConstraint) {
+    bla(editedConstraint) {
       this.hideConstraintChooser();
-      this.$emit("constraint-edited", editedConstraint);
-    }
-  }
+      this.$emit('constraint-edited', editedConstraint);
+    },
+  },
 };
 </script>
 

@@ -1,24 +1,24 @@
 <template>
   <input
-    v-bind:class="{ 'base-input-undercover': undercover }"
-    v-bind:style="{ width: this.width }"
-    v-bind:value="value"
-    v-on:input="$emit('input', $event.target.value)"
+    :class="{ 'base-input-undercover': undercover }"
+    :style="{ width: this.width }"
+    :value="value"
+    @input="$emit('input', $event.target.value)"
   >
 </template>
 
 <script>
 export default {
-  name: "BaseInput",
+  name: 'BaseInput',
   props: {
     value: {},
     width: {
-      default: "",
+      default: '',
       type: String,
-      required: false
+      required: false,
     },
-    undercover: Boolean
-  }
+    undercover: Boolean,
+  },
 };
 </script>
 

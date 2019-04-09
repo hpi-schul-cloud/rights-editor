@@ -7,72 +7,78 @@
       <ul class="actions-list">
         <li
           v-for="action in actions"
-          v-bind:key="action.id"
-          v-bind:class="{selected: isSelected(action.id)}"
-          v-on:click="actionClicked(action.id)"
-        >{{ action.label }}</li>
+          :key="action.id"
+          :class="{selected: isSelected(action.id)}"
+          @click="actionClicked(action.id)"
+        >
+          {{ action.label }}
+        </li>
       </ul>
     </template>
     <template v-slot:footer>
       <div class="modal-footer">
         <BaseButton
-          textlike
           v-if="allowAbort"
-          v-bind:onClick="function() {$emit('abort');}"
-        >Abbrechen</BaseButton>
+          textlike
+          :on-click="function() {$emit('abort');}"
+        >
+          Abbrechen
+        </BaseButton>
         <BaseButton
-          v-bind:disabled="currentAction == ''"
-          v-bind:onClick="function() {$emit('chosen', currentAction);}"
-        >Annehmen</BaseButton>
+          :disabled="currentAction == ''"
+          :on-click="function() {$emit('chosen', currentAction);}"
+        >
+          Annehmen
+        </BaseButton>
       </div>
     </template>
   </BaseModal>
 </template>
 
 <script>
-import BaseButton from "./BaseButton.vue";
-import BaseModal from "./BaseModal.vue";
+import BaseButton from './BaseButton.vue';
+import BaseModal from './BaseModal.vue';
 
 export default {
-  name: "ActionChooser",
+  name: 'ActionChooser',
   components: {
     BaseButton,
-    BaseModal
-  },
-
-  data: function() {
-    return {
-      currentSelected: null,
-      currentAction: "",
-      actions: [
-        { id: 0, label: "Aggregieren" },
-        { id: 1, label: "Annotieren" },
-        { id: 2, label: "Annonymisieren" },
-        { id: 3, label: "Archivieren" },
-        { id: 4, label: "Kompensieren" },
-        { id: 5, label: "Löschen" },
-        { id: 6, label: "Drucken" },
-        { id: 7, label: "Speichern" },
-        { id: 8, label: "Verbreiten" },
-        { id: 9, label: "Zitieren" }
-      ]
-    };
+    BaseModal,
   },
   props: {
     allowAbort: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
+  },
+
+  data() {
+    return {
+      currentSelected: null,
+      currentAction: '',
+      actions: [
+        { id: 0, label: 'Aggregieren' },
+        { id: 1, label: 'Annotieren' },
+        { id: 2, label: 'Annonymisieren' },
+        { id: 3, label: 'Archivieren' },
+        { id: 4, label: 'Kompensieren' },
+        { id: 5, label: 'Löschen' },
+        { id: 6, label: 'Drucken' },
+        { id: 7, label: 'Speichern' },
+        { id: 8, label: 'Verbreiten' },
+        { id: 9, label: 'Zitieren' },
+      ],
+    };
   },
   methods: {
-    actionClicked: function(actionId) {
+    actionClicked(actionId) {
       this.currentAction = this.actions[actionId].label;
       this.currentSelected = actionId;
     },
-    isSelected: function(identifier) {
+    isSelected(identifier) {
       return this.currentSelected == identifier;
-    }
-  }
+    },
+  },
 };
 </script>
 
