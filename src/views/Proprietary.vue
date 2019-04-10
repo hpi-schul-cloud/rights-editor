@@ -1,7 +1,5 @@
 <template>
-  <div class="oer-page">
-    <RuleEditor />
-  </div>
+  <RuleEditor />
 </template>
 
 <script>

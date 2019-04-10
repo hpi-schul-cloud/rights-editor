@@ -68,15 +68,7 @@
       </div>
     </div>
 
-    <!-- display subrules -->
-    <div class="subrule-container">
-      <RuleItem
-        v-for="(subrule, index) in rule[subruleType]"
-        :key="index"
-        :policy="policy"
-        :path="[...path, subruleType, index]"
-      />
-    </div>
+    <p>TODO: Link to subrules if present</p>
   </div>
 </template>
 

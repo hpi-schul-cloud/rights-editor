@@ -3,7 +3,7 @@
     <!-- TODO(hks): Breadcrums wär cool -->
     <div>
       <h1>Elektronisches Lizenz-Bearbeitungsprogramm (ELBP)</h1>
-      <h2>erlaubt die automatische Generierung von Lizenzen in maschinenlesbarem Format</h2>
+      <h2>Erlaubt die automatische Generierung von Lizenzen in maschinenlesbarem Format</h2>
     </div>
     <p>Welche Art Lizenz möchten Sie anlegen?</p>
     <div
