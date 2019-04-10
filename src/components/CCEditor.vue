@@ -20,11 +20,11 @@
           type="radio"
           value="alike"
         >
-        <label>Ja, aber nur unter gleichen Bedinungen</label>
+        <label>Ja, aber nur unter gleichen Bedingungen</label>
       </div>
     </div>
     <div class="question">
-      <label>Kommerziele Nutzungen Ihres Werkes erlauben?</label>
+      <label>Kommerzielle Nutzungen Ihres Werkes erlauben?</label>
       <div class="options">
         <input
           v-model="commercialUse"

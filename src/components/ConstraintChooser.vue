@@ -1,8 +1,5 @@
 <template>
-  <BaseModal
-    :width="'1000px'"
-    :scrollable="false"
-  >
+  <BaseModal :width="'1000px'" :scrollable="false">
     <template v-slot:header>
       <h1 v-if="constraintToEdit == null">
         Einschränkung hinzufügen
@@ -42,31 +39,20 @@
         </div>
         <div class="value-container">
           <!-- input is number with unit -->
-          <div
-            v-if="displayNumberInput"
-            class="numeric-input-container"
-          >
+          <div v-if="displayNumberInput" class="numeric-input-container">
             <div class="number-container">
               <div class="numeric-input-header">
                 Zahl:
               </div>
               <br>
-              <BaseInput
-                v-model.number="number"
-                class="number-input flat-input"
-                type="number"
-              />
+              <BaseInput v-model.number="number" class="number-input flat-input" type="number" />
             </div>
             <div class="unit-container">
               <div class="numeric-input-header">
                 Einheit:
               </div>
               <br>
-              <ul
-                class="unit-list list"
-                type="text"
-                name="unit"
-              >
+              <ul class="unit-list list" type="text" name="unit">
                 <li
                   v-for="unit in _units"
                   :key="unit.id"
@@ -79,10 +65,7 @@
             </div>
           </div>
           <!-- input is selection from list -->
-          <div
-            v-if="displayListInput"
-            class="value-list-container list-container"
-          >
+          <div v-if="displayListInput" class="value-list-container list-container">
             <ul class="value-list list">
               <li
                 v-for="item in _list"

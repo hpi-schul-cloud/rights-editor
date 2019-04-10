@@ -137,6 +137,13 @@ export default {
     constraints() {
       return this.rule.constraint;
     },
+    ruleParent() {
+      const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
+      return pathWithoutLastElement.reduce(
+        (result, segment) => result[segment],
+        this.policy,
+      );
+    },
   },
   methods: {
     furtherPath(nameSegment, indexSegment) {
@@ -151,8 +158,13 @@ export default {
       this.rule[this.subruleType].push({});
     },
     removeRule() {
-      // TODO
-      throw new Exception('not implemented yet');
+      Vue.delete(this.ruleParent, this.path[this.path.length - 1]);
+      if (this.ruleParent.length === 0) {
+        const parentsParent = this.path
+          .slice(0, this.path.length - 2)
+          .reduce((result, segment) => result[segment], this.policy);
+        Vue.delete(parentsParent, this.path[this.path.length - 2]);
+      }
     },
     showConstraintChooser() {
       this.displayConstraintChooser = true;
