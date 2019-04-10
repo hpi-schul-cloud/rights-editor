@@ -10,7 +10,7 @@
       @licenseClicked="license = $event"
     />
     <div>
-      <h2>Provisorische Lizenz</h2>
+      <h2>Provisorische Lizenz:</h2>
       <pre>{{ odrl }}</pre>
     </div>
   </div>
