@@ -62,7 +62,13 @@ export default {
 
 <style scoped>
 .label {
-    margin: 4px 0px;
+    margin: 0px;
+    padding: 4px 0px;
+    cursor: pointer;
+}
+.label:hover {
+    font-weight: bold;
+    color: #323232;
 }
 .subrules {
     padding-left: 20px;
