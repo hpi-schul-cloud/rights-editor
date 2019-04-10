@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tree">
     <p class="label">
       Policy
     </p>
@@ -61,8 +61,17 @@ export default {
 </script>
 
 <style scoped>
+.tree {
+  padding: 16px 8px;
+}
 .label {
-    margin: 4px 0px;
+    margin: 0px;
+    padding: 4px 0px;
+    cursor: pointer;
+}
+.label:hover {
+  font-weight: bold;
+  color: #323232;
 }
 .rules {
     padding-left: 20px;
