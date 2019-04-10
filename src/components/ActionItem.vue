@@ -1,7 +1,7 @@
 <template>
   <div class="action-container">
     <ActionChooser
-      v-if="actionChooserShouldDisplay"
+      v-if="displayActionChooser"
       :action-chooser-allow-abort="actionChooserAllowAbort"
       @chosen="hideActionChooser(); action = $event"
       @abort="hideActionChooser()"
@@ -24,6 +24,8 @@
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import ActionChooser from './ActionChooser.vue';
+
+const placeholderText = '<leer>';
 
 export default {
   name: 'ActionItem',
@@ -56,7 +58,7 @@ export default {
     action: {
       get() {
         if (!this.rule.action) {
-          Vue.set(this.rule, 'action', '<leer>');
+          Vue.set(this.rule, 'action', placeholderText);
         }
         return this.rule.action;
       },
@@ -64,9 +66,9 @@ export default {
         this.rule.action = newAction;
       },
     },
-  },
-  mounted() {
-    this.showActionChooser(false);
+    displayActionChooser() {
+      return this.actionChooserShouldDisplay || this.rule.action === placeholderText;
+    },
   },
   methods: {
     showActionChooserWithAbort() {

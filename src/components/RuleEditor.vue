@@ -1,14 +1,13 @@
 <template>
   <div class="rule-editor">
-    <PolicyTree :policy="policy" />
     <div class="editor-header">
-      <BaseButton :on-click="newPermission">
+      <BaseButton :onClick="newPermission">
         Erlaubnis
       </BaseButton>
-      <BaseButton :on-click="newObligation">
+      <BaseButton :onClick="newObligation">
         Pflicht
       </BaseButton>
-      <BaseButton :on-click="newProhibition">
+      <BaseButton :onClick="newProhibition">
         Verbot
       </BaseButton>
       <span class="licence-name">
@@ -17,18 +16,11 @@
       </span>
     </div>
 
-    <RuleItem
-      v-for="(rule, index) in policy['permission']" :key="rule.uid" :policy="policy"
-      :path="['permission', index]"
-    />
-    <RuleItem
-      v-for="(rule, index) in policy['prohibition']" :key="rule.uid" :policy="policy"
-      :path="['prohibition', index]"
-    />
-    <RuleItem
-      v-for="(rule, index) in policy['obligation']" :key="rule.uid" :policy="policy"
-      :path="['obligation', index]"
-    />
+    <PolicyTree class="policy-tree" :policy="policy" :selectedPath.sync="editPath" />
+
+    <div class="detail-pane">
+      <RuleItem :policy="policy" :path="editPath" v-if="showRulePane" />
+    </div>
 
     <pre>{{ policy }}</pre>
   </div>
@@ -53,14 +45,11 @@ export default {
   },
   data() {
     return {
+      editPath: [],
       policy: {
         uid: '007-asdf-3ddfi',
         follow(path) {
-          let result = this;
-          path.forEach((segment) => {
-            result = result[segment];
-          });
-          return result;
+          return path.reduce((result, pathSegment) => result[pathSegment], this);
         },
       },
     };
@@ -70,22 +59,32 @@ export default {
       if (!this.policy.permission) {
         Vue.set(this.policy, 'permission', []);
       }
-      const p = this.policy.permission;
-      Vue.set(p, p.length, {});
+      let idx = this.policy.permission.length
+      Vue.set(this.policy.permission, idx, {});
+      this.editPath = ['permission', idx];
     },
     newObligation() {
       if (!this.policy.obligation) {
         Vue.set(this.policy, 'obligation', []);
       }
-      this.policy.obligation.push({});
+      let idx = this.policy.obligation.length
+      Vue.set(this.policy.obligation, idx, {});
+      this.editPath = ['obligation', idx];
     },
     newProhibition() {
       if (!this.policy.prohibition) {
         Vue.set(this.policy, 'prohibition', []);
       }
-      this.policy.prohibition.push({});
+      let idx = this.policy.prohibition.length
+      Vue.set(this.policy.prohibition, idx, {});
+      this.editPath = ['prohibition', idx];
     },
   },
+  computed: {
+    showRulePane() {
+      return this.editPath.length > 0;
+    }
+  }
 };
 </script>
 
@@ -103,6 +102,13 @@ a:focus {
 </style>
 
 <style scoped>
+.policy-tree {
+  float: left;
+  width: 200px;
+}
+.detail-pane {
+  margin-left: 200px;
+}
 .editor-header {
   background-color: white;
   border-bottom: 5px solid gray;
@@ -120,8 +126,5 @@ a:focus {
 input.guid-input {
   margin-left: 10px;
   width: 175px;
-}
-
-pre {
 }
 </style>
