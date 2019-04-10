@@ -80,9 +80,11 @@ export default {
   background-color: transparent;
   color: black;
   font-weight: bold;
-  width: 22px;
-  height: 32px;
+  width: 20px;
+  height: 20px;
   margin: 8px;
   padding: 0;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 </style>
