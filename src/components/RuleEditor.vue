@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="rule-editor">
+    <PolicyTree :policy="policy" />
     <div class="editor-header">
       <BaseButton :on-click="newPermission">
         Erlaubnis
@@ -38,17 +39,16 @@ import Vue from 'vue';
 
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
-import Action from './ActionItem.vue';
-
+import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
-import { Odrl } from '../libs/rightsml-lib-js/ODRLclasses';
-import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
+
 
 export default {
   name: 'RuleEditor',
   components: {
     BaseButton,
     BaseInput,
+    PolicyTree,
     RuleItem,
   },
   data() {

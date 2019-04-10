@@ -4,9 +4,10 @@
     "vue/max-attributes-per-line": ["error", {
       "singleline": 3,
       "multiline": {
-        "max": 3,
+        "max": 1,
         "allowFirstLine": false
       }
-    }]
+    }],
+    "linebreak-style": "off"
   }
 }
