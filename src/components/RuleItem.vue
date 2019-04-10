@@ -16,7 +16,7 @@
     {{ ruleInfo.descriptionBefore }}
     <span v-if="parentruleInfo != null">
       {{ parentruleInfo.definiteArticle }}
-      <a href="#">{{ parentruleInfo.name }}</a>
+      <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentruleInfo.name }}</a>
     </span>
     {{ ruleInfo.descriptionAfter }}
 
@@ -24,7 +24,7 @@
     <br>
     <!-- add new refinement -->
     Das
-    <a href="#">{{ rule['action'] }}</a> darf nur auf die folgende Art und Weise erfolgen...
+    <em>{{ rule['action'] }}</em> darf nur auf die folgende Art und Weise erfolgen...
     <BaseButton
       class="add-button"
       :on-click="function(){/* TODO: implement this functionality */}"
@@ -35,7 +35,7 @@
     <br>
     <!-- display and edit constraints -->
     Insgesamt gilt {{ ruleInfo.definiteArticle }}
-    <a href="#">{{ ruleInfo.name }}</a> nur, wenn...
+    <em>{{ ruleInfo.name }}</em> nur, wenn...
     <ConstraintItem
       v-for="(constraint, index) in constraints"
       :key="index"
@@ -62,7 +62,7 @@
         {{ subruleInfo.descriptionBefore }}
         <span>
           {{ ruleInfo.definiteArticle }}
-          <a href="#">{{ ruleInfo.name }}</a>
+          <em>{{ ruleInfo.name }}</em>
         </span>
         {{ subruleInfo.descriptionAfter }}
       </div>
@@ -155,7 +155,10 @@ export default {
       if (!this.rule[this.subruleType]) {
         Vue.set(this.rule, this.subruleType, []);
       }
-      this.rule[this.subruleType].push({});
+      let subrules = this.rule[this.subruleType];
+      let idx = subrules.length;
+      Vue.set(subrules, idx, {})
+      this.$emit('followLink', [...this.path, this.subruleType, idx]);
     },
     removeRule() {
       Vue.delete(this.ruleParent, this.path[this.path.length - 1]);

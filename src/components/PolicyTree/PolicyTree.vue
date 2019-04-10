@@ -63,6 +63,7 @@ export default {
 <style scoped>
 .tree {
   padding: 16px 8px;
+  box-sizing: border-box;
 }
 .label {
     margin: 0px;

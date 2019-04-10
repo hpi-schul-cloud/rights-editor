@@ -34,4 +34,16 @@ ul {
   margin-left: 50px;
   margin-right: 50px;
 }
+
+em, a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #1f3b70;
+  font-style: normal;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
 </style>
