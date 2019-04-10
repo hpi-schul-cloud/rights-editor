@@ -1,21 +1,3 @@
-import { Odrl as Vocab } from '../rightsml-lib-js/ODRLvocabs';
-import { Action } from '../../components/ActionItem.vue';
-
-export class Rule {
-  constructor(id, type) {
-    this.id = id;
-    this.type = type;
-    this.action = new Action('<Aktion auswählen>', Vocab.ActionsCV.use);
-  }
-}
-
-export class RuleTree {
-  constructor(id, type) {
-    this.id = id;
-    this.rules = [];
-  }
-}
-
 export const RuleTypes = Object.freeze({
   permission: {
     name: 'Erlaubnis',
@@ -29,7 +11,7 @@ export const RuleTypes = Object.freeze({
   },
   obligation: {
     name: 'Pflicht',
-    definiteArticle: 'die', 
+    definiteArticle: 'die',
     indefiniteArticle: 'eine',
     parentrule: '',
     subrule: 'consequence',
@@ -39,7 +21,7 @@ export const RuleTypes = Object.freeze({
   },
   prohibition: {
     name: 'Verbot',
-    definiteArticle: 'das', 
+    definiteArticle: 'das',
     indefiniteArticle: 'ein',
     parentrule: '',
     subrule: 'remedy',
@@ -48,7 +30,7 @@ export const RuleTypes = Object.freeze({
     icon: 'fas fa-ban',
   },
   duty: {
-    name: 'Pflicht',
+    name: 'Bedingung',
     definiteArticle: 'die',
     indefiniteArticle: 'eine',
     parentrule: 'permission',
@@ -57,7 +39,7 @@ export const RuleTypes = Object.freeze({
             ' muss geleistet werden, damit ',
     descriptionAfter:
             ' gilt.',
-    icon: 'far fa-handshake',
+    icon: 'far fa-hand-point-up',
   },
   consequence: {
     name: 'Konsequenz',
@@ -69,11 +51,11 @@ export const RuleTypes = Object.freeze({
             ' muss geleistet werden, falls ',
     descriptionAfter:
             ' nicht eingehalten wurde.',
-    icon: 'fas fa-hand-holding',
+    icon: 'fas fa-gavel',
   },
   remedy: {
     name: 'Strafe',
-    definiteArticle: 'die', 
+    definiteArticle: 'die',
     indefiniteArticle: 'eine',
     parentrule: 'prohibition',
     subrule: '',

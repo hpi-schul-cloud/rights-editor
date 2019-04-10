@@ -109,7 +109,7 @@ import {
   groups,
   units,
   operandMapping,
-} from '../libs/constraints/constraints';
+} from '../libs/odrl/constraints';
 import BaseInput from './BaseInput.vue';
 import BaseModal from './BaseModal.vue';
 import BaseButton from './BaseButton.vue';

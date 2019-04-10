@@ -16,18 +16,20 @@
       </span>
     </div>
 
-    <RuleItem
-      v-for="(rule, index) in policy['permission']" :key="rule.uid" :policy="policy"
-      :path="['permission', index]"
-    />
-    <RuleItem
-      v-for="(rule, index) in policy['prohibition']" :key="rule.uid" :policy="policy"
-      :path="['prohibition', index]"
-    />
-    <RuleItem
-      v-for="(rule, index) in policy['obligation']" :key="rule.uid" :policy="policy"
-      :path="['obligation', index]"
-    />
+    <div class="editor-body">
+      <RuleItem
+        v-for="(rule, index) in policy['permission']" :key="rule.uid" :policy="policy"
+        :path="['permission', index]"
+      />
+      <RuleItem
+        v-for="(rule, index) in policy['prohibition']" :key="rule.uid" :policy="policy"
+        :path="['prohibition', index]"
+      />
+      <RuleItem
+        v-for="(rule, index) in policy['obligation']" :key="rule.uid" :policy="policy"
+        :path="['obligation', index]"
+      />
+    </div>
 
     <pre>{{ policy }}</pre>
   </div>
@@ -35,14 +37,10 @@
 
 <script>
 import Vue from 'vue';
-
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import Action from './ActionItem.vue';
-
 import RuleItem from './RuleItem.vue';
-import { Odrl } from '../libs/rightsml-lib-js/ODRLclasses';
-import { Odrl as Vocab } from '../libs/rightsml-lib-js/ODRLvocabs';
 
 export default {
   name: 'RuleEditor',
@@ -113,6 +111,12 @@ a:focus {
   width: calc(100% - 20px);
 }
 
+.editor-body {
+  margin: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .licence-name {
   margin-left: 20px;
 }
@@ -120,8 +124,5 @@ a:focus {
 input.guid-input {
   margin-left: 10px;
   width: 175px;
-}
-
-pre {
 }
 </style>

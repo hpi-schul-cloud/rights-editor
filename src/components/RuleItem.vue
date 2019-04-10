@@ -15,7 +15,7 @@
     <ActionItem class="action-item" :policy="policy" :path="[...path, 'action']" />
     {{ ruleInfo.descriptionBefore }}
     <span v-if="parentruleInfo != null">
-      {{ parentruleInfo.definiteArticle}}
+      {{ parentruleInfo.definiteArticle }}
       <a href="#">{{ parentruleInfo.name }}</a>
     </span>
     {{ ruleInfo.descriptionAfter }}
@@ -34,7 +34,7 @@
 
     <br>
     <!-- display and edit constraints -->
-    Insgesamt gilt {{ruleInfo.definiteArticle}}
+    Insgesamt gilt {{ ruleInfo.definiteArticle }}
     <a href="#">{{ ruleInfo.name }}</a> nur, wenn...
     <ConstraintItem
       v-for="(constraint, index) in constraints"
@@ -50,7 +50,7 @@
     <!-- add subrules -->
     <div v-if="ruleInfo.subrule != ''" class="add-subrule-container">
       <i>Optional können folgende Erweiterungen hinzugefügt werden:</i>
-      <br>{{this.sentenceStart(subruleInfo.indefiniteArticle)}}
+      <br>{{ this.sentenceStart(subruleInfo.indefiniteArticle) }}
       <BaseButton
         class="add-subrule-button"
         :name="subruleInfo.name"
@@ -60,11 +60,11 @@
       </BaseButton>
       <div class="add-subrule-info">
         {{ subruleInfo.descriptionBefore }}
-    <span>
-      {{ ruleInfo.definiteArticle}}
-      <a href="#">{{ ruleInfo.name }}</a>
-    </span>
-    {{ subruleInfo.descriptionAfter }}
+        <span>
+          {{ ruleInfo.definiteArticle }}
+          <a href="#">{{ ruleInfo.name }}</a>
+        </span>
+        {{ subruleInfo.descriptionAfter }}
       </div>
     </div>
 
@@ -86,7 +86,7 @@ import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem';
 import BaseButton from './BaseButton.vue';
 import ConstraintChooser from './ConstraintChooser.vue';
-import { RuleTypes } from '../libs/rules/rules.js';
+import { RuleTypes } from '../libs/odrl/rules.js';
 
 export default {
   name: 'RuleItem',
@@ -136,9 +136,8 @@ export default {
     parentruleInfo() {
       if (this.ruleInfo.parentrule != '') {
         return RuleTypes[this.ruleInfo.parentrule];
-      } else {
-        return null;
       }
+      return null;
     },
     constraints() {
       return this.rule.constraint;
@@ -175,7 +174,7 @@ export default {
         Vue.delete(parentsParent, this.path[this.path.length - 2]);
       }
     },
-    showConstraintChooser() {      
+    showConstraintChooser() {
       this.displayConstraintChooser = true;
     },
     hideConstraintChooser() {
@@ -193,11 +192,7 @@ export default {
 
 <style scoped>
 .rule-container {
-  width: 95%;
-  margin: 10px;
-  margin-top: 0px;
-  margin-left: 0px;
-  padding: 20px;
+  width: 1000px;
 }
 
 .rule-header {
@@ -208,7 +203,7 @@ export default {
 .remove-button {
   position: absolute;
   left: calc(100% - 20px);
-  top: -20px;
+  top: -10px;
 }
 
 .constraint-container {
@@ -232,11 +227,11 @@ export default {
 }
 
 .subrule-container {
-  margin-left: 20px;
+  margin-top: 50px;
 }
 
 .add-subrule-container {
-  margin-top: 45px;
+  margin-top: 50px;
 }
 
 .add-subrule-info {
