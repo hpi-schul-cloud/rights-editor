@@ -16,10 +16,11 @@
       </span>
     </div>
 
-    <PolicyTree class="policy-tree" :policy="policy" :selectedPath.sync="editPath" />
-
-    <div class="detail-pane">
-      <RuleItem :policy="policy" :path="editPath" v-if="showRulePane" />
+    <div class="editor-body">
+      <PolicyTree class="policy-tree" :policy="policy" :selectedPath.sync="editPath" />
+      <div class="detail-pane">
+        <RuleItem :policy="policy" :path="editPath" v-if="showRulePane" />
+      </div>
     </div>
 
     <pre>{{ policy }}</pre>
@@ -28,12 +29,10 @@
 
 <script>
 import Vue from 'vue';
-
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
-
 
 export default {
   name: 'RuleEditor',
@@ -117,6 +116,12 @@ a:focus {
   padding-bottom: 20px;
   padding-top: 20px;
   width: calc(100% - 20px);
+}
+
+.editor-body {
+  margin: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .licence-name {
