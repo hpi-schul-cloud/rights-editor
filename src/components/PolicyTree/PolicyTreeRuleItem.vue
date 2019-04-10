@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { RuleTypes } from '../../libs/rules/rules';
+import { RuleTypes } from '../../libs/odrl/rules.js';
 
 export default {
   name: 'PolicyTreeRuleItem',
