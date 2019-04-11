@@ -62,12 +62,10 @@
           <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ subrule.action }}</a>
           <span v-if="index + 2 < subrules.length">, </span>
           <span v-if="index + 1 < subrules.length"> und </span>
-        </span>
+        </span>.
       </p>
 
       <BaseButton class="add-button" :name="subruleInfo.name" :on-click="appendNewSubrule">
-        {{ subruleInfo.gender === 'f' ? 'Eine' : 'Ein' }}
-        {{ subrules && subrules.length > 1 ? 'weitere' : '' }}
         {{ subruleInfo.name }} hinzufügen
       </BaseButton>
       <!-- additional explanation -->
