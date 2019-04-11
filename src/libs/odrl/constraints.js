@@ -7,7 +7,7 @@ export class Constraint {
     // TODO: make this less ugly
     this.rightOperandList = [];
     this.rightOperandNumber = 0;
-    this.rightOperandStr = '';
+    this.rightoperandListtr = '';
 
     this.operator = '';
     this.unit = '';
@@ -15,88 +15,73 @@ export class Constraint {
   }
 }
 
-export const operands = [
-  { id: 0, name: 'Bundesland' },
-  { id: 1, name: 'Gruppenzugehörigkeit' },
-  { id: 2, name: 'Alter' },
-  { id: 3, name: 'Nutzungsdauer' },
-  { id: 4, name: 'Nutzeranzahl' },
+export const operandList = [
+  'Bundesland',
+  'Gruppenzugehörigkeit',
+  'Alter',
+  'Nutzungsdauer',
+  'Nutzeranzahl',
 ];
 
-export const operators = [
-  { id: 0, symbol: '=', short: 'eq' },
-  { id: 1, symbol: '<', short: 'lt' },
-  { id: 2, symbol: '≤', short: 'lteq' },
-  { id: 3, symbol: '>', short: 'gt' },
-  { id: 4, symbol: '≥', short: 'gteq' },
+export const operatorList = [
+  { symbol: '=', identifier: 'eq' },
+  { symbol: '<', identifier: 'lt' },
+  { symbol: '≤', identifier: 'lteq' },
+  { symbol: '>', identifier: 'gt' },
+  { symbol: '≥', identifier: 'gteq' },
 ];
 
 export const states = [
-  { id: 0, name: 'Baden-Württemberg' },
-  { id: 1, name: 'Bayern' },
-  { id: 2, name: 'Berlin' },
-  { id: 3, name: 'Brandenburg' },
-  { id: 4, name: 'Bremen' },
-  { id: 5, name: 'Hamburg' },
-  { id: 6, name: 'Hessen' },
-  { id: 7, name: 'Mecklenburg-Vorpommern' },
-  { id: 8, name: 'Niedersachsen' },
-  { id: 9, name: 'Nordrhein-Westfalen' },
-  { id: 10, name: 'Rheinland-Pfalz' },
-  { id: 11, name: 'Saarland' },
-  { id: 12, name: 'Sachsen' },
-  { id: 13, name: 'Sachsen-Anhalt' },
-  { id: 14, name: 'Schleswig-Holstein' },
-  { id: 15, name: 'Thüringen' },
+  'Baden-Württemberg',
+  'Bayern',
+  'Berlin',
+  'Brandenburg',
+  'Bremen',
+  'Hamburg',
+  'Hessen',
+  'Mecklenburg-Vorpommern',
+  'Niedersachsen',
+  'Nordrhein-Westfalen',
+  'Rheinland-Pfalz',
+  'Saarland',
+  'Sachsen',
+  'Sachsen-Anhalt',
+  'Schleswig-Holstein',
+  'Thüringen',
 ];
 
 export const groups = [
-  { id: 0, name: 'Lehrer' },
-  { id: 1, name: 'Schüler' },
-  { id: 2, name: 'Verwaltung' },
+  'Lehrer',
+  'Schüler',
+  'Verwaltung',
 ];
 
-export const units = [
-  { id: 0, name: 'Jahre' },
-  { id: 1, name: 'Tage' },
-  { id: 2, name: 'Stunden' },
-  { id: 3, name: 'Nutzer' },
+export const unitList = [
+  'Jahre',
+  'Tage',
+  'Stunden',
+  'Nutzer',
 ];
 
-export const operandMapping = [
-  {
-    id: 0, // Bundesland
-    operand: operands[0],
-    operators: [operators[0]],
+export const operandMapping = {
+  'Bundesland': {
+    operators: [operatorList[0]],
     list: states,
-    units: [],
   },
-  {
-    id: 1, // Gruppenzugehörigkeit
-    operand: operands[1],
-    operators: [operators[0]],
+  'Gruppenzugehörigkeit': {
+    operators: [operatorList[0]],
     list: groups,
-    units: [],
   },
-  {
-    id: 2, // Alter
-    operand: operands[2],
-    operators: [operators[0], operators[1], operators[2], operators[3], operators[4]],
-    list: [],
-    units: [units[0]],
+  'Alter': {
+    operators: operatorList,
+    units: [unitList[0]],
   },
-  {
-    id: 3, // Nutzungsdauer
-    operand: operands[3],
-    operators: [operators[0], operators[1], operators[2], operators[3], operators[4]],
-    list: [],
-    units: [units[0], units[1], units[2]],
+  'Nutzungsdauer': {
+    operators: operatorList,
+    units: [unitList[0], unitList[1], unitList[2]],
   },
-  {
-    id: 4, // Nutzeranzahl
-    operand: operands[4],
-    operators: [operators[0], operators[1], operators[2], operators[3], operators[4]],
-    list: [],
-    units: [units[3]],
+  'Nutzeranzahl': {
+    operators: operatorList,
+    units: [unitList[3]],
   },
-];
+};

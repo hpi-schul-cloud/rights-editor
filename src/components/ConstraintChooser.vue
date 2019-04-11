@@ -1,85 +1,67 @@
 <template>
   <BaseModal :width="'1000px'" :scrollable="false">
     <template v-slot:header>
-      <h1 v-if="constraintToEdit == null">
-        Einschränkung hinzufügen
-      </h1>
-      <h1 v-else>
-        Einschränkung bearbeiten
-      </h1>
-      <div class="hidden">
-        {{ forceRerender }}
-      </div>
+      <h1 v-if="constraintToEdit == null">Einschränkung hinzufügen</h1>
+      <h1 v-else>Einschränkung bearbeiten</h1>
     </template>
+
     <template v-slot:body>
-      <div class="body-container">
-        <div class="list-container">
-          <ul class="list">
-            <li
-              v-for="operand in _operands"
-              :key="operand.id"
-              :class="{ selected: isOperandSelected(operand.id) }"
-              @click="operandClicked(operand.id)"
-            >
-              {{ operand.name }}
-            </li>
-          </ul>
-        </div>
-        <div class="list-container">
-          <ul class="list">
-            <li
-              v-for="operator in _operators"
-              :key="operator.id"
-              :class="{ selected: isOperatorSelected(operator.id) }"
-              @click="operatorClicked(operator.id)"
-            >
-              {{ operator.symbol }}
-            </li>
-          </ul>
-        </div>
-        <div class="value-container">
-          <!-- input is number with unit -->
-          <div v-if="displayNumberInput" class="numeric-input-container">
-            <div class="number-container">
-              <div class="numeric-input-header">
-                Zahl:
-              </div>
-              <br>
-              <BaseInput v-model.number="number" class="number-input flat-input" type="number" />
-            </div>
-            <div class="unit-container">
-              <div class="numeric-input-header">
-                Einheit:
-              </div>
-              <br>
-              <ul class="unit-list list" type="text" name="unit">
-                <li
-                  v-for="unit in _units"
-                  :key="unit.id"
-                  :class="{ selected: isUnitSelected(unit.id) }"
-                  @click="unitClicked(unit.id)"
-                >
-                  {{ unit.name }}
-                </li>
-              </ul>
-            </div>
+      <ul class="list">
+        <li
+          v-for="(op, index) in operands"
+          :key="index"
+          :class="{ selected: operand === op }"
+          @click="operand = op"
+        >{{ op }}</li>
+      </ul>
+      <ul class="list">
+        <li
+          v-for="(operator, index) in operators"
+          :key="index"
+          :class="{ selected: constraint.operator === operator.identifier }"
+          @click="set(constraint, 'operator', operator.identifier)"
+        >{{ operator.symbol }}</li>
+      </ul>
+      <div class="value-container">
+        <!-- input is number with unit -->
+        <div v-if="isNumericInput" class="numeric-input-container">
+          <div class="number-container">
+            <div class="numeric-input-header">Zahl:</div>
+            <br>
+            <BaseInput
+              v-model.number="constraint.value"
+              class="number-input flat-input"
+              type="number"
+            />
           </div>
-          <!-- input is selection from list -->
-          <div v-if="displayListInput" class="value-list-container list-container">
-            <ul class="value-list list">
+          <div class="unit-container">
+            <div class="numeric-input-header">Einheit:</div>
+            <br>
+            <ul class="unit-list list" type="text" name="unit">
               <li
-                v-for="item in _list"
-                :key="item.id"
-                :class="{ selected: isListItemSelected(item.id) }"
-                @click="listItemClicked(item.id)"
-              >
-                {{ item.name }}
-              </li>
+                v-for="(unit, index) in units"
+                :key="index"
+                :class="{ selected: selectedUnit === unit }"
+                @click="selectedUnit = unit"
+              >{{ unit }}</li>
             </ul>
           </div>
         </div>
+        <!-- input is selection from list -->
+        <ul v-if="isListInput" class="value-list list">
+          <li
+            v-for="(item, index) in listItems"
+            :key="index"
+            :class="{ selected: constraint.rightOperand === item }"
+            @click="set(constraint, 'rightOperand', item)"
+          >{{ item }}</li>
+        </ul>
+        <pre
+          style="position: fixed; z-index: 2; top: 0; left: 0; background-color: white; margin: 0px; padding: 0px"
+        >{{ constraint }}</pre>
       </div>
     </template>
+
     <template v-slot:footer>
       <div class="modal-footer">
         <BaseButton
@@ -89,12 +71,8 @@
               $emit('abort');
             }
           "
-        >
-          Abbrechen
-        </BaseButton>
-        <BaseButton :on-click="accept">
-          Annehmen
-        </BaseButton>
+        >Abbrechen</BaseButton>
+        <BaseButton :on-click="function() {$console.log('not implemented')}">Annehmen</BaseButton>
       </div>
     </template>
   </BaseModal>
@@ -103,40 +81,43 @@
 <script>
 import {
   Constraint,
-  operands,
-  operators,
+  operandList,
   states,
   groups,
-  units,
-  operandMapping,
-} from '../libs/odrl/constraints';
-import BaseInput from './BaseInput.vue';
-import BaseModal from './BaseModal.vue';
-import BaseButton from './BaseButton.vue';
+  operandMapping
+} from "../libs/odrl/constraints";
+import BaseInput from "./BaseInput.vue";
+import BaseModal from "./BaseModal.vue";
+import BaseButton from "./BaseButton.vue";
+import Vue from "vue";
 
 export default {
-  name: 'ConstraintChooser',
+  name: "ConstraintChooser",
   components: {
     BaseInput,
     BaseModal,
-    BaseButton,
+    BaseButton
   },
   props: {
     constraintToEdit: {
       type: Object,
       default: null,
-      required: false,
-    },
+      required: false
+    }
   },
   data() {
     return {
+      constraint: {},
+      selectedUnit: "",
+
+      /////// ---------
+
       forceRerender: 0,
 
       displayNumberInput: false,
       displayListInput: true,
 
       numericOperands: null,
-      _operands: null,
       _operators: null,
       _list: null,
       _units: null,
@@ -146,167 +127,97 @@ export default {
       selectedUnitId: 0,
 
       number: 0,
-      selectedListItems: [],
+      selectedListItems: []
     };
   },
-  created() {
-    this.numericOperands = new Set();
-    for (let i = 0; i < operandMapping.length; i++) {
-      if (operandMapping[i].units.length > 0) {
-        // if there is a unit to select, then the input is a number for sure
-        this.numericOperands.add(i);
-      }
-    }
-
-    if (this.constraintToEdit == null) {
-      // totally new (empty) constraint chooser is going to be created
-      this.initializeDataOnOperandId(0);
-    } else {
-      // load data from the constraint to be edited
-
-      // determine operand
-      for (let i = 0; i < operands.length; i++) {
-        if (operands[i].name == this.constraintToEdit.leftOperand) {
-          this.selectedOperandId = i;
-        }
-      }
-
-      this.initializeDataOnOperandId(this.selectedOperandId);
-
-      // determine operator
-      for (let i = 0; i < operators.length; i++) {
-        if (operators[i].symbol == this.constraintToEdit.operator) {
-          this.selectedOperatorId = operators[i].id;
-        }
-      }
-
-      if (this.constraintToEdit.unit == '') {
-        // list items
-        for (let i = 0; i < this._list.length; i++) {
-          for (
-            let j = 0;
-            j < this.constraintToEdit.rightOperandList.length;
-            j++
-          ) {
-            if (
-              this._list[i].name == this.constraintToEdit.rightOperandList[j]
-            ) {
-              this.selectedListItems[i] = true;
-            }
-          }
-        }
-      } else {
-        // number with unit
-        for (let i = 0; i < units.length; i++) {
-          if (units[i].name == this.constraintToEdit.unit) {
-            this.selectedUnitId = i;
-          }
-        }
-        this.number = this.constraintToEdit.rightOperandNumber;
-      }
-    }
-  },
   methods: {
-    initializeDataOnOperandId(id) {
-      this.selectedOperandId = id;
+    //   accept() {
+    //     const constraint = new Constraint(-1);
+    //     constraint.leftOperand = operands[this.selectedOperandId].name;
+    //     constraint.operator = operators[this.selectedOperatorId].symbol;
 
-      // reset to default input values
-      this.selectedOperatorId = 0;
-      this.number = 0;
+    //     if (this.displayNumberInput) {
+    //       // for numeric input the right operand is just a number, also add the unit though
+    //       constraint.rightOperandNumber = this.number;
+    //       constraint.rightOperandStr = constraint.rightOperandNumber.toString();
+    //       constraint.unit = units[this.selectedUnitId].name;
+    //     } else {
+    //       // create array of chosen names from the value list
+    //       const listItems = [];
+    //       for (let i = 0; i < this._list.length; i++) {
+    //         if (this.selectedListItems[i] == true) {
+    //           listItems.push(this._list[i].name);
+    //         }
+    //       }
+    //       constraint.rightOperandList = listItems;
+    //       constraint.rightOperandStr = listItems.toString();
+    //       // add a space after each comma
+    //       constraint.rightOperandStr = constraint.rightOperandStr.replace(
+    //         /,/g,
+    //         ", "
+    //       );
+    //     }
+    //     constraint.name = `${constraint.leftOperand} ${constraint.operator} ${
+    //       constraint.rightOperandStr
+    //     }`;
 
-      // set data based on chosen operand (use mapping information to do so)
-      const operandMapAtId = operandMapping[this.selectedOperandId];
+    //     if (constraint.unit != "") {
+    //       constraint.name += ` ${constraint.unit}`;
+    //     }
 
-      this.selectedListItems = new Array();
-      for (let i = 0; i < operandMapAtId.list.length; i++) {
-        this.selectedListItems.push(false);
-      }
-
-      this._operands = operands;
-      this._operators = operandMapAtId.operators;
-      this._list = operandMapAtId.list;
-      this._units = operandMapAtId.units;
-
-      // set correct display mode (numeric or list input)
-      if (this.numericOperands.has(id)) {
-        this.displayNumberInput = true;
-        this.displayListInput = false;
-        this.selectedUnitId = operandMapAtId.units[0].id;
-      } else {
-        this.displayNumberInput = false;
-        this.displayListInput = true;
-      }
-    },
-    operandClicked(id) {
-      this.initializeDataOnOperandId(id);
-    },
-    isOperandSelected(id) {
-      return this.selectedOperandId == id;
-    },
-    operatorClicked(id) {
-      this.selectedOperatorId = id;
-    },
-    isOperatorSelected(id) {
-      return this.selectedOperatorId == id;
-    },
-    listItemClicked(id) {
-      this.selectedListItems[id] = !this.selectedListItems[id];
-      this.forceRerender += 1;
-    },
-    isListItemSelected(id) {
-      return this.selectedListItems[id] == true;
-    },
-    unitClicked(id) {
-      this.selectedUnitId = id;
-    },
-    isUnitSelected(id) {
-      return this.selectedUnitId == id;
-    },
-    accept() {
-      const constraint = new Constraint(-1);
-      constraint.leftOperand = operands[this.selectedOperandId].name;
-      constraint.operator = operators[this.selectedOperatorId].symbol;
-
-      if (this.displayNumberInput) {
-        // for numeric input the right operand is just a number, also add the unit though
-        constraint.rightOperandNumber = this.number;
-        constraint.rightOperandStr = constraint.rightOperandNumber.toString();
-        constraint.unit = units[this.selectedUnitId].name;
-      } else {
-        // create array of chosen names from the value list
-        const listItems = [];
-        for (let i = 0; i < this._list.length; i++) {
-          if (this.selectedListItems[i] == true) {
-            listItems.push(this._list[i].name);
-          }
-        }
-        constraint.rightOperandList = listItems;
-        constraint.rightOperandStr = listItems.toString();
-        // add a space after each comma
-        constraint.rightOperandStr = constraint.rightOperandStr.replace(
-          /,/g,
-          ', ',
-        );
-      }
-      constraint.name = `${constraint.leftOperand} ${constraint.operator} ${
-        constraint.rightOperandStr
-      }`;
-
-      if (constraint.unit != '') {
-        constraint.name += ` ${constraint.unit}`;
-      }
-
-      this.$emit('chosen', constraint);
-    },
+    //     this.$emit("chosen", constraint);
+    //   }
+    set(target, name, value) {
+      Vue.set(target, name, value);
+    }
   },
+  computed: {
+    operands() {
+      return operandList;
+    },
+    operand: {
+      get() {
+        let operand = this.constraint.leftOperand;
+        if (!operand) {
+          operand = this.operands[0];
+        }
+        return operand;
+      },
+      set(op) {
+        if (this.constraint.leftOperand === op) {
+          // do nothing
+          return;
+        }
+        Vue.set(this.constraint, 'leftOperand', op);
+        Vue.delete(this.constraint, "operator");
+        Vue.delete(this.constraint, "rightOperand");
+      }
+    },
+    operators() {
+      return operandMapping[this.operand].operators;
+    },
+    units() {
+      return operandMapping[this.operand].units;
+    },
+    listItems() {
+      return operandMapping[this.operand].list;
+    },
+    isNumericInput() {
+      return !!operandMapping[this.operand].units;
+    },
+    isListInput() {
+      return !!operandMapping[this.operand].list;
+    }
+  }
 };
 </script>
 
 <style scoped>
 .list {
-  margin: 0px;
+  float: left;
+  margin: 0px 10px;
   padding: 0px;
-  width: 100%;
+  width: 300px;
   font-size: 16px;
 }
 .list li {
@@ -325,16 +236,8 @@ export default {
   background-color: rgb(218, 218, 218);
 }
 
-.list-container {
-  float: left;
-  margin-right: 10px;
-  margin-left: 10px;
-  width: 300px;
-}
-
 .value-container {
   float: left;
-  margin-right: 15px;
 }
 
 .value-list {
