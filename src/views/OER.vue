@@ -38,4 +38,8 @@ export default {
 .oer-page > *:not(:last-child) {
   margin-bottom: 50px;
 }
+.oer-page{
+  margin-left: 10%;
+  margin-right: 10%;
+}
 </style>

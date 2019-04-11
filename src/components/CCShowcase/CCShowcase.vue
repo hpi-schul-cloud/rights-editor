@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     image_by() {
-      return require("../../img/cc/CC-BY-NC-ND.svg");
+      return require("../../img/cc/CC-BY.svg");
     },
     image_by_sa() {
       return require("../../img/cc/CC-BY-SA.svg");

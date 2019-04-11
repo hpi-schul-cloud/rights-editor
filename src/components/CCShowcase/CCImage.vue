@@ -1,12 +1,17 @@
 <template>
-  <img
-    v-bind:src="imageSource"
-    v-on:click="$emit('licenseClicked', licenseID)"
-    v-bind:class="{active: isActive}"
-  >
+  <div class="ccImages">
+    <img
+      v-bind:src="imageSource"
+      v-on:click="$emit('licenseClicked', licenseID)"
+      v-bind:class="{active: isActive}"
+    >
+    <p>{{ name }}</p>
+  </div>
 </template>
 
 <script>
+import { ccNames } from '../../libs/cc/identifiers.js';
+
 export default {
   name: "CCImage",
   props: {
@@ -25,6 +30,9 @@ export default {
   computed: {
     isActive: function() {
       return this.activeLicense === this.licenseID;
+    },
+    name() {
+      return ccNames[this.licenseID];
     }
   }
 };
@@ -34,8 +42,6 @@ export default {
 img {
   opacity: 0.6;
   cursor: pointer;
-
-  user-drag: none;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-drag: none;
@@ -48,5 +54,8 @@ img:hover {
 }
 img.active {
   box-shadow: 0px 6px 3px -3px gray;
+}
+.ccImages{
+  color: #1f3b70;
 }
 </style>
