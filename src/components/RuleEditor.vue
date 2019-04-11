@@ -19,7 +19,7 @@
     <div class="editor-body">
       <PolicyTree class="policy-tree" :policy="policy" :selectedPath.sync="editPath" />
       <div class="detail-pane">
-        <RuleItem :policy="policy" :path="editPath" v-if="showRulePane" />
+        <RuleItem :policy="policy" :path="editPath" v-if="showRulePane" @followLink="editPath = $event" />
       </div>
     </div>
 
@@ -86,19 +86,6 @@ export default {
   }
 };
 </script>
-
-<style>
-a {
-  text-decoration: none;
-  font-weight: bold;
-  color: #1f3b70;
-}
-
-a:hover,
-a:focus {
-  text-decoration: underline;
-}
-</style>
 
 <style scoped>
 .policy-tree {
