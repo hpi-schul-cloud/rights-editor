@@ -182,8 +182,7 @@ export default {
 .rule-container {
   width: 100%;
   min-width: 200px;
-  margin-left: 10px;
-  padding-top: 10px;
+  margin: 10px;
 }
 
 .rule-header {

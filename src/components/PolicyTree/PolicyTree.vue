@@ -61,8 +61,9 @@ export default {
 </script>
 
 <style scoped>
-.tree {
-  padding: 16px 8px;
+.tree {  
+  padding: 8px;
+  padding-top: 24px;
   box-sizing: border-box;
 }
 .label {

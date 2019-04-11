@@ -99,11 +99,11 @@ export default {
 .policy-tree {
   float: left;
   width: 200px;
-  margin: 0px;
-  padding: 0px;
 }
+
 .policy-detail {
-  margin-left: 200px;
+  margin-left: 200px;  
+  padding: 10px;
 }
 
 .editor-header {
