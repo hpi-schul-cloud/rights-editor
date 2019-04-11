@@ -11,6 +11,7 @@
     </div>
 
     <!-- display action -->
+<<<<<<< HEAD
     <p>
       <!-- main explanation -->
       <EmbedInText text-before="Das" :text-after="ruleInfo.description">
@@ -22,8 +23,19 @@
         <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentruleInfo.name }}</a>
       </EmbedInText>
     </p>
+=======
+    Das
+    <ActionItem class="action-item" :policy="policy" :path="[...path, 'action']" />
+    {{ ruleInfo.descriptionBefore }}
+    <span v-if="parentruleInfo != null">
+      {{ parentruleInfo.definiteArticle }}
+      <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentruleInfo.name }}</a>
+    </span>
+    {{ ruleInfo.descriptionAfter }}
+>>>>>>> origin/master
 
     <!-- add new refinement -->
+<<<<<<< HEAD
     <p>
       Das <em>{{ rule['action'] }}</em> darf nur auf die folgende Art und Weise erfolgen...
       <BaseButton class="add-button" :on-click="function(){console.error('not implemented')}">
@@ -31,8 +43,19 @@
       </BaseButton>
     </p>
     
+=======
+    Das
+    <em>{{ rule['action'] }}</em> darf nur auf die folgende Art und Weise erfolgen...
+    <BaseButton
+      class="add-button"
+      :on-click="function(){/* TODO: implement this functionality */}"
+    >
+      Verfeinerung hinzufügen
+    </BaseButton>
+>>>>>>> origin/master
 
     <!-- display and edit constraints -->
+<<<<<<< HEAD
     <p>
       Insgesamt gilt {{ ruleInfo.definiteArticle }} <em>{{ ruleInfo.name }}</em> nur, wenn...
       <ConstraintItem
@@ -46,6 +69,20 @@
         Einschränkung hinzufügen
       </BaseButton>
     </p>
+=======
+    Insgesamt gilt {{ ruleInfo.definiteArticle }}
+    <em>{{ ruleInfo.name }}</em> nur, wenn...
+    <ConstraintItem
+      v-for="(constraint, index) in constraints"
+      :key="index"
+      :policy="policy"
+      :path="[...path, 'constraint', index]"
+    />
+    <!-- add new constraint -->
+    <BaseButton class="add-button" :on-click="addConstraint">
+      Einschränkung hinzufügen
+    </BaseButton>
+>>>>>>> origin/master
 
     <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
@@ -54,11 +91,22 @@
       <BaseButton :name="subruleInfo.name" :on-click="appendNewSubrule">
         {{ subruleInfo.name }}
       </BaseButton>
+<<<<<<< HEAD
       {{ subruleInfo.description }}
       <!-- additional explanation -->
       <EmbedInText :text-before="subruleInfo.descriptionAddition[0]" :text-after="subruleInfo.descriptionAddition[1]">
         {{ ruleInfo.definiteArticle }} <em>{{ ruleInfo.name }}</em>
       </EmbedInText>
+=======
+      <div class="add-subrule-info">
+        {{ subruleInfo.descriptionBefore }}
+        <span>
+          {{ ruleInfo.definiteArticle }}
+          <em>{{ ruleInfo.name }}</em>
+        </span>
+        {{ subruleInfo.descriptionAfter }}
+      </div>
+>>>>>>> origin/master
     </div>
 
     <p>TODO: Link to subrules if present</p>
@@ -142,10 +190,17 @@ export default {
       if (!this.rule[subruleTypeName]) {
         Vue.set(this.rule, subruleTypeName, []);
       }
+<<<<<<< HEAD
       let subrules = this.rule[subruleTypeName];
       let idx = subrules.length;
       Vue.set(subrules, idx, {})
       this.$emit('followLink', [...this.path, subruleTypeName, idx]);
+=======
+      let subrules = this.rule[this.subruleType];
+      let idx = subrules.length;
+      Vue.set(subrules, idx, {})
+      this.$emit('followLink', [...this.path, this.subruleType, idx]);
+>>>>>>> origin/master
     },
     removeRule() {
       const containerPath = this.path.slice(0, this.path.length - 1);

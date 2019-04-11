@@ -6,18 +6,18 @@
       @chosen="hideConstraintChooser(); constraint = $event"
       @abort="abortChooser()"
     />
-    <div>
+    <div class="constraint-container">
       <BaseButton
         input
         :width="'500px'"
         :on-click="showConstraintChooser"
-        class="constraint-button"
+        class="edit-constraint"
         name="constraint"
         type="button"
       >
         {{ constraint.name }}
       </BaseButton>
-      <BaseButton remove :on-click="removeConstraint">
+      <BaseButton class="remove-constraint" remove :on-click="removeConstraint">
         <i class="fas fa-times" />
       </BaseButton>
     </div>
@@ -106,7 +106,16 @@ export default {
 </script>
 
 <style scoped>
-.constraint-button {
+.constraint-container {
+  position: relative;
+}
+
+.edit-constraint {
   margin: 0px;
+}
+
+.remove-constraint {
+  position: absolute;
+  top: calc(50% - 18px);
 }
 </style>
