@@ -34,6 +34,7 @@ export default {
     name() {
       return ccNames[this.licenseID];
     }
+  }
 };
 </script>
 
