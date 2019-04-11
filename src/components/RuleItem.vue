@@ -18,8 +18,8 @@
       </EmbedInText>
       <!-- additional explanation -->
       <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddition[0]" :text-after="ruleInfo.descriptionAddition[1]">
-        {{ ruleInfo.gender === 'f' ? 'die' : 'das' }}
-        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentRuleName }}</a>
+        {{ parentRule.gender === 'f' ? 'die' : 'das' }}
+        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentRule.name }}</a>
       </EmbedInText>
     </p>
 
@@ -118,12 +118,13 @@ export default {
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];
     },
-    parentRuleName() {
+    parentRule() {
       if (!this.ruleInfo.hasParentRule) {
-        return '<! keine Elternregel >';
+        console.error("has no parent");
+        return null;
       }
       let parentRuleTypeName = this.path[this.path.length - 4];
-      return RuleTypes[parentRuleTypeName].name;
+      return RuleTypes[parentRuleTypeName];
     },
     canHaveSubrules() {
       return this.ruleInfo.subrule != '';
