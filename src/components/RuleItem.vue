@@ -17,9 +17,9 @@
         <ActionItem :policy="policy" :path="[...path, 'action']" />
       </EmbedInText>
       <!-- additional explanation -->
-      <EmbedInText v-if="hasParentRule" :text-before="ruleInfo.descriptionAddition[0]" :text-after="ruleInfo.descriptionAddition[1]">
-        {{ ruleInfo.definiteArticle }}
-        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentruleInfo.name }}</a>
+      <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddition[0]" :text-after="ruleInfo.descriptionAddition[1]">
+        {{ ruleInfo.gender === 'f' ? 'die' : 'das' }}
+        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentRuleName }}</a>
       </EmbedInText>
     </p>
 
@@ -34,7 +34,7 @@
 
     <!-- display and edit constraints -->
     <p>
-      Insgesamt gilt {{ ruleInfo.definiteArticle }} <em>{{ ruleInfo.name }}</em> nur, wenn...
+      Insgesamt gilt {{ ruleInfo.gender === 'f' ? 'die' : 'das' }} <em>{{ ruleInfo.name }}</em> nur, wenn...
       <ConstraintItem
         v-for="(constraint, index) in constraints"
         :key="index"
@@ -49,19 +49,29 @@
 
     <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
-      <i>Optional können folgende Erweiterungen hinzugefügt werden:</i>
-      <br>{{ subruleInfo.indefiniteArticle }}
-      <BaseButton :name="subruleInfo.name" :on-click="appendNewSubrule">
-        {{ subruleInfo.name }}
-      </BaseButton>
-      {{ subruleInfo.description }}
-      <!-- additional explanation -->
+      Optional können {{ subruleInfo.pluralName }} hinzugefügt werden. {{ subruleInfo.pluralName }} sind Pflichten,
+      die geleistet werden müssen,
       <EmbedInText :text-before="subruleInfo.descriptionAddition[0]" :text-after="subruleInfo.descriptionAddition[1]">
-        {{ ruleInfo.definiteArticle }} <em>{{ ruleInfo.name }}</em>
+        {{ ruleInfo.gender === 'f' ? 'die' : 'das' }} <em>{{ ruleInfo.name }}</em>
       </EmbedInText>
-    </div>
+      
+      <p v-if="subrules">
+        Die {{ subrules.length == 1 ? subruleInfo.name : subruleInfo.pluralName }} diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
+        {{ subrules.length === 1 ? 'ist' : 'sind' }}
+        <span v-for="(subrule, index) in subrules" :key="index">
+          <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ subrule.action }}</a>
+          <span v-if="index + 2 < subrules.length">, </span>
+          <span v-if="index + 1 < subrules.length"> und </span>
+        </span>
+      </p>
 
-    <p>TODO: Link to subrules if present</p>
+      <BaseButton class="add-button" :name="subruleInfo.name" :on-click="appendNewSubrule">
+        {{ subruleInfo.gender === 'f' ? 'Eine' : 'Ein' }}
+        {{ subrules && subrules.length > 1 ? 'weitere' : '' }}
+        {{ subruleInfo.name }} hinzufügen
+      </BaseButton>
+      <!-- additional explanation -->
+    </div>
   </div>
 </template>
 
@@ -111,11 +121,19 @@ export default {
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];
     },
-    parentruleInfo() {
-      if (this.ruleInfo.parentrule != '') {
-        return RuleTypes[this.ruleInfo.parentrule];
+    parentRuleName() {
+      if (!this.ruleInfo.hasParentRule) {
+        return '<! keine Elternregel >';
       }
-      return null;
+      let parentRuleTypeName = this.path[this.path.length - 4];
+      return RuleTypes[parentRuleTypeName].name;
+    },
+    canHaveSubrules() {
+      return this.ruleInfo.subrule != '';
+    },
+    subrules() {
+      let subruleTypeName = this.ruleInfo.subrule;
+      return this.rule[subruleTypeName];
     },
     hasParentRule() {
       return !!this.parentruleInfo;
@@ -177,6 +195,10 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: underline;
+}
+
 .rule-container {
   width: 1000px;
 }
