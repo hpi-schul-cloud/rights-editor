@@ -128,10 +128,7 @@ export default {
     },
     ruleParent() {
       const containerPath = this.path.slice(0, this.path.length - 1);
-      return containerPath.reduce(
-        (result, segment) => result[segment],
-        this.policy,
-      );
+      return this.policy.follow(containerPath);
     },
   },
   methods: {
@@ -165,7 +162,7 @@ export default {
       // last rule it contained, we also delete the array.
       const parentPath = containerPath.slice(0, containerPath.length - 1);
       const ruleParent = this.policy.follow(parentPath);
-      const containerName = containerPath[containerPath - 1];
+      const containerName = containerPath[containerPath.length - 1];
       Vue.delete(ruleParent, containerName);
       this.$emit('followLink', parentPath);
     },
