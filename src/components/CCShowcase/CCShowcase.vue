@@ -61,22 +61,22 @@ export default {
   },
   computed: {
     image_by() {
-      return require("../../img/cc/by.png");
+      return require("../../img/cc/CC-BY-NC-ND.svg");
     },
     image_by_sa() {
-      return require("../../img/cc/by-sa.png");
+      return require("../../img/cc/CC-BY-SA.svg");
     },
     image_by_nd() {
-      return require("../../img/cc/by-nd.png");
+      return require("../../img/cc/CC-BY-ND.svg");
     },
     image_by_nc() {
-      return require("../../img/cc/by-nc.eu.png");
+      return require("../../img/cc/CC-BY-ND.svg");
     },
     image_by_nc_sa() {
-      return require("../../img/cc/by-nc-sa.eu.png");
+      return require("../../img/cc/CC-BY-NC-SA.svg");
     },
     image_by_nc_nd() {
-      return require("../../img/cc/by-nc-nd.eu.png");
+      return require("../../img/cc/CC-BY-NC-ND.svg");
     }
   }
 };

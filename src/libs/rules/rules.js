@@ -10,7 +10,7 @@ export class Rule {
 }
 
 export class RuleTree {
-    constructor(id, type) {
+    constructor(id) {
         this.id = id;
         this.rules = [];
     }
