@@ -12,7 +12,7 @@
       class="mode-choosing"
     >
       <router-link :to="mode.path">
-        <BaseButton>{{ mode.name }}</BaseButton>
+        <BaseButton :onClick="function(){}">{{ mode.name }}</BaseButton>
       </router-link>
     </div>
   </div>
