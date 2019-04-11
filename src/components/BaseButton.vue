@@ -22,7 +22,7 @@ export default {
     textlike: Boolean,
     input: Boolean,
     remove: Boolean,
-    onClick: { type: Function, required: false },
+    onClick: { type: Function, required: true },
   },
 };
 </script>
