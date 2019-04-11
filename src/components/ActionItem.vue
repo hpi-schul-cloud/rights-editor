@@ -2,7 +2,7 @@
   <div class="action-container">
     <ActionChooser
       v-if="displayActionChooser"
-      :action-chooser-allow-abort="actionChooserAllowAbort"
+      :allow-abort="actionChooserAllowAbort"
       @chosen="hideActionChooser(); action = $event"
       @abort="hideActionChooser()"
     />
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       actionChooserShouldDisplay: false,
-      actionChooserAllowAbort: true,
+      actionChooserAllowAbort: false,
     };
   },
   computed: {
@@ -80,7 +80,7 @@ export default {
     },
     hideActionChooser() {
       this.actionChooserShouldDisplay = false;
-      this.actionChooserAllowAbort = true;
+      this.actionChooserAllowAbort = false;
     },
   },
 };

@@ -19,7 +19,9 @@
       <!-- additional explanation -->
       <EmbedInText v-if="hasParentRule" :text-before="ruleInfo.descriptionAddition[0]" :text-after="ruleInfo.descriptionAddition[1]">
         {{ ruleInfo.definiteArticle }}
-        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentruleInfo.name }}</a>
+        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">
+          {{ parentruleInfo.name }}
+        </a>
       </EmbedInText>
     </p>
 
@@ -30,7 +32,7 @@
         Verfeinerung hinzufügen
       </BaseButton>
     </p>
-    
+
 
     <!-- display and edit constraints -->
     <p>
@@ -105,7 +107,7 @@ export default {
       return this.policy.follow(this.path);
     },
     ruleInfo() {
-      let ruleTypeName = this.path[this.path.length - 2];
+      const ruleTypeName = this.path[this.path.length - 2];
       return RuleTypes[ruleTypeName];
     },
     subruleInfo() {
@@ -138,13 +140,13 @@ export default {
       return p;
     },
     appendNewSubrule() {
-      let subruleTypeName = this.ruleInfo.subrule;
+      const subruleTypeName = this.ruleInfo.subrule;
       if (!this.rule[subruleTypeName]) {
         Vue.set(this.rule, subruleTypeName, []);
       }
-      let subrules = this.rule[subruleTypeName];
-      let idx = subrules.length;
-      Vue.set(subrules, idx, {})
+      const subrules = this.rule[subruleTypeName];
+      const idx = subrules.length;
+      Vue.set(subrules, idx, {});
       this.$emit('followLink', [...this.path, subruleTypeName, idx]);
     },
     removeRule() {
@@ -178,7 +180,8 @@ export default {
 
 <style scoped>
 .rule-container {
-  width: 1000px;
+  width: 100%;
+  min-width: 200px;
 }
 
 .rule-header {
@@ -188,7 +191,7 @@ export default {
 
 .remove-button {
   position: absolute;
-  left: calc(100% - 20px);
+  right: 0px;
   top: -10px;
 }
 

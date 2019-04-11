@@ -1,25 +1,33 @@
 <template>
   <div class="rule-editor">
     <div class="editor-header">
-      <BaseButton :onClick="newPermission">
+      <BaseButton :on-click="newPermission">
         Erlaubnis
       </BaseButton>
-      <BaseButton :onClick="newObligation">
+      <BaseButton :on-click="newObligation">
         Pflicht
       </BaseButton>
-      <BaseButton :onClick="newProhibition">
+      <BaseButton :on-click="newProhibition">
         Verbot
       </BaseButton>
-      <span class="licence-name">
-        GUID der Lizenz:
-        <BaseInput v-model="policy['uid']" undercover class="guid-input" />
-      </span>
+
+      <div class="guid-container">
+        <span class="guid-label">
+          GUID der Lizenz:
+          <BaseInput v-model="policy['uid']" undercover class="guid-input" />
+        </span>
+      </div>
     </div>
 
     <div class="editor-body">
-      <PolicyTree class="policy-tree" :policy="policy" :selectedPath.sync="editPath" />
+      <PolicyTree class="policy-tree" :policy="policy" :selected-path.sync="editPath" />
       <div class="detail-pane">
-        <RuleItem :policy="policy" :path="editPath" v-if="showRulePane" @followLink="editPath = $event" />
+        <RuleItem
+          v-if="showRulePane"
+          :policy="policy"
+          :path="editPath"
+          @followLink="editPath = $event"
+        />
       </div>
     </div>
 
@@ -53,12 +61,17 @@ export default {
       },
     };
   },
+  computed: {
+    showRulePane() {
+      return this.editPath.length > 0;
+    },
+  },
   methods: {
     newPermission() {
       if (!this.policy.permission) {
         Vue.set(this.policy, 'permission', []);
       }
-      let idx = this.policy.permission.length
+      const idx = this.policy.permission.length;
       Vue.set(this.policy.permission, idx, {});
       this.editPath = ['permission', idx];
     },
@@ -66,7 +79,7 @@ export default {
       if (!this.policy.obligation) {
         Vue.set(this.policy, 'obligation', []);
       }
-      let idx = this.policy.obligation.length
+      const idx = this.policy.obligation.length;
       Vue.set(this.policy.obligation, idx, {});
       this.editPath = ['obligation', idx];
     },
@@ -74,16 +87,11 @@ export default {
       if (!this.policy.prohibition) {
         Vue.set(this.policy, 'prohibition', []);
       }
-      let idx = this.policy.prohibition.length
+      const idx = this.policy.prohibition.length;
       Vue.set(this.policy.prohibition, idx, {});
       this.editPath = ['prohibition', idx];
     },
   },
-  computed: {
-    showRulePane() {
-      return this.editPath.length > 0;
-    }
-  }
 };
 </script>
 
@@ -95,6 +103,7 @@ export default {
 .detail-pane {
   margin-left: 200px;
 }
+
 .editor-header {
   background-color: white;
   border-bottom: 5px solid gray;
@@ -111,12 +120,36 @@ export default {
   padding-right: 20px;
 }
 
-.licence-name {
+.guid-container {
+  display: inline;
+}
+
+.guid-label {
   margin-left: 20px;
 }
 
 input.guid-input {
   margin-left: 10px;
   width: 175px;
+}
+
+@media screen and (max-width: 840px) {
+  .editor-body {
+    padding: 0px;
+  }
+
+  .guid-container {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .editor-body {
+    margin: 0px;
+  }
+
+  .guid-container {
+    margin-top: 20px;
+  }
 }
 </style>
