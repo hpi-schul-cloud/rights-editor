@@ -21,7 +21,7 @@
 
     <div class="editor-body">
       <PolicyTree class="policy-tree" :policy="policy" :selected-path.sync="editPath" />
-      <div class="detail-pane">
+      <div class="policy-detail">
         <RuleItem
           v-if="showRulePane"
           :policy="policy"
@@ -99,8 +99,10 @@ export default {
 .policy-tree {
   float: left;
   width: 200px;
+  margin: 0px;
+  padding: 0px;
 }
-.detail-pane {
+.policy-detail {
   margin-left: 200px;
 }
 
@@ -111,13 +113,12 @@ export default {
 
   padding-bottom: 20px;
   padding-top: 20px;
-  width: calc(100% - 20px);
+  width: 100%;
 }
 
 .editor-body {
-  margin: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .guid-container {
@@ -134,12 +135,17 @@ input.guid-input {
 }
 
 @media screen and (max-width: 840px) {
+  .policy-detail {
+    display: inline-block;
+    margin-left: 0px;
+  }
+
   .editor-body {
     padding: 0px;
   }
 
   .guid-container {
-    display: block;
+    display: block;    
   }
 }
 

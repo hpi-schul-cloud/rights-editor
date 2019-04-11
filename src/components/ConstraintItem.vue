@@ -9,7 +9,7 @@
     <div class="constraint-container">
       <BaseButton
         input
-        :width="'500px'"
+        :width="'90%'"
         :on-click="showConstraintChooser"
         class="edit-constraint"
         name="constraint"
@@ -117,6 +117,9 @@ export default {
 
 .edit-constraint {
   margin: 0px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  max-width: 500px;
 }
 
 .remove-constraint {
