@@ -35,6 +35,20 @@ ul {
   margin-right: 50px;
 }
 
+@media screen and (max-width: 840px) {
+  #app {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #app {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
 em, a {
   text-decoration: none;
   font-weight: bold;

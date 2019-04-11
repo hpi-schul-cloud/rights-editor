@@ -87,4 +87,12 @@ export default {
   padding-left: 5px;
   padding-right: 5px;
 }
+
+@media screen and (max-width: 500px) {
+  .base-button {
+    padding: 8px;
+    margin: 5px;
+    font-size: 14px;
+  }
+}
 </style>

@@ -10,7 +10,7 @@
         :key="index"
         :policy="policy"
         :path="['permission', index]"
-        :selectedPath="selectedPath"
+        :selected-path="selectedPath"
         @update:selectedPath="$emit('update:selectedPath', $event)"
       />
     </div>
@@ -21,7 +21,7 @@
         :key="index"
         :policy="policy"
         :path="['obligation', index]"
-        :selectedPath="selectedPath"
+        :selected-path="selectedPath"
         @update:selectedPath="$emit('update:selectedPath', $event)"
       />
     </div>
@@ -32,7 +32,7 @@
         :key="index"
         :policy="policy"
         :path="['prohibition', index]"
-        :selectedPath="selectedPath"
+        :selected-path="selectedPath"
         @update:selectedPath="$emit('update:selectedPath', $event)"
       />
     </div>
@@ -61,8 +61,9 @@ export default {
 </script>
 
 <style scoped>
-.tree {
-  padding: 16px 8px;
+.tree {  
+  padding: 8px;
+  padding-top: 24px;
   box-sizing: border-box;
 }
 .label {

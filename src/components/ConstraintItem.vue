@@ -9,7 +9,7 @@
     <div class="constraint-container">
       <BaseButton
         input
-        :width="'500px'"
+        :width="'90%'"
         :on-click="showConstraintChooser"
         class="edit-constraint"
         name="constraint"
@@ -29,6 +29,8 @@ import Vue from 'vue';
 import ConstraintChooser from './ConstraintChooser.vue';
 import BaseButton from './BaseButton.vue';
 
+const placeholder = '<leer>';
+
 export default {
   name: 'ConstraintItem',
   components: {
@@ -47,7 +49,7 @@ export default {
   },
   data() {
     return {
-      displayConstraintChooser: false,
+      constraintChooserShouldDisplay: false,
     };
   },
   computed: {
@@ -57,7 +59,7 @@ export default {
           (result, segment) => result[segment],
           this.policy,
         );
-        return c || { name: '<leer>' };
+        return c || { name: placeholder };
       },
       set(newConstraint) {
         Vue.set(
@@ -74,6 +76,9 @@ export default {
         this.policy,
       );
     },
+    displayConstraintChooser() {
+      return this.constraintChooserShouldDisplay || this.constraint.name === placeholder;
+    }
   },
   methods: {
     abortChooser() {
@@ -87,10 +92,10 @@ export default {
       }
     },
     showConstraintChooser() {
-      this.displayConstraintChooser = true;
+      this.constraintChooserShouldDisplay = true;
     },
     hideConstraintChooser() {
-      this.displayConstraintChooser = false;
+      this.constraintChooserShouldDisplay = false;
     },
     removeConstraint() {
       Vue.delete(this.constraintParent, this.path[this.path.length - 1]);
@@ -112,6 +117,9 @@ export default {
 
 .edit-constraint {
   margin: 0px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  max-width: 500px;
 }
 
 .remove-constraint {

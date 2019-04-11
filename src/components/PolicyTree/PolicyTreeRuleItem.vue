@@ -10,7 +10,7 @@
         :key="index"
         :policy="policy"
         :path="[...path, subruleType, index]"
-        :selectedPath="selectedPath"
+        :selected-path="selectedPath"
         @update:selectedPath="$emit('update:selectedPath', $event)"
       />
     </div>
@@ -55,7 +55,7 @@ export default {
     },
     isSelected() {
       return this.path.join() === this.selectedPath.join();
-    }
+    },
   },
 };
 </script>
