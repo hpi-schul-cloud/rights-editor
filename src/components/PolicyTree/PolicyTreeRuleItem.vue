@@ -1,8 +1,8 @@
 <template>
   <div>
-    <p class="label" :class="{ selectedRule: isSelected }" @click="$emit('update:selectedPath', path)">
+    <a href="#" class="label" :class="{ selectedRule: isSelected }" @click="$emit('update:selectedPath', path)">
       {{ name }}
-    </p>
+    </a>
 
     <div v-if="subrules" class="subrules">
       <PolicyTreeRuleItem
@@ -62,11 +62,15 @@ export default {
 
 <style scoped>
 .label {
+    display: block;
     margin: 0px;
     padding: 4px 0px;
     cursor: pointer;
+    color: black;
+    font-weight: normal;
+    text-decoration: none;
 }
-.label:hover {
+.label:hover:not(.selectedRule) {
     font-weight: bold;
     color: #323232;
 }
