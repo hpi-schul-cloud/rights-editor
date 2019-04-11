@@ -3,20 +3,40 @@
     <div class="question">
       <label>Erlauben, dass Bearbeitungen Ihres Werkes geteilt werden?</label>
       <div class="options">
-        <input type="radio" v-model="share" value="yes">
+        <input
+          v-model="share"
+          type="radio"
+          value="yes"
+        >
         <label>Ja</label>
-        <input type="radio" v-model="share" value="no">
+        <input
+          v-model="share"
+          type="radio"
+          value="no"
+        >
         <label>Nein</label>
-        <input type="radio" v-model="share" value="alike">
-        <label>Ja, aber nur unter gleichen Bedinungen</label>
+        <input
+          v-model="share"
+          type="radio"
+          value="alike"
+        >
+        <label>Ja, aber nur unter gleichen Bedingungen</label>
       </div>
     </div>
     <div class="question">
-      <label>Kommerziele Nutzungen Ihres Werkes erlauben?</label>
+      <label>Kommerzielle Nutzungen Ihres Werkes erlauben?</label>
       <div class="options">
-        <input type="radio" v-model="commercialUse" value="yes">
+        <input
+          v-model="commercialUse"
+          type="radio"
+          value="yes"
+        >
         <label>Ja</label>
-        <input type="radio" v-model="commercialUse" value="no">
+        <input
+          v-model="commercialUse"
+          type="radio"
+          value="no"
+        >
         <label>Nein</label>
       </div>
     </div>
@@ -30,78 +50,78 @@ import {
   ID_BY_SA,
   ID_BY_NC,
   ID_BY_NC_ND,
-  ID_BY_NC_SA
-} from "../libs/cc/identifiers";
+  ID_BY_NC_SA,
+} from '../libs/cc/identifiers';
 
 export default {
-  name: "CCEditor",
-  data: function() {
-    return {
-      share: "yes",
-      commercialUse: "yes"
-    };
-  },
+  name: 'CCEditor',
   props: {
     activeLicense: {
-      type: String
-    }
+      type: String,
+    },
+  },
+  data() {
+    return {
+      share: 'yes',
+      commercialUse: 'yes',
+    };
   },
   watch: {
-    share: function(value) {
-      this.$emit("activeLicense", this.license(value, this.commercialUse));
+    share(value) {
+      this.$emit('activeLicense', this.license(value, this.commercialUse));
     },
-    commercialUse: function(value) {
-      this.$emit("activeLicense", this.license(this.share, value));
+    commercialUse(value) {
+      this.$emit('activeLicense', this.license(this.share, value));
     },
-    activeLicense: function(value) {
+    activeLicense(value) {
       switch (value) {
         case ID_BY:
-          this.share = "yes";
-          this.commercialUse = "yes";
+          this.share = 'yes';
+          this.commercialUse = 'yes';
           break;
         case ID_BY_ND:
-          this.share = "no";
-          this.commercialUse = "yes";
+          this.share = 'no';
+          this.commercialUse = 'yes';
           break;
         case ID_BY_SA:
-          this.share = "alike";
-          this.commercialUse = "yes";
+          this.share = 'alike';
+          this.commercialUse = 'yes';
           break;
         case ID_BY_NC:
-          this.share = "yes";
-          this.commercialUse = "no";
+          this.share = 'yes';
+          this.commercialUse = 'no';
           break;
         case ID_BY_NC_ND:
-          this.share = "no";
-          this.commercialUse = "no";
+          this.share = 'no';
+          this.commercialUse = 'no';
           break;
         case ID_BY_NC_SA:
-          this.share = "alike";
-          this.commercialUse = "no";
+          this.share = 'alike';
+          this.commercialUse = 'no';
           break;
         default:
-          throw new Exception("illegal argument");
+          throw new Exception('illegal argument');
       }
-    }
+    },
   },
   methods: {
     license(share, commercialUse) {
-      if (share === "yes" && commercialUse === "yes") {
+      if (share === 'yes' && commercialUse === 'yes') {
         return ID_BY;
-      } else if (share === "no" && commercialUse === "yes") {
+      } if (share === 'no' && commercialUse === 'yes') {
         return ID_BY_ND;
-      } else if (share === "alike" && commercialUse === "yes") {
+      } if (share === 'alike' && commercialUse === 'yes') {
         return ID_BY_SA;
-      } else if (share === "yes" && commercialUse === "no") {
+      } if (share === 'yes' && commercialUse === 'no') {
         return ID_BY_NC;
-      } else if (share === "no" && commercialUse === "no") {
+      } if (share === 'no' && commercialUse === 'no') {
         return ID_BY_NC_ND;
-      } else if (share === "alike" && commercialUse === "no") {
+      } if (share === 'alike' && commercialUse === 'no') {
         return ID_BY_NC_SA;
       }
-      throw new Exception("illegal argument");
-    }
-  }
+      throw new Exception('illegal argument');
+    },
+  },
 };
 </script>
 

@@ -1,82 +1,88 @@
 <template>
   <div class="action-container">
     <ActionChooser
-      v-if="actionChooserSettings.displayActionChooser"
-      v-bind:allowAbort="actionChooserSettings.allowAbort"
-      v-on:chosen="hideActionChooser(); action.name=$event"
-      v-on:abort="hideActionChooser()"
-    ></ActionChooser>
+      v-if="displayActionChooser"
+      :action-chooser-allow-abort="actionChooserAllowAbort"
+      @chosen="hideActionChooser(); action = $event"
+      @abort="hideActionChooser()"
+    />
 
     <!-- display and edit action -->
     <BaseButton
       input
-      v-bind:value="actionName"
-      v-bind:onClick="showActionChooserWithAbort"
+      :on-click="showActionChooserWithAbort"
       list="actions"
       name="action"
       type="button"
-    >{{action.name}}</BaseButton>
+    >
+      {{ action }}
+    </BaseButton>
   </div>
 </template>
 
 <script>
-import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
-import BaseButton from "./BaseButton.vue";
-import ActionChooser from "./ActionChooser.vue";
+import Vue from 'vue';
+import BaseButton from './BaseButton.vue';
+import ActionChooser from './ActionChooser.vue';
 
-export class Action {
-  constructor(name, nsVocabUri) {
-    this.name = name;
-    this.nsVocabUri = nsVocabUri;
-    this.constraints = new Array();
-  }
-
-  name() {
-    return this.nsVocabUri.split("/").pop();
-  }
-}
+const placeholderText = '<leer>';
 
 export default {
-  name: "ActionItem",
+  name: 'ActionItem',
   components: {
     ActionChooser,
-    BaseButton
-  },
-  data: function() {
-    return {
-      actionChooserSettings: {
-        displayActionChooser: false,
-        allowAbort: true
-      }
-    };
+    BaseButton,
   },
   props: {
-    action: {
+    policy: {
       type: Object,
-      required: true
-    }
-  },
-  mounted: function() {
-    this.showActionChooser(false);
-  },
-  methods: {
-    showActionChooserWithAbort: function() {
-      this.showActionChooser(true);
+      required: true,
     },
-    showActionChooser: function(allowAbort) {
-      this.actionChooserSettings.displayActionChooser = true;
-      this.actionChooserSettings.allowAbort = allowAbort;
+    path: {
+      type: Array,
+      required: true,
     },
-    hideActionChooser: function() {
-      this.actionChooserSettings.displayActionChooser = false;
-      this.actionChooserSettings.allowAbort = true;
-    }
+  },
+  data() {
+    return {
+      actionChooserShouldDisplay: false,
+      actionChooserAllowAbort: true,
+    };
   },
   computed: {
-    actionName: function() {
-      return this.action.name;
-    }
-  }
+    rule() {
+      return this.path
+        .slice(0, this.path.length - 1)
+        .reduce((result, segment) => result[segment], this.policy);
+    },
+    action: {
+      get() {
+        if (!this.rule.action) {
+          Vue.set(this.rule, 'action', placeholderText);
+        }
+        return this.rule.action;
+      },
+      set(newAction) {
+        this.rule.action = newAction;
+      },
+    },
+    displayActionChooser() {
+      return this.actionChooserShouldDisplay || this.rule.action === placeholderText;
+    },
+  },
+  methods: {
+    showActionChooserWithAbort() {
+      this.showActionChooser(true);
+    },
+    showActionChooser(allowAbort) {
+      this.actionChooserShouldDisplay = true;
+      this.actionChooserAllowAbort = allowAbort;
+    },
+    hideActionChooser() {
+      this.actionChooserShouldDisplay = false;
+      this.actionChooserAllowAbort = true;
+    },
+  },
 };
 </script>
 

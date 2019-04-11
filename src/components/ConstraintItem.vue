@@ -2,70 +2,120 @@
   <div>
     <ConstraintChooser
       v-if="displayConstraintChooser"
-      v-on:chosen="constraintChosen($event)"
-      v-on:abort="hideConstraintChooser()"
-      v-on:edited="bla($event)"
-      v-bind:constraintToEdit="constraint"
-    ></ConstraintChooser>
-    <div>
+      :constraint-to-edit="constraint"
+      @chosen="hideConstraintChooser(); constraint = $event"
+      @abort="abortChooser()"
+    />
+    <div class="constraint-container">
       <BaseButton
         input
-        v-bind:width="'500px'"
-        v-bind:onClick="showConstraintChooser"
-        class="constraint-button"
+        :width="'500px'"
+        :on-click="showConstraintChooser"
+        class="edit-constraint"
         name="constraint"
         type="button"
-      >{{ constraint.name }}</BaseButton>
-      <BaseButton remove v-bind:onClick="function () {$emit('remove-constraint', constraint.id);}">
-        <i class="fas fa-times"></i>
+      >
+        {{ constraint.name }}
+      </BaseButton>
+      <BaseButton class="remove-constraint" remove :on-click="removeConstraint">
+        <i class="fas fa-times" />
       </BaseButton>
     </div>
   </div>
 </template>
 
 <script>
-import { Odrl as Vocab } from "../libs/rightsml-lib-js/ODRLvocabs";
-import ConstraintChooser from "./ConstraintChooser.vue";
-import BaseButton from "./BaseButton.vue";
+import Vue from 'vue';
+import ConstraintChooser from './ConstraintChooser.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
-  name: "ConstraintItem",
+  name: 'ConstraintItem',
   components: {
     ConstraintChooser,
-    BaseButton
-  },
-  data: function() {
-    return {
-      displayConstraintChooser: false
-    };
+    BaseButton,
   },
   props: {
-    constraint: {
+    policy: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+    path: {
+      type: Array,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      displayConstraintChooser: true,
+    };
+  },
+  computed: {
+    constraint: {
+      get() {
+        const c = this.path.reduce(
+          (result, segment) => result[segment],
+          this.policy,
+        );
+        return c || { name: '<leer>' };
+      },
+      set(newConstraint) {
+        Vue.set(
+          this.constraintParent,
+          this.path[this.path.length - 1],
+          newConstraint,
+        );
+      },
+    },
+    constraintParent() {
+      const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
+      return pathWithoutLastElement.reduce(
+        (result, segment) => result[segment],
+        this.policy,
+      );
+    },
   },
   methods: {
-    showConstraintChooser: function() {
+    abortChooser() {
+      this.hideConstraintChooser();
+      const c = this.path.reduce(
+        (result, segment) => result[segment],
+        this.policy,
+      );
+      if (!c) {
+        this.removeConstraint();
+      }
+    },
+    showConstraintChooser() {
       this.displayConstraintChooser = true;
     },
-    hideConstraintChooser: function() {
+    hideConstraintChooser() {
       this.displayConstraintChooser = false;
     },
-    constraintChosen: function(chosenConstraint) {
-      this.hideConstraintChooser();
-      this.$emit("constraint-chosen", chosenConstraint);
+    removeConstraint() {
+      Vue.delete(this.constraintParent, this.path[this.path.length - 1]);
+      if (this.constraintParent.length === 0) {
+        const parentsParent = this.path
+          .slice(0, this.path.length - 2)
+          .reduce((result, segment) => result[segment], this.policy);
+        Vue.delete(parentsParent, this.path[this.path.length - 2]);
+      }
     },
-    bla: function(editedConstraint) {
-      this.hideConstraintChooser();
-      this.$emit("constraint-edited", editedConstraint);
-    }
-  }
+  },
 };
 </script>
 
 <style scoped>
-.constraint-button {
+.constraint-container {
+  position: relative;
+}
+
+.edit-constraint {
   margin: 0px;
+}
+
+.remove-constraint {
+  position: absolute;
+  top: calc(50% - 18px);
 }
 </style>

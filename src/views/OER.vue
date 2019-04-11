@@ -1,12 +1,19 @@
 <template>
-<div class="oer-page">
-  <CCEditor class="cc-editor" v-bind:activeLicense="license" v-on:activeLicense="license = $event"></CCEditor>
-  <CCShowcase v-bind:activeLicense="license" v-on:licenseClicked="license = $event"></CCShowcase>
-  <div>
-    <h2>Provisorische Lizenz</h2>
-    <pre>{{ odrl }}</pre>
+  <div class="oer-page">
+    <CCEditor
+      class="cc-editor"
+      :active-license="license"
+      @activeLicense="license = $event"
+    />
+    <CCShowcase
+      :active-license="license"
+      @licenseClicked="license = $event"
+    />
+    <div>
+      <h2>Provisorische Lizenz:</h2>
+      <pre>{{ odrl }}</pre>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -16,22 +23,22 @@ import CCShowcase from '../components/CCShowcase/CCShowcase.vue';
 import { ccIDToODRL } from '../libs/cc/odrl';
 
 export default {
-  name: 'oer',
-  data: function() {
-    return {
-      license: 'http://creativecommons.org/licenses/by/4.0/'
-    };
-  },
+  name: 'Oer',
   components: {
     CCEditor,
-    CCShowcase
+    CCShowcase,
+  },
+  data() {
+    return {
+      license: 'http://creativecommons.org/licenses/by/4.0/',
+    };
   },
   computed: {
-    odrl: function() {
+    odrl() {
       return ccIDToODRL(this.license);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

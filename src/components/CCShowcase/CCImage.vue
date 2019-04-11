@@ -13,28 +13,27 @@
 import { ccNames } from '../../libs/cc/identifiers.js';
 
 export default {
-  name: "CCImage",
+  name: 'CCImage',
   props: {
     imageSource: {
-      required: true
+      required: true,
     },
     licenseID: {
       type: String,
-      required: true
+      required: true,
     },
     activeLicense: {
       type: String,
-      default: ""
-    }
+      default: '',
+    },
   },
   computed: {
-    isActive: function() {
+    isActive() {
       return this.activeLicense === this.licenseID;
     },
     name() {
       return ccNames[this.licenseID];
     }
-  }
 };
 </script>
 

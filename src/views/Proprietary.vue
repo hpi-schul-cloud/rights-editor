@@ -1,22 +1,18 @@
 <template>
-<div class="oer-page">
-  <RuleEditor></RuleEditor>
-</div>
+  <RuleEditor />
 </template>
 
 <script>
 import RuleEditor from '../components/RuleEditor.vue';
 
 export default {
-  name: 'proprietary',
+  name: 'Proprietary',
   components: {
-    RuleEditor
+    RuleEditor,
   },
-  data: function() {
+  data() {
     return {
     };
   },
-}
+};
 </script>
-
-
