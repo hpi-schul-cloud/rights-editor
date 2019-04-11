@@ -68,7 +68,6 @@
       <BaseButton class="add-button" :name="subruleInfo.name" :on-click="appendNewSubrule">
         {{ subruleInfo.name }} hinzufügen
       </BaseButton>
-      <!-- additional explanation -->
     </div>
   </div>
 </template>
