@@ -11,61 +11,54 @@
     </div>
 
     <!-- display action -->
-    Das
-    <ActionItem class="action-item" :policy="policy" :path="[...path, 'action']" />
-    {{ ruleInfo.descriptionBefore }}
-    <span v-if="parentruleInfo != null">
-      {{ parentruleInfo.definiteArticle }}
-      <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentruleInfo.name }}</a>
-    </span>
-    {{ ruleInfo.descriptionAfter }}
+    <p>
+      <!-- main explanation -->
+      <EmbedInText text-before="Das" :text-after="ruleInfo.description">
+        <ActionItem :policy="policy" :path="[...path, 'action']" />
+      </EmbedInText>
+      <!-- additional explanation -->
+      <EmbedInText v-if="hasParentRule" :text-before="ruleInfo.descriptionAddition[0]" :text-after="ruleInfo.descriptionAddition[1]">
+        {{ ruleInfo.definiteArticle }}
+        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentruleInfo.name }}</a>
+      </EmbedInText>
+    </p>
 
-    <br>
-    <br>
     <!-- add new refinement -->
-    Das
-    <em>{{ rule['action'] }}</em> darf nur auf die folgende Art und Weise erfolgen...
-    <BaseButton
-      class="add-button"
-      :on-click="function(){/* TODO: implement this functionality */}"
-    >
-      Verfeinerung hinzufügen
-    </BaseButton>
+    <p>
+      Das <em>{{ rule['action'] }}</em> darf nur auf die folgende Art und Weise erfolgen...
+      <BaseButton class="add-button" :on-click="function(){console.error('not implemented')}">
+        Verfeinerung hinzufügen
+      </BaseButton>
+    </p>
+    
 
-    <br>
     <!-- display and edit constraints -->
-    Insgesamt gilt {{ ruleInfo.definiteArticle }}
-    <em>{{ ruleInfo.name }}</em> nur, wenn...
-    <ConstraintItem
-      v-for="(constraint, index) in constraints"
-      :key="index"
-      :policy="policy"
-      :path="[...path, 'constraint', index]"
-    />
-    <!-- add new constraint -->
-    <BaseButton class="add-button" :on-click="addConstraint">
-      Einschränkung hinzufügen
-    </BaseButton>
+    <p>
+      Insgesamt gilt {{ ruleInfo.definiteArticle }} <em>{{ ruleInfo.name }}</em> nur, wenn...
+      <ConstraintItem
+        v-for="(constraint, index) in constraints"
+        :key="index"
+        :policy="policy"
+        :path="[...path, 'constraint', index]"
+      />
+      <!-- add new constraint -->
+      <BaseButton class="add-button" :on-click="addConstraint">
+        Einschränkung hinzufügen
+      </BaseButton>
+    </p>
 
     <!-- add subrules -->
-    <div v-if="ruleInfo.subrule != ''" class="add-subrule-container">
+    <div v-if="canHaveSubrules" class="subrule-container">
       <i>Optional können folgende Erweiterungen hinzugefügt werden:</i>
-      <br>{{ this.sentenceStart(subruleInfo.indefiniteArticle) }}
-      <BaseButton
-        class="add-subrule-button"
-        :name="subruleInfo.name"
-        :on-click="appendNewSubrule"
-      >
+      <br>{{ subruleInfo.indefiniteArticle }}
+      <BaseButton :name="subruleInfo.name" :on-click="appendNewSubrule">
         {{ subruleInfo.name }}
       </BaseButton>
-      <div class="add-subrule-info">
-        {{ subruleInfo.descriptionBefore }}
-        <span>
-          {{ ruleInfo.definiteArticle }}
-          <em>{{ ruleInfo.name }}</em>
-        </span>
-        {{ subruleInfo.descriptionAfter }}
-      </div>
+      {{ subruleInfo.description }}
+      <!-- additional explanation -->
+      <EmbedInText :text-before="subruleInfo.descriptionAddition[0]" :text-after="subruleInfo.descriptionAddition[1]">
+        {{ ruleInfo.definiteArticle }} <em>{{ ruleInfo.name }}</em>
+      </EmbedInText>
     </div>
 
     <p>TODO: Link to subrules if present</p>
@@ -78,11 +71,13 @@ import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem';
 import BaseButton from './BaseButton.vue';
 import ConstraintChooser from './ConstraintChooser.vue';
+import EmbedInText from './EmbedInText.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
 
 export default {
   name: 'RuleItem',
   components: {
+    EmbedInText,
     ConstraintItem,
     BaseButton,
     ActionItem,
@@ -107,20 +102,11 @@ export default {
   },
   computed: {
     rule() {
-      const r = this.path.reduce(
-        (result, segment) => result[segment],
-        this.policy,
-      );
-      return r;
-    },
-    ruleType() {
-      return this.path[this.path.length - 2];
+      return this.policy.follow(this.path);
     },
     ruleInfo() {
-      return RuleTypes[this.ruleType];
-    },
-    subruleType() {
-      return this.ruleInfo.subrule;
+      let ruleTypeName = this.path[this.path.length - 2];
+      return RuleTypes[ruleTypeName];
     },
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];
@@ -131,49 +117,57 @@ export default {
       }
       return null;
     },
+    hasParentRule() {
+      return !!this.parentruleInfo;
+    },
+    canHaveSubrules() {
+      return this.ruleInfo.subrule != '';
+    },
     constraints() {
       return this.rule.constraint;
     },
     ruleParent() {
-      const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
-      return pathWithoutLastElement.reduce(
+      const containerPath = this.path.slice(0, this.path.length - 1);
+      return containerPath.reduce(
         (result, segment) => result[segment],
         this.policy,
       );
     },
   },
   methods: {
-    sentenceStart(string) {
-      return string[0].toUpperCase() + string.substr(1, string.length);
-    },
     furtherPath(nameSegment, indexSegment) {
       const p = this.path.slice();
       p.push(nameSegment, indexSegment);
       return p;
     },
     appendNewSubrule() {
-      if (!this.rule[this.subruleType]) {
-        Vue.set(this.rule, this.subruleType, []);
+      let subruleTypeName = this.ruleInfo.subrule;
+      if (!this.rule[subruleTypeName]) {
+        Vue.set(this.rule, subruleTypeName, []);
       }
-      let subrules = this.rule[this.subruleType];
+      let subrules = this.rule[subruleTypeName];
       let idx = subrules.length;
       Vue.set(subrules, idx, {})
-      this.$emit('followLink', [...this.path, this.subruleType, idx]);
+      this.$emit('followLink', [...this.path, subruleTypeName, idx]);
     },
     removeRule() {
-      Vue.delete(this.ruleParent, this.path[this.path.length - 1]);
-      if (this.ruleParent.length === 0) {
-        const parentsParent = this.path
-          .slice(0, this.path.length - 2)
-          .reduce((result, segment) => result[segment], this.policy);
-        Vue.delete(parentsParent, this.path[this.path.length - 2]);
+      const containerPath = this.path.slice(0, this.path.length - 1);
+      const ruleContainer = this.policy.follow(containerPath);
+      const idx = this.path[this.path.length - 1];
+      ruleContainer.splice(idx, 1);
+      if (ruleContainer.length > 0) {
+        const redirectIdx = idx >= ruleContainer.length ? ruleContainer.length - 1 : idx;
+        this.$emit('followLink', [...containerPath, redirectIdx]);
+        return;
       }
-    },
-    showConstraintChooser() {
-      this.displayConstraintChooser = true;
-    },
-    hideConstraintChooser() {
-      this.displayConstraintChooser = false;
+
+      // If the array containing the rule is empty due to deleting the
+      // last rule it contained, we also delete the array.
+      const parentPath = containerPath.slice(0, containerPath.length - 1);
+      const ruleParent = this.policy.follow(parentPath);
+      const containerName = containerPath[containerPath - 1];
+      Vue.delete(ruleParent, containerName);
+      this.$emit('followLink', parentPath);
     },
     addConstraint() {
       if (!this.constraints) {
@@ -201,20 +195,6 @@ export default {
   top: -10px;
 }
 
-.constraint-container {
-  display: inline;
-}
-
-.constraint-text {
-  display: inline;
-  margin-right: 10px;
-}
-
-.constraint-edit {
-  margin: 0px;
-  padding: 0px;
-}
-
 .add-button {
   display: block;
   margin-top: 10px;
@@ -223,17 +203,5 @@ export default {
 
 .subrule-container {
   margin-top: 50px;
-}
-
-.add-subrule-container {
-  margin-top: 50px;
-}
-
-.add-subrule-info {
-  display: inline-block;
-}
-
-.add-subrule-button {
-  margin-left: 6px;
 }
 </style>
