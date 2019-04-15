@@ -1,10 +1,6 @@
 <template>
   <div class="ccImages">
-    <img
-      v-bind:src="imageSource"
-      v-on:click="$emit('licenseClicked', licenseID)"
-      v-bind:class="{active: isActive}"
-    >
+    <img :src="imageSource" :class="{active: isActive}" @click="$emit('licenseClicked', licenseID)">
     <p>{{ name }}</p>
   </div>
 </template>
@@ -33,8 +29,8 @@ export default {
     },
     name() {
       return ccNames[this.licenseID];
-    }
-  }
+    },
+  },
 };
 </script>
 
