@@ -57,9 +57,6 @@
             @click="toggleRightOperand(item)"
           >{{ item }}</li>
         </ul>
-        <pre
-          style="position: fixed; z-index: 2; top: 0; left: 0; background-color: white; margin: 0px; padding: 0px"
-        >{{ constraint }}</pre>
       </div>
     </template>
 
@@ -121,9 +118,6 @@ export default {
       if (hasLeftOperand && hasOperator && hasRightOperand && hasUnitIfNumeric) {
         this.$emit('chosen', this.constraint);
       }
-    },
-    set(target, name, value) {
-      Vue.set(target, name, value);
     },
     toggleRightOperand(op) {
       let idx = this.rightOperand.indexOf(op);
