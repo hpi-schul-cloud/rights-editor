@@ -1,24 +1,139 @@
 <template>
-  <BaseChooser></BaseChooser>
+  <BaseModal :width="'1000px'" :scrollable="false">
+    <template v-slot:header>
+      <h1 v-if="objectToEdit == null">
+        {{ name }} hinzufügen
+      </h1>
+      <h1 v-else>
+        {{ name }} bearbeiten
+      </h1>
+    </template>
+
+    <template v-slot:body>
+      <ul class="list">
+        <li
+          v-for="(op, index) in operands"
+          :key="index"
+          :class="{ selected: leftOperand === op }"
+          @click="leftOperand = op"
+        >
+          {{ op }}
+        </li>
+      </ul>
+      <ul class="list">
+        <li
+          v-for="(op, index) in operators"
+          :key="index"
+          :class="{ selected: operator === op.identifier }"
+          @click="operator = op.identifier"
+        >
+          {{ op.symbol }}
+        </li>
+      </ul>
+      <div class="value-container">
+        <!-- input is number with unit -->
+        <div v-if="isNumericInput" class="numeric-input-container">
+          <div class="number-container">
+            <div class="numeric-input-header">
+              Zahl:
+            </div>
+            <br>
+            <BaseInput              
+              class="number-input flat-input"
+              type="number"
+              :value="value"
+              @input="value = $event"
+            />
+          </div>
+          <div class="unit-container">
+            <div class="numeric-input-header">
+              Einheit:
+            </div>
+            <br>
+            <ul class="unit-list list" type="text" name="unit">
+              <li
+                v-for="(u, index) in units"
+                :key="index"
+                :class="{ selected: unit === u }"
+                @click="unit = u"
+              >
+                {{ u }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- input is selection from list -->
+        <ul v-if="isListInput" class="value-list list">
+          <li
+            v-for="(item, index) in listItems"
+            :key="index"
+            :class="{ selected: Array.isArray(rightOperand) && rightOperand.indexOf(item) >= 0 }"
+            @click="toggleRightOperand(item)"
+          >
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+    </template>
+
+    <template v-slot:footer>
+      <div class="modal-footer">
+        <BaseButton
+          textlike
+          :on-click="
+            function() {
+              $emit('abort');
+            }
+          "
+        >
+          Abbrechen
+        </BaseButton>
+        <BaseButton :on-click="accept">
+          Annehmen
+        </BaseButton>
+      </div>
+    </template>
+  </BaseModal>
 </template>
 
 <script>
 import Vue from 'vue';
-import BaseChooser from './BaseChooser.vue';
-import {
-  operandList,
-  operandMapping,
-} from '../libs/odrl/constraints';
+import BaseInput from './BaseInput.vue';
+import BaseModal from './BaseModal.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
   name: 'ConstraintChooser',
   components: {
-    BaseChooser
+    BaseInput,
+    BaseModal,
+    BaseButton,
+  },
+  props: {
+    objectToEdit: {
+      type: Object,
+      default: null,
+      required: false,
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    operands: {
+      type: Array,
+      required: true
+    },
+    operandMapping: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      constraint: {},
+    };
   },
   computed: {
-    operands() {
-      return operandList;
-    },
     leftOperand: {
       get() {
         let operand = this.constraint.leftOperand;
