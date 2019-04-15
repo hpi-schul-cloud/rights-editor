@@ -1,8 +1,11 @@
 <template>
   <div>
-    <a href="#" class="label" :class="{ selectedRule: isSelected }" @click="$emit('update:selectedPath', path)">
-      {{ name }}
-    </a>
+    <a
+      href="#"
+      class="label"
+      :class="{ selectedRule: isSelected }"
+      @click="$emit('update:selectedPath', path)"
+    >{{ name }}</a>
 
     <div v-if="subrules" class="subrules">
       <PolicyTreeRuleItem

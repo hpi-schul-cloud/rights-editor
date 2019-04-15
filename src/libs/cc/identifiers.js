@@ -5,7 +5,7 @@ export const ID_BY_NC = 'http://creativecommons.org/licenses/by-nc/4.0/';
 export const ID_BY_NC_ND = 'http://creativecommons.org/licenses/by-nc-nd/4.0/';
 export const ID_BY_NC_SA = 'http://creativecommons.org/licenses/by-nc-sa/4.0/';
 
-let nameMapping = {};
+const nameMapping = {};
 nameMapping[ID_BY] = 'Namensnennung';
 nameMapping[ID_BY_ND] = 'Namensnennung-Keine Bearbeitung';
 nameMapping[ID_BY_SA] = 'Namensnennung - Weitergabe unter gleichen Bedingungen';

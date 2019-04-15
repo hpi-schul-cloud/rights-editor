@@ -78,7 +78,7 @@ export default {
     },
     displayConstraintChooser() {
       return this.constraintChooserShouldDisplay || this.constraint.name === placeholder;
-    }
+    },
   },
   methods: {
     abortChooser() {

@@ -1,10 +1,7 @@
 <template>
   <div class="rule-container">
     <div class="rule-header">
-      <h3>
-        {{ ruleInfo.name }}
-        <i :class="ruleInfo.icon" />
-      </h3>
+      <h3>{{ ruleInfo.name }} <i :class="ruleInfo.icon" /></h3>
       <BaseButton remove class="remove-button" :on-click="removeRule">
         <i class="far fa-trash-alt" />
       </BaseButton>
@@ -54,7 +51,7 @@
       <EmbedInText :text-before="subruleInfo.descriptionAddition[0]" :text-after="subruleInfo.descriptionAddition[1]">
         {{ ruleInfo.gender === 'f' ? 'die' : 'das' }} <em>{{ ruleInfo.name }}</em>
       </EmbedInText>
-      
+
       <p v-if="subrules">
         Die {{ subrules.length == 1 ? subruleInfo.name : subruleInfo.pluralName }} diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
         {{ subrules.length === 1 ? 'ist' : 'sind' }}
@@ -120,17 +117,17 @@ export default {
     },
     parentRule() {
       if (!this.ruleInfo.hasParentRule) {
-        console.error("has no parent");
+        console.error('has no parent');
         return null;
       }
-      let parentRuleTypeName = this.path[this.path.length - 4];
+      const parentRuleTypeName = this.path[this.path.length - 4];
       return RuleTypes[parentRuleTypeName];
     },
     canHaveSubrules() {
       return this.ruleInfo.subrule != '';
     },
     subrules() {
-      let subruleTypeName = this.ruleInfo.subrule;
+      const subruleTypeName = this.ruleInfo.subrule;
       return this.rule[subruleTypeName];
     },
     hasParentRule() {
