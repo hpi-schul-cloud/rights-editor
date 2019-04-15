@@ -72,14 +72,14 @@
           >
             {{ item }}
           </li>
-        </ul>        
+        </ul>
       </div>
     </template>
 
     <template v-slot:footer>
       <div class="modal-footer">
         <BaseButton
-          textlike                   
+          textlike
           :on-click="
             function() {
               $emit('abort');
@@ -88,9 +88,10 @@
         >
           Abbrechen
         </BaseButton>
-        <BaseButton 
-        :disabled="!complete()"
-        :on-click="accept">
+        <BaseButton
+          :disabled="!complete()"
+          :on-click="accept"
+        >
           Annehmen
         </BaseButton>
       </div>
@@ -125,10 +126,10 @@ export default {
       required: false,
     },
   },
-  data: function() {
+  data() {
     return {
-      constraintCopy: null
-    }
+      constraintCopy: null,
+    };
   },
   computed: {
     operands() {
