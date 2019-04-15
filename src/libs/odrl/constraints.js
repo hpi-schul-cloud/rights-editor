@@ -64,23 +64,23 @@ export const unitList = [
 ];
 
 export const operandMapping = {
-  'Bundesland': {
+  Bundesland: {
     operators: [operatorList[0]],
     list: states,
   },
-  'Gruppenzugehörigkeit': {
+  Gruppenzugehörigkeit: {
     operators: [operatorList[0]],
     list: groups,
   },
-  'Alter': {
+  Alter: {
     operators: operatorList,
     units: [unitList[0]],
   },
-  'Nutzungsdauer': {
+  Nutzungsdauer: {
     operators: operatorList,
     units: [unitList[0], unitList[1], unitList[2]],
   },
-  'Nutzeranzahl': {
+  Nutzeranzahl: {
     operators: operatorList,
     units: [unitList[3]],
   },

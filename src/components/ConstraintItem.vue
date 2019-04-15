@@ -74,15 +74,15 @@ export default {
         return placeholder;
       }
       let desc = this.constraint.leftOperand;
-      desc += ' ' + operatorList.find(op => (op.identifier === this.constraint.operator)).symbol;
+      desc += ` ${operatorList.find(op => (op.identifier === this.constraint.operator)).symbol}`;
       if (Array.isArray(this.constraint.rightOperand)) {
-        desc += ' ' + this.constraint.rightOperand.join(', ');
+        desc += ` ${this.constraint.rightOperand.join(', ')}`;
       } else {
-        desc += ' ' + this.constraint.rightOperand['@value'];
-        desc += ' ' + this.constraint.unit;
+        desc += ` ${this.constraint.rightOperand['@value']}`;
+        desc += ` ${this.constraint.unit}`;
       }
-      return desc
-    }
+      return desc;
+    },
   },
   methods: {
     abortChooser() {

@@ -102,7 +102,7 @@ export default {
 }
 
 .policy-detail {
-  margin-left: 200px;  
+  margin-left: 200px;
   padding: 10px;
 }
 
@@ -145,7 +145,7 @@ input.guid-input {
   }
 
   .guid-container {
-    display: block;    
+    display: block;
   }
 }
 
