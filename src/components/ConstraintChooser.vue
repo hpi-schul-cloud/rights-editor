@@ -10,17 +10,17 @@
         <li
           v-for="(op, index) in operands"
           :key="index"
-          :class="{ selected: operand === op }"
-          @click="operand = op"
+          :class="{ selected: leftOperand === op }"
+          @click="leftOperand = op"
         >{{ op }}</li>
       </ul>
       <ul class="list">
         <li
-          v-for="(operator, index) in operators"
+          v-for="(op, index) in operators"
           :key="index"
-          :class="{ selected: constraint.operator === operator.identifier }"
-          @click="set(constraint, 'operator', operator.identifier)"
-        >{{ operator.symbol }}</li>
+          :class="{ selected: operator === op.identifier }"
+          @click="operator = op.identifier"
+        >{{ op.symbol }}</li>
       </ul>
       <div class="value-container">
         <!-- input is number with unit -->
@@ -29,7 +29,8 @@
             <div class="numeric-input-header">Zahl:</div>
             <br>
             <BaseInput
-              v-model.number="constraint.value"
+              :value="value"
+              @input="value = $event"
               class="number-input flat-input"
               type="number"
             />
@@ -39,11 +40,11 @@
             <br>
             <ul class="unit-list list" type="text" name="unit">
               <li
-                v-for="(unit, index) in units"
+                v-for="(u, index) in units"
                 :key="index"
-                :class="{ selected: selectedUnit === unit }"
-                @click="selectedUnit = unit"
-              >{{ unit }}</li>
+                :class="{ selected: unit === u }"
+                @click="unit = u"
+              >{{ u }}</li>
             </ul>
           </div>
         </div>
@@ -52,8 +53,8 @@
           <li
             v-for="(item, index) in listItems"
             :key="index"
-            :class="{ selected: constraint.rightOperand === item }"
-            @click="set(constraint, 'rightOperand', item)"
+            :class="{ selected: Array.isArray(rightOperand) && rightOperand.indexOf(item) >= 0 }"
+            @click="toggleRightOperand(item)"
           >{{ item }}</li>
         </ul>
         <pre
@@ -72,7 +73,7 @@
             }
           "
         >Abbrechen</BaseButton>
-        <BaseButton :on-click="function() {$console.log('not implemented')}">Annehmen</BaseButton>
+        <BaseButton :on-click="accept">Annehmen</BaseButton>
       </div>
     </template>
   </BaseModal>
@@ -108,78 +109,46 @@ export default {
   data() {
     return {
       constraint: {},
-      selectedUnit: "",
-
-      /////// ---------
-
-      forceRerender: 0,
-
-      displayNumberInput: false,
-      displayListInput: true,
-
-      numericOperands: null,
-      _operators: null,
-      _list: null,
-      _units: null,
-
-      selectedOperandId: 0,
-      selectedOperatorId: 0,
-      selectedUnitId: 0,
-
-      number: 0,
-      selectedListItems: []
     };
   },
   methods: {
-    //   accept() {
-    //     const constraint = new Constraint(-1);
-    //     constraint.leftOperand = operands[this.selectedOperandId].name;
-    //     constraint.operator = operators[this.selectedOperatorId].symbol;
+    accept() {
+      let hasLeftOperand = !!this.constraint.leftOperand;
+      let hasOperator = !!this.constraint.operator;
+      let hasRightOperand = !!this.constraint.rightOperand;
+      let hasUnitIfNumeric = !this.isNumericInput || !!this.constraint.unit;
 
-    //     if (this.displayNumberInput) {
-    //       // for numeric input the right operand is just a number, also add the unit though
-    //       constraint.rightOperandNumber = this.number;
-    //       constraint.rightOperandStr = constraint.rightOperandNumber.toString();
-    //       constraint.unit = units[this.selectedUnitId].name;
-    //     } else {
-    //       // create array of chosen names from the value list
-    //       const listItems = [];
-    //       for (let i = 0; i < this._list.length; i++) {
-    //         if (this.selectedListItems[i] == true) {
-    //           listItems.push(this._list[i].name);
-    //         }
-    //       }
-    //       constraint.rightOperandList = listItems;
-    //       constraint.rightOperandStr = listItems.toString();
-    //       // add a space after each comma
-    //       constraint.rightOperandStr = constraint.rightOperandStr.replace(
-    //         /,/g,
-    //         ", "
-    //       );
-    //     }
-    //     constraint.name = `${constraint.leftOperand} ${constraint.operator} ${
-    //       constraint.rightOperandStr
-    //     }`;
-
-    //     if (constraint.unit != "") {
-    //       constraint.name += ` ${constraint.unit}`;
-    //     }
-
-    //     this.$emit("chosen", constraint);
-    //   }
+      if (hasLeftOperand && hasOperator && hasRightOperand && hasUnitIfNumeric) {
+        this.$emit('chosen', this.constraint);
+      }
+    },
     set(target, name, value) {
       Vue.set(target, name, value);
-    }
+    },
+    toggleRightOperand(op) {
+      let idx = this.rightOperand.indexOf(op);
+      if (idx >= 0) {
+        this.rightOperand.splice(idx, 1);
+
+        if (this.rightOperand.length === 0) {
+          Vue.delete(this.constraint, 'rightOperand');
+        }
+        return;
+      }
+
+      this.rightOperand = [...this.rightOperand, op];
+    },
   },
   computed: {
     operands() {
       return operandList;
     },
-    operand: {
+    leftOperand: {
       get() {
         let operand = this.constraint.leftOperand;
         if (!operand) {
           operand = this.operands[0];
+          this.leftOperand = operand;
         }
         return operand;
       },
@@ -189,24 +158,69 @@ export default {
           return;
         }
         Vue.set(this.constraint, 'leftOperand', op);
-        Vue.delete(this.constraint, "operator");
-        Vue.delete(this.constraint, "rightOperand");
+        Vue.delete(this.constraint, 'operator');
+        Vue.delete(this.constraint, 'rightOperand');
+        Vue.delete(this.constraint, 'unit');
+      },
+    },
+    operator: {
+      get() {
+        if (this.operators.length === 1) {
+          this.operator = this.operators[0].identifier;
+        }
+        return this.constraint['operator'];
+      },
+      set(op) {
+        Vue.set(this.constraint, 'operator', op);
+      },
+    },
+    rightOperand: {
+      get() {
+        let operand = this.constraint.rightOperand;
+        return operand ? operand : [];
+      },
+      set(op) {
+        op.sort();
+        Vue.set(this.constraint, 'rightOperand', op);
       }
     },
+    value: {
+      get() {
+        let op = this.constraint['rightOperand'];
+        if (!op && this.isNumericInput) {
+          Vue.set(this.constraint, 'rightOperand', {'@value': '0'});
+        }
+        return this.constraint['rightOperand']['@value'];
+      },
+      set(val) {
+        this.constraint['rightOperand']['@value'] = val;
+      }
+    },
+    unit: {
+      get() {
+        if (this.units.length === 1) {
+          this.unit = this.units[0]; 
+        }
+        return this.constraint['unit'];
+      },
+      set(u) {
+        Vue.set(this.constraint, 'unit', u); 
+      },
+    },
     operators() {
-      return operandMapping[this.operand].operators;
+      return operandMapping[this.leftOperand].operators;
     },
     units() {
-      return operandMapping[this.operand].units;
+      return operandMapping[this.leftOperand].units;
     },
     listItems() {
-      return operandMapping[this.operand].list;
+      return operandMapping[this.leftOperand].list;
     },
     isNumericInput() {
-      return !!operandMapping[this.operand].units;
+      return !!operandMapping[this.leftOperand].units;
     },
     isListInput() {
-      return !!operandMapping[this.operand].list;
+      return !!operandMapping[this.leftOperand].list;
     }
   }
 };
