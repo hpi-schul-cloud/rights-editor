@@ -7,79 +7,75 @@
       <h1 v-else>
         Einschränkung bearbeiten
       </h1>
-      <div class="hidden">
-        {{ forceRerender }}
-      </div>
     </template>
+
     <template v-slot:body>
-      <div class="body-container">
-        <div class="list-container">
-          <ul class="list">
-            <li
-              v-for="operand in _operands"
-              :key="operand.id"
-              :class="{ selected: isOperandSelected(operand.id) }"
-              @click="operandClicked(operand.id)"
-            >
-              {{ operand.name }}
-            </li>
-          </ul>
-        </div>
-        <div class="list-container">
-          <ul class="list">
-            <li
-              v-for="operator in _operators"
-              :key="operator.id"
-              :class="{ selected: isOperatorSelected(operator.id) }"
-              @click="operatorClicked(operator.id)"
-            >
-              {{ operator.symbol }}
-            </li>
-          </ul>
-        </div>
-        <div class="value-container">
-          <!-- input is number with unit -->
-          <div v-if="displayNumberInput" class="numeric-input-container">
-            <div class="number-container">
-              <div class="numeric-input-header">
-                Zahl:
-              </div>
-              <br>
-              <BaseInput v-model.number="number" class="number-input flat-input" type="number" />
+      <ul class="list">
+        <li
+          v-for="(op, index) in operands"
+          :key="index"
+          :class="{ selected: leftOperand === op }"
+          @click="leftOperand = op"
+        >
+          {{ op }}
+        </li>
+      </ul>
+      <ul class="list">
+        <li
+          v-for="(op, index) in operators"
+          :key="index"
+          :class="{ selected: operator === op.identifier }"
+          @click="operator = op.identifier"
+        >
+          {{ op.symbol }}
+        </li>
+      </ul>
+      <div class="value-container">
+        <!-- input is number with unit -->
+        <div v-if="isNumericInput" class="numeric-input-container">
+          <div class="number-container">
+            <div class="numeric-input-header">
+              Zahl:
             </div>
-            <div class="unit-container">
-              <div class="numeric-input-header">
-                Einheit:
-              </div>
-              <br>
-              <ul class="unit-list list" type="text" name="unit">
-                <li
-                  v-for="unit in _units"
-                  :key="unit.id"
-                  :class="{ selected: isUnitSelected(unit.id) }"
-                  @click="unitClicked(unit.id)"
-                >
-                  {{ unit.name }}
-                </li>
-              </ul>
-            </div>
+            <br>
+            <BaseInput
+              :value="value"
+              class="number-input flat-input"
+              type="number"
+              @input="value = $event"
+            />
           </div>
-          <!-- input is selection from list -->
-          <div v-if="displayListInput" class="value-list-container list-container">
-            <ul class="value-list list">
+          <div class="unit-container">
+            <div class="numeric-input-header">
+              Einheit:
+            </div>
+            <br>
+            <ul class="unit-list list" type="text" name="unit">
               <li
-                v-for="item in _list"
-                :key="item.id"
-                :class="{ selected: isListItemSelected(item.id) }"
-                @click="listItemClicked(item.id)"
+                v-for="(u, index) in units"
+                :key="index"
+                :class="{ selected: unit === u }"
+                @click="unit = u"
               >
-                {{ item.name }}
+                {{ u }}
               </li>
             </ul>
           </div>
         </div>
+        <!-- input is selection from list -->
+        <ul v-if="isListInput" class="value-list list">
+          <li
+            v-for="(item, index) in listItems"
+            :key="index"
+            :class="{ selected: Array.isArray(rightOperand) && rightOperand.indexOf(item) >= 0 }"
+            @click="toggleRightOperand(item)"
+          >
+            {{ item }}
+          </li>
+        </ul>
       </div>
     </template>
+
     <template v-slot:footer>
       <div class="modal-footer">
         <BaseButton
@@ -101,13 +97,12 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import {
   Constraint,
-  operands,
-  operators,
+  operandList,
   states,
   groups,
-  units,
   operandMapping,
 } from '../libs/odrl/constraints';
 import BaseInput from './BaseInput.vue';
@@ -130,173 +125,116 @@ export default {
   },
   data() {
     return {
-      forceRerender: 0,
-
-      displayNumberInput: false,
-      displayListInput: true,
-
-      numericOperands: null,
-      _operands: null,
-      _operators: null,
-      _list: null,
-      _units: null,
-
-      selectedOperandId: 0,
-      selectedOperatorId: 0,
-      selectedUnitId: 0,
-
-      number: 0,
-      selectedListItems: [],
+      constraint: {},
     };
   },
-  created() {
-    this.numericOperands = new Set();
-    for (let i = 0; i < operandMapping.length; i++) {
-      if (operandMapping[i].units.length > 0) {
-        // if there is a unit to select, then the input is a number for sure
-        this.numericOperands.add(i);
-      }
-    }
-
-    if (this.constraintToEdit == null) {
-      // totally new (empty) constraint chooser is going to be created
-      this.initializeDataOnOperandId(0);
-    } else {
-      // load data from the constraint to be edited
-
-      // determine operand
-      for (let i = 0; i < operands.length; i++) {
-        if (operands[i].name == this.constraintToEdit.leftOperand) {
-          this.selectedOperandId = i;
+  computed: {
+    operands() {
+      return operandList;
+    },
+    leftOperand: {
+      get() {
+        let operand = this.constraint.leftOperand;
+        if (!operand) {
+          operand = this.operands[0];
+          this.leftOperand = operand;
         }
-      }
-
-      this.initializeDataOnOperandId(this.selectedOperandId);
-
-      // determine operator
-      for (let i = 0; i < operators.length; i++) {
-        if (operators[i].symbol == this.constraintToEdit.operator) {
-          this.selectedOperatorId = operators[i].id;
+        return operand;
+      },
+      set(op) {
+        if (this.constraint.leftOperand === op) {
+          // do nothing
+          return;
         }
-      }
-
-      if (this.constraintToEdit.unit == '') {
-        // list items
-        for (let i = 0; i < this._list.length; i++) {
-          for (
-            let j = 0;
-            j < this.constraintToEdit.rightOperandList.length;
-            j++
-          ) {
-            if (
-              this._list[i].name == this.constraintToEdit.rightOperandList[j]
-            ) {
-              this.selectedListItems[i] = true;
-            }
-          }
+        Vue.set(this.constraint, 'leftOperand', op);
+        Vue.delete(this.constraint, 'operator');
+        Vue.delete(this.constraint, 'rightOperand');
+        Vue.delete(this.constraint, 'unit');
+      },
+    },
+    operator: {
+      get() {
+        if (this.operators.length === 1) {
+          this.operator = this.operators[0].identifier;
         }
-      } else {
-        // number with unit
-        for (let i = 0; i < units.length; i++) {
-          if (units[i].name == this.constraintToEdit.unit) {
-            this.selectedUnitId = i;
-          }
+        return this.constraint.operator;
+      },
+      set(op) {
+        Vue.set(this.constraint, 'operator', op);
+      },
+    },
+    rightOperand: {
+      get() {
+        const operand = this.constraint.rightOperand;
+        return operand || [];
+      },
+      set(op) {
+        op.sort();
+        Vue.set(this.constraint, 'rightOperand', op);
+      },
+    },
+    value: {
+      get() {
+        const op = this.constraint.rightOperand;
+        if (!op && this.isNumericInput) {
+          Vue.set(this.constraint, 'rightOperand', { '@value': '0' });
         }
-        this.number = this.constraintToEdit.rightOperandNumber;
-      }
-    }
+        return this.constraint.rightOperand['@value'];
+      },
+      set(val) {
+        this.constraint.rightOperand['@value'] = val;
+      },
+    },
+    unit: {
+      get() {
+        if (this.units.length === 1) {
+          this.unit = this.units[0];
+        }
+        return this.constraint.unit;
+      },
+      set(u) {
+        Vue.set(this.constraint, 'unit', u);
+      },
+    },
+    operators() {
+      return operandMapping[this.leftOperand].operators;
+    },
+    units() {
+      return operandMapping[this.leftOperand].units;
+    },
+    listItems() {
+      return operandMapping[this.leftOperand].list;
+    },
+    isNumericInput() {
+      return !!operandMapping[this.leftOperand].units;
+    },
+    isListInput() {
+      return !!operandMapping[this.leftOperand].list;
+    },
   },
   methods: {
-    initializeDataOnOperandId(id) {
-      this.selectedOperandId = id;
-
-      // reset to default input values
-      this.selectedOperatorId = 0;
-      this.number = 0;
-
-      // set data based on chosen operand (use mapping information to do so)
-      const operandMapAtId = operandMapping[this.selectedOperandId];
-
-      this.selectedListItems = new Array();
-      for (let i = 0; i < operandMapAtId.list.length; i++) {
-        this.selectedListItems.push(false);
-      }
-
-      this._operands = operands;
-      this._operators = operandMapAtId.operators;
-      this._list = operandMapAtId.list;
-      this._units = operandMapAtId.units;
-
-      // set correct display mode (numeric or list input)
-      if (this.numericOperands.has(id)) {
-        this.displayNumberInput = true;
-        this.displayListInput = false;
-        this.selectedUnitId = operandMapAtId.units[0].id;
-      } else {
-        this.displayNumberInput = false;
-        this.displayListInput = true;
-      }
-    },
-    operandClicked(id) {
-      this.initializeDataOnOperandId(id);
-    },
-    isOperandSelected(id) {
-      return this.selectedOperandId == id;
-    },
-    operatorClicked(id) {
-      this.selectedOperatorId = id;
-    },
-    isOperatorSelected(id) {
-      return this.selectedOperatorId == id;
-    },
-    listItemClicked(id) {
-      this.selectedListItems[id] = !this.selectedListItems[id];
-      this.forceRerender += 1;
-    },
-    isListItemSelected(id) {
-      return this.selectedListItems[id] == true;
-    },
-    unitClicked(id) {
-      this.selectedUnitId = id;
-    },
-    isUnitSelected(id) {
-      return this.selectedUnitId == id;
-    },
     accept() {
-      const constraint = new Constraint(-1);
-      constraint.leftOperand = operands[this.selectedOperandId].name;
-      constraint.operator = operators[this.selectedOperatorId].symbol;
+      const hasLeftOperand = !!this.constraint.leftOperand;
+      const hasOperator = !!this.constraint.operator;
+      const hasRightOperand = !!this.constraint.rightOperand;
+      const hasUnitIfNumeric = !this.isNumericInput || !!this.constraint.unit;
 
-      if (this.displayNumberInput) {
-        // for numeric input the right operand is just a number, also add the unit though
-        constraint.rightOperandNumber = this.number;
-        constraint.rightOperandStr = constraint.rightOperandNumber.toString();
-        constraint.unit = units[this.selectedUnitId].name;
-      } else {
-        // create array of chosen names from the value list
-        const listItems = [];
-        for (let i = 0; i < this._list.length; i++) {
-          if (this.selectedListItems[i] == true) {
-            listItems.push(this._list[i].name);
-          }
+      if (hasLeftOperand && hasOperator && hasRightOperand && hasUnitIfNumeric) {
+        this.$emit('chosen', this.constraint);
+      }
+    },
+    toggleRightOperand(op) {
+      const idx = this.rightOperand.indexOf(op);
+      if (idx >= 0) {
+        this.rightOperand.splice(idx, 1);
+
+        if (this.rightOperand.length === 0) {
+          Vue.delete(this.constraint, 'rightOperand');
         }
-        constraint.rightOperandList = listItems;
-        constraint.rightOperandStr = listItems.toString();
-        // add a space after each comma
-        constraint.rightOperandStr = constraint.rightOperandStr.replace(
-          /,/g,
-          ', ',
-        );
-      }
-      constraint.name = `${constraint.leftOperand} ${constraint.operator} ${
-        constraint.rightOperandStr
-      }`;
-
-      if (constraint.unit != '') {
-        constraint.name += ` ${constraint.unit}`;
+        return;
       }
 
-      this.$emit('chosen', constraint);
+      this.rightOperand = [...this.rightOperand, op];
     },
   },
 };
@@ -304,9 +242,10 @@ export default {
 
 <style scoped>
 .list {
-  margin: 0px;
+  float: left;
+  margin: 0px 10px;
   padding: 0px;
-  width: 100%;
+  width: 300px;
   font-size: 16px;
 }
 .list li {
@@ -325,16 +264,8 @@ export default {
   background-color: rgb(218, 218, 218);
 }
 
-.list-container {
-  float: left;
-  margin-right: 10px;
-  margin-left: 10px;
-  width: 300px;
-}
-
 .value-container {
   float: left;
-  margin-right: 15px;
 }
 
 .value-list {
