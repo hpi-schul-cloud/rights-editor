@@ -16,7 +16,9 @@
       <!-- additional explanation -->
       <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddition[0]" :text-after="ruleInfo.descriptionAddition[1]">
         {{ parentRule.gender === 'f' ? 'die' : 'das' }}
-        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentRule.name }}</a>
+        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">
+          {{ parentRule.name }}
+        </a>
       </EmbedInText>
     </p>
 
@@ -56,9 +58,15 @@
         Die {{ subrules.length == 1 ? subruleInfo.name : subruleInfo.pluralName }} diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
         {{ subrules.length === 1 ? 'ist' : 'sind' }}
         <span v-for="(subrule, index) in subrules" :key="index">
-          <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ subrule.action }}</a>
-          <span v-if="index + 2 < subrules.length">, </span>
-          <span v-if="index + 1 < subrules.length"> und </span>
+          <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">
+            {{ subrule.action }}
+          </a>
+          <span v-if="index + 2 < subrules.length">
+            ,
+          </span>
+          <span v-if="index + 1 < subrules.length">
+            und
+          </span>
         </span>.
       </p>
 

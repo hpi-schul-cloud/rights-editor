@@ -15,7 +15,7 @@
         name="constraint"
         type="button"
       >
-        {{ constraint.name }}
+        {{ description }}
       </BaseButton>
       <BaseButton class="remove-constraint" remove :on-click="removeConstraint">
         <i class="fas fa-times" />
@@ -27,6 +27,7 @@
 <script>
 import Vue from 'vue';
 import ConstraintChooser from './ConstraintChooser.vue';
+import { operatorList } from '../libs/odrl/constraints';
 import BaseButton from './BaseButton.vue';
 
 const placeholder = '<leer>';
@@ -55,29 +56,32 @@ export default {
   computed: {
     constraint: {
       get() {
-        const c = this.path.reduce(
-          (result, segment) => result[segment],
-          this.policy,
-        );
-        return c || { name: placeholder };
+        return this.policy.follow(this.path);
       },
       set(newConstraint) {
-        Vue.set(
-          this.constraintParent,
-          this.path[this.path.length - 1],
-          newConstraint,
-        );
+        Vue.set(this.constraintParent, this.path[this.path.length - 1], newConstraint);
       },
     },
     constraintParent() {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
-      return pathWithoutLastElement.reduce(
-        (result, segment) => result[segment],
-        this.policy,
-      );
+      return this.policy.follow(pathWithoutLastElement);
     },
     displayConstraintChooser() {
-      return this.constraintChooserShouldDisplay || this.constraint.name === placeholder;
+      return this.constraintChooserShouldDisplay || !this.constraint;
+    },
+    description() {
+      if (!this.constraint) {
+        return placeholder;
+      }
+      let desc = this.constraint.leftOperand;
+      desc += ` ${operatorList.find(op => (op.identifier === this.constraint.operator)).symbol}`;
+      if (Array.isArray(this.constraint.rightOperand)) {
+        desc += ` ${this.constraint.rightOperand.join(', ')}`;
+      } else {
+        desc += ` ${this.constraint.rightOperand['@value']}`;
+        desc += ` ${this.constraint.unit}`;
+      }
+      return desc;
     },
   },
   methods: {
