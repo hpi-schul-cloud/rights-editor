@@ -2,8 +2,11 @@
   <BaseChooser
     v-bind:objectToEdit="constraintToEdit"
     v-bind:name="'Einschränkung'"
-    v-bind:operands="operandList"
-    v-bind:operandMapping="operandMapping"></BaseChooser>
+    v-bind:operandList="opList"
+    v-bind:operandMapping="opMapping"
+    v-on:abort="function() { $emit('abort'); }"
+    v-on:chosen="forward">
+    </BaseChooser>
 </template>
 
 <script>
@@ -26,5 +29,18 @@ export default {
       required: false,
     },
   },
+  computed: {
+    opList() {
+      return operandList;
+    },
+    opMapping() {
+      return operandMapping;
+    }
+  },
+  methods: {
+    forward(constraint) {
+      this.$emit('chosen', constraint);
+    }
+  }
 };
 </script>

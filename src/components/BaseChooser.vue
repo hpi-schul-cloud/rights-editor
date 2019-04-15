@@ -88,7 +88,9 @@
         >
           Abbrechen
         </BaseButton>
-        <BaseButton :on-click="accept">
+        <BaseButton 
+        :disabled="!complete()"
+        :on-click="accept">
           Annehmen
         </BaseButton>
       </div>
@@ -103,7 +105,7 @@ import BaseModal from './BaseModal.vue';
 import BaseButton from './BaseButton.vue';
 
 export default {
-  name: 'ConstraintChooser',
+  name: 'BaseChooser',
   components: {
     BaseInput,
     BaseModal,
@@ -119,7 +121,7 @@ export default {
       type: String,
       required: true
     },
-    operands: {
+    operandList: {
       type: Array,
       required: true
     },
@@ -131,42 +133,43 @@ export default {
   data() {
     return {
       objectCopy: null,
+      forceUpdate: 0,
     };
   },
   computed: {
     operands() {
-      return operandList;
+      return this.operandList;
     },
-    constraint() {
-      if (this.constraintCopy) {
-        // the constraint copy has already been initialized correctly
-        return this.constraintCopy;
+    object() {
+      if (this.objectCopy) {
+        // the object copy has already been initialized correctly
+        return this.objectCopy;
       }
-      if (!this.constraintToEdit) {
-        // new empty constraint is going to be filled
-        this.constraintCopy = {};
-        return this.constraintCopy;
+      if (!this.objectToEdit) {
+        // new empty object is going to be filled
+        this.objectCopy = {};
+        return this.objectCopy;
       }
-      // deep copy the v-bound constraint that is going to be edited
-      this.constraintCopy = {};
-      Vue.set(this.constraintCopy, 'leftOperand', this.constraintToEdit.leftOperand);
-      Vue.set(this.constraintCopy, 'operator', this.constraintToEdit.operator);
+      // deep copy the v-bound object that is going to be edited
+      this.objectCopy = {};
+      Vue.set(this.objectCopy, 'leftOperand', this.objectToEdit.leftOperand);
+      Vue.set(this.objectCopy, 'operator', this.objectToEdit.operator);
 
-      if (Array.isArray(this.constraintToEdit.rightOperand)) {
+      if (Array.isArray(this.objectToEdit.rightOperand)) {
         // right operand is a selection from list
-        Vue.set(this.constraintCopy, 'rightOperand', [...this.constraintToEdit.rightOperand]);
+        Vue.set(this.objectCopy, 'rightOperand', [...this.objectToEdit.rightOperand]);
       } else {
         // right operand is number and unit
-        Vue.set(this.constraintCopy, 'rightOperand', { '@value': this.constraintToEdit.rightOperand['@value'] });
-        Vue.set(this.constraintCopy, 'unit', this.constraintToEdit.unit);
+        Vue.set(this.objectCopy, 'rightOperand', { '@value': this.objectToEdit.rightOperand['@value'] });
+        Vue.set(this.objectCopy, 'unit', this.objectToEdit.unit);
       }
 
-      Vue.delete(this.constraintCopy, 'uninitialized');
-      return this.constraintCopy;
+      Vue.delete(this.objectCopy, 'uninitialized');
+      return this.objectCopy;
     },
     leftOperand: {
       get() {
-        let operand = this.constraint.leftOperand;
+        let operand = this.object.leftOperand;
         if (!operand) {
           operand = this.operands[0];
           this.leftOperand = operand;
@@ -174,14 +177,14 @@ export default {
         return operand;
       },
       set(op) {
-        if (this.constraint.leftOperand === op) {
+        if (this.object.leftOperand === op) {
           // do nothing
           return;
         }
-        Vue.set(this.constraint, 'leftOperand', op);
-        Vue.delete(this.constraint, 'operator');
-        Vue.delete(this.constraint, 'rightOperand');
-        Vue.delete(this.constraint, 'unit');
+        Vue.set(this.object, 'leftOperand', op);
+        Vue.delete(this.object, 'operator');
+        Vue.delete(this.object, 'rightOperand');
+        Vue.delete(this.object, 'unit');
       },
     },
     operator: {
@@ -189,32 +192,32 @@ export default {
         if (this.operators.length === 1) {
           this.operator = this.operators[0].identifier;
         }
-        return this.constraint.operator;
+        return this.object.operator;
       },
       set(op) {
-        Vue.set(this.constraint, 'operator', op);
+        Vue.set(this.object, 'operator', op);
       },
     },
     rightOperand: {
       get() {
-        const operand = this.constraint.rightOperand;
+        const operand = this.object.rightOperand;
         return operand || [];
       },
       set(op) {
         op.sort();
-        Vue.set(this.constraint, 'rightOperand', op);
+        Vue.set(this.object, 'rightOperand', op);
       },
     },
     value: {
       get() {
-        const op = this.constraint.rightOperand;
+        const op = this.object.rightOperand;
         if (!op && this.isNumericInput) {
-          Vue.set(this.constraint, 'rightOperand', { '@value': '0' });
+          Vue.set(this.object, 'rightOperand', { '@value': '0' });
         }
-        return this.constraint.rightOperand['@value'];
+        return this.object.rightOperand['@value'];
       },
       set(val) {
-        this.constraint.rightOperand['@value'] = val;
+        this.object.rightOperand['@value'] = val;
       },
     },
     unit: {
@@ -222,10 +225,10 @@ export default {
         if (this.units.length === 1) {
           this.unit = this.units[0];
         }
-        return this.constraint.unit;
+        return this.object.unit;
       },
       set(u) {
-        Vue.set(this.constraint, 'unit', u);
+        Vue.set(this.object, 'unit', u);
       },
     },
     operators() {
@@ -246,16 +249,16 @@ export default {
   },
   methods: {
     complete() {
-      const hasLeftOperand = !!this.constraint.leftOperand;
-      const hasOperator = !!this.constraint.operator;
-      const hasRightOperand = !!this.constraint.rightOperand;
-      const hasUnitIfNumeric = !this.isNumericInput || !!this.constraint.unit;
+      const hasLeftOperand = !!this.object.leftOperand;
+      const hasOperator = !!this.object.operator;
+      const hasRightOperand = !!this.object.rightOperand;
+      const hasUnitIfNumeric = !this.isNumericInput || !!this.object.unit;
 
       return hasLeftOperand && hasOperator && hasRightOperand && hasUnitIfNumeric;
     },
     accept() {
       if (this.complete()) {
-        this.$emit('chosen', this.constraint);
+        this.$emit('chosen', this.object);
       }
     },
     toggleRightOperand(op) {
@@ -264,7 +267,7 @@ export default {
         this.rightOperand.splice(idx, 1);
 
         if (this.rightOperand.length === 0) {
-          Vue.delete(this.constraint, 'rightOperand');
+          Vue.delete(this.object, 'rightOperand');
         }
         return;
       }
