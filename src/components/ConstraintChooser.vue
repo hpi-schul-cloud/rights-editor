@@ -72,14 +72,14 @@
           >
             {{ item }}
           </li>
-        </ul>
+        </ul>        
       </div>
     </template>
 
     <template v-slot:footer>
       <div class="modal-footer">
         <BaseButton
-          textlike
+          textlike                   
           :on-click="
             function() {
               $emit('abort');
@@ -88,7 +88,9 @@
         >
           Abbrechen
         </BaseButton>
-        <BaseButton :on-click="accept">
+        <BaseButton 
+        :disabled="!complete()"
+        :on-click="accept">
           Annehmen
         </BaseButton>
       </div>
@@ -123,14 +125,41 @@ export default {
       required: false,
     },
   },
-  data() {
+  data: function() {
     return {
-      constraint: {},
-    };
+      constraintCopy: null
+    }
   },
   computed: {
     operands() {
       return operandList;
+    },
+    constraint() {
+      if (this.constraintCopy) {
+        // the constraint copy has already been initialized correctly
+        return this.constraintCopy;
+      }
+      if (!this.constraintToEdit) {
+        // new empty constraint is going to be filled
+        this.constraintCopy = {};
+        return this.constraintCopy;
+      }
+      // deep copy the v-bound constraint that is going to be edited
+      this.constraintCopy = {};
+      Vue.set(this.constraintCopy, 'leftOperand', this.constraintToEdit.leftOperand);
+      Vue.set(this.constraintCopy, 'operator', this.constraintToEdit.operator);
+
+      if (Array.isArray(this.constraintToEdit.rightOperand)) {
+        // right operand is a selection from list
+        Vue.set(this.constraintCopy, 'rightOperand', [...this.constraintToEdit.rightOperand]);
+      } else {
+        // right operand is number and unit
+        Vue.set(this.constraintCopy, 'rightOperand', { '@value': this.constraintToEdit.rightOperand['@value'] });
+        Vue.set(this.constraintCopy, 'unit', this.constraintToEdit.unit);
+      }
+
+      Vue.delete(this.constraintCopy, 'uninitialized');
+      return this.constraintCopy;
     },
     leftOperand: {
       get() {
@@ -213,13 +242,16 @@ export default {
     },
   },
   methods: {
-    accept() {
+    complete() {
       const hasLeftOperand = !!this.constraint.leftOperand;
       const hasOperator = !!this.constraint.operator;
       const hasRightOperand = !!this.constraint.rightOperand;
       const hasUnitIfNumeric = !this.isNumericInput || !!this.constraint.unit;
 
-      if (hasLeftOperand && hasOperator && hasRightOperand && hasUnitIfNumeric) {
+      return hasLeftOperand && hasOperator && hasRightOperand && hasUnitIfNumeric;
+    },
+    accept() {
+      if (this.complete()) {
         this.$emit('chosen', this.constraint);
       }
     },

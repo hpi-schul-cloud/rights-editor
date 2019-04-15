@@ -1,7 +1,7 @@
 <template>
   <button
     class="base-button"
-    :class="{ 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input, 'base-button-remove': remove }"
+    :class="{ 'base-button-disabled': disabled, 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input, 'base-button-remove': remove }"
     :style="{ width: this.width }"
     @click="onClick"
   >
@@ -22,6 +22,7 @@ export default {
     textlike: Boolean,
     input: Boolean,
     remove: Boolean,
+    disabled: Boolean,
     onClick: { type: Function, required: true },
   },
 };
@@ -42,6 +43,10 @@ export default {
   text-decoration: none;
   font-size: 16px;
   cursor: pointer;
+}
+
+.base-button-disabled {
+  background-color: gray;
 }
 
 .base-button-big {
