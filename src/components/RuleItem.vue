@@ -17,16 +17,16 @@
         <ActionItem :policy="policy" :path="[...path, 'action']" />
       </EmbedInText>
       <!-- additional explanation -->
-      <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddition[0]" :text-after="ruleInfo.descriptionAddition[1]">
-        {{ parentRule.gender === 'f' ? 'die' : 'das' }}
+      <EmbedInText v-if="ruleInfo.hasparentRuleInfo" :text-before="ruleInfo.descriptionAddon[0]" :text-after="ruleInfo.descriptionAddon[1]">
+        {{ parentRuleInfo.gender === 'f' ? 'die' : 'das' }}
         <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">
-          {{ parentRule.name }}
+          {{ parentRuleInfo.name }}
         </a>
       </EmbedInText>
     </p>
 
     <!-- add new refinement -->
-    <p>
+    <p class="refinements-paragraph">
       Das <em>{{ rule['action'] }}</em> darf nur auf die folgende Art und Weise erfolgen...
       <RefinementItem
         v-for="(refinement, index) in refinements"
@@ -39,10 +39,9 @@
       </BaseButton>
     </p>
 
-
     <!-- display and edit constraints -->
-    <p>
-      Insgesamt gilt {{ ruleInfo.gender === 'f' ? 'die' : 'das' }} <em>{{ ruleInfo.name }}</em> nur, wenn...
+    <p class="constraints-paragraph">
+      Insgesamt gilt {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em> nur, wenn...
       <ConstraintItem
         v-for="(constraint, index) in constraints"
         :key="index"
@@ -57,11 +56,17 @@
 
     <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
-      Optional können {{ subruleInfo.pluralName }} hinzugefügt werden. {{ subruleInfo.pluralName }} sind Pflichten,
-      die geleistet werden müssen,
-      <EmbedInText :text-before="subruleInfo.descriptionAddition[0]" :text-after="subruleInfo.descriptionAddition[1]">
-        {{ ruleInfo.gender === 'f' ? 'die' : 'das' }} <em>{{ ruleInfo.name }}</em>
-      </EmbedInText>
+     
+     
+      <u>Optional kann um folgende Regeln erweitert werden:</u>
+      <p>
+      <BaseButton class="add-button" :name="subruleInfo.pluralName" :on-click="appendNewSubrule">
+      {{ subruleInfo.name }} hinzufügen</BaseButton>
+
+      {{ subruleInfo.pluralName }} sind Pflichten, die geleistet werden müssen,
+      <EmbedInText :text-before="subruleInfo.descriptionAddon[0]" :text-after="subruleInfo.descriptionAddon[1]">
+        {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em>
+      </EmbedInText></P>      
 
       <p v-if="subrules">
         Die {{ subrules.length == 1 ? subruleInfo.name : subruleInfo.pluralName }} diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
@@ -79,9 +84,6 @@
         </span>.
       </p>
 
-      <BaseButton class="add-button" :name="subruleInfo.name" :on-click="appendNewSubrule">
-        {{ subruleInfo.name }} hinzufügen
-      </BaseButton>
     </div>
   </div>
 </template>
@@ -94,6 +96,7 @@ import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
+import { articles as articleMapping } from '../libs/language/language.js';
 
 export default {
   name: 'RuleItem',
@@ -125,7 +128,7 @@ export default {
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];
     },
-    parentRule() {
+    parentRuleInfo() {
       if (!this.ruleInfo.hasParentRule) {
         console.error('has no parent');
         return null;
@@ -141,13 +144,16 @@ export default {
       return this.rule[subruleTypeName];
     },
     hasParentRule() {
-      return !!this.parentruleInfo;
+      return !!this.parentRuleInfo;
     },
     constraints() {
       return this.rule.constraint;
     },
     refinements() {
       return this.rule.refinement;
+    },
+    articles() {
+      return articleMapping;
     }
   },
   methods: {
@@ -227,6 +233,10 @@ a {
   display: block;
   margin-top: 10px;
   margin-left: 0px;
+}
+
+.constraints-paragraph {
+  margin-top: 40px;
 }
 
 .subrule-container {
