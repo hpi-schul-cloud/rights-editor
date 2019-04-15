@@ -28,7 +28,13 @@
     <!-- add new refinement -->
     <p>
       Das <em>{{ rule['action'] }}</em> darf nur auf die folgende Art und Weise erfolgen...
-      <BaseButton class="add-button" :on-click="function(){console.error('not implemented')}">
+      <RefinementItem
+        v-for="(refinement, index) in refinements"
+        :key="index"
+        :policy="policy"
+        :path="[...path, 'refinement', index]"
+      />
+      <BaseButton class="add-button" :on-click="addRefinement">
         Verfeinerung hinzufügen
       </BaseButton>
     </p>
@@ -82,11 +88,11 @@
 
 <script>
 import Vue from 'vue';
-import ActionItem from './ActionItem.vue';
-import ConstraintItem from './ConstraintItem';
-import BaseButton from './BaseButton.vue';
-import ConstraintChooser from './ConstraintChooser.vue';
 import EmbedInText from './EmbedInText.vue';
+import BaseButton from './BaseButton.vue';
+import ActionItem from './ActionItem.vue';
+import ConstraintItem from './ConstraintItem.vue';
+import RefinementItem from './RefinementItem.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
 
 export default {
@@ -96,8 +102,7 @@ export default {
     ConstraintItem,
     BaseButton,
     ActionItem,
-    ConstraintItem,
-    ConstraintChooser,
+    RefinementItem
   },
   props: {
     policy: {
@@ -108,12 +113,6 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {
-      displayConstraintChooser: false,
-      nextId: 0,
-    };
   },
   computed: {
     rule() {
@@ -144,16 +143,12 @@ export default {
     hasParentRule() {
       return !!this.parentruleInfo;
     },
-    canHaveSubrules() {
-      return this.ruleInfo.subrule != '';
-    },
     constraints() {
       return this.rule.constraint;
     },
-    ruleParent() {
-      const containerPath = this.path.slice(0, this.path.length - 1);
-      return this.policy.follow(containerPath);
-    },
+    refinements() {
+      return this.rule.refinement;
+    }
   },
   methods: {
     furtherPath(nameSegment, indexSegment) {
@@ -196,6 +191,12 @@ export default {
       }
       this.constraints.push(null);
     },
+    addRefinement() {
+      if (!this.refinements) {
+        Vue.set(this.rule, 'refinement', []);
+      }
+      this.refinements.push(null);
+    }
   },
 };
 </script>

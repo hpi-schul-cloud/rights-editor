@@ -1,11 +1,15 @@
 <template>
   <div>
-    <ConstraintChooser
-      v-if="displayConstraintChooser"
-      :constraint-to-edit="constraint"
-      @chosen="hideConstraintChooser(); constraint = $event"
-      @abort="abortChooser()"
-    />
+    <BaseChooser
+    v-if="displayConstraintChooser"
+    v-bind:objectToEdit="constraint"
+    v-bind:name="'Einschränkung'"
+    v-bind:operandList="opList"
+    v-bind:operandMapping="opMapping"
+    @chosen="hideConstraintChooser(); constraint = $event"
+    @abort="abortChooser()">
+    </BaseChooser>
+
     <div class="constraint-container">
       <BaseButton
         input
@@ -26,16 +30,20 @@
 
 <script>
 import Vue from 'vue';
-import ConstraintChooser from './ConstraintChooser.vue';
-import { operatorList } from '../libs/odrl/constraints';
 import BaseButton from './BaseButton.vue';
+import BaseChooser from './BaseChooser.vue';
+import {
+  operandList,
+  operandMapping,
+  operatorList
+} from '../libs/odrl/constraints';
 
 const placeholder = '<leer>';
 
 export default {
   name: 'ConstraintItem',
   components: {
-    ConstraintChooser,
+    BaseChooser,
     BaseButton,
   },
   props: {
@@ -83,6 +91,12 @@ export default {
       }
       return desc;
     },
+    opList() {
+      return operandList;
+    },
+    opMapping() {
+      return operandMapping;
+    }
   },
   methods: {
     abortChooser() {
