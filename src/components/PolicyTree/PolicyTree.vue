@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import PolicyTreeRuleItem from './PolicyTreeRuleItem';
+import PolicyTreeRuleItem from './PolicyTreeRuleItem.vue';
 
 export default {
   name: 'PolicyTree',
@@ -62,8 +62,7 @@ export default {
 
 <style scoped>
 .tree {
-  padding: 8px;
-  padding-top: 24px;
+  padding: 0px 8px;
   box-sizing: border-box;
 }
 .label {

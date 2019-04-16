@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { ccNames } from '../../libs/cc/identifiers.js';
+import { ccNames } from '../../libs/cc/identifiers';
 
 export default {
   name: 'CCImage',

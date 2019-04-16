@@ -11,7 +11,7 @@
     <p class="actions">
       <!-- main explanation -->
       <EmbedInText text-before="Das" :text-after="ruleInfo.description">
-        <ActionItem :policy="policy" :path="[...path, 'action']" />
+        <ActionItem :policy="policy" :path="[...path, 'action']" :remove-callback="removeRule" />
       </EmbedInText>
       <!-- additional explanation -->
       <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddon[0]" :text-after="ruleInfo.descriptionAddon[1]">
@@ -127,7 +127,7 @@ export default {
       return RuleTypes[parentRuleTypeName];
     },
     canHaveSubrules() {
-      return this.ruleInfo.subrule != '';
+      return this.ruleInfo.subrule !== '';
     },
     subrules() {
       const subruleTypeName = this.ruleInfo.subrule;

@@ -2,15 +2,14 @@
   <div class="action-container">
     <ActionChooser
       v-if="displayActionChooser"
-      :allow-abort="actionChooserAllowAbort"
       @chosen="hideActionChooser(); action = $event"
-      @abort="hideActionChooser()"
+      @abort="choosingAborted()"
     />
 
     <!-- display and edit action -->
     <BaseButton
       input
-      :on-click="showActionChooserWithAbort"
+      :on-click="showActionChooser"
       list="actions"
       name="action"
       type="button"
@@ -42,18 +41,20 @@ export default {
       type: Array,
       required: true,
     },
+    removeCallback: {
+      type: Function,
+      required: true,
+    },
   },
   data() {
     return {
       actionChooserShouldDisplay: false,
-      actionChooserAllowAbort: false,
     };
   },
   computed: {
     rule() {
-      return this.path
-        .slice(0, this.path.length - 1)
-        .reduce((result, segment) => result[segment], this.policy);
+      const rulePath = this.path.slice(0, this.path.length - 1);
+      return this.policy.follow(rulePath);
     },
     action: {
       get() {
@@ -74,16 +75,18 @@ export default {
     },
   },
   methods: {
-    showActionChooserWithAbort() {
-      this.showActionChooser(true);
-    },
-    showActionChooser(allowAbort) {
+    showActionChooser() {
       this.actionChooserShouldDisplay = true;
-      this.actionChooserAllowAbort = allowAbort;
     },
     hideActionChooser() {
       this.actionChooserShouldDisplay = false;
-      this.actionChooserAllowAbort = false;
+    },
+    choosingAborted() {
+      if (this.rule.action === placeholderText) {
+        this.removeCallback();
+      } else {
+        this.hideActionChooser();
+      }
     },
   },
 };
