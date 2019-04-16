@@ -23,8 +23,7 @@
       <BaseButton class="remove-refinement" remove :on-click="removeRefinement">
         <i class="fas fa-times" />
       </BaseButton>
-    </div>
-    <pre style="position: absolute; top: 0; left: 0; background-color: green;">{{this.path.toString()}}</pre>
+    </div>    
   </div>
 </template>
 
