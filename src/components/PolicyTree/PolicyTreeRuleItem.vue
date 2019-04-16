@@ -41,12 +41,16 @@ export default {
   },
   computed: {
     rule() {
-      return this.path.reduce((result, segment) => result[segment], this.policy);
+      return this.policy.follow(this.path)
     },
     name() {
       const pathLen = this.path.length;
       const rType = RuleTypes[this.path[pathLen - 2]];
-      return rType.name;
+      let action = this.rule.action;
+      if (Array.isArray(action)) {
+        action = action[0]['rdf:value'];
+      }
+      return rType.name + ': ' + action;
     },
     subruleType() {
       const pathLen = this.path.length;
@@ -72,6 +76,10 @@ export default {
     color: black;
     font-weight: normal;
     text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 .label:hover:not(.selectedRule) {
     font-weight: bold;
