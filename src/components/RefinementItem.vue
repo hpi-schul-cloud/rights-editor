@@ -23,7 +23,7 @@
       <BaseButton class="remove-refinement" remove :on-click="removeRefinement">
         <i class="fas fa-times" />
       </BaseButton>
-    </div>    
+    </div>
   </div>
 </template>
 
@@ -114,15 +114,15 @@ export default {
     hideRefinementChooser() {
       this.refinementChooserShouldDisplay = false;
     },
-    removeRefinement() {      
+    removeRefinement() {
       Vue.delete(this.refinementParent, this.path[this.path.length - 1]);
-      
+
       if (this.refinementParent.length === 0) {
         // if no refinements are left, make the action just a string again
-        let rulePath = this.path.slice(0, this.path.length - 4);
-        let ruleObject = this.policy.follow(rulePath);
-        let action = ruleObject['action'][0]['rdf:value'];
-        ruleObject['action'] = action;
+        const rulePath = this.path.slice(0, this.path.length - 4);
+        const ruleObject = this.policy.follow(rulePath);
+        const action = ruleObject.action[0]['rdf:value'];
+        ruleObject.action = action;
       }
     },
   },

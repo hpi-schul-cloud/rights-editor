@@ -72,7 +72,7 @@
           <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ subrule.action }}</a>
           <span v-if="index + 1 < subrules.length">, <br></span>
         </span>.
-      </p>      
+      </p>
 
     </div>
   </div>
@@ -137,7 +137,7 @@ export default {
       return !!this.parentRuleInfo;
     },
     action() {
-      return this.rule['action'];
+      return this.rule.action;
     },
     actionLabel() {
       return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
@@ -197,9 +197,9 @@ export default {
     addRefinement() {
       if (this.refinements == null) {
         // action is just a string, but when adding refinements, action becomes an an array
-        let action = this.action;
+        const action = this.action;
         Vue.delete(this.rule, 'action');
-        
+
         Vue.set(this.rule, 'action', [{}]);
         Vue.set(this.action[0], 'rdf:value', action);
         Vue.set(this.action[0], 'refinement', []);
