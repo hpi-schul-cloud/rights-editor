@@ -1,10 +1,7 @@
 <template>
   <div class="rule-container">
     <div class="rule-header">
-      <h3>
-        {{ ruleInfo.name }}
-        <i :class="ruleInfo.icon" />
-      </h3>
+      <h3>{{ ruleInfo.name }} <i :class="ruleInfo.icon" /></h3>
       <BaseButton remove class="remove-button" :on-click="removeRule">
         <i class="far fa-trash-alt" />
       </BaseButton>

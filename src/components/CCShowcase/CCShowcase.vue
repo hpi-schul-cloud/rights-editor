@@ -61,24 +61,24 @@ export default {
   },
   computed: {
     image_by() {
-      return require("../../img/cc/CC-BY.svg");
+      return require('../../img/cc/CC-BY.svg');
     },
     image_by_sa() {
-      return require("../../img/cc/CC-BY-SA.svg");
+      return require('../../img/cc/CC-BY-SA.svg');
     },
     image_by_nd() {
-      return require("../../img/cc/CC-BY-ND.svg");
+      return require('../../img/cc/CC-BY-ND.svg');
     },
     image_by_nc() {
-      return require("../../img/cc/CC-BY-ND.svg");
+      return require('../../img/cc/CC-BY-ND.svg');
     },
     image_by_nc_sa() {
-      return require("../../img/cc/CC-BY-NC-SA.svg");
+      return require('../../img/cc/CC-BY-NC-SA.svg');
     },
     image_by_nc_nd() {
-      return require("../../img/cc/CC-BY-NC-ND.svg");
-    }
-  }
+      return require('../../img/cc/CC-BY-NC-ND.svg');
+    },
+  },
 };
 </script>
 
