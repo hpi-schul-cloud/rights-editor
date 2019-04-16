@@ -24,6 +24,7 @@
         <i class="fas fa-times" />
       </BaseButton>
     </div>
+    <pre style="position: absolute; top: 0; left: 0; background-color: green;">{{this.path.toString()}}</pre>
   </div>
 </template>
 
@@ -114,13 +115,15 @@ export default {
     hideRefinementChooser() {
       this.refinementChooserShouldDisplay = false;
     },
-    removeRefinement() {
+    removeRefinement() {      
       Vue.delete(this.refinementParent, this.path[this.path.length - 1]);
+      
       if (this.refinementParent.length === 0) {
-        const parentsParent = this.path
-          .slice(0, this.path.length - 2)
-          .reduce((result, segment) => result[segment], this.policy);
-        Vue.delete(parentsParent, this.path[this.path.length - 2]);
+        // if no refinements are left, make the action just a string again
+        let rulePath = this.path.slice(0, this.path.length - 4);
+        let ruleObject = this.policy.follow(rulePath);
+        let action = ruleObject['action'][0]['rdf:value'];
+        ruleObject['action'] = action;
       }
     },
   },

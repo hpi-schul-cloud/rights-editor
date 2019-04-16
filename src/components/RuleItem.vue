@@ -8,7 +8,7 @@
     </div>
 
     <!-- display action -->
-    <p>
+    <p class="actions">
       <!-- main explanation -->
       <EmbedInText text-before="Das" :text-after="ruleInfo.description">
         <ActionItem :policy="policy" :path="[...path, 'action']" />
@@ -20,22 +20,23 @@
       </EmbedInText>
     </p>
 
-    <!-- add new refinement -->
-    <p class="refinements-paragraph">
-      Das <em>{{ rule['action'] }}</em> darf nur auf die folgende Art und Weise erfolgen...
+    <!-- display and edit refinements -->
+    <p class="refinements">
+      Das <em>{{ actionLabel }}</em> darf nur auf die folgende Art und Weise erfolgen...
       <RefinementItem
         v-for="(refinement, index) in refinements"
         :key="index"
         :policy="policy"
-        :path="[...path, 'refinement', index]"
+        :path="[...path, 'action', 0, 'refinement', index]"
       />
+      <!-- add new refinement -->
       <BaseButton class="add-button" :on-click="addRefinement">
         Verfeinerung hinzufügen
       </BaseButton>
     </p>
 
     <!-- display and edit constraints -->
-    <p class="paragraph">
+    <p class="constraints">
       Insgesamt gilt {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em> nur, wenn...
       <ConstraintItem
         v-for="(constraint, index) in constraints"
@@ -64,14 +65,14 @@
       </P>
 
       <!-- list all available subrules -->
-      <p class="paragraph" v-if="subrules">
+      <p v-if="subrules">
         Die {{ subrules.length == 1 ? subruleInfo.name : subruleInfo.pluralName }} diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
         {{ subrules.length === 1 ? 'ist' : 'sind' }}<br>
         <span v-for="(subrule, index) in subrules" :key="index">
           <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ subrule.action }}</a>
           <span v-if="index + 1 < subrules.length">, <br></span>
         </span>.
-      </p>
+      </p>      
 
     </div>
   </div>
@@ -135,22 +136,29 @@ export default {
     hasParentRule() {
       return !!this.parentRuleInfo;
     },
+    action() {
+      return this.rule['action'];
+    },
+    actionLabel() {
+      return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
+    },
     constraints() {
       return this.rule.constraint;
     },
     refinements() {
-      return this.rule.refinement;
+      if (this.action === undefined) {
+        return undefined;
+      }
+      if (!Array.isArray(this.action)) {
+        return null;
+      }
+      return this.action[0].refinement;
     },
     articles() {
       return articleMapping;
     },
   },
   methods: {
-    furtherPath(nameSegment, indexSegment) {
-      const p = this.path.slice();
-      p.push(nameSegment, indexSegment);
-      return p;
-    },
     appendNewSubrule() {
       const subruleTypeName = this.ruleInfo.subrule;
       if (!this.rule[subruleTypeName]) {
@@ -187,8 +195,14 @@ export default {
       this.constraints.push(null);
     },
     addRefinement() {
-      if (!this.refinements) {
-        Vue.set(this.rule, 'refinement', []);
+      if (this.refinements == null) {
+        // action is just a string, but when adding refinements, action becomes an an array
+        let action = this.action;
+        Vue.delete(this.rule, 'action');
+        
+        Vue.set(this.rule, 'action', [{}]);
+        Vue.set(this.action[0], 'rdf:value', action);
+        Vue.set(this.action[0], 'refinement', []);
       }
       this.refinements.push(null);
     },
@@ -224,9 +238,12 @@ a {
   margin-left: 0px;
 }
 
-.paragraph {
+p {
+  line-height: 1.2em;
+}
+
+p.constraints {
   margin-top: 40px;
-  line-height: 1.5em;
 }
 
 .subrule-container {
