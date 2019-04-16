@@ -11,7 +11,7 @@
     <p>
       <!-- main explanation -->
       <EmbedInText text-before="Das" :text-after="ruleInfo.description">
-        <ActionItem :policy="policy" :path="[...path, 'action']" />
+        <ActionItem :policy="policy" :path="[...path, 'action']" :remove-callback="removeRule" />
       </EmbedInText>
       <!-- additional explanation -->
       <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddition[0]" :text-after="ruleInfo.descriptionAddition[1]">
@@ -80,11 +80,10 @@
 <script>
 import Vue from 'vue';
 import ActionItem from './ActionItem.vue';
-import ConstraintItem from './ConstraintItem';
+import ConstraintItem from './ConstraintItem.vue';
 import BaseButton from './BaseButton.vue';
-import ConstraintChooser from './ConstraintChooser.vue';
 import EmbedInText from './EmbedInText.vue';
-import { RuleTypes } from '../libs/odrl/rules.js';
+import { RuleTypes } from '../libs/odrl/rules';
 
 export default {
   name: 'RuleItem',
@@ -93,8 +92,6 @@ export default {
     ConstraintItem,
     BaseButton,
     ActionItem,
-    ConstraintItem,
-    ConstraintChooser,
   },
   props: {
     policy: {
@@ -132,7 +129,7 @@ export default {
       return RuleTypes[parentRuleTypeName];
     },
     canHaveSubrules() {
-      return this.ruleInfo.subrule != '';
+      return this.ruleInfo.subrule !== '';
     },
     subrules() {
       const subruleTypeName = this.ruleInfo.subrule;
@@ -142,7 +139,7 @@ export default {
       return !!this.parentruleInfo;
     },
     canHaveSubrules() {
-      return this.ruleInfo.subrule != '';
+      return this.ruleInfo.subrule !== '';
     },
     constraints() {
       return this.rule.constraint;

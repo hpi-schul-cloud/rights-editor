@@ -99,6 +99,9 @@ export default {
 .policy-tree {
   float: left;
   width: 200px;
+  box-shadow: 3px 0px 2px -3px gray;
+  margin-top: 24px;
+  padding-bottom: 12px;
 }
 
 .policy-detail {
@@ -106,6 +109,10 @@ export default {
   padding: 10px;
 }
 
+pre {
+  margin-left: 200px;
+  padding: 10px;
+}
 .editor-header {
   background-color: white;
   border-bottom: 5px solid gray;
