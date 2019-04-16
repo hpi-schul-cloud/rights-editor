@@ -70,7 +70,7 @@ export default {
       return require('../../img/cc/CC-BY-ND.svg');
     },
     image_by_nc() {
-      return require('../../img/cc/CC-BY-ND.svg');
+      return require('../../img/cc/CC-BY-NC.svg');
     },
     image_by_nc_sa() {
       return require('../../img/cc/CC-BY-NC-SA.svg');
