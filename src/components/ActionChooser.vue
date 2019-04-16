@@ -18,7 +18,6 @@
     <template v-slot:footer>
       <div class="modal-footer">
         <BaseButton
-          v-if="allowAbort"
           textlike
           :on-click="function() {$emit('abort');}"
         >
@@ -45,13 +44,6 @@ export default {
     BaseButton,
     BaseModal,
   },
-  props: {
-    allowAbort: {
-      type: Boolean,
-      default: true,
-    },
-  },
-
   data() {
     return {
       currentSelected: null,
@@ -76,7 +68,7 @@ export default {
       this.currentSelected = actionId;
     },
     isSelected(identifier) {
-      return this.currentSelected == identifier;
+      return this.currentSelected === identifier;
     },
   },
 };

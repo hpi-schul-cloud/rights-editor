@@ -102,10 +102,7 @@
 <script>
 import Vue from 'vue';
 import {
-  Constraint,
   operandList,
-  states,
-  groups,
   operandMapping,
 } from '../libs/odrl/constraints';
 import BaseInput from './BaseInput.vue';
