@@ -14,11 +14,9 @@
         <ActionItem :policy="policy" :path="[...path, 'action']" />
       </EmbedInText>
       <!-- additional explanation -->
-      <EmbedInText v-if="ruleInfo.hasparentRuleInfo" :text-before="ruleInfo.descriptionAddon[0]" :text-after="ruleInfo.descriptionAddon[1]">
-        {{ parentRuleInfo.gender === 'f' ? 'die' : 'das' }}
-        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">
-          {{ parentRuleInfo.name }}
-        </a>
+      <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddon[0]" :text-after="ruleInfo.descriptionAddon[1]">
+        {{ articles[parentRuleInfo.gender].def }}
+        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentRuleInfo.name }}</a>
       </EmbedInText>
     </p>
 
@@ -37,7 +35,7 @@
     </p>
 
     <!-- display and edit constraints -->
-    <p class="constraints-paragraph">
+    <p class="paragraph">
       Insgesamt gilt {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em> nur, wenn...
       <ConstraintItem
         v-for="(constraint, index) in constraints"
@@ -53,31 +51,25 @@
 
     <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
-     
-     
-      <u>Optional kann um folgende Regeln erweitert werden:</u>
+
+      Optional kann um folgende Regeln erweitert werden:
       <p>
-      <BaseButton class="add-button" :name="subruleInfo.pluralName" :on-click="appendNewSubrule">
-      {{ subruleInfo.name }} hinzufügen</BaseButton>
+        <BaseButton class="add-button" :name="subruleInfo.pluralName" :on-click="appendNewSubrule">
+          {{ subruleInfo.name }} hinzufügen</BaseButton>
 
-      {{ subruleInfo.pluralName }} sind Pflichten, die geleistet werden müssen,
-      <EmbedInText :text-before="subruleInfo.descriptionAddon[0]" :text-after="subruleInfo.descriptionAddon[1]">
-        {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em>
-      </EmbedInText></P>      
+        {{ subruleInfo.pluralName }} sind Pflichten, die geleistet werden müssen,
+        <EmbedInText :text-before="subruleInfo.descriptionAddon[0]" :text-after="subruleInfo.descriptionAddon[1]">
+          {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em>
+        </EmbedInText>
+      </P>
 
-      <p v-if="subrules">
+      <!-- list all available subrules -->
+      <p class="paragraph" v-if="subrules">
         Die {{ subrules.length == 1 ? subruleInfo.name : subruleInfo.pluralName }} diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
-        {{ subrules.length === 1 ? 'ist' : 'sind' }}
+        {{ subrules.length === 1 ? 'ist' : 'sind' }}<br>
         <span v-for="(subrule, index) in subrules" :key="index">
-          <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">
-            {{ subrule.action }}
-          </a>
-          <span v-if="index + 2 < subrules.length">
-            ,
-          </span>
-          <span v-if="index + 1 < subrules.length">
-            und
-          </span>
+          <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ subrule.action }}</a>
+          <span v-if="index + 1 < subrules.length">, <br></span>
         </span>.
       </p>
 
@@ -102,7 +94,7 @@ export default {
     ConstraintItem,
     BaseButton,
     ActionItem,
-    RefinementItem
+    RefinementItem,
   },
   props: {
     policy: {
@@ -151,7 +143,7 @@ export default {
     },
     articles() {
       return articleMapping;
-    }
+    },
   },
   methods: {
     furtherPath(nameSegment, indexSegment) {
@@ -199,7 +191,7 @@ export default {
         Vue.set(this.rule, 'refinement', []);
       }
       this.refinements.push(null);
-    }
+    },
   },
 };
 </script>
@@ -232,8 +224,9 @@ a {
   margin-left: 0px;
 }
 
-.constraints-paragraph {
+.paragraph {
   margin-top: 40px;
+  line-height: 1.5em;
 }
 
 .subrule-container {

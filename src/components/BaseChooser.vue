@@ -38,7 +38,7 @@
               Zahl:
             </div>
             <br>
-            <BaseInput              
+            <BaseInput
               class="number-input flat-input"
               type="number"
               :value="value"
@@ -88,9 +88,10 @@
         >
           Abbrechen
         </BaseButton>
-        <BaseButton 
-        :disabled="!complete()"
-        :on-click="accept">
+        <BaseButton
+          :disabled="!complete()"
+          :on-click="accept"
+        >
           Annehmen
         </BaseButton>
       </div>
@@ -119,16 +120,16 @@ export default {
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     operandList: {
       type: Array,
-      required: true
+      required: true,
     },
     operandMapping: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {

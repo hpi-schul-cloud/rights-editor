@@ -2,10 +2,10 @@
   <div>
     <BaseChooser
       v-if="displayRefinementChooser"
-      :objectToEdit="refinement"
+      :object-to-edit="refinement"
       :name="'Verfeinerung'"
-      :operandList="opList"
-      :operandMapping="opMapping"
+      :operand-list="opList"
+      :operand-mapping="opMapping"
       @chosen="hideRefinementChooser(); refinement = $event"
       @abort="abortChooser()"
     />
@@ -34,7 +34,7 @@ import BaseButton from './BaseButton.vue';
 import {
   operandList,
   operandMapping,
-  operatorList
+  operatorList,
 } from '../libs/odrl/refinements';
 
 const placeholder = '<leer>';
@@ -91,11 +91,11 @@ export default {
       return desc;
     },
     opList() {
-        return operandList;
+      return operandList;
     },
     opMapping() {
-        return operandMapping;
-    }
+      return operandMapping;
+    },
   },
   methods: {
     abortChooser() {

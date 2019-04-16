@@ -1,14 +1,14 @@
 <template>
   <div>
     <BaseChooser
-    v-if="displayConstraintChooser"
-    v-bind:objectToEdit="constraint"
-    v-bind:name="'Einschränkung'"
-    v-bind:operandList="opList"
-    v-bind:operandMapping="opMapping"
-    @chosen="hideConstraintChooser(); constraint = $event"
-    @abort="abortChooser()">
-    </BaseChooser>
+      v-if="displayConstraintChooser"
+      :object-to-edit="constraint"
+      :name="'Einschränkung'"
+      :operand-list="opList"
+      :operand-mapping="opMapping"
+      @chosen="hideConstraintChooser(); constraint = $event"
+      @abort="abortChooser()"
+    />
 
     <div class="constraint-container">
       <BaseButton
@@ -35,7 +35,7 @@ import BaseChooser from './BaseChooser.vue';
 import {
   operandList,
   operandMapping,
-  operatorList
+  operatorList,
 } from '../libs/odrl/constraints';
 
 const placeholder = '<leer>';
@@ -96,7 +96,7 @@ export default {
     },
     opMapping() {
       return operandMapping;
-    }
+    },
   },
   methods: {
     abortChooser() {
