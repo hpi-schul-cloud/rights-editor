@@ -5,7 +5,7 @@ export const RuleTypes = Object.freeze({
     hasParentRule: false,
     subrule: 'duty',
     description: 'ist erlaubt.',
-    descriptionAddition: ['', ''],
+    descriptionAddon: ['', ''],
     icon: 'far fa-check-circle',
   },
   obligation: {
@@ -14,7 +14,7 @@ export const RuleTypes = Object.freeze({
     hasParentRule: false,
     subrule: 'consequence',
     description: 'ist Pflicht.',
-    descriptionAddition: ['', ''],
+    descriptionAddon: ['', ''],
     icon: 'far fa-handshake',
   },
   prohibition: {
@@ -23,7 +23,7 @@ export const RuleTypes = Object.freeze({
     hasParentRule: false,
     subrule: 'remedy',
     description: 'ist verboten.',
-    descriptionAddition: ['', ''],
+    descriptionAddon: ['', ''],
     icon: 'fas fa-ban',
   },
   duty: {
@@ -33,7 +33,7 @@ export const RuleTypes = Object.freeze({
     hasParentRule: true,
     subrule: 'consequence',
     description: 'muss geleistet werden,',
-    descriptionAddition: ['damit', 'gilt.'],
+    descriptionAddon: ['damit', 'gilt.'],
     icon: 'far fa-hand-point-up',
   },
   consequence: {
@@ -43,7 +43,7 @@ export const RuleTypes = Object.freeze({
     hasParentRule: true,
     subrule: '',
     description: 'muss geleistet werden,',
-    descriptionAddition: ['falls', 'nicht eingehalten wurde.'],
+    descriptionAddon: ['falls', 'nicht eingehalten wurde.'],
     icon: 'fas fa-gavel',
   },
   remedy: {
@@ -53,7 +53,7 @@ export const RuleTypes = Object.freeze({
     hasParentRule: true,
     subrule: '',
     description: 'muss geleistet werden,',
-    descriptionAddition: ['falls', 'missachtet wurde.'],
+    descriptionAddon: ['falls', 'missachtet wurde.'],
     icon: 'fas fa-balance-scale',
   },
 });

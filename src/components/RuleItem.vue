@@ -8,32 +8,36 @@
     </div>
 
     <!-- display action -->
-    <p>
+    <p class="actions">
       <!-- main explanation -->
       <EmbedInText text-before="Das" :text-after="ruleInfo.description">
         <ActionItem :policy="policy" :path="[...path, 'action']" :remove-callback="removeRule" />
       </EmbedInText>
       <!-- additional explanation -->
-      <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddition[0]" :text-after="ruleInfo.descriptionAddition[1]">
-        {{ parentRule.gender === 'f' ? 'die' : 'das' }}
-        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">
-          {{ parentRule.name }}
-        </a>
+      <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddon[0]" :text-after="ruleInfo.descriptionAddon[1]">
+        {{ articles[parentRuleInfo.gender].def }}
+        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentRuleInfo.name }}</a>
       </EmbedInText>
     </p>
 
-    <!-- add new refinement -->
-    <p>
-      Das <em>{{ rule['action'] }}</em> darf nur auf die folgende Art und Weise erfolgen...
-      <BaseButton class="add-button" :on-click="function(){console.error('not implemented')}">
+    <!-- display and edit refinements -->
+    <p class="refinements">
+      Das <em>{{ actionLabel }}</em> darf nur auf die folgende Art und Weise erfolgen...
+      <RefinementItem
+        v-for="(refinement, index) in refinements"
+        :key="index"
+        :policy="policy"
+        :path="[...path, 'action', 0, 'refinement', index]"
+      />
+      <!-- add new refinement -->
+      <BaseButton class="add-button" :on-click="addRefinement">
         Verfeinerung hinzufügen
       </BaseButton>
     </p>
 
-
     <!-- display and edit constraints -->
-    <p>
-      Insgesamt gilt {{ ruleInfo.gender === 'f' ? 'die' : 'das' }} <em>{{ ruleInfo.name }}</em> nur, wenn...
+    <p class="constraints">
+      Insgesamt gilt {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em> nur, wenn...
       <ConstraintItem
         v-for="(constraint, index) in constraints"
         :key="index"
@@ -48,42 +52,41 @@
 
     <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
-      Optional können {{ subruleInfo.pluralName }} hinzugefügt werden. {{ subruleInfo.pluralName }} sind Pflichten,
-      die geleistet werden müssen,
-      <EmbedInText :text-before="subruleInfo.descriptionAddition[0]" :text-after="subruleInfo.descriptionAddition[1]">
-        {{ ruleInfo.gender === 'f' ? 'die' : 'das' }} <em>{{ ruleInfo.name }}</em>
-      </EmbedInText>
 
+      Optional kann um folgende Regeln erweitert werden:
+      <p>
+        <BaseButton class="add-button" :name="subruleInfo.pluralName" :on-click="appendNewSubrule">
+          {{ subruleInfo.name }} hinzufügen</BaseButton>
+
+        {{ subruleInfo.pluralName }} sind Pflichten, die geleistet werden müssen,
+        <EmbedInText :text-before="subruleInfo.descriptionAddon[0]" :text-after="subruleInfo.descriptionAddon[1]">
+          {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em>
+        </EmbedInText>
+      </P>
+
+      <!-- list all available subrules -->
       <p v-if="subrules">
         Die {{ subrules.length == 1 ? subruleInfo.name : subruleInfo.pluralName }} diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
-        {{ subrules.length === 1 ? 'ist' : 'sind' }}
+        {{ subrules.length === 1 ? 'ist' : 'sind' }}<br>
         <span v-for="(subrule, index) in subrules" :key="index">
-          <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">
-            {{ subrule.action }}
-          </a>
-          <span v-if="index + 2 < subrules.length">
-            ,
-          </span>
-          <span v-if="index + 1 < subrules.length">
-            und
-          </span>
+          <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ subrule.action }}</a>
+          <span v-if="index + 1 < subrules.length">, <br></span>
         </span>.
-      </p>
+      </p>      
 
-      <BaseButton class="add-button" :name="subruleInfo.name" :on-click="appendNewSubrule">
-        {{ subruleInfo.name }} hinzufügen
-      </BaseButton>
     </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
+import EmbedInText from './EmbedInText.vue';
+import BaseButton from './BaseButton.vue';
 import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem.vue';
-import BaseButton from './BaseButton.vue';
-import EmbedInText from './EmbedInText.vue';
-import { RuleTypes } from '../libs/odrl/rules';
+import RefinementItem from './RefinementItem.vue';
+import { RuleTypes } from '../libs/odrl/rules.js';
+import { articles as articleMapping } from '../libs/language/language.js';
 
 export default {
   name: 'RuleItem',
@@ -92,6 +95,7 @@ export default {
     ConstraintItem,
     BaseButton,
     ActionItem,
+    RefinementItem,
   },
   props: {
     policy: {
@@ -102,12 +106,6 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {
-      displayConstraintChooser: false,
-      nextId: 0,
-    };
   },
   computed: {
     rule() {
@@ -120,7 +118,7 @@ export default {
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];
     },
-    parentRule() {
+    parentRuleInfo() {
       if (!this.ruleInfo.hasParentRule) {
         console.error('has no parent');
         return null;
@@ -136,25 +134,31 @@ export default {
       return this.rule[subruleTypeName];
     },
     hasParentRule() {
-      return !!this.parentruleInfo;
+      return !!this.parentRuleInfo;
     },
-    canHaveSubrules() {
-      return this.ruleInfo.subrule !== '';
+    action() {
+      return this.rule['action'];
+    },
+    actionLabel() {
+      return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
     },
     constraints() {
       return this.rule.constraint;
     },
-    ruleParent() {
-      const containerPath = this.path.slice(0, this.path.length - 1);
-      return this.policy.follow(containerPath);
+    refinements() {
+      if (this.action === undefined) {
+        return undefined;
+      }
+      if (!Array.isArray(this.action)) {
+        return null;
+      }
+      return this.action[0].refinement;
+    },
+    articles() {
+      return articleMapping;
     },
   },
   methods: {
-    furtherPath(nameSegment, indexSegment) {
-      const p = this.path.slice();
-      p.push(nameSegment, indexSegment);
-      return p;
-    },
     appendNewSubrule() {
       const subruleTypeName = this.ruleInfo.subrule;
       if (!this.rule[subruleTypeName]) {
@@ -190,6 +194,18 @@ export default {
       }
       this.constraints.push(null);
     },
+    addRefinement() {
+      if (this.refinements == null) {
+        // action is just a string, but when adding refinements, action becomes an an array
+        let action = this.action;
+        Vue.delete(this.rule, 'action');
+        
+        Vue.set(this.rule, 'action', [{}]);
+        Vue.set(this.action[0], 'rdf:value', action);
+        Vue.set(this.action[0], 'refinement', []);
+      }
+      this.refinements.push(null);
+    },
   },
 };
 </script>
@@ -220,6 +236,14 @@ a {
   display: block;
   margin-top: 10px;
   margin-left: 0px;
+}
+
+p {
+  line-height: 1.2em;
+}
+
+p.constraints {
+  margin-top: 40px;
 }
 
 .subrule-container {

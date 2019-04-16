@@ -61,6 +61,9 @@ export default {
         if (!this.rule.action) {
           Vue.set(this.rule, 'action', placeholderText);
         }
+        if (Array.isArray(this.rule.action)) {
+          return this.rule.action[0]['rdf:value'];
+        }
         return this.rule.action;
       },
       set(newAction) {

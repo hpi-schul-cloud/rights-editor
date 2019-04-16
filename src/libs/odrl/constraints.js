@@ -1,20 +1,3 @@
-export class Constraint {
-  constructor(id) {
-    this.id = id;
-    this.name = '<leer>';
-    this.leftOperand = '';
-
-    // TODO: make this less ugly
-    this.rightOperandList = [];
-    this.rightOperandNumber = 0;
-    this.rightoperandListtr = '';
-
-    this.operator = '';
-    this.unit = '';
-    this.type = '';
-  }
-}
-
 export const operandList = [
   'Bundesland',
   'Gruppenzugehörigkeit',
