@@ -74,7 +74,6 @@ export default {
       let text = "Erlaubt ist: "
 
       if (typeof this.policy.permission !== 'undefined') {
-        //text = text + Object.values(this.policy.permission)
         text += JSON.stringify(this.policy.permission);
       }
 
