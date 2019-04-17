@@ -66,7 +66,7 @@ export default {
   width: 180px;
   height: 200px;
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   top: 0;
   left: 0;
 }

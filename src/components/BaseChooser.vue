@@ -46,7 +46,7 @@
             />
           </div>
           <div class="unit-container">
-            <div class="numeric-input-header">
+            <div @contextmenu="rightClickHandler($event)" class="numeric-input-header">
               Einheit:
             </div>
             <br>
@@ -101,6 +101,7 @@
 
 <script>
 import Vue from 'vue';
+import EventBus from '../eventbus';
 import BaseInput from './BaseInput.vue';
 import BaseModal from './BaseModal.vue';
 import BaseButton from './BaseButton.vue';
@@ -275,6 +276,10 @@ export default {
 
       this.rightOperand = [...this.rightOperand, op];
     },
+    rightClickHandler: function(e) {
+      EventBus.$emit("context-menu-open", e);
+      e.preventDefault(); // prevents the default context menu
+    }
   },
 };
 </script>
