@@ -1,12 +1,40 @@
 <template>
   <div id="app">
-    <router-view />
+    <ContextMenu 
+    v-if="displayContextMenu"
+    :x="mousePosition.x"
+    :y="mousePosition.y"
+    v-on:context-menu-close="displayContextMenu = false"
+    ></ContextMenu>
+    <router-view/>    
   </div>
 </template>
 
 <script>
+import EventBus from './eventbus.js';
+import ContextMenu from './components/ContextMenu.vue';
+
 export default {
   name: 'App',
+  components: {
+    ContextMenu
+  },
+  data() {
+    return {
+      displayContextMenu: false,
+      mousePosition: {
+        x: 0,
+        y: 0
+      }
+    };
+  },
+  mounted () {
+    EventBus.$on('context-menu-open', (event) => {
+      this.mousePosition.x = event.pageX;
+      this.mousePosition.y = event.pageY;
+      this.displayContextMenu = true;
+    });
+  }
 };
 </script>
 

@@ -1,16 +1,10 @@
 <template>
   <div>
-    <ContextMenu v-if="showContextMenu"
-    :x="rightClickPosition.x"
-    :y="rightClickPosition.y"
-    v-on:close="showContextMenu = false"></ContextMenu>
-
     <a
       href="#"
       class="label"
       :class="{ selectedRule: isSelected }"
-      @click="$emit('update:selectedPath', path)"
-      @contextmenu="rightClickHandler($event)"
+      @click="$emit('update:selectedPath', path)"      
     >{{ name }}</a>
 
     <div v-if="subrules" class="subrules">

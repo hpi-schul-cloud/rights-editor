@@ -10,9 +10,5 @@ export default {
   components: {
     RuleEditor,
   },
-  data() {
-    return {
-    };
-  },
 };
 </script>

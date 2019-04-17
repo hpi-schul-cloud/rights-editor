@@ -1,10 +1,5 @@
 <template>
   <div class="tree">
-    <ContextMenu v-if="showContextMenu"
-    :x="rightClickPosition.x"
-    :y="rightClickPosition.y"
-    v-on:close="showContextMenu = false"></ContextMenu>
-
     <p class="label" @contextmenu="rightClickHandler($event)">Policy</p>
 
     <div v-if="policy['permission']" class="rules">
@@ -43,40 +38,28 @@
 </template>
 
 <script>
+import EventBus from '../../eventbus';
 import PolicyTreeRuleItem from './PolicyTreeRuleItem.vue';
-import ContextMenu from '../ContextMenu.vue'
 
 export default {
-  name: 'PolicyTree',
+  name: "PolicyTree",
   components: {
-    PolicyTreeRuleItem,
-    ContextMenu
+    PolicyTreeRuleItem
   },
   props: {
     policy: {
       type: Object,
-      required: true,
+      required: true
     },
     selectedPath: {
       type: Array,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      showContextMenu: false,
-      rightClickPosition: {
-        x: 0,
-        y: 0
-      }
-    };
+      required: true
+    }
   },
   methods: {
     rightClickHandler: function(e) {
-        this.showContextMenu = true;
-        this.rightClickPosition.x = e.pageX;
-        this.rightClickPosition.y = e.pageY;
-        e.preventDefault();
+      EventBus.$emit("context-menu-open", e);
+      e.preventDefault(); // prevents the default context menu
     }
   }
 };

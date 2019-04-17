@@ -1,5 +1,7 @@
 <template>
-  <div class="context-container" v-closable="onOutsideClick" v-closable:x="x" v-closable:y="y"></div>
+  <div class="context-container" 
+  :style="{ marginLeft: x + 'px', marginTop: y + 'px'}" 
+  v-closable="onOutsideClick"></div>
 </template>
 
 <script>
@@ -10,33 +12,25 @@ import Vue from "vue";
 let handleOutsideClick;
 Vue.directive("closable", {
   bind(el, binding, vnode) {
-    
-    // Set correct margin to position the context menu at the mouse position
-    if (binding.rawName === "v-closable:x") {
-      el.style.marginLeft = `${binding.value}px`;      
-    } else if (binding.rawName === "v-closable:y") {
-      el.style.marginTop = `${binding.value}px`;
-    } else {
-      // Here's the click/touchstart handler
-      // (it is registered below)
-      handleOutsideClick = e => {
-        e.stopPropagation();
-        // Get the handler method name and the exclude array
-        // from the object used in v-closable
-        const handler = binding.value;
-        // We check to see if the clicked element is not
-        // the dialog element
-        if (!el.contains(e.target)) {
-          // If the clicked element is outside the dialog
-          // and not the button, then call the outside-click handler
-          // from the same component this directive is used in
-          handler();
-        }
-      };
-      // Register click/touchstart event listeners on the whole page
-      document.addEventListener("click", handleOutsideClick);
-      document.addEventListener("touchstart", handleOutsideClick);
-    }
+    // Here's the click/touchstart handler
+    // (it is registered below)
+    handleOutsideClick = e => {
+      e.stopPropagation();
+      // Get the handler method name and the exclude array
+      // from the object used in v-closable
+      const handler = binding.value;
+      // We check to see if the clicked element is not
+      // the dialog element
+      if (!el.contains(e.target)) {
+        // If the clicked element is outside the dialog
+        // and not the button, then call the outside-click handler
+        // from the same component this directive is used in
+        handler();
+      }
+    };
+    // Register click/touchstart event listeners on the whole page
+    document.addEventListener("click", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
   },
   unbind() {
     // If the element that has v-closable is removed, then
@@ -48,7 +42,6 @@ Vue.directive("closable", {
 
 export default {
   name: "ContextMenu",
-  components: {},
   props: {
     x: {
       type: Number,
@@ -59,10 +52,9 @@ export default {
       required: true
     }
   },
-  computed: {},
   methods: {
     onOutsideClick() {
-      this.$emit("close");
+      this.$emit("context-menu-close");
     }
   }
 };
