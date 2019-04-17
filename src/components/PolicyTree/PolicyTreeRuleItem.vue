@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     rule() {
-      return this.policy.follow(this.path)
+      return this.policy.follow(this.path);
     },
     name() {
       const pathLen = this.path.length;
@@ -50,7 +50,7 @@ export default {
       if (Array.isArray(action)) {
         action = action[0]['rdf:value'];
       }
-      return [rType.name + ': ', action];
+      return [`${rType.name}: `, action];
     },
     subruleType() {
       const pathLen = this.path.length;
