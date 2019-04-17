@@ -13,6 +13,10 @@
       <h2>Provisorische Lizenz:</h2>
       <pre>{{ odrl }}</pre>
     </div>
+    <div>
+      <h2>Was bedeutet diese Lizenz?</h2>
+      <pre>{{ licenceText }}</pre>
+    </div>
   </div>
 </template>
 
@@ -36,6 +40,39 @@ export default {
   computed: {
     odrl() {
       return ccIDToODRL(this.license);
+    },
+    licenceText() {
+
+      let text = ""
+
+      if (this.license === 'http://creativecommons.org/licenses/by/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+      }
+      if (this.license === 'http://creativecommons.org/licenses/by-nd/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich darf das Medium nicht bearbeiten.\n';
+      }
+      if (this.license === 'http://creativecommons.org/licenses/by-sa/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich muss das Medium unter gleichen Bedingungen weitergeben.\n';
+      }
+      if (this.license === 'http://creativecommons.org/licenses/by-nc/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich darf das Medium nicht kommerziell verwenden.\n';
+      }
+      if (this.license === 'http://creativecommons.org/licenses/by-nc-nd/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich darf das Medium nicht kommerziell verwenden.\n';
+        text = text + 'Ich darf das Medium nicht bearbeiten.\n';
+      }
+      if (this.license === 'http://creativecommons.org/licenses/by-nc-sa/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich darf das Medium nicht kommerziell verwenden.\n';
+        text = text + 'Ich muss das Medium unter gleichen Bedingungen weitergeben.\n';
+      }
+
+      return text;
+
     },
   },
 };
