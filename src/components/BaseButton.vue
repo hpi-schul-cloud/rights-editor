@@ -46,6 +46,10 @@ export default {
   cursor: pointer;
 }
 
+.base-button:active {
+  background-color: #142056;
+}
+
 .base-button-disabled {
   background-color: gray;
 }
@@ -58,6 +62,10 @@ export default {
   color: black;
   background: none;
   border: none;
+}
+
+.base-button-textlike:active {
+  background: none;
 }
 
 .base-button-input {
