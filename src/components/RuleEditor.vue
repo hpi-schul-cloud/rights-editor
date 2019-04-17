@@ -32,6 +32,10 @@
     </div>
 
     <pre>{{ policy }}</pre>
+    <div>
+      <h2>Was bedeutet diese Lizenz?</h2>
+      <pre>{{ licenceText }}</pre>
+    </div>
   </div>
 </template>
 
@@ -64,6 +68,53 @@ export default {
   computed: {
     showRulePane() {
       return this.editPath.length > 0;
+    },
+    licenceText() {
+
+      let text = "Erlaubt ist: "
+
+      if (typeof this.policy.permission !== 'undefined') {
+        //text = text + Object.values(this.policy.permission)
+        text += JSON.stringify(this.policy.permission);
+      }
+
+      text += "\nVerpflichtend ist: "
+
+      if (typeof this.policy.obligation !== 'undefined') {
+        text += JSON.stringify(this.policy.obligation);
+      }
+
+      text += "\nVerboten ist: "
+
+      if (typeof this.policy.prohibition !== 'undefined') {
+        text += JSON.stringify(this.policy.prohibition);
+      }
+      
+      if (this.license === 'http://creativecommons.org/licenses/by-nd/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich darf das Medium nicht bearbeiten.\n';
+      }
+      if (this.license === 'http://creativecommons.org/licenses/by-sa/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich muss das Medium unter gleichen Bedingungen weitergeben.\n';
+      }
+      if (this.license === 'http://creativecommons.org/licenses/by-nc/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich darf das Medium nicht kommerziell verwenden.\n';
+      }
+      if (this.license === 'http://creativecommons.org/licenses/by-nc-nd/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich darf das Medium nicht kommerziell verwenden.\n';
+        text = text + 'Ich darf das Medium nicht bearbeiten.\n';
+      }
+      if (this.license === 'http://creativecommons.org/licenses/by-nc-sa/4.0/') {
+        text = text + 'Ich muss den Namen des Urhebers nennen.\n';
+        text = text + 'Ich darf das Medium nicht kommerziell verwenden.\n';
+        text = text + 'Ich muss das Medium unter gleichen Bedingungen weitergeben.\n';
+      }
+
+      return text;
+
     },
   },
   methods: {
