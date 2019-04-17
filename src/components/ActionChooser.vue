@@ -8,7 +8,7 @@
         <li
           v-for="action in actions"
           :key="action.id"
-          :class="{selected: isSelected(action.id)}"
+          :class="{selected: currentSelected === action.id}"
           @click="actionClicked(action.id)"
         >
           {{ action.label }}
@@ -17,16 +17,10 @@
     </template>
     <template v-slot:footer>
       <div class="modal-footer">
-        <BaseButton
-          textlike
-          :on-click="function() {$emit('abort');}"
-        >
+        <BaseButton textlike :on-click="abort">
           Abbrechen
         </BaseButton>
-        <BaseButton
-          :disabled="currentAction == ''"
-          :on-click="function() {$emit('chosen', currentAction);}"
-        >
+        <BaseButton :disabled="currentAction == ''" :on-click="chosen">
           Annehmen
         </BaseButton>
       </div>
@@ -67,8 +61,11 @@ export default {
       this.currentAction = this.actions[actionId].label;
       this.currentSelected = actionId;
     },
-    isSelected(identifier) {
-      return this.currentSelected === identifier;
+    abort() {
+      this.$emit('abort');
+    },
+    chosen(action) {
+      this.$emit('chosen', this.currentAction);
     },
   },
 };
@@ -98,4 +95,5 @@ export default {
 .modal-footer {
   text-align: right;
 }
+
 </style>

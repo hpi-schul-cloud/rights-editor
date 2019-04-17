@@ -5,7 +5,7 @@
       class="label"
       :class="{ selectedRule: isSelected }"
       @click="$emit('update:selectedPath', path)"
-    >{{ name }}</a>
+    >{{ name[0] }}<br><span class="action">{{ name[1] }}</span></a>
 
     <div v-if="subrules" class="subrules">
       <PolicyTreeRuleItem
@@ -41,12 +41,16 @@ export default {
   },
   computed: {
     rule() {
-      return this.path.reduce((result, segment) => result[segment], this.policy);
+      return this.policy.follow(this.path);
     },
     name() {
       const pathLen = this.path.length;
       const rType = RuleTypes[this.path[pathLen - 2]];
-      return rType.name;
+      let action = this.rule.action;
+      if (Array.isArray(action)) {
+        action = action[0]['rdf:value'];
+      }
+      return [`${rType.name}: `, action];
     },
     subruleType() {
       const pathLen = this.path.length;
@@ -72,6 +76,11 @@ export default {
     color: black;
     font-weight: normal;
     text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-top: 1px transparent solid;
+    border-bottom: 1px transparent solid;
 }
 .label:hover:not(.selectedRule) {
     font-weight: bold;
@@ -83,5 +92,14 @@ export default {
 .selectedRule {
   color: #1f3b70;
   font-weight: bold;
+  border-top: 1px #1f3b70 solid;
+  border-bottom: 1px #1f3b70 solid;
+}
+.action {
+  font-size: 15px;
+}
+.selectedRule .action {
+  font-weight: normal;
+  font-style: italic;
 }
 </style>
