@@ -32,6 +32,10 @@
     </div>
 
     <pre>{{ policy }}</pre>
+    <div>
+      <h2>Was bedeutet diese Lizenz?</h2>
+      <pre>{{ licenceText }}</pre>
+    </div>
   </div>
 </template>
 
@@ -64,6 +68,30 @@ export default {
   computed: {
     showRulePane() {
       return this.editPath.length > 0;
+    },
+    licenceText() {
+
+      let text = "Erlaubt ist: "
+
+      if (typeof this.policy.permission !== 'undefined') {
+        //text = text + Object.values(this.policy.permission)
+        text += JSON.stringify(this.policy.permission);
+      }
+
+      text += "\nVerpflichtend ist: "
+
+      if (typeof this.policy.obligation !== 'undefined') {
+        text += JSON.stringify(this.policy.obligation);
+      }
+
+      text += "\nVerboten ist: "
+
+      if (typeof this.policy.prohibition !== 'undefined') {
+        text += JSON.stringify(this.policy.prohibition);
+      }
+
+      return text;
+
     },
   },
   methods: {
