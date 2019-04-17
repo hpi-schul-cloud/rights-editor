@@ -11,7 +11,7 @@
         Verbot
       </BaseButton>
 
-      <div class="guid-container">
+      <div class="guid-container">                
         <span class="guid-label">
           GUID der Lizenz:
           <BaseInput v-model="policy['uid']" undercover class="guid-input" />
@@ -29,7 +29,7 @@
           @followLink="editPath = $event"
         />
       </div>
-    </div>
+    </div>    
 
     <pre>{{ policy }}</pre>
   </div>
@@ -48,7 +48,7 @@ export default {
     BaseButton,
     BaseInput,
     PolicyTree,
-    RuleItem,
+    RuleItem
   },
   data() {
     return {

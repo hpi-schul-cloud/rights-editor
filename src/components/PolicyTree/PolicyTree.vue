@@ -1,8 +1,11 @@
 <template>
   <div class="tree">
-    <p class="label">
-      Policy
-    </p>
+    <ContextMenu v-if="showContextMenu"
+    :x="rightClickPosition.x"
+    :y="rightClickPosition.y"
+    v-on:close="showContextMenu = false"></ContextMenu>
+
+    <p class="label" @contextmenu="rightClickHandler($event)">Policy</p>
 
     <div v-if="policy['permission']" class="rules">
       <PolicyTreeRuleItem
@@ -41,11 +44,13 @@
 
 <script>
 import PolicyTreeRuleItem from './PolicyTreeRuleItem.vue';
+import ContextMenu from '../ContextMenu.vue'
 
 export default {
   name: 'PolicyTree',
   components: {
     PolicyTreeRuleItem,
+    ContextMenu
   },
   props: {
     policy: {
@@ -57,6 +62,23 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      showContextMenu: false,
+      rightClickPosition: {
+        x: 0,
+        y: 0
+      }
+    };
+  },
+  methods: {
+    rightClickHandler: function(e) {
+        this.showContextMenu = true;
+        this.rightClickPosition.x = e.pageX;
+        this.rightClickPosition.y = e.pageY;
+        e.preventDefault();
+    }
+  }
 };
 </script>
 
@@ -66,15 +88,15 @@ export default {
   box-sizing: border-box;
 }
 .label {
-    margin: 0px;
-    padding: 4px 0px;
-    cursor: pointer;
+  margin: 0px;
+  padding: 4px 0px;
+  cursor: pointer;
 }
 .label:hover {
   font-weight: bold;
   color: #323232;
 }
 .rules {
-    padding-left: 20px;
+  padding-left: 20px;
 }
 </style>

@@ -3,7 +3,7 @@
     class="base-button"
     :disabled="disabled"
     :class="{ 'base-button-disabled': disabled, 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input, 'base-button-remove': remove }"
-    :style="{ width: this.width }"
+    :style="{ width: width }"
     @click="onClick"
   >
     <slot />

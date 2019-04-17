@@ -1,10 +1,16 @@
 <template>
   <div>
+    <ContextMenu v-if="showContextMenu"
+    :x="rightClickPosition.x"
+    :y="rightClickPosition.y"
+    v-on:close="showContextMenu = false"></ContextMenu>
+
     <a
       href="#"
       class="label"
       :class="{ selectedRule: isSelected }"
       @click="$emit('update:selectedPath', path)"
+      @contextmenu="rightClickHandler($event)"
     >{{ name }}</a>
 
     <div v-if="subrules" class="subrules">
@@ -22,9 +28,13 @@
 
 <script>
 import { RuleTypes } from '../../libs/odrl/rules';
+import ContextMenu from '../ContextMenu.vue';
 
 export default {
   name: 'PolicyTreeRuleItem',
+  components: {
+    ContextMenu
+  },
   props: {
     policy: {
       type: Object,
@@ -38,6 +48,23 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  data() {
+    return {
+      showContextMenu: false,
+      rightClickPosition: {
+        x: 0,
+        y: 0
+      }
+    };
+  },
+  methods: {
+    rightClickHandler: function(e) {
+        this.showContextMenu = true;
+        this.rightClickPosition.x = e.pageX;
+        this.rightClickPosition.y = e.pageY;
+        e.preventDefault();
+    }
   },
   computed: {
     rule() {
