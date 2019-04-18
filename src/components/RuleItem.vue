@@ -211,14 +211,16 @@ export default {
 </script>
 
 <style scoped>
+h3 {
+  margin: 0px;
+}
+
 a {
   text-decoration: underline;
 }
 
 .rule-container {
-  width: 100%;
   min-width: 200px;
-  margin: 10px;
 }
 
 .rule-header {

@@ -1,8 +1,11 @@
 <template>
   <div class="tree">
-    <p class="label">
-      Policy
-    </p>
+    <PolicyTreeNode
+      label="Policy"
+      :path="[]"
+      :selected-path="selectedPath"
+      @followPath="$emit('followPath', $event)"
+    />
 
     <div v-if="policy['permission']" class="rules">
       <PolicyTreeRuleItem
@@ -11,7 +14,7 @@
         :policy="policy"
         :path="['permission', index]"
         :selected-path="selectedPath"
-        @update:selectedPath="$emit('update:selectedPath', $event)"
+        @followPath="$emit('followPath', $event)"
       />
     </div>
 
@@ -22,7 +25,7 @@
         :policy="policy"
         :path="['obligation', index]"
         :selected-path="selectedPath"
-        @update:selectedPath="$emit('update:selectedPath', $event)"
+        @followPath="$emit('followPath', $event)"
       />
     </div>
 
@@ -33,7 +36,7 @@
         :policy="policy"
         :path="['prohibition', index]"
         :selected-path="selectedPath"
-        @update:selectedPath="$emit('update:selectedPath', $event)"
+        @followPath="$emit('followPath', $event)"
       />
     </div>
   </div>
@@ -41,11 +44,13 @@
 
 <script>
 import PolicyTreeRuleItem from './PolicyTreeRuleItem.vue';
+import PolicyTreeNode from './PolicyTreeNode.vue';
 
 export default {
   name: 'PolicyTree',
   components: {
     PolicyTreeRuleItem,
+    PolicyTreeNode,
   },
   props: {
     policy: {
@@ -61,19 +66,6 @@ export default {
 </script>
 
 <style scoped>
-.tree {
-  padding: 0px 8px;
-  box-sizing: border-box;
-}
-.label {
-    margin: 0px;
-    padding: 4px 0px;
-    cursor: pointer;
-}
-.label:hover {
-  font-weight: bold;
-  color: #323232;
-}
 .rules {
     padding-left: 20px;
 }
