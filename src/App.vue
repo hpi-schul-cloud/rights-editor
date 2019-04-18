@@ -1,37 +1,46 @@
 <template>
   <div id="app">
-    <ContextMenu 
-    v-if="displayContextMenu"
-    :x="mousePosition.x"
-    :y="mousePosition.y"
-    v-on:context-menu-close="displayContextMenu = false"
+    <ContextMenu
+      v-if="displayContextMenu"
+      :x="mousePosition.x"
+      :y="mousePosition.y"
+      :content="contextMenuContent"
+      v-on:context-menu-close="onClose()"
     ></ContextMenu>
-    <router-view/>    
+    <router-view/>
   </div>
 </template>
 
 <script>
-import EventBus from './eventbus.js';
-import ContextMenu from './components/ContextMenu.vue';
+import EventBus from "./eventbus.js";
+import ContextMenu from "./components/ContextMenu.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     ContextMenu
   },
   data() {
     return {
       displayContextMenu: false,
+      contextMenuContent: "<h1>Was?</h1>",
       mousePosition: {
         x: 0,
         y: 0
       }
     };
   },
-  mounted () {
-    EventBus.$on('context-menu-open', (event) => {
+  methods: {
+    onClose() {
+      this.displayContextMenu = false;
+      EventBus.$emit("context-menu-closed");
+    }
+  },
+  mounted() {
+    EventBus.$on("context-menu-open", (event, content) => {
       this.mousePosition.x = event.pageX;
       this.mousePosition.y = event.pageY;
+      this.contextMenuContent = content;
       this.displayContextMenu = true;
     });
   }
@@ -77,7 +86,8 @@ ul {
   }
 }
 
-em, a {
+em,
+a {
   text-decoration: none;
   font-weight: bold;
   color: #1f3b70;

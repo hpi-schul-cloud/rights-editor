@@ -1,7 +1,10 @@
 <template>
   <div class="context-container" 
   :style="{ marginLeft: x + 'px', marginTop: y + 'px'}" 
-  v-closable="onOutsideClick"></div>
+  v-closable="onOutsideClick">
+  
+    <span v-html="content"></span>
+  </div>
 </template>
 
 <script>
@@ -30,13 +33,11 @@ Vue.directive("closable", {
     };
     // Register click/touchstart event listeners on the whole page
     document.addEventListener("click", handleOutsideClick);
-    document.addEventListener("touchstart", handleOutsideClick);
   },
   unbind() {
     // If the element that has v-closable is removed, then
     // unbind click/touchstart listeners from the whole page
     document.removeEventListener("click", handleOutsideClick);
-    document.removeEventListener("touchstart", handleOutsideClick);
   }
 });
 
@@ -50,6 +51,10 @@ export default {
     y: {
       type: Number,
       required: true
+    },
+    content: {
+      type: String, // TODO: pass HTML Code as property?
+      required: true
     }
   },
   methods: {
@@ -62,12 +67,16 @@ export default {
 
 <style scoped>
 .context-container {
-  background-color: green;
-  width: 180px;
-  height: 200px;
-  position: absolute;
+  background-color: white;
+  border: 1px solid #ABABAB;
+
+  width: 250px;
+  height: 225px;
+  position: absolute;  
   z-index: 3;
   top: 0;
   left: 0;
+
+  padding: 10px;
 }
 </style>

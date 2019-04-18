@@ -134,8 +134,7 @@ export default {
   },
   data() {
     return {
-      objectCopy: null,
-      forceUpdate: 0,
+      objectCopy: null
     };
   },
   computed: {
@@ -277,7 +276,7 @@ export default {
       this.rightOperand = [...this.rightOperand, op];
     },
     rightClickHandler: function(e) {
-      EventBus.$emit("context-menu-open", e);
+      EventBus.$emit("context-menu-open", e, this.unit);
       e.preventDefault(); // prevents the default context menu
     }
   },

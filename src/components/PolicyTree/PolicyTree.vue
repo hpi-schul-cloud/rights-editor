@@ -1,6 +1,10 @@
 <template>
   <div class="tree">
-    <p class="label" @contextmenu="rightClickHandler($event)">Policy</p>
+    <p
+      class="label"
+      :class="{ 'active': rightClicked }"
+      @contextmenu="rightClickHandler($event)"
+    >Policy</p>
 
     <div v-if="policy['permission']" class="rules">
       <PolicyTreeRuleItem
@@ -38,13 +42,18 @@
 </template>
 
 <script>
-import EventBus from '../../eventbus';
-import PolicyTreeRuleItem from './PolicyTreeRuleItem.vue';
+import EventBus from "../../eventbus";
+import PolicyTreeRuleItem from "./PolicyTreeRuleItem.vue";
 
 export default {
   name: "PolicyTree",
   components: {
     PolicyTreeRuleItem
+  },
+  data() {
+    return {
+      rightClicked: false
+    };
   },
   props: {
     policy: {
@@ -58,9 +67,15 @@ export default {
   },
   methods: {
     rightClickHandler: function(e) {
-      EventBus.$emit("context-menu-open", e);
+      EventBus.$emit("context-menu-open", e, "<h1>DAS!</h1>");
       e.preventDefault(); // prevents the default context menu
+      this.rightClicked = true;
     }
+  },
+  mounted() {
+    EventBus.$on("context-menu-closed", event => {      
+      this.rightClicked = false;
+    });
   }
 };
 </script>
@@ -75,7 +90,8 @@ export default {
   padding: 4px 0px;
   cursor: pointer;
 }
-.label:hover {
+.label:hover,
+.label.active {
   font-weight: bold;
   color: #323232;
 }
