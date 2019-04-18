@@ -10,25 +10,28 @@
       <BaseButton :on-click="newProhibition">
         Verbot
       </BaseButton>
-
-      <div class="guid-container">
-        <span class="guid-label">
-          GUID der Lizenz:
-          <BaseInput v-model="policy['uid']" undercover class="guid-input" />
-        </span>
-      </div>
     </div>
 
     <div class="editor-body">
-      <PolicyTree class="policy-tree" :policy="policy" :selected-path.sync="editPath" />
-      <div class="policy-detail">
-        <RuleItem
-          v-if="showRulePane"
-          :policy="policy"
-          :path="editPath"
-          @followLink="editPath = $event"
-        />
-      </div>
+      <PolicyTree
+        class="policy-tree"
+        :policy="policy"
+        :selected-path="editPath"
+        @followPath="editPath = $event"
+      />
+      <PolicyItem
+        v-if="!showRulePane"
+        class="policy-detail"
+        :policy="policy"
+        @followLink="editPath = $event"
+      />
+      <RuleItem
+        v-if="showRulePane"
+        class="policy-detail"
+        :policy="policy"
+        :path="editPath"
+        @followLink="editPath = $event"
+      />
     </div>
 
     <pre>{{ policy }}</pre>
@@ -45,6 +48,7 @@ import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
+import PolicyItem from './PolicyItem.vue';
 
 export default {
   name: 'RuleEditor',
@@ -53,6 +57,7 @@ export default {
     BaseInput,
     PolicyTree,
     RuleItem,
+    PolicyItem,
   },
   data() {
     return {
@@ -126,14 +131,15 @@ export default {
 .policy-tree {
   float: left;
   width: 200px;
+  padding: 0px 8px;
+  box-sizing: border-box;
   box-shadow: 3px 0px 2px -3px gray;
-  margin-top: 24px;
   padding-bottom: 12px;
 }
 
 .policy-detail {
   margin-left: 200px;
-  padding: 10px;
+  padding: 0px 0px 0px 15px;
 }
 
 pre {
@@ -151,16 +157,7 @@ pre {
 }
 
 .editor-body {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.guid-container {
-  display: inline;
-}
-
-.guid-label {
-  margin-left: 20px;
+  padding-top: 24px;
 }
 
 input.guid-input {
@@ -177,19 +174,11 @@ input.guid-input {
   .editor-body {
     padding: 0px;
   }
-
-  .guid-container {
-    display: block;
-  }
 }
 
 @media screen and (max-width: 500px) {
   .editor-body {
     margin: 0px;
-  }
-
-  .guid-container {
-    margin-top: 20px;
   }
 }
 </style>
