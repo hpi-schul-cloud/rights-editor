@@ -1,3 +1,13 @@
+export const actionList = Object.freeze([
+  'Archivieren',
+  'Bearbeiten',
+  'Drucken',
+  'Kopieren',
+  'Verbreiten',
+  'Verkaufen',
+  'Vorführen',
+  'Zitieren',
+]);
 
 class Action {
   constructor(definition, label, note, identifier, includedIn, includedBy) {

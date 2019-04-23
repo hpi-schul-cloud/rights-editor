@@ -6,12 +6,12 @@
     <template v-slot:body>
       <ul class="actions-list">
         <li
-          v-for="action in actions"
-          :key="action.id"
-          :class="{selected: currentSelected === action.id}"
-          @click="actionClicked(action.id)"
+          v-for="(action, index) in actions"
+          :key="index"
+          :class="{selected: currentSelected === index}"
+          @click="actionClicked(index)"
         >
-          {{ action.label }}
+          {{ action }}
         </li>
       </ul>
     </template>
@@ -31,6 +31,7 @@
 <script>
 import BaseButton from './BaseButton.vue';
 import BaseModal from './BaseModal.vue';
+import { actionList } from '../libs/odrl/actions.js';
 
 export default {
   name: 'ActionChooser',
@@ -41,24 +42,12 @@ export default {
   data() {
     return {
       currentSelected: null,
-      currentAction: '',
-      actions: [
-        { id: 0, label: 'Aggregieren' },
-        { id: 1, label: 'Annotieren' },
-        { id: 2, label: 'Annonymisieren' },
-        { id: 3, label: 'Archivieren' },
-        { id: 4, label: 'Kompensieren' },
-        { id: 5, label: 'Löschen' },
-        { id: 6, label: 'Drucken' },
-        { id: 7, label: 'Speichern' },
-        { id: 8, label: 'Verbreiten' },
-        { id: 9, label: 'Zitieren' },
-      ],
+      currentAction: '',      
     };
   },
   methods: {
     actionClicked(actionId) {
-      this.currentAction = this.actions[actionId].label;
+      this.currentAction = this.actions[actionId];
       this.currentSelected = actionId;
     },
     abort() {
@@ -68,6 +57,11 @@ export default {
       this.$emit('chosen', this.currentAction);
     },
   },
+  computed: {
+    actions() {
+      return actionList;
+    }
+  }
 };
 </script>
 

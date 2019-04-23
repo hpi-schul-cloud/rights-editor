@@ -335,6 +335,7 @@ export default {
 
 .unit-list {
   margin-top: 10px;
+  margin-left: 0px;
 }
 
 .numeric-input-header {
