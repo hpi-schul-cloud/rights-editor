@@ -2,7 +2,7 @@
   <div class="rule-editor">
     <div class="editor-back">
       <router-link to="/">
-        <a><i class="fas fa-arrow-circle-left" /> Zurück</a>
+        <a><i class="fas fa-arrow-circle-left" /> Start</a>
       </router-link>
     </div>
     <div class="editor-header">

@@ -1,7 +1,7 @@
 <template>
   <div class="oer-page">
     <router-link to="/">
-      <a><i class="fas fa-arrow-circle-left" /> Zurück</a>
+      <a><i class="fas fa-arrow-circle-left" /> Start</a>
     </router-link>
     <CCEditor
       class="cc-editor"
