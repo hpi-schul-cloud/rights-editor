@@ -1,5 +1,10 @@
 <template>
   <div class="rule-editor">
+    <div class="editor-back">
+      <router-link to="/">
+        <a><i class="fas fa-arrow-circle-left" /> Start</a>
+      </router-link>
+    </div>
     <div class="editor-header">
       <BaseButton :on-click="newPermission">
         Erlaubnis
@@ -34,10 +39,12 @@
       />
     </div>
 
-    <pre>{{ policy }}</pre>
-    <div>
+    <div class="policy-meaning">
+
       <h2>Was bedeutet diese Lizenz?</h2>
       <pre>{{ licenceText }}</pre>
+      <h2>Provisorische Lizenz</h2>
+      <pre>{{ policy }}</pre>
     </div>
   </div>
 </template>
@@ -75,27 +82,25 @@ export default {
       return this.editPath.length > 0;
     },
     licenceText() {
-
-      let text = "Erlaubt ist: "
+      let text = 'Erlaubt ist: ';
 
       if (typeof this.policy.permission !== 'undefined') {
         text += JSON.stringify(this.policy.permission);
       }
 
-      text += "\nVerpflichtend ist: "
+      text += '\nVerpflichtend ist: ';
 
       if (typeof this.policy.obligation !== 'undefined') {
         text += JSON.stringify(this.policy.obligation);
       }
 
-      text += "\nVerboten ist: "
+      text += '\nVerboten ist: ';
 
       if (typeof this.policy.prohibition !== 'undefined') {
         text += JSON.stringify(this.policy.prohibition);
       }
 
       return text;
-
     },
   },
   methods: {
@@ -142,13 +147,19 @@ export default {
   padding: 0px 0px 0px 15px;
 }
 
+
+.policy-meaning{
+  margin-left: 200px;
+  padding: 10px;
+}
+
 .editor-header {
   background-color: white;
-  border-bottom: 1px #1f3b70 solid;
+  box-shadow: 0px 3px 2px -3px gray;
   overflow: hidden;
 
   padding-bottom: 20px;
-  padding-top: 20px;
+  padding-top: 0px;
   width: 100%;
 }
 
@@ -156,9 +167,15 @@ export default {
   padding-top: 24px;
 }
 
-pre {
-  margin-left: 220px;
-  padding: 10px;
+
+.editor-back{
+  margin-left: 10px;
+  color: #1f3b70;
+}
+
+input.guid-input {
+  margin-left: 10px;
+  width: 175px;
 }
 
 @media screen and (max-width: 840px) {
