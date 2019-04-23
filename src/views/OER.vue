@@ -1,5 +1,8 @@
 <template>
   <div class="oer-page">
+    <router-link to="/">
+      <a><i class="fas fa-arrow-circle-left" /> Zurück</a>
+    </router-link>
     <CCEditor
       class="cc-editor"
       :active-license="license"

@@ -1,5 +1,10 @@
 <template>
   <div class="rule-editor">
+    <div class="editor-back">
+      <router-link to="/">
+        <a><i class="fas fa-arrow-circle-left" /> Zurück</a>
+      </router-link>
+    </div>
     <div class="editor-header">
       <BaseButton :on-click="newPermission">
         Erlaubnis
@@ -153,12 +158,17 @@ export default {
   overflow: hidden;
 
   padding-bottom: 20px;
-  padding-top: 20px;
+  padding-top: 0px;
   width: 100%;
 }
 
 .editor-body {
   padding-top: 24px;
+}
+
+.editor-back{
+  margin-left: 10px;
+  color: #1f3b70;
 }
 
 input.guid-input {
