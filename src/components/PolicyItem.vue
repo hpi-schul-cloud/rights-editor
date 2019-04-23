@@ -25,5 +25,8 @@ export default {
 </script>
 
 <style scoped>
-
+.guid-input {
+  margin-left: 10px;
+  width: 175px;
+}
 </style>

@@ -31,10 +31,10 @@
 import Vue from 'vue';
 import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
-import {
-  operandList,
+import {  
   operandMapping,
   operatorList,
+  actionToRefinements
 } from '../libs/odrl/refinements';
 
 const placeholder = '<leer>';
@@ -73,6 +73,10 @@ export default {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
       return this.policy.follow(pathWithoutLastElement);
     },
+    action() {
+      const actionItem = this.policy.follow(this.path.slice(0, this.path.length - 3));
+      return actionItem[0]['rdf:value'];
+    },
     displayRefinementChooser() {
       return this.refinementChooserShouldDisplay || !this.refinement;
     },
@@ -91,10 +95,15 @@ export default {
       return desc;
     },
     opList() {
-      return operandList;
+      // get the action-specific refinement operands
+      return actionToRefinements[this.action].operands;
     },
     opMapping() {
-      return operandMapping;
+      // every action needs a different set of possible refinements
+      return this.opList.reduce((opMapping, operand) => {
+        opMapping[operand] = operandMapping[operand];
+        return opMapping
+      }, {});
     },
   },
   methods: {

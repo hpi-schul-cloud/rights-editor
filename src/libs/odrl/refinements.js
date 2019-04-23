@@ -1,7 +1,39 @@
 export const operandList = [
-  'hmmm',
-  'well',
-  'dunno',
+  'Speichermedium',
+  'Anteil',
+  'Anzahl',
+  'Auflösung',
+  'Teilnehmer',
+  'Verbreitungsmethode',
+  'Dateiformat',
+  'Betrag'
+];
+
+const storageMedium = [
+  'Magnetband',
+  'Festplatte',
+  'CD/DVD'
+];
+
+const attendees = [
+  'Schüler',
+  'Lehrer',
+  'Eltern',
+  'Verwaltung'
+];
+
+const communication = [
+  'E-Mail',
+  'USB-Stick',
+  'Cloud',
+];
+
+const fileFormat = [
+  '.mp3',
+  '.mp4',
+  '.pdf',
+  '.doc',
+  '.ppt',
 ];
 
 export const operatorList = [
@@ -13,23 +45,72 @@ export const operatorList = [
 ];
 
 export const unitList = [
-  'xd',
-  'xp',
-  'lol',
-  'rofl',
+  '%',
+  'Stück',
+  'Personen',
+  'dpi',
+  'ppi',
+  '€'
 ];
 
 export const operandMapping = {
-  hmmm: {
+  Speichermedium: {
     operators: [operatorList[0]],
-    list: [unitList[0], unitList[1], unitList[2]],
+    list: storageMedium,
   },
-  well: {
-    operators: [operatorList[0]],
-    list: [unitList[0], unitList[1], unitList[2]],
-  },
-  dunno: {
+  Anteil: {
     operators: operatorList,
     units: [unitList[0]],
   },
+  Anzahl: {
+    operators: operatorList,
+    units: [unitList[1], unitList[2]],
+  },
+  Auflösung: {
+    operators: operatorList,
+    units: [unitList[3], unitList[4]],
+  },
+  Teilnehmer: {
+    operators: [operatorList[0]],
+    list: attendees,
+  },
+  Verbreitungsmethode: {
+    operators: [operatorList[0]],
+    list: communication,
+  },
+  Dateiformat: {
+    operators: [operatorList[0]],
+    list: fileFormat,
+  },
+  Betrag: {
+    operators: operatorList,
+    units: [unitList[5]],
+  }
 };
+
+export const actionToRefinements = Object.freeze({
+  Archivieren: {
+    operands: [operandList[0], operandList[1], operandList[2]],
+  },
+  Bearbeiten: {
+    operands: [operandList[1]],
+  },
+  Drucken: {
+    operands: [operandList[1], operandList[2], operandList[3]],
+  },
+  Kopieren: {
+    operands: [operandList[2], operandList[6]],
+  },
+  Verbreiten: {
+    operands: [operandList[1], operandList[2], operandList[4], operandList[5], operandList[6]],
+  },
+  Verkaufen: {
+    operands: [operandList[7]],
+  },
+  Vorführen: {
+    operands: [operandList[1], operandList[2], operandList[4]],
+  },
+  Zitieren: {
+    operands: [operandList[1]],
+  },
+});
