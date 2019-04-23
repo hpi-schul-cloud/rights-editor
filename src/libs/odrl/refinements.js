@@ -88,7 +88,7 @@ export const operandMapping = {
   }
 };
 
-export const actionToRefinement = Object.freeze({
+export const actionToRefinements = Object.freeze({
   Archivieren: {
     operands: [operandList[0], operandList[1], operandList[2]],
   },
