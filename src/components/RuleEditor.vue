@@ -143,9 +143,10 @@ export default {
 }
 
 .policy-detail {
-  margin-left: 200px;
+  margin-left: 220px;
   padding: 0px 0px 0px 15px;
 }
+
 
 .policy-meaning{
   margin-left: 200px;
@@ -165,6 +166,7 @@ export default {
 .editor-body {
   padding-top: 24px;
 }
+
 
 .editor-back{
   margin-left: 10px;

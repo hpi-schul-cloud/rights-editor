@@ -1,7 +1,7 @@
 <template>
   <div class="tree">
     <PolicyTreeNode
-      label="Policy"
+      label="Lizenz"
       :path="[]"
       :selected-path="selectedPath"
       @followPath="$emit('followPath', $event)"
