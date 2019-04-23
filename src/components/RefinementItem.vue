@@ -100,12 +100,10 @@ export default {
     },
     opMapping() {
       // every action needs a different set of possible refinements
-      let opMapping = {};      
-      for (let i = 0; i < this.opList.length; i++) {
-        let operand = this.opList[i];
+      return this.opList.reduce((opMapping, operand) => {
         opMapping[operand] = operandMapping[operand];
-      }
-      return opMapping;
+        return opMapping
+      }, {});
     },
   },
   methods: {
