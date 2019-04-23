@@ -34,10 +34,12 @@
       />
     </div>
 
-    <pre>{{ policy }}</pre>
-    <div>
+    <div class="policy-meaning">
+
       <h2>Was bedeutet diese Lizenz?</h2>
       <pre>{{ licenceText }}</pre>
+      <h2>Provisorische Lizenz</h2>
+      <pre>{{ policy }}</pre>
     </div>
   </div>
 </template>
@@ -75,27 +77,25 @@ export default {
       return this.editPath.length > 0;
     },
     licenceText() {
-
-      let text = "Erlaubt ist: "
+      let text = 'Erlaubt ist: ';
 
       if (typeof this.policy.permission !== 'undefined') {
         text += JSON.stringify(this.policy.permission);
       }
 
-      text += "\nVerpflichtend ist: "
+      text += '\nVerpflichtend ist: ';
 
       if (typeof this.policy.obligation !== 'undefined') {
         text += JSON.stringify(this.policy.obligation);
       }
 
-      text += "\nVerboten ist: "
+      text += '\nVerboten ist: ';
 
       if (typeof this.policy.prohibition !== 'undefined') {
         text += JSON.stringify(this.policy.prohibition);
       }
 
       return text;
-
     },
   },
   methods: {
@@ -142,13 +142,14 @@ export default {
   padding: 0px 0px 0px 15px;
 }
 
-pre {
+.policy-meaning{
   margin-left: 200px;
   padding: 10px;
 }
+
 .editor-header {
   background-color: white;
-  border-bottom: 5px solid gray;
+  box-shadow: 0px 3px 2px -3px gray;
   overflow: hidden;
 
   padding-bottom: 20px;
