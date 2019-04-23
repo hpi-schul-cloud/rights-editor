@@ -138,17 +138,13 @@ export default {
 }
 
 .policy-detail {
-  margin-left: 200px;
+  margin-left: 220px;
   padding: 0px 0px 0px 15px;
 }
 
-pre {
-  margin-left: 200px;
-  padding: 10px;
-}
 .editor-header {
   background-color: white;
-  border-bottom: 5px solid gray;
+  border-bottom: 1px #1f3b70 solid;
   overflow: hidden;
 
   padding-bottom: 20px;
@@ -160,9 +156,9 @@ pre {
   padding-top: 24px;
 }
 
-input.guid-input {
-  margin-left: 10px;
-  width: 175px;
+pre {
+  margin-left: 220px;
+  padding: 10px;
 }
 
 @media screen and (max-width: 840px) {
