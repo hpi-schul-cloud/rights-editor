@@ -3,7 +3,7 @@
     <div class="editor-back">
       <router-link to="/">
         <a>
-          <i class="fas fa-arrow-circle-left"/> Start
+          <i class="fas fa-arrow-circle-left" /> Start
         </a>
       </router-link>
     </div>
@@ -19,38 +19,47 @@
       @abort="hideConstraintChooser()"
     />
 
-    <BaseButton class="add-constraint" @click="showConstraintChooser()" type="button">Einschränkung hinzufügen</BaseButton>
+    <BaseButton class="add-constraint" type="button" @click="showConstraintChooser()">Einschränkung hinzufügen</BaseButton>
 
-    <li class="constraints" v-for="(constraint, index) in constraints" :key="index">
+    <li v-for="(constraint, index) in constraints" :key="index" class="constraints">
       {{ description(constraint) }}
-      <BaseButton class="remove-constraint" remove v-on:click="removeConstraint(index)">
-        <i class="fas fa-times"/>
+      <BaseButton class="remove-constraint" remove @click="removeConstraint(index)">
+        <i class="fas fa-times" />
       </BaseButton>
     </li>
   </div>
 </template>
 
 <script>
-import BaseChooser from "../components/BaseChooser.vue";
-import BaseButton from "../components/BaseButton.vue";
+import BaseChooser from '../components/BaseChooser.vue';
+import BaseButton from '../components/BaseButton.vue';
 import {
   operandList,
   operandMapping,
-  operatorList
-} from "../libs/odrl/constraints";
+  operatorList,
+} from '../libs/odrl/constraints';
 
 export default {
-  name: "Metadata",
+  name: 'Metadata',
   components: {
     BaseButton,
-    BaseChooser
+    BaseChooser,
   },
   data() {
     return {
       displayConstraintChooser: false,
       constraint: null,
-      constraints: []
+      constraints: [],
     };
+  },
+  computed: {
+    opList() {
+      const filteredOperands = operandList.filter((value, index, arr) => value != 'Nutzungsdauer' && value != 'Nutzeranzahl');
+      return filteredOperands;
+    },
+    opMapping() {
+      return operandMapping;
+    },
   },
   methods: {
     showConstraintChooser() {
@@ -72,25 +81,14 @@ export default {
         operatorList.find(op => op.identifier === constraint.operator).symbol
       }`;
       if (Array.isArray(constraint.rightOperand)) {
-        desc += ` ${constraint.rightOperand.join(", ")}`;
+        desc += ` ${constraint.rightOperand.join(', ')}`;
       } else {
-        desc += ` ${constraint.rightOperand["@value"]}`;
+        desc += ` ${constraint.rightOperand['@value']}`;
         desc += ` ${constraint.unit}`;
       }
       return desc;
-    }
-  },
-  computed: {
-    opList() {
-      var filteredOperands = operandList.filter(function(value, index, arr) {
-        return value != "Nutzungsdauer" && value != "Nutzeranzahl";
-      });
-      return filteredOperands;
     },
-    opMapping() {
-      return operandMapping;
-    }
-  }
+  },
 };
 </script>
 

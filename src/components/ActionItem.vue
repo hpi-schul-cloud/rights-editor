@@ -9,10 +9,10 @@
     <!-- display and edit action -->
     <BaseButton
       input
-      @click="showActionChooser()"
       list="actions"
       name="action"
       type="button"
+      @click="showActionChooser()"
     >
       {{ action }}
     </BaseButton>

@@ -23,7 +23,7 @@ export default {
     textlike: Boolean,
     input: Boolean,
     remove: Boolean,
-    disabled: Boolean    
+    disabled: Boolean,
   },
 };
 </script>

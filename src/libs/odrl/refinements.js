@@ -6,20 +6,20 @@ export const operandList = [
   'Teilnehmer',
   'Verbreitungsmethode',
   'Dateiformat',
-  'Betrag'
+  'Betrag',
 ];
 
 const storageMedium = [
   'Magnetband',
   'Festplatte',
-  'CD/DVD'
+  'CD/DVD',
 ];
 
 const attendees = [
   'Schüler',
   'Lehrer',
   'Eltern',
-  'Verwaltung'
+  'Verwaltung',
 ];
 
 const communication = [
@@ -50,7 +50,7 @@ export const unitList = [
   'Personen',
   'dpi',
   'ppi',
-  '€'
+  '€',
 ];
 
 export const operandMapping = {
@@ -85,7 +85,7 @@ export const operandMapping = {
   Betrag: {
     operators: operatorList,
     units: [unitList[5]],
-  }
+  },
 };
 
 export const actionToRefinements = Object.freeze({

@@ -13,10 +13,10 @@
       <BaseButton
         input
         :width="'90%'"
-        @click="showRefinementChooser()"
         class="edit-refinement"
         name="refinement"
         type="button"
+        @click="showRefinementChooser()"
       >
         {{ description }}
       </BaseButton>
@@ -31,10 +31,10 @@
 import Vue from 'vue';
 import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
-import {  
+import {
   operandMapping,
   operatorList,
-  actionToRefinements
+  actionToRefinements,
 } from '../libs/odrl/refinements';
 
 const placeholder = '<leer>';
@@ -102,7 +102,7 @@ export default {
       // every action needs a different set of possible refinements
       return this.opList.reduce((opMapping, operand) => {
         opMapping[operand] = operandMapping[operand];
-        return opMapping
+        return opMapping;
       }, {});
     },
   },

@@ -15,22 +15,22 @@
 </template>
 
 <script>
-import BaseButton from "../components/BaseButton.vue";
+import BaseButton from '../components/BaseButton.vue';
 
 export default {
-  name: "Start",
+  name: 'Start',
   components: {
-    BaseButton
+    BaseButton,
   },
   data() {
     return {
       modes: [
-        { name: "OER (Creative Commons)", path: { name: "oer" } },
-        { name: "Proprietär (RightsML)", path: { name: "proprietary" } },
-        { name: "Metadaten (zusätzlich zur Lizenz)", path: { name: "meta" } }
-      ]
+        { name: 'OER (Creative Commons)', path: { name: 'oer' } },
+        { name: 'Proprietär (RightsML)', path: { name: 'proprietary' } },
+        { name: 'Metadaten (zusätzlich zur Lizenz)', path: { name: 'meta' } },
+      ],
     };
-  }
+  },
 };
 </script>
 

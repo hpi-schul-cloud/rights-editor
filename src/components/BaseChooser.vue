@@ -73,41 +73,41 @@
 </template>
 
 <script>
-import Vue from "vue";
-import BaseInput from "./BaseInput.vue";
-import BaseModal from "./BaseModal.vue";
-import BaseButton from "./BaseButton.vue";
+import Vue from 'vue';
+import BaseInput from './BaseInput.vue';
+import BaseModal from './BaseModal.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
-  name: "BaseChooser",
+  name: 'BaseChooser',
   components: {
     BaseInput,
     BaseModal,
-    BaseButton
+    BaseButton,
   },
   props: {
     objectToEdit: {
       type: Object,
       default: null,
-      required: false
+      required: false,
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     operandList: {
       type: Array,
-      required: true
+      required: true,
     },
     operandMapping: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       objectCopy: null,
-      forceUpdate: 0
+      forceUpdate: 0,
     };
   },
   computed: {
@@ -126,23 +126,23 @@ export default {
       }
       // deep copy the v-bound object that is going to be edited
       this.objectCopy = {};
-      Vue.set(this.objectCopy, "leftOperand", this.objectToEdit.leftOperand);
-      Vue.set(this.objectCopy, "operator", this.objectToEdit.operator);
+      Vue.set(this.objectCopy, 'leftOperand', this.objectToEdit.leftOperand);
+      Vue.set(this.objectCopy, 'operator', this.objectToEdit.operator);
 
       if (Array.isArray(this.objectToEdit.rightOperand)) {
         // right operand is a selection from list
-        Vue.set(this.objectCopy, "rightOperand", [
-          ...this.objectToEdit.rightOperand
+        Vue.set(this.objectCopy, 'rightOperand', [
+          ...this.objectToEdit.rightOperand,
         ]);
       } else {
         // right operand is number and unit
-        Vue.set(this.objectCopy, "rightOperand", {
-          "@value": this.objectToEdit.rightOperand["@value"]
+        Vue.set(this.objectCopy, 'rightOperand', {
+          '@value': this.objectToEdit.rightOperand['@value'],
         });
-        Vue.set(this.objectCopy, "unit", this.objectToEdit.unit);
+        Vue.set(this.objectCopy, 'unit', this.objectToEdit.unit);
       }
 
-      Vue.delete(this.objectCopy, "uninitialized");
+      Vue.delete(this.objectCopy, 'uninitialized');
       return this.objectCopy;
     },
     leftOperand: {
@@ -159,11 +159,11 @@ export default {
           // do nothing
           return;
         }
-        Vue.set(this.object, "leftOperand", op);
-        Vue.delete(this.object, "operator");
-        Vue.delete(this.object, "rightOperand");
-        Vue.delete(this.object, "unit");
-      }
+        Vue.set(this.object, 'leftOperand', op);
+        Vue.delete(this.object, 'operator');
+        Vue.delete(this.object, 'rightOperand');
+        Vue.delete(this.object, 'unit');
+      },
     },
     operator: {
       get() {
@@ -173,8 +173,8 @@ export default {
         return this.object.operator;
       },
       set(op) {
-        Vue.set(this.object, "operator", op);
-      }
+        Vue.set(this.object, 'operator', op);
+      },
     },
     rightOperand: {
       get() {
@@ -183,20 +183,20 @@ export default {
       },
       set(op) {
         op.sort();
-        Vue.set(this.object, "rightOperand", op);
-      }
+        Vue.set(this.object, 'rightOperand', op);
+      },
     },
     value: {
       get() {
         const op = this.object.rightOperand;
         if (!op && this.isNumericInput) {
-          Vue.set(this.object, "rightOperand", { "@value": "0" });
+          Vue.set(this.object, 'rightOperand', { '@value': '0' });
         }
-        return this.object.rightOperand["@value"];
+        return this.object.rightOperand['@value'];
       },
       set(val) {
-        this.object.rightOperand["@value"] = val;
-      }
+        this.object.rightOperand['@value'] = val;
+      },
     },
     unit: {
       get() {
@@ -206,8 +206,8 @@ export default {
         return this.object.unit;
       },
       set(u) {
-        Vue.set(this.object, "unit", u);
-      }
+        Vue.set(this.object, 'unit', u);
+      },
     },
     operators() {
       return this.operandMapping[this.leftOperand].operators;
@@ -223,7 +223,7 @@ export default {
     },
     isListInput() {
       return !!this.operandMapping[this.leftOperand].list;
-    }
+    },
   },
   methods: {
     complete() {
@@ -238,7 +238,7 @@ export default {
     },
     accept() {
       if (this.complete()) {
-        this.$emit("chosen", this.object);
+        this.$emit('chosen', this.object);
       }
     },
     toggleRightOperand(op) {
@@ -247,14 +247,14 @@ export default {
         this.rightOperand.splice(idx, 1);
 
         if (this.rightOperand.length === 0) {
-          Vue.delete(this.object, "rightOperand");
+          Vue.delete(this.object, 'rightOperand');
         }
         return;
       }
 
       this.rightOperand = [...this.rightOperand, op];
-    }
-  }
+    },
+  },
 };
 </script>
 
