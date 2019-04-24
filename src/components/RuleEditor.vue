@@ -147,7 +147,6 @@ export default {
   padding: 0px 0px 0px 15px;
 }
 
-
 .policy-meaning{
   margin-left: 200px;
   padding: 10px;
@@ -167,8 +166,9 @@ export default {
   padding-top: 24px;
 }
 
-
 .editor-back{
+  padding-top: 15px;
+  padding-bottom: 5px;
   margin-left: 10px;
   color: #1f3b70;
 }

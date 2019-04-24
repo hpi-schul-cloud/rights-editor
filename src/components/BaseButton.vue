@@ -46,10 +46,6 @@ export default {
   cursor: pointer;
 }
 
-.base-button:active {
-  background-color: #142056;
-}
-
 .base-button-disabled {
   background-color: gray;
 }
