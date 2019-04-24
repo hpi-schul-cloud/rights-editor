@@ -19,9 +19,9 @@
       @abort="hideConstraintChooser()"
     />
 
-    <BaseButton @click="showConstraintChooser()" type="button">Einschränkung hinzufügen</BaseButton>
+    <BaseButton class="add-constraint" @click="showConstraintChooser()" type="button">Einschränkung hinzufügen</BaseButton>
 
-    <li v-for="(constraint, index) in constraints" :key="index">
+    <li class="constraints" v-for="(constraint, index) in constraints" :key="index">
       {{ description(constraint) }}
       <BaseButton class="remove-constraint" remove v-on:click="removeConstraint(index)">
         <i class="fas fa-times"/>
@@ -99,5 +99,25 @@ export default {
   padding-top: 15px;
   padding-bottom: 5px;
   color: #1f3b70;
+}
+
+.constraints {
+  border: 1px solid gray;
+  width: 300px;
+  margin: 8px;
+  margin-left: 0px;
+  padding: 20px;
+  position: relative;
+}
+
+.add-constraint {
+  margin-left: 0px;
+  margin-bottom: 20px;
+}
+
+.remove-constraint {
+  position: absolute;
+  right: 0px;
+  top: 0px;
 }
 </style>
