@@ -9,7 +9,7 @@
     <!-- display and edit action -->
     <BaseButton
       input
-      :on-click="showActionChooser"
+      @click="showActionChooser()"
       list="actions"
       name="action"
       type="button"

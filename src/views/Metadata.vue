@@ -15,20 +15,29 @@
       :name="'Einschränkung'"
       :operand-list="opList"
       :operand-mapping="opMapping"
-      @chosen="constraintChosen($event)"
+      @chosen="addConstraint($event)"
       @abort="hideConstraintChooser()"
     />
 
-    <BaseButton :on-click="showConstraintChooser" type="button">Einschränkung hinzufügen</BaseButton>
+    <BaseButton @click="showConstraintChooser()" type="button">Einschränkung hinzufügen</BaseButton>
 
-    <li v-for="(constraint, index) in constraints" :key="index">{{ JSON.stringify(constraint) }}</li>
+    <li v-for="(constraint, index) in constraints" :key="index">
+      {{ description(constraint) }}
+      <BaseButton class="remove-constraint" remove v-on:click="removeConstraint(index)">
+        <i class="fas fa-times"/>
+      </BaseButton>
+    </li>
   </div>
 </template>
 
 <script>
 import BaseChooser from "../components/BaseChooser.vue";
 import BaseButton from "../components/BaseButton.vue";
-import { operandList, operandMapping } from "../libs/odrl/constraints";
+import {
+  operandList,
+  operandMapping,
+  operatorList
+} from "../libs/odrl/constraints";
 
 export default {
   name: "Metadata",
@@ -50,9 +59,25 @@ export default {
     hideConstraintChooser() {
       this.displayConstraintChooser = false;
     },
-    constraintChosen(c) {
+    addConstraint(constraint) {
       this.hideConstraintChooser();
-      this.constraints.push(c);
+      this.constraints.push(constraint);
+    },
+    removeConstraint(index) {
+      this.constraints.splice(index, 1);
+    },
+    description(constraint) {
+      let desc = constraint.leftOperand;
+      desc += ` ${
+        operatorList.find(op => op.identifier === constraint.operator).symbol
+      }`;
+      if (Array.isArray(constraint.rightOperand)) {
+        desc += ` ${constraint.rightOperand.join(", ")}`;
+      } else {
+        desc += ` ${constraint.rightOperand["@value"]}`;
+        desc += ` ${constraint.unit}`;
+      }
+      return desc;
     }
   },
   computed: {

@@ -4,7 +4,7 @@
     :disabled="disabled"
     :class="{ 'base-button-disabled': disabled, 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input, 'base-button-remove': remove }"
     :style="{ width: this.width }"
-    @click="onClick"
+    v-on="$listeners"
   >
     <slot />
   </button>
@@ -23,8 +23,7 @@ export default {
     textlike: Boolean,
     input: Boolean,
     remove: Boolean,
-    disabled: Boolean,
-    onClick: { type: Function, required: true },
+    disabled: Boolean    
   },
 };
 </script>

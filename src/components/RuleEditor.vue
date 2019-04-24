@@ -6,13 +6,13 @@
       </router-link>
     </div>
     <div class="editor-header">
-      <BaseButton :on-click="newPermission">
+      <BaseButton @click="newPermission()">
         Erlaubnis
       </BaseButton>
-      <BaseButton :on-click="newObligation">
+      <BaseButton @click="newObligation()">
         Pflicht
       </BaseButton>
-      <BaseButton :on-click="newProhibition">
+      <BaseButton @click="newProhibition()">
         Verbot
       </BaseButton>
     </div>
