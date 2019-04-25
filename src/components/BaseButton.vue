@@ -4,7 +4,7 @@
     :disabled="disabled"
     :class="{ 'base-button-disabled': disabled, 'base-button-big': big, 'base-button-textlike': textlike, 'base-button-input': input, 'base-button-remove': remove }"
     :style="{ width: this.width }"
-    @click="onClick"
+    v-on="$listeners"
   >
     <slot />
   </button>
@@ -24,7 +24,6 @@ export default {
     input: Boolean,
     remove: Boolean,
     disabled: Boolean,
-    onClick: { type: Function, required: true },
   },
 };
 </script>
@@ -44,10 +43,6 @@ export default {
   text-decoration: none;
   font-size: 16px;
   cursor: pointer;
-}
-
-.base-button:active {
-  background-color: #142056;
 }
 
 .base-button-disabled {

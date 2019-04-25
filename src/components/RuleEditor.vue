@@ -6,13 +6,13 @@
       </router-link>
     </div>
     <div class="editor-header">
-      <BaseButton :on-click="newPermission">
+      <BaseButton @click="newPermission()">
         Erlaubnis
       </BaseButton>
-      <BaseButton :on-click="newObligation">
+      <BaseButton @click="newObligation()">
         Pflicht
       </BaseButton>
-      <BaseButton :on-click="newProhibition">
+      <BaseButton @click="newProhibition()">
         Verbot
       </BaseButton>
     </div>
@@ -147,7 +147,6 @@ export default {
   padding: 0px 0px 0px 15px;
 }
 
-
 .policy-meaning{
   margin-left: 200px;
   padding: 10px;
@@ -167,8 +166,9 @@ export default {
   padding-top: 24px;
 }
 
-
 .editor-back{
+  padding-top: 15px;
+  padding-bottom: 5px;
   margin-left: 10px;
   color: #1f3b70;
 }
