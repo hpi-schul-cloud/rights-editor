@@ -74,8 +74,13 @@ export default {
       return this.policy.follow(pathWithoutLastElement);
     },
     action() {
-      const actionItem = this.policy.follow(this.path.slice(0, this.path.length - 3));
-      return actionItem[0]['rdf:value'];
+      let actionObject = {};
+      if (this.refinementParent.length == 1) {
+        actionObject = this.policy.follow(this.path.slice(0, this.path.length - 2));
+      } else {
+        actionObject = this.policy.follow(this.path.slice(0, this.path.length - 4));
+      }
+      return actionObject['rdf:value'];
     },
     displayRefinementChooser() {
       return this.refinementChooserShouldDisplay || !this.refinement;
@@ -124,7 +129,18 @@ export default {
       this.refinementChooserShouldDisplay = false;
     },
     removeRefinement() {
-      Vue.delete(this.refinementParent, this.path[this.path.length - 1]);
+      const index = this.path[this.path.length - 1];
+      Vue.delete(this.refinementParent, index); // index of the current refinement
+
+      if (this.refinementParent.length === 1) {
+        // go from list with logical operator
+        // back to just one refinement within the array
+        const refinement = this.refinementParent[0];
+        const actionPath = this.path.slice(0, this.path.length - 4);
+        Vue.delete(this.policy.follow(actionPath), 'refinement');
+        Vue.set(this.policy.follow(actionPath), 'refinement', [refinement]);
+        return;
+      }
 
       if (this.refinementParent.length === 0) {
         // if no refinements are left, make the action just a string again
