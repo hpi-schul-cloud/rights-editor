@@ -42,8 +42,13 @@ export default {
   data() {
     return {
       currentSelected: null,
-      currentAction: '',      
+      currentAction: '',
     };
+  },
+  computed: {
+    actions() {
+      return actionList;
+    },
   },
   methods: {
     actionClicked(actionId) {
@@ -57,11 +62,6 @@ export default {
       this.$emit('chosen', this.currentAction);
     },
   },
-  computed: {
-    actions() {
-      return actionList;
-    }
-  }
 };
 </script>
 

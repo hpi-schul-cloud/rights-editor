@@ -38,17 +38,21 @@
     <!-- display and edit constraints -->
     <p class="constraints">
       Insgesamt gilt {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em> nur, wenn...
-      <ConstraintItem
-        v-for="(constraint, index) in constraints"
-        :key="index"
-        :policy="policy"
-        :path="[...path, 'constraint', index]"
-      />
-      <!-- add new constraint -->
-      <BaseButton class="add-button" :on-click="addConstraint">
-        Einschränkung hinzufügen
-      </BaseButton>
+      <em v-if="logicalOpText == 'ODER'">entweder</em>
     </p>
+    
+    <li v-for="(constraint, index) in constraints" :key="index"> 
+      <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
+      <a v-if="Array.isArray(constraints) && constraints.length > 1 && index < constraints.length - 1"
+        class="logical-operator" @click="nextLogicalOperator()">
+        {{ logicalOpText }}
+      </a>
+    </li>
+
+    <!-- add new constraint -->
+    <BaseButton class="add-button" :on-click="addConstraint">
+      Einschränkung hinzufügen
+    </BaseButton>
 
     <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
@@ -107,6 +111,18 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      logicalOperators: [
+        { text: 'UND/ODER',
+          short: 'or' },
+        { text: 'ODER',
+          short: 'xone' },
+        { text: 'UND',
+          short: 'and' }],
+      selectedLogicalOperator: 0,
+    };
+  },
   computed: {
     rule() {
       return this.policy.follow(this.path);
@@ -142,8 +158,20 @@ export default {
     actionLabel() {
       return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
     },
-    constraints() {
-      return this.rule.constraint;
+    constraints() {      
+      if (this.rule.constraint == undefined) {
+        return null;
+      }
+      if (this.rule.constraint.length <= 1) {
+        return this.rule.constraint;
+      }
+      return this.rule.constraint[this.logicalOpShort]['@list'];
+    },
+    constraintPath() {
+      if (this.rule.constraint.length <= 1) {
+        return [...this.path, 'constraint'];
+      }
+      return [...this.path, 'constraint', this.logicalOpShort, '@list'];
     },
     refinements() {
       if (this.action === undefined) {
@@ -157,6 +185,12 @@ export default {
     articles() {
       return articleMapping;
     },
+    logicalOpText() {
+      return this.logicalOperators[this.selectedLogicalOperator].text;
+    },
+    logicalOpShort() {
+      return this.logicalOperators[this.selectedLogicalOperator].short;
+    }
   },
   methods: {
     appendNewSubrule() {
@@ -190,9 +224,31 @@ export default {
     },
     addConstraint() {
       if (!this.constraints) {
-        Vue.set(this.rule, 'constraint', []);
+        Vue.set(this.rule, 'constraint', []);        
       }
+
+      // make use of the logical operator to combine more than one constraint
+      if (this.constraints.length >= 1) {
+        const constraint = this.constraints;
+        Vue.delete(this.rule, 'constraint');
+        Vue.set(this.rule, 'constraint', {});
+        Vue.set(this.rule.constraint, this.logicalOpShort, {});
+        Vue.set(this.rule.constraint[this.logicalOpShort], '@list', constraint);
+      }
+
       this.constraints.push(null);
+    },    
+    nextLogicalOperator() {
+      const list = this.rule.constraint[this.logicalOpShort];
+      Vue.delete(this.rule.constraint, this.logicalOpShort);
+
+      this.selectedLogicalOperator++;
+      if (this.selectedLogicalOperator >= this.logicalOperators.length) {
+        this.selectedLogicalOperator = 0;
+      }
+      
+      Vue.set(this.rule.constraint, this.logicalOpShort, {});
+      Vue.set(this.rule.constraint, this.logicalOpShort, list);
     },
     addRefinement() {
       if (this.refinements == null) {
@@ -246,6 +302,25 @@ p {
 
 p.constraints {
   margin-top: 40px;
+}
+
+.logical-operator {
+  line-height: 2.5em;
+  text-decoration: none;
+  padding: 8px;
+
+
+  /* disable text selection highlighting */
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+.logical-operator:hover {
+  cursor: pointer;
 }
 
 .subrule-container {
