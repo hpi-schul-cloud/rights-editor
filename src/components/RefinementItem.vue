@@ -13,14 +13,14 @@
       <BaseButton
         input
         :width="'90%'"
-        :on-click="showRefinementChooser"
         class="edit-refinement"
         name="refinement"
         type="button"
+        @click="showRefinementChooser()"
       >
         {{ description }}
       </BaseButton>
-      <BaseButton class="remove-refinement" remove :on-click="removeRefinement">
+      <BaseButton class="remove-refinement" remove @click="removeRefinement()">
         <i class="fas fa-times" />
       </BaseButton>
     </div>

@@ -21,7 +21,7 @@
       >
         {{ description }}
       </BaseButton>
-      <BaseButton class="remove-constraint" remove :on-click="removeConstraint">
+      <BaseButton class="remove-constraint" remove @click="removeConstraint()">
         <i class="fas fa-times" />
       </BaseButton>
     </div>

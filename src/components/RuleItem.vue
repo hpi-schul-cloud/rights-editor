@@ -2,7 +2,7 @@
   <div class="rule-container">
     <div class="rule-header">
       <h3>{{ ruleInfo.name }} <i :class="ruleInfo.icon" /></h3>
-      <BaseButton remove class="remove-button" :on-click="removeRule">
+      <BaseButton remove class="remove-button" @click="removeRule()">
         <i class="far fa-trash-alt" />
       </BaseButton>
     </div>
@@ -23,7 +23,7 @@
     <!-- display and edit refinements -->
     <p class="refinements">
       Das <em>{{ actionLabel }}</em> darf nur auf die folgende Art und Weise erfolgen...
-      <em v-if="logicalRefOpText == 'ODER'">entweder</em>
+      <em v-if="usingLogicalRefinementOp && logicalRefOpText == 'ODER'">entweder</em>
     </p>
 
     <li v-for="(refinement, index) in refinements" :key="index">
@@ -69,7 +69,7 @@
 
       Optional kann um folgende Regeln erweitert werden:
       <p>
-        <BaseButton class="add-button" :name="subruleInfo.pluralName" :on-click="appendNewSubrule">
+        <BaseButton class="add-button" :name="subruleInfo.pluralName" @click="appendNewSubrule">
           {{ subruleInfo.name }} hinzufügen</BaseButton>
 
         {{ subruleInfo.pluralName }} sind Pflichten, die geleistet werden müssen,

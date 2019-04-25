@@ -1,12 +1,8 @@
 <template>
   <BaseModal :width="'1000px'" :scrollable="false">
     <template v-slot:header>
-      <h1 v-if="objectToEdit == null">
-        {{ name }} hinzufügen
-      </h1>
-      <h1 v-else>
-        {{ name }} bearbeiten
-      </h1>
+      <h1 v-if="objectToEdit == null">{{ name }} hinzufügen</h1>
+      <h1 v-else>{{ name }} bearbeiten</h1>
     </template>
 
     <template v-slot:body>
@@ -16,9 +12,7 @@
           :key="index"
           :class="{ selected: leftOperand === op }"
           @click="leftOperand = op"
-        >
-          {{ op }}
-        </li>
+        >{{ op }}</li>
       </ul>
       <ul class="list">
         <li
@@ -26,17 +20,13 @@
           :key="index"
           :class="{ selected: operator === op.identifier }"
           @click="operator = op.identifier"
-        >
-          {{ op.symbol }}
-        </li>
+        >{{ op.symbol }}</li>
       </ul>
       <div class="value-container">
         <!-- input is number with unit -->
         <div v-if="isNumericInput" class="numeric-input-container">
           <div class="number-container">
-            <div class="numeric-input-header">
-              Zahl:
-            </div>
+            <div class="numeric-input-header">Zahl:</div>
             <br>
             <BaseInput
               class="number-input flat-input"
@@ -46,9 +36,7 @@
             />
           </div>
           <div class="unit-container">
-            <div class="numeric-input-header">
-              Einheit:
-            </div>
+            <div class="numeric-input-header">Einheit:</div>
             <br>
             <ul class="unit-list list" type="text" name="unit">
               <li
@@ -56,9 +44,7 @@
                 :key="index"
                 :class="{ selected: unit === u }"
                 @click="unit = u"
-              >
-                {{ u }}
-              </li>
+              >{{ u }}</li>
             </ul>
           </div>
         </div>
@@ -69,9 +55,7 @@
             :key="index"
             :class="{ selected: Array.isArray(rightOperand) && rightOperand.indexOf(item) >= 0 }"
             @click="toggleRightOperand(item)"
-          >
-            {{ item }}
-          </li>
+          >{{ item }}</li>
         </ul>
       </div>
     </template>
@@ -80,20 +64,9 @@
       <div class="modal-footer">
         <BaseButton
           textlike
-          :on-click="
-            function() {
-              $emit('abort');
-            }
-          "
-        >
-          Abbrechen
-        </BaseButton>
-        <BaseButton
-          :disabled="!complete()"
-          :on-click="accept"
-        >
-          Annehmen
-        </BaseButton>
+          @click="$emit('abort');"
+        >Abbrechen</BaseButton>
+        <BaseButton :disabled="!complete()" @click="accept()">Annehmen</BaseButton>
       </div>
     </template>
   </BaseModal>
@@ -158,10 +131,14 @@ export default {
 
       if (Array.isArray(this.objectToEdit.rightOperand)) {
         // right operand is a selection from list
-        Vue.set(this.objectCopy, 'rightOperand', [...this.objectToEdit.rightOperand]);
+        Vue.set(this.objectCopy, 'rightOperand', [
+          ...this.objectToEdit.rightOperand,
+        ]);
       } else {
         // right operand is number and unit
-        Vue.set(this.objectCopy, 'rightOperand', { '@value': this.objectToEdit.rightOperand['@value'] });
+        Vue.set(this.objectCopy, 'rightOperand', {
+          '@value': this.objectToEdit.rightOperand['@value'],
+        });
         Vue.set(this.objectCopy, 'unit', this.objectToEdit.unit);
       }
 
@@ -255,7 +232,9 @@ export default {
       const hasRightOperand = !!this.object.rightOperand;
       const hasUnitIfNumeric = !this.isNumericInput || !!this.object.unit;
 
-      return hasLeftOperand && hasOperator && hasRightOperand && hasUnitIfNumeric;
+      return (
+        hasLeftOperand && hasOperator && hasRightOperand && hasUnitIfNumeric
+      );
     },
     accept() {
       if (this.complete()) {
