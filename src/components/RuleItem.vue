@@ -168,13 +168,12 @@ export default {
       return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
     },
     constraints() {
-      if (this.rule.constraint == undefined) {
-        return null;
+      if (this.rule.constraint) { 
+        if (this.rule.constraint.length <= 1) {
+          return this.rule.constraint;
+        }
+        return this.rule.constraint[this.logicalOpShort]['@list'];
       }
-      if (this.rule.constraint.length <= 1) {
-        return this.rule.constraint;
-      }
-      return this.rule.constraint[this.logicalOpShort]['@list'];
     },
     constraintPath() {
       if (this.rule.constraint.length <= 1) {
