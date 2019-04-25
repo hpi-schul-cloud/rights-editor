@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     refinement: {
-      get() {        
+      get() {
         return this.policy.follow(this.path);
       },
       set(newRefinement) {

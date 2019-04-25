@@ -40,11 +40,14 @@
       Insgesamt gilt {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em> nur, wenn...
       <em v-if="logicalOpText == 'ODER'">entweder</em>
     </p>
-    
-    <li v-for="(constraint, index) in constraints" :key="index"> 
+
+    <li v-for="(constraint, index) in constraints" :key="index">
       <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
-      <a v-if="Array.isArray(constraints) && constraints.length > 1 && index < constraints.length - 1"
-        class="logical-operator" @click="nextLogicalOperator()">
+      <a
+        v-if="Array.isArray(constraints) && constraints.length > 1 && index < constraints.length - 1"
+        class="logical-operator"
+        @click="nextLogicalOperator()"
+      >
         {{ logicalOpText }}
       </a>
     </li>
@@ -114,12 +117,18 @@ export default {
   data() {
     return {
       logicalOperators: [
-        { text: 'UND/ODER',
-          short: 'or' },
-        { text: 'ODER',
-          short: 'xone' },
-        { text: 'UND',
-          short: 'and' }],
+        {
+          text: 'UND/ODER',
+          short: 'or',
+        },
+        {
+          text: 'ODER',
+          short: 'xone',
+        },
+        {
+          text: 'UND',
+          short: 'and',
+        }],
       selectedLogicalOperator: 0,
     };
   },
@@ -158,7 +167,7 @@ export default {
     actionLabel() {
       return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
     },
-    constraints() {      
+    constraints() {
       if (this.rule.constraint == undefined) {
         return null;
       }
@@ -190,7 +199,7 @@ export default {
     },
     logicalOpShort() {
       return this.logicalOperators[this.selectedLogicalOperator].short;
-    }
+    },
   },
   methods: {
     appendNewSubrule() {
@@ -224,7 +233,7 @@ export default {
     },
     addConstraint() {
       if (!this.constraints) {
-        Vue.set(this.rule, 'constraint', []);        
+        Vue.set(this.rule, 'constraint', []);
       }
 
       // make use of the logical operator to combine more than one constraint
@@ -237,7 +246,7 @@ export default {
       }
 
       this.constraints.push(null);
-    },    
+    },
     nextLogicalOperator() {
       const list = this.rule.constraint[this.logicalOpShort];
       Vue.delete(this.rule.constraint, this.logicalOpShort);
@@ -246,7 +255,7 @@ export default {
       if (this.selectedLogicalOperator >= this.logicalOperators.length) {
         this.selectedLogicalOperator = 0;
       }
-      
+
       Vue.set(this.rule.constraint, this.logicalOpShort, {});
       Vue.set(this.rule.constraint, this.logicalOpShort, list);
     },

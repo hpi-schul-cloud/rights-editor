@@ -115,9 +115,9 @@ export default {
     hideConstraintChooser() {
       this.constraintChooserShouldDisplay = false;
     },
-    removeConstraint() {      
+    removeConstraint() {
       const index = this.path[this.path.length - 1]; // index of the current constraint
-      Vue.delete(this.constraintParent, index);      
+      Vue.delete(this.constraintParent, index);
 
       if (this.constraintParent.length === 1) {
         // go from list with logical operator
