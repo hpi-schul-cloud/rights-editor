@@ -17,10 +17,10 @@
     </template>
     <template v-slot:footer>
       <div class="modal-footer">
-        <BaseButton textlike :on-click="abort">
+        <BaseButton textlike @click="abort">
           Abbrechen
         </BaseButton>
-        <BaseButton :disabled="currentAction == ''" :on-click="chosen">
+        <BaseButton :disabled="currentAction == ''" @click="chosen($event)">
           Annehmen
         </BaseButton>
       </div>
@@ -42,8 +42,13 @@ export default {
   data() {
     return {
       currentSelected: null,
-      currentAction: '',      
+      currentAction: '',
     };
+  },
+  computed: {
+    actions() {
+      return actionList;
+    },
   },
   methods: {
     actionClicked(actionId) {
@@ -57,11 +62,6 @@ export default {
       this.$emit('chosen', this.currentAction);
     },
   },
-  computed: {
-    actions() {
-      return actionList;
-    }
-  }
 };
 </script>
 

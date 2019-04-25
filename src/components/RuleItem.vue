@@ -2,7 +2,7 @@
   <div class="rule-container">
     <div class="rule-header">
       <h3>{{ ruleInfo.name }} <i :class="ruleInfo.icon" /></h3>
-      <BaseButton remove class="remove-button" :on-click="removeRule">
+      <BaseButton remove class="remove-button" @click="removeRule()">
         <i class="far fa-trash-alt" />
       </BaseButton>
     </div>
@@ -30,7 +30,7 @@
         :path="[...path, 'action', 0, 'refinement', index]"
       />
       <!-- add new refinement -->
-      <BaseButton class="add-button" :on-click="addRefinement">
+      <BaseButton class="add-button" @click="addRefinement()">
         Verfeinerung hinzufügen
       </BaseButton>
     </p>
@@ -45,7 +45,7 @@
         :path="[...path, 'constraint', index]"
       />
       <!-- add new constraint -->
-      <BaseButton class="add-button" :on-click="addConstraint">
+      <BaseButton class="add-button" @click="addConstraint()">
         Einschränkung hinzufügen
       </BaseButton>
     </p>
@@ -55,7 +55,7 @@
 
       Optional kann um folgende Regeln erweitert werden:
       <p>
-        <BaseButton class="add-button" :name="subruleInfo.pluralName" :on-click="appendNewSubrule">
+        <BaseButton class="add-button" :name="subruleInfo.pluralName" @click="appendNewSubrule">
           {{ subruleInfo.name }} hinzufügen</BaseButton>
 
         {{ subruleInfo.pluralName }} sind Pflichten, die geleistet werden müssen,
