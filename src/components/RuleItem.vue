@@ -312,7 +312,7 @@ export default {
         const refinement = this.refinements;
         Vue.delete(this.action[0], 'refinement');
         Vue.set(this.action[0], 'refinement', {});
-        Vue.set(this.action[0].refinement, this.logicalRefOpShort, {}); // ???
+        Vue.set(this.action[0].refinement, this.logicalRefOpShort, {});
         Vue.set(this.action[0].refinement[this.logicalRefOpShort], '@list', refinement);
       }
 
