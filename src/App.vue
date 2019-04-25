@@ -19,9 +19,11 @@ export default {
 }
 li {
   list-style-type: none;
+  padding-inline-start: 0px;
 }
 ul {
   list-style-type: none;
+  padding-inline-start: 0px;
 }
 
 #app {

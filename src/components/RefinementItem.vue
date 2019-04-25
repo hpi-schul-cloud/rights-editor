@@ -73,14 +73,19 @@ export default {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
       return this.policy.follow(pathWithoutLastElement);
     },
-    action() {
-      let actionObject = {};
-      if (this.refinementParent.length == 1) {
-        actionObject = this.policy.follow(this.path.slice(0, this.path.length - 2));
+    isOneOfManyRefinements() {
+      return this.refinementParent.length > 1;
+    },
+    actionLabel() {
+      let actionPath;
+
+      if (this.isOneOfManyRefinements) {
+        actionPath = this.path.slice(0, this.path.length - 4);
       } else {
-        actionObject = this.policy.follow(this.path.slice(0, this.path.length - 4));
+        actionPath = this.path.slice(0, this.path.length - 2);
       }
-      return actionObject['rdf:value'];
+
+      return this.policy.follow(actionPath)['rdf:value'];
     },
     displayRefinementChooser() {
       return this.refinementChooserShouldDisplay || !this.refinement;
@@ -101,7 +106,7 @@ export default {
     },
     opList() {
       // get the action-specific refinement operands
-      return actionToRefinements[this.action].operands;
+      return actionToRefinements[this.actionLabel].operands;
     },
     opMapping() {
       // every action needs a different set of possible refinements
@@ -137,7 +142,6 @@ export default {
         // back to just one refinement within the array
         const refinement = this.refinementParent[0];
         const actionPath = this.path.slice(0, this.path.length - 4);
-        Vue.delete(this.policy.follow(actionPath), 'refinement');
         Vue.set(this.policy.follow(actionPath), 'refinement', [refinement]);
         return;
       }

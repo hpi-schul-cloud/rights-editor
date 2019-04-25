@@ -116,15 +116,14 @@ export default {
       this.constraintChooserShouldDisplay = false;
     },
     removeConstraint() {
-      const index = this.path[this.path.length - 1]; // index of the current constraint
-      Vue.delete(this.constraintParent, index);
+      const removeIndex = this.path[this.path.length - 1];
+      Vue.delete(this.constraintParent, removeIndex);
 
       if (this.constraintParent.length === 1) {
         // go from list with logical operator
         // back to just one constraint within the array
         const constraint = this.constraintParent[0];
         const rulePath = this.path.slice(0, this.path.length - 4);
-        Vue.delete(this.policy.follow(rulePath), 'constraint');
         Vue.set(this.policy.follow(rulePath), 'constraint', [constraint]);
         return;
       }
