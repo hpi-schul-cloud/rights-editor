@@ -218,7 +218,7 @@ export default {
         return false;
       }
 
-      // again, there are more than one refinement instance within the policy if the refinement is an object containing a logical operator and so on...
+      // again, there is more than one refinement instance within the policy if the refinement is an object containing a logical operator and so on...
       return !Array.isArray(this.action[0].refinement);
     },
     refinementPath() {
@@ -319,9 +319,7 @@ export default {
         const action = this.action;
         Vue.delete(this.rule, 'action');
 
-        Vue.set(this.rule, 'action', [{}]);
-        Vue.set(this.action[0], 'rdf:value', action);
-        Vue.set(this.action[0], 'refinement', []);
+        Vue.set(this.rule, 'action', [{'rdf:value': action, 'refinement': []}]);
       }
 
       // and when more refinements are added, these multiple refinements
