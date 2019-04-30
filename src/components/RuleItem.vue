@@ -23,32 +23,52 @@
     <!-- display and edit refinements -->
     <p class="refinements">
       Das <em>{{ actionLabel }}</em> darf nur auf die folgende Art und Weise erfolgen...
-      <RefinementItem
-        v-for="(refinement, index) in refinements"
-        :key="index"
-        :policy="policy"
-        :path="[...path, 'action', 0, 'refinement', index]"
-      />
-      <!-- add new refinement -->
-      <BaseButton class="add-button" @click="addRefinement()">
-        Verfeinerung hinzufügen
-      </BaseButton>
+      <em v-if="usingLogicalRefinement && logicalRefinementOperatorText == 'ODER'">entweder</em>
     </p>
+
+    <ul>
+      <li v-for="(refinement, index) in refinements" :key="index">
+        <RefinementItem :policy="policy" :path="[...refinementPath, index]" />
+        <BaseButton
+          v-if="usingLogicalRefinement && index < refinements.length - 1"
+          textlike
+          class="logical-operator"
+          @click="nextLogicalRefinementOperator()"
+        >
+          {{ logicalRefinementOperatorText }}
+        </BaseButton>
+      </li>
+    </ul>
+
+    <!-- add new refinement -->
+    <BaseButton class="add-button" @click="addRefinement()">
+      Verfeinerung hinzufügen
+    </BaseButton>
 
     <!-- display and edit constraints -->
     <p class="constraints">
       Insgesamt gilt {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em> nur, wenn...
-      <ConstraintItem
-        v-for="(constraint, index) in constraints"
-        :key="index"
-        :policy="policy"
-        :path="[...path, 'constraint', index]"
-      />
-      <!-- add new constraint -->
-      <BaseButton class="add-button" @click="addConstraint()">
-        Einschränkung hinzufügen
-      </BaseButton>
+      <em v-if="usingLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
     </p>
+
+    <ul>
+      <li v-for="(constraint, index) in constraints" :key="index">
+        <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
+        <BaseButton
+          v-if="usingLogicalConstraint && index < constraints.length - 1"
+          textlike
+          class="logical-operator"
+          @click="nextLogicalConstraintOperator()"
+        >
+          {{ logicalConstraintOperatorText }}
+        </BaseButton>
+      </li>
+    </ul>
+
+    <!-- add new constraint -->
+    <BaseButton class="add-button" @click="addConstraint()">
+      Einschränkung hinzufügen
+    </BaseButton>
 
     <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
@@ -107,6 +127,25 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      logicalOperators: [
+        {
+          text: 'UND/ODER',
+          short: 'or',
+        },
+        {
+          text: 'ODER',
+          short: 'xone',
+        },
+        {
+          text: 'UND',
+          short: 'and',
+        }],
+      selectedLogicalConstraint: 0,
+      selectedLogicalRefinement: 0,
+    };
+  },
   computed: {
     rule() {
       return this.policy.follow(this.path);
@@ -143,22 +182,78 @@ export default {
       return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
     },
     constraints() {
+      if (!this.rule.constraint) {
+        return null;
+      }
+      if (this.isLogicalConstraint) {
+        return this.rule.constraint[this.logicalConstraintOperatorShort]['@list'];
+      }
       return this.rule.constraint;
     },
+    isLogicalConstraint() {
+      // if rule.constraint is an array, that means that only one refinement has been added
+      // otherwise rule.refinement is an object containting a logical operator, which is an object containing a list, which is an array containting more than one refinement instances
+      return !Array.isArray(this.rule.constraint);
+    },
+    constraintPath() {
+      if (this.isLogicalConstraint) {
+        return [...this.path, 'constraint', this.logicalConstraintOperatorShort, '@list'];
+      }
+      return [...this.path, 'constraint'];
+    },
     refinements() {
-      if (this.action === undefined) {
-        return undefined;
+      if (!this.action) {
+        return null;
       }
       if (!Array.isArray(this.action)) {
         return null;
       }
+      if (this.isLogicalRefinement) {
+        return this.action[0].refinement[this.logicalRefinementOperatorShort]['@list'];
+      }
       return this.action[0].refinement;
+    },
+    isLogicalRefinement() {
+      if (!this.action || !Array.isArray(this.action)) {
+        return false;
+      }
+
+      // again, there is more than one refinement instance within the policy if the refinement is an object containing a logical operator and so on...
+      return !Array.isArray(this.action[0].refinement);
+    },
+    refinementPath() {
+      if (this.refinements) {
+        if (this.refinements.length <= 1) {
+          return [...this.path, 'action', 0, 'refinement'];
+        }
+        return [...this.path, 'action', 0, 'refinement', this.logicalRefinementOperatorShort, '@list'];
+      }
     },
     articles() {
       return articleMapping;
     },
+    logicalConstraintOperatorText() {
+      return this.logicalOperators[this.selectedLogicalConstraint].text;
+    },
+    logicalConstraintOperatorShort() {
+      return this.logicalOperators[this.selectedLogicalConstraint].short;
+    },
+    logicalRefinementOperatorText() {
+      return this.logicalOperators[this.selectedLogicalRefinement].text;
+    },
+    logicalRefinementOperatorShort() {
+      return this.logicalOperators[this.selectedLogicalRefinement].short;
+    },
+    usingLogicalConstraint() {
+      return Array.isArray(this.constraints) && this.constraints.length > 1;
+    },
+    usingLogicalRefinement() {
+      return Array.isArray(this.refinements) && this.refinements.length > 1;
+    },
   },
   methods: {
+
+    // rules
     appendNewSubrule() {
       const subruleTypeName = this.ruleInfo.subrule;
       if (!this.rule[subruleTypeName]) {
@@ -188,23 +283,74 @@ export default {
       Vue.delete(ruleParent, containerName);
       this.$emit('followLink', parentPath);
     },
+
+    // constraints
     addConstraint() {
       if (!this.constraints) {
         Vue.set(this.rule, 'constraint', []);
       }
+
+      // make use of the logical operator to combine more than one constraint
+      if (this.constraints.length == 1) {
+        const constraint = this.constraints;
+        Vue.set(this.rule, 'constraint', {});
+        Vue.set(this.rule.constraint, this.logicalConstraintOperatorShort, { '@list': constraint });
+      }
+
       this.constraints.push(null);
     },
+    nextLogicalConstraintOperator() {
+      const list = this.rule.constraint[this.logicalConstraintOperatorShort];
+      Vue.delete(this.rule.constraint, this.logicalConstraintOperatorShort);
+
+      // selectedLogicalConstraint is an index into the array of viable logical
+      // operators. It points to the currently selected operator. by incrementing
+      // it (and reseting to 0 when the index goes out of bounds) we cycle through
+      // the possible operators one by one.
+      this.selectedLogicalConstraint++;
+      if (this.selectedLogicalConstraint >= this.logicalOperators.length) {
+        this.selectedLogicalConstraint = 0;
+      }
+
+      Vue.set(this.rule.constraint, this.logicalConstraintOperatorShort, list);
+    },
+
+    // refinements
     addRefinement() {
       if (this.refinements == null) {
         // action is just a string, but when adding refinements, action becomes an an array
+        // holding one refinement element
         const action = this.action;
         Vue.delete(this.rule, 'action');
 
-        Vue.set(this.rule, 'action', [{}]);
-        Vue.set(this.action[0], 'rdf:value', action);
-        Vue.set(this.action[0], 'refinement', []);
+        Vue.set(this.rule, 'action', [{'rdf:value': action, 'refinement': []}]);
       }
+
+      // and when more refinements are added, these multiple refinements
+      // are combined in a list by a logical operator
+      if (this.refinements.length == 1) {
+        const refinement = this.refinements;
+        Vue.set(this.action[0], 'refinement', {});
+        Vue.set(this.action[0].refinement, this.logicalRefinementOperatorShort, { '@list': refinement });
+      }
+
       this.refinements.push(null);
+    },
+    nextLogicalRefinementOperator() {
+      const ref = this.action[0].refinement;
+      const list = ref[this.logicalRefinementOperatorShort];
+      Vue.delete(ref, this.logicalRefinementOperatorShort);
+
+      // selectedLogicalRefinement is an index into the array of viable logical
+      // operators. It points to the currently selected operator. by incrementing
+      // it (and reseting to 0 when the index goes out of bounds) we cycle through
+      // the possible operators one by one.
+      this.selectedLogicalRefinement++;
+      if (this.selectedLogicalRefinement >= this.logicalOperators.length) {
+        this.selectedLogicalRefinement = 0;
+      }
+
+      Vue.set(ref, this.logicalRefinementOperatorShort, list);
     },
   },
 };
@@ -246,6 +392,26 @@ p {
 
 p.constraints {
   margin-top: 40px;
+}
+
+.logical-operator {
+  text-decoration: none;
+  padding: 8px;
+  margin: 2px;
+  font-weight: bold;
+  color: #1f3b70;
+
+  /* disable text selection highlighting */
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+.logical-operator:hover {
+  cursor: pointer;
 }
 
 .subrule-container {
