@@ -303,6 +303,10 @@ export default {
       const list = this.rule.constraint[this.logicalConstraintOperatorShort];
       Vue.delete(this.rule.constraint, this.logicalConstraintOperatorShort);
 
+      // selectedLogicalConstraint is an index into the array of viable logical
+      // operators. It points to the currently selected operator. by incrementing
+      // it (and reseting to 0 when the index goes out of bounds) we cycle through
+      // the possible operators one by one.
       this.selectedLogicalConstraint++;
       if (this.selectedLogicalConstraint >= this.logicalOperators.length) {
         this.selectedLogicalConstraint = 0;
@@ -337,10 +341,15 @@ export default {
       const list = ref[this.logicalRefinementOperatorShort];
       Vue.delete(ref, this.logicalRefinementOperatorShort);
 
+      // selectedLogicalRefinement is an index into the array of viable logical
+      // operators. It points to the currently selected operator. by incrementing
+      // it (and reseting to 0 when the index goes out of bounds) we cycle through
+      // the possible operators one by one.
       this.selectedLogicalRefinement++;
       if (this.selectedLogicalRefinement >= this.logicalOperators.length) {
         this.selectedLogicalRefinement = 0;
       }
+
       Vue.set(ref, this.logicalRefinementOperatorShort, list);
     },
   },
