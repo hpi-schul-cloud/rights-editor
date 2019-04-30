@@ -89,7 +89,7 @@
         Die {{ subrules.length == 1 ? subruleInfo.name : subruleInfo.pluralName }} diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
         {{ subrules.length === 1 ? 'ist' : 'sind' }}<br>
         <span v-for="(subrule, index) in subrules" :key="index">
-          <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ subrule.action }}</a>
+          <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ getSubruleActionLabel(subrule) }}</a>
           <span v-if="index + 1 < subrules.length">, <br></span>
         </span>.
       </p>
@@ -283,7 +283,13 @@ export default {
       Vue.delete(ruleParent, containerName);
       this.$emit('followLink', parentPath);
     },
-
+    getSubruleActionLabel(subrule) {
+      if (Array.isArray(subrule.action)) {
+        return subrule.action[0]['rdf:value'];
+      }
+      return subrule.action;
+    },
+    
     // constraints
     addConstraint() {
       if (!this.constraints) {
