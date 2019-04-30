@@ -14,7 +14,7 @@
       <BaseButton
         input
         :width="'90%'"
-        :on-click="showConstraintChooser"
+        @click="showConstraintChooser()"
         class="edit-constraint"
         name="constraint"
         type="button"
