@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Start from './views/Start.vue';
 import OER from './views/OER.vue';
-import Metadata from './views/Metadata.vue';
 import Proprietary from './views/Proprietary.vue';
 
 Vue.use(Router);
@@ -25,11 +24,6 @@ export default new Router({
       path: '/proprietary',
       name: 'proprietary',
       component: Proprietary,
-    },
-    {
-      path: '/meta',
-      name: 'meta',
-      component: Metadata,
-    },
+    }
   ],
 });
