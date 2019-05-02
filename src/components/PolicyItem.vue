@@ -61,7 +61,16 @@ export default {
   },
   computed: {
     opList() {
-      const filteredOperands = operandList.filter((value, index, arr) => value != 'Nutzungsdauer' && value != 'Nutzeranzahl');
+      const filteredOperands = operandList.filter((value, index, arr) => 
+        value != 'Nutzungsdauer' && 
+        value != 'Nutzeranzahl' &&
+        value != 'Speichermedium' &&
+        value != 'Anteil' &&
+        value != 'Anzahl' &&
+        value != 'Auflösung' &&
+        value != 'Teilnehmer' && 
+        value != 'Verbreitungsmethode' &&
+        value != 'Dateiformat');
       return filteredOperands;
     },
     opMapping() {
