@@ -32,14 +32,14 @@ export const operatorList = [
 
 export const logicalOperatorList = {
   or: {
-    text: 'UND/ODER',    
+    text: 'UND/ODER',
   },
   xone: {
     text: 'ODER',
   },
   and: {
     text: 'UND',
-  }
+  },
 };
 
 const storageMedium = [
@@ -159,7 +159,7 @@ export const operandMapping = {
   Betrag: {
     operators: operatorList,
     units: [unitList[9]],
-  },  
+  },
 };
 
 export const actionToRefinements = Object.freeze({

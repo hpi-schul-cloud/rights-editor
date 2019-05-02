@@ -14,10 +14,10 @@
       <BaseButton
         input
         :width="'90%'"
-        @click="showConstraintChooser()"
         class="edit-constraint"
         name="constraint"
         type="button"
+        @click="showConstraintChooser()"
       >
         {{ description }}
       </BaseButton>

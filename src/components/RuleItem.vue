@@ -128,11 +128,6 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      selectedLogicalRefinement: 0,
-    };
-  },
   computed: {
     rule() {
       return this.policy.follow(this.path);
@@ -231,7 +226,7 @@ export default {
         return null;
       }
 
-      let op = Object.keys(this.rule.constraint)[0];
+      const op = Object.keys(this.rule.constraint)[0];
       if (op == undefined) {
         return Object.keys(logicalOperatorList)[0];
       }
@@ -249,12 +244,12 @@ export default {
         return null;
       }
 
-      let op = Object.keys(this.action[0].refinement)[0];
+      const op = Object.keys(this.action[0].refinement)[0];
       if (op == undefined) {
         return Object.keys(logicalOperatorList)[0];
       }
       return op;
-    }
+    },
   },
   methods: {
 
@@ -294,7 +289,7 @@ export default {
       }
       return subrule.action;
     },
-    
+
     // constraints
     addConstraint() {
       if (!this.constraints) {
@@ -316,12 +311,12 @@ export default {
 
       Vue.delete(this.rule.constraint, this.logicalConstraintOperatorShort);
 
-      let keys = Object.keys(logicalOperatorList);
+      const keys = Object.keys(logicalOperatorList);
       // get the index of the current operator
-      let index = keys.indexOf(oldOp);
+      const index = keys.indexOf(oldOp);
       // the new logical operator is just the next one in the list
-      let nextOp = keys[(index + 1) % keys.length];
-      
+      const nextOp = keys[(index + 1) % keys.length];
+
       Vue.set(this.rule.constraint, nextOp, list);
     },
 
@@ -333,7 +328,7 @@ export default {
         const action = this.action;
         Vue.delete(this.rule, 'action');
 
-        Vue.set(this.rule, 'action', [{'rdf:value': action, 'refinement': []}]);
+        Vue.set(this.rule, 'action', [{ 'rdf:value': action, refinement: [] }]);
       }
 
       // and when more refinements are added, these multiple refinements
@@ -353,12 +348,12 @@ export default {
 
       Vue.delete(ref, this.logicalRefinementOperatorShort);
 
-      let keys = Object.keys(logicalOperatorList);
+      const keys = Object.keys(logicalOperatorList);
       // get the index of the current operator
-      let index = keys.indexOf(oldOp);
+      const index = keys.indexOf(oldOp);
       // the new logical operator is just the next one in the list
-      let nextOp = keys[(index + 1) % keys.length];
-      
+      const nextOp = keys[(index + 1) % keys.length];
+
       Vue.set(ref, nextOp, list);
     },
   },

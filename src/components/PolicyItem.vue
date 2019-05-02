@@ -9,7 +9,7 @@
     Die Lizenz gilt nur, wenn <em v-if="isLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
 
     <ul>
-      <li v-for="(constraint, index) in constraints" :key="index">        
+      <li v-for="(constraint, index) in constraints" :key="index">
         <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
         <BaseButton
           v-if="isLogicalConstraint && index < constraints.length - 1"
@@ -24,7 +24,7 @@
 
     <!-- add new constraint -->
     <BaseButton class="add-constraint" type="button" @click="addConstraint()">
-      <i class="fas fa-plus"></i>
+      <i class="fas fa-plus" />
     </BaseButton>
 
   </div>
@@ -35,12 +35,12 @@ import Vue from 'vue';
 import BaseInput from './BaseInput.vue';
 import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
-import ConstraintItem from './ConstraintItem.vue'
+import ConstraintItem from './ConstraintItem.vue';
 import {
   operandList,
   operandMapping,
   operatorList,
-  logicalOperatorList
+  logicalOperatorList,
 } from '../libs/odrl/constraints';
 
 export default {
@@ -49,7 +49,7 @@ export default {
     BaseInput,
     BaseButton,
     BaseChooser,
-    ConstraintItem
+    ConstraintItem,
   },
   props: {
     policy: {
@@ -58,8 +58,8 @@ export default {
     },
   },
   data() {
-    return {      
-      selectedLogicalConstraint: 0
+    return {
+      selectedLogicalConstraint: 0,
     };
   },
   computed: {
@@ -74,7 +74,7 @@ export default {
     },
     isLogicalConstraint() {
       // if policy.constraint is an array, that means that only one refinement has been added
-      // otherwise policy.refinement is an object containting a logical operator, 
+      // otherwise policy.refinement is an object containting a logical operator,
       // which is an object containing a list, which is an array containting more than one refinement instances
       return !Array.isArray(this.policy.constraint);
     },
@@ -85,16 +85,15 @@ export default {
       return ['constraint'];
     },
     opList() {
-      const filteredOperands = operandList.filter((value, index, arr) => 
-        value != 'Nutzungsdauer' && 
-        value != 'Nutzeranzahl' &&
-        value != 'Speichermedium' &&
-        value != 'Anteil' &&
-        value != 'Anzahl' &&
-        value != 'Auflösung' &&
-        value != 'Teilnehmer' && 
-        value != 'Verbreitungsmethode' &&
-        value != 'Dateiformat');
+      const filteredOperands = operandList.filter((value, index, arr) => value != 'Nutzungsdauer'
+        && value != 'Nutzeranzahl'
+        && value != 'Speichermedium'
+        && value != 'Anteil'
+        && value != 'Anzahl'
+        && value != 'Auflösung'
+        && value != 'Teilnehmer'
+        && value != 'Verbreitungsmethode'
+        && value != 'Dateiformat');
       return filteredOperands;
     },
     opMapping() {
@@ -112,7 +111,7 @@ export default {
         return null;
       }
 
-      let op = Object.keys(this.policy.constraint)[0];
+      const op = Object.keys(this.policy.constraint)[0];
       if (op == undefined) {
         return Object.keys(logicalOperatorList)[0];
       }
@@ -142,12 +141,12 @@ export default {
 
       Vue.delete(this.policy.constraint, this.logicalConstraintOperatorShort);
 
-      let keys = Object.keys(logicalOperatorList);
+      const keys = Object.keys(logicalOperatorList);
       // get the index of the current operator
-      let index = keys.indexOf(oldOp);
+      const index = keys.indexOf(oldOp);
       // the new logical operator is just the next one in the list
-      let nextOp = keys[(index + 1) % keys.length];
-      
+      const nextOp = keys[(index + 1) % keys.length];
+
       Vue.set(this.policy.constraint, nextOp, list);
     },
   },

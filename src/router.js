@@ -24,6 +24,6 @@ export default new Router({
       path: '/proprietary',
       name: 'proprietary',
       component: Proprietary,
-    }
+    },
   ],
 });

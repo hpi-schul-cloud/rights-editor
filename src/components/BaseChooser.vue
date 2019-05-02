@@ -265,8 +265,8 @@ export default {
   padding: 0px;
   font-size: 16px;
   width: 300px;
-  height: 250px;  
-  overflow-y: auto;  
+  height: 250px;
+  overflow-y: auto;
 }
 .list li {
   padding: 0.5em;

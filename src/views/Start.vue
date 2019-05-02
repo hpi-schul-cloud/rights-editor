@@ -26,7 +26,7 @@ export default {
     return {
       modes: [
         { name: 'OER (Creative Commons)', path: { name: 'oer' } },
-        { name: 'Proprietär (RightsML)', path: { name: 'proprietary' } }
+        { name: 'Proprietär (RightsML)', path: { name: 'proprietary' } },
       ],
     };
   },
