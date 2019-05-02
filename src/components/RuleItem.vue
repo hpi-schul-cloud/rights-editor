@@ -289,7 +289,7 @@ export default {
       }
       return subrule.action;
     },
-    
+
     // constraints
     addConstraint() {
       if (!this.constraints) {
@@ -329,7 +329,7 @@ export default {
         const action = this.action;
         Vue.delete(this.rule, 'action');
 
-        Vue.set(this.rule, 'action', [{'rdf:value': action, 'refinement': []}]);
+        Vue.set(this.rule, 'action', [{ 'rdf:value': action, refinement: [] }]);
       }
 
       // and when more refinements are added, these multiple refinements
