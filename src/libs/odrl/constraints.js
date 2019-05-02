@@ -30,6 +30,18 @@ export const operatorList = [
   { symbol: '≥', identifier: 'gteq' },
 ];
 
+export const logicalOperatorList = {
+  or: {
+    text: 'UND/ODER',    
+  },
+  xone: {
+    text: 'ODER',
+  },
+  and: {
+    text: 'UND',
+  }
+};
+
 const storageMedium = [
   'Magnetband',
   'Festplatte',

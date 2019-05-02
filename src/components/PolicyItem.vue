@@ -5,38 +5,42 @@
       <BaseInput v-model="policy['uid']" undercover class="guid-input" />
     </span>
 
-    <h2>Global geltende Einschränkungen festlegen...</h2>
+    <h2>Global geltende Einschränkungen hinzufügen...</h2>
+    Die Lizenz gilt nur, wenn <em v-if="isLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
 
-    <BaseChooser
-      v-if="displayConstraintChooser"
-      :object-to-edit="constraint"
-      :name="'Einschränkung'"
-      :operand-list="opList"
-      :operand-mapping="opMapping"
-      @chosen="addConstraint($event)"
-      @abort="hideConstraintChooser()"
-    />
+    <ul>
+      <li v-for="(constraint, index) in constraints" :key="index">        
+        <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
+        <BaseButton
+          v-if="isLogicalConstraint && index < constraints.length - 1"
+          textlike
+          class="logical-operator"
+          @click="nextLogicalConstraintOperator()"
+        >
+          {{ logicalConstraintOperatorText }}
+        </BaseButton>
+      </li>
+    </ul>
 
-    <BaseButton class="add-constraint" type="button" @click="showConstraintChooser()">Hinzufügen</BaseButton>
-
-    <li v-for="(constraint, index) in constraints" :key="index" class="constraints">
-      {{ description(constraint) }}
-      <BaseButton class="remove-constraint" remove @click="removeConstraint(index)">
-        <i class="fas fa-times" />
-      </BaseButton>
-    </li>
+    <!-- add new constraint -->
+    <BaseButton class="add-constraint" type="button" @click="addConstraint()">
+      <i class="fas fa-plus"></i>
+    </BaseButton>
 
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
 import BaseInput from './BaseInput.vue';
-import BaseChooser from '../components/BaseChooser.vue';
-import BaseButton from '../components/BaseButton.vue';
+import BaseChooser from './BaseChooser.vue';
+import BaseButton from './BaseButton.vue';
+import ConstraintItem from './ConstraintItem.vue'
 import {
   operandList,
   operandMapping,
   operatorList,
+  logicalOperatorList
 } from '../libs/odrl/constraints';
 
 export default {
@@ -44,7 +48,8 @@ export default {
   components: {
     BaseInput,
     BaseButton,
-    BaseChooser
+    BaseChooser,
+    ConstraintItem
   },
   props: {
     policy: {
@@ -53,13 +58,32 @@ export default {
     },
   },
   data() {
-    return {
-      displayConstraintChooser: false,
-      constraint: null,
-      constraints: [],
-    }
+    return {      
+      selectedLogicalConstraint: 0
+    };
   },
   computed: {
+    constraints() {
+      if (!this.policy.constraint) {
+        return null;
+      }
+      if (this.isLogicalConstraint) {
+        return this.policy.constraint[this.logicalConstraintOperatorShort]['@list'];
+      }
+      return this.policy.constraint;
+    },
+    isLogicalConstraint() {
+      // if policy.constraint is an array, that means that only one refinement has been added
+      // otherwise policy.refinement is an object containting a logical operator, 
+      // which is an object containing a list, which is an array containting more than one refinement instances
+      return !Array.isArray(this.policy.constraint);
+    },
+    constraintPath() {
+      if (this.isLogicalConstraint) {
+        return ['constraint', this.logicalConstraintOperatorShort, '@list'];
+      }
+      return ['constraint'];
+    },
     opList() {
       const filteredOperands = operandList.filter((value, index, arr) => 
         value != 'Nutzungsdauer' && 
@@ -76,33 +100,55 @@ export default {
     opMapping() {
       return operandMapping;
     },
+    logicalConstraintOperatorText() {
+      if (!this.policy.constraint) {
+        return null;
+      }
+
+      return logicalOperatorList[this.logicalConstraintOperatorShort].text;
+    },
+    logicalConstraintOperatorShort() {
+      if (!this.policy.constraint) {
+        return null;
+      }
+
+      let op = Object.keys(this.policy.constraint)[0];
+      if (op == undefined) {
+        return Object.keys(logicalOperatorList)[0];
+      }
+      return op;
+    },
   },
   methods: {
-    showConstraintChooser() {
-      this.displayConstraintChooser = true;
-    },
-    hideConstraintChooser() {
-      this.displayConstraintChooser = false;
-    },
-    addConstraint(constraint) {
-      this.hideConstraintChooser();
-      this.constraints.push(constraint);
-    },
-    removeConstraint(index) {
-      this.constraints.splice(index, 1);
-    },
-    description(constraint) {
-      let desc = constraint.leftOperand;
-      desc += ` ${
-        operatorList.find(op => op.identifier === constraint.operator).symbol
-      }`;
-      if (Array.isArray(constraint.rightOperand)) {
-        desc += ` ${constraint.rightOperand.join(', ')}`;
-      } else {
-        desc += ` ${constraint.rightOperand['@value']}`;
-        desc += ` ${constraint.unit}`;
+
+    // constraints
+    addConstraint() {
+      if (!this.constraints) {
+        Vue.set(this.policy, 'constraint', []);
       }
-      return desc;
+
+      // make use of the logical operator to combine more than one constraint
+      if (this.constraints.length == 1) {
+        const constraint = this.constraints;
+        Vue.set(this.policy, 'constraint', {});
+        Vue.set(this.policy.constraint, this.logicalConstraintOperatorShort, { '@list': constraint });
+      }
+
+      this.constraints.push(null);
+    },
+    nextLogicalConstraintOperator() {
+      const list = this.policy.constraint[this.logicalConstraintOperatorShort];
+      const oldOp = this.logicalConstraintOperatorShort;
+
+      Vue.delete(this.policy.constraint, this.logicalConstraintOperatorShort);
+
+      let keys = Object.keys(logicalOperatorList);
+      // get the index of the current operator
+      let index = keys.indexOf(oldOp);
+      // the new logical operator is just the next one in the list
+      let nextOp = keys[(index + 1) % keys.length];
+      
+      Vue.set(this.policy.constraint, nextOp, list);
     },
   },
 };
@@ -114,23 +160,29 @@ export default {
   width: 175px;
 }
 
-.constraints {
-  border: 1px solid gray;
-  width: 300px;
-  margin: 8px;
-  margin-left: 0px;
-  padding: 20px;
-  position: relative;
-}
-
 .add-constraint {
   margin-left: 0px;
   margin-bottom: 20px;
+  padding: 10px 15px;
 }
 
-.remove-constraint {
-  position: absolute;
-  right: 0px;
-  top: 0px;
+.logical-operator {
+  text-decoration: none;
+  padding: 8px;
+  margin: 2px;
+  font-weight: bold;
+  color: #1f3b70;
+
+  /* disable text selection highlighting */
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+.logical-operator:hover {
+  cursor: pointer;
 }
 </style>
