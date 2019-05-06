@@ -1,19 +1,26 @@
 <template>
   <div>
     <BaseButton id="dropdown-button" input @click="clicked()">
-    {{ selectedOption }} 
-    <i id="dropdown-icon" class="fas fa-caret-down"></i>
+      {{ selectedOption }}
+      <i id="dropdown-icon" class="fas fa-caret-down" />
     </BaseButton>
 
-    <div v-if="displayList" class="dropdown"
-    :style="{ width: this.width }">
-      <ul v-closable="{ exclude: ['dropdown-button', 'dropdown-icon'], 
-                        handler: 'onOutsideClick'}">
+    <div
+      v-if="shouldDisplayList"
+      class="dropdown"
+      :style="{ width: this.width }"
+    >
+      <ul
+        v-closable="{ exclude: ['dropdown-button', 'dropdown-icon'],
+                      handler: 'onOutsideClick'}"
+      >
 
-        <li v-for="(option, index) in list"
-        v-bind:key="index"
-        @click="selected(index)">
-        {{ list[index] }}
+        <li
+          v-for="(option, index) in list"
+          :key="index"
+          @click="showList = false; selectedOption = option"
+        >
+          {{ option }}
         </li>
       </ul>
     </div>
@@ -21,12 +28,12 @@
 </template>
 
 <script>
-import BaseButton from "./BaseButton.vue";
-import Vue from "vue";
+import Vue from 'vue';
+import BaseButton from './BaseButton.vue';
 
 let handleOutsideClick;
 Vue.directive('closable', {
-  bind (el, binding, vnode) {
+  bind(el, binding, vnode) {
     // Here's the click/touchstart handler
     // (it is registered below)
     handleOutsideClick = (e) => {
@@ -36,19 +43,19 @@ Vue.directive('closable', {
       const { exclude, handler } = binding.value;
       // This variable indicates if the clicked element is excluded
       let clickedOnExcludedEl = false;
-      exclude.forEach(excludeId => {
+      exclude.forEach((excludeId) => {
         // We only run this code if we haven't detected
         // any excluded element yet
-        if (!clickedOnExcludedEl) {            
+        if (!clickedOnExcludedEl) {
           // See if this excluded element
-          // is the same element the user just clicked on          
+          // is the same element the user just clicked on
           if (!e.target.id) {
             clickedOnExcludedEl = false;
           } else {
             clickedOnExcludedEl = excludeId == e.target.id;
-          }               
+          }
         }
-      })
+      });
       // We check to see if the clicked element is not
       // the dialog element and not excluded
       if (!el.contains(e.target) && !clickedOnExcludedEl) {
@@ -57,15 +64,15 @@ Vue.directive('closable', {
         // from the same component this directive is used in
         vnode.context[handler]();
       }
-    }
+    };
     // Register click/touchstart event listeners on the whole page
     document.addEventListener('click', handleOutsideClick);
   },
-  unbind () {
+  unbind() {
     // If the element that has v-closable is removed, then
     // unbind click/touchstart listeners from the whole page
     document.removeEventListener('click', handleOutsideClick);
-  }
+  },
 });
 
 export default {
@@ -76,7 +83,11 @@ export default {
   props: {
     list: {
       type: Array,
-      required: true
+      required: true,
+    },
+    initValue: {
+      type: String,
+      required: false,
     },
     width: {
       default: '200px',
@@ -90,18 +101,6 @@ export default {
       selectedListOptionIndex: 0,
     };
   },
-  methods: {
-    clicked() {
-      this.showList = !this.showList;
-    },
-    selected(index) {
-      this.selectedListOptionIndex = index;
-      this.showList = false;
-    },
-    onOutsideClick() {
-      this.showList = false;
-    }
-  },
   computed: {
     selectedOption: {
       get() {
@@ -109,12 +108,24 @@ export default {
       },
       set(option) {
         this.selectedListOptionIndex = this.list.indexOf(option);
-      }
+        this.$emit('selected', option);
+      },
     },
-    displayList() {
+    shouldDisplayList() {
       return this.showList;
-    }
-  }
+    },
+  },
+  created() {
+    this.selectedOption = this.initValue;
+  },
+  methods: {
+    clicked() {
+      this.showList = !this.showList;
+    },
+    onOutsideClick() {
+      this.showList = false;
+    },
+  },
 };
 </script>
 

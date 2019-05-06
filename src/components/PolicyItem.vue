@@ -1,13 +1,18 @@
 <template>
   <div>
-    <div class="input-container id-input"> 
+    <div class="input-container id-input">
       ID der Lizenz:
-      <BaseInput v-model="policy['uid']" undercover class="input"/>
+      <BaseInput v-model="policy['uid']" undercover class="input" />
     </div>
 
-    <div class="input-container"> 
-      <BaseDropdown class="dropdown-button" v-bind:list="assetOptions"></BaseDropdown>         
-      <BaseInput v-model="assetId" undercover class="input"/>
+    <div class="input-container">
+      <BaseDropdown
+        class="dropdown-button"
+        :list="assetOptions"
+        :init-value="assetLabel"
+        @selected="assetTypeSelected($event)"
+      />
+      <BaseInput v-model="assetId" undercover class="input" />
     </div>
 
     <div class="constraints-container">
@@ -16,7 +21,7 @@
 
       <ul>
         <li v-for="(constraint, index) in constraints" :key="index">
-          <ConstraintItem :policy="policy" :path="[...constraintPath, index]"/>
+          <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
           <BaseButton
             v-if="isLogicalConstraint && index < constraints.length - 1"
             textlike
@@ -28,45 +33,45 @@
 
       <!-- add new constraint -->
       <BaseButton class="add-constraint" type="button" @click="addConstraint()">
-        <i class="fas fa-plus"/>
+        <i class="fas fa-plus" />
       </BaseButton>
     </div>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-import BaseInput from "./BaseInput.vue";
-import BaseChooser from "./BaseChooser.vue";
-import BaseButton from "./BaseButton.vue";
-import BaseDropdown from "./BaseDropdown.vue";
-import ConstraintItem from "./ConstraintItem.vue";
+import Vue from 'vue';
+import BaseInput from './BaseInput.vue';
+import BaseChooser from './BaseChooser.vue';
+import BaseButton from './BaseButton.vue';
+import BaseDropdown from './BaseDropdown.vue';
+import ConstraintItem from './ConstraintItem.vue';
 import {
   operandList,
   operandMapping,
   operatorList,
-  logicalOperatorList
-} from "../libs/odrl/constraints";
+  logicalOperatorList,
+} from '../libs/odrl/constraints';
 
 export default {
-  name: "PolicyItem",
+  name: 'PolicyItem',
   components: {
     BaseInput,
     BaseButton,
     BaseDropdown,
     BaseChooser,
-    ConstraintItem
+    ConstraintItem,
   },
   props: {
     policy: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      assetOptions: ["Medieninhalt", "Inhaltesammlung"],
-    }; 
+      assetOptions: ['Medieninhalt', 'Inhaltesammlung'],
+    };
   },
   computed: {
     constraints() {
@@ -75,7 +80,7 @@ export default {
       }
       if (this.isLogicalConstraint) {
         return this.policy.constraint[this.logicalConstraintOperatorShort][
-          "@list"
+          '@list'
         ];
       }
       return this.policy.constraint;
@@ -88,22 +93,21 @@ export default {
     },
     constraintPath() {
       if (this.isLogicalConstraint) {
-        return ["constraint", this.logicalConstraintOperatorShort, "@list"];
+        return ['constraint', this.logicalConstraintOperatorShort, '@list'];
       }
-      return ["constraint"];
+      return ['constraint'];
     },
     opList() {
       const filteredOperands = operandList.filter(
-        (value, index, arr) =>
-          value != "Nutzungsdauer" &&
-          value != "Nutzeranzahl" &&
-          value != "Speichermedium" &&
-          value != "Anteil" &&
-          value != "Anzahl" &&
-          value != "Auflösung" &&
-          value != "Teilnehmer" &&
-          value != "Verbreitungsmethode" &&
-          value != "Dateiformat"
+        (value, index, arr) => value != 'Nutzungsdauer'
+          && value != 'Nutzeranzahl'
+          && value != 'Speichermedium'
+          && value != 'Anteil'
+          && value != 'Anzahl'
+          && value != 'Auflösung'
+          && value != 'Teilnehmer'
+          && value != 'Verbreitungsmethode'
+          && value != 'Dateiformat',
       );
       return filteredOperands;
     },
@@ -129,13 +133,13 @@ export default {
       return op;
     },
     assetIsString() {
-      return typeof this.policy.target == "string";
+      return typeof this.policy.target === 'string';
     },
     assetLabel() {
       if (this.assetIsString) {
-        return "Medieninhalt";
+        return 'Medieninhalt';
       }
-      return "Inhaltesammlung";
+      return 'Inhaltesammlung';
     },
     assetId: {
       get() {
@@ -150,22 +154,22 @@ export default {
         } else {
           this.policy.target.uid = id;
         }
-      }
-    }
+      },
+    },
   },
   methods: {
     // constraints
     addConstraint() {
       if (!this.constraints) {
-        Vue.set(this.policy, "constraint", []);
+        Vue.set(this.policy, 'constraint', []);
       }
 
       // make use of the logical operator to combine more than one constraint
       if (this.constraints.length == 1) {
         const constraint = this.constraints;
-        Vue.set(this.policy, "constraint", {});
+        Vue.set(this.policy, 'constraint', {});
         Vue.set(this.policy.constraint, this.logicalConstraintOperatorShort, {
-          "@list": constraint
+          '@list': constraint,
         });
       }
 
@@ -187,17 +191,17 @@ export default {
     },
 
     // assets
-    switchAssetType() {
-      if (this.assetIsString) {
-        Vue.set(this.policy, "target", {
-          "@type": "AssetCollection",
-          uid: this.assetId
+    assetTypeSelected(type) {
+      if (type == 'Inhaltesammlung') {
+        Vue.set(this.policy, 'target', {
+          '@type': 'AssetCollection',
+          uid: this.assetId,
         });
-      } else {
-        Vue.set(this.policy, "target", this.assetId);
+      } else if (type == 'Medieninhalt') {
+        Vue.set(this.policy, 'target', this.assetId);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -221,7 +225,7 @@ export default {
 
 
 .asset-label-container {
-  display: inline-block; 
+  display: inline-block;
   width: 125px;
 }
 
