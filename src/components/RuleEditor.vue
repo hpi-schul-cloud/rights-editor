@@ -70,7 +70,8 @@ export default {
     return {
       editPath: [],
       policy: {
-        uid: '007-asdf-3ddfi',
+        uid: '',
+        target: '',
         follow(path) {
           return path.reduce((result, pathSegment) => result[pathSegment], this);
         },
