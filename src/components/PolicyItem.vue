@@ -1,32 +1,41 @@
 <template>
   <div>
-    <span class="guid-label">
+    <div class="input-container id-input">
       ID der Lizenz:
-      <BaseInput v-model="policy['uid']" undercover class="guid-input" />
-    </span>
+      <BaseInput v-model="policy['uid']" undercover class="input" />
+    </div>
 
-    <h2>Global geltende Einschränkungen hinzufügen...</h2>
-    Die Lizenz gilt nur, wenn <em v-if="isLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
+    <div class="input-container">
+      <BaseDropdown
+        class="dropdown-button"
+        :list="assetOptions"
+        :init-value="assetLabel"
+        @selected="assetTypeSelected($event)"
+      />
+      <BaseInput v-model="assetId" undercover class="input" />
+    </div>
 
-    <ul>
-      <li v-for="(constraint, index) in constraints" :key="index">
-        <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
-        <BaseButton
-          v-if="isLogicalConstraint && index < constraints.length - 1"
-          textlike
-          class="logical-operator"
-          @click="nextLogicalConstraintOperator()"
-        >
-          {{ logicalConstraintOperatorText }}
-        </BaseButton>
-      </li>
-    </ul>
+    <div class="constraints-container">
+      <h3>Global geltende Einschränkungen hinzufügen...</h3>Die Lizenz gilt nur, wenn
+      <em v-if="isLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
 
-    <!-- add new constraint -->
-    <BaseButton class="add-constraint" type="button" @click="addConstraint()">
-      <i class="fas fa-plus" />
-    </BaseButton>
+      <ul>
+        <li v-for="(constraint, index) in constraints" :key="index">
+          <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
+          <BaseButton
+            v-if="isLogicalConstraint && index < constraints.length - 1"
+            textlike
+            class="logical-operator"
+            @click="nextLogicalConstraintOperator()"
+          >{{ logicalConstraintOperatorText }}</BaseButton>
+        </li>
+      </ul>
 
+      <!-- add new constraint -->
+      <BaseButton class="add-constraint" type="button" @click="addConstraint()">
+        <i class="fas fa-plus" />
+      </BaseButton>
+    </div>
   </div>
 </template>
 
@@ -35,6 +44,7 @@ import Vue from 'vue';
 import BaseInput from './BaseInput.vue';
 import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
+import BaseDropdown from './BaseDropdown.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import {
   operandList,
@@ -48,6 +58,7 @@ export default {
   components: {
     BaseInput,
     BaseButton,
+    BaseDropdown,
     BaseChooser,
     ConstraintItem,
   },
@@ -59,7 +70,7 @@ export default {
   },
   data() {
     return {
-      selectedLogicalConstraint: 0,
+      assetOptions: ['Medieninhalt', 'Inhaltesammlung'],
     };
   },
   computed: {
@@ -68,7 +79,9 @@ export default {
         return null;
       }
       if (this.isLogicalConstraint) {
-        return this.policy.constraint[this.logicalConstraintOperatorShort]['@list'];
+        return this.policy.constraint[this.logicalConstraintOperatorShort][
+          '@list'
+        ];
       }
       return this.policy.constraint;
     },
@@ -85,15 +98,17 @@ export default {
       return ['constraint'];
     },
     opList() {
-      const filteredOperands = operandList.filter((value, index, arr) => value != 'Nutzungsdauer'
-        && value != 'Nutzeranzahl'
-        && value != 'Speichermedium'
-        && value != 'Anteil'
-        && value != 'Anzahl'
-        && value != 'Auflösung'
-        && value != 'Teilnehmer'
-        && value != 'Verbreitungsmethode'
-        && value != 'Dateiformat');
+      const filteredOperands = operandList.filter(
+        (value, index, arr) => value != 'Nutzungsdauer'
+          && value != 'Nutzeranzahl'
+          && value != 'Speichermedium'
+          && value != 'Anteil'
+          && value != 'Anzahl'
+          && value != 'Auflösung'
+          && value != 'Teilnehmer'
+          && value != 'Verbreitungsmethode'
+          && value != 'Dateiformat',
+      );
       return filteredOperands;
     },
     opMapping() {
@@ -117,9 +132,32 @@ export default {
       }
       return op;
     },
+    assetIsString() {
+      return typeof this.policy.target === 'string';
+    },
+    assetLabel() {
+      if (this.assetIsString) {
+        return 'Medieninhalt';
+      }
+      return 'Inhaltesammlung';
+    },
+    assetId: {
+      get() {
+        if (this.assetIsString) {
+          return this.policy.target;
+        }
+        return this.policy.target.uid;
+      },
+      set(id) {
+        if (this.assetIsString) {
+          this.policy.target = id;
+        } else {
+          this.policy.target.uid = id;
+        }
+      },
+    },
   },
   methods: {
-
     // constraints
     addConstraint() {
       if (!this.constraints) {
@@ -130,7 +168,9 @@ export default {
       if (this.constraints.length == 1) {
         const constraint = this.constraints;
         Vue.set(this.policy, 'constraint', {});
-        Vue.set(this.policy.constraint, this.logicalConstraintOperatorShort, { '@list': constraint });
+        Vue.set(this.policy.constraint, this.logicalConstraintOperatorShort, {
+          '@list': constraint,
+        });
       }
 
       this.constraints.push(null);
@@ -149,14 +189,53 @@ export default {
 
       Vue.set(this.policy.constraint, nextOp, list);
     },
+
+    // assets
+    assetTypeSelected(type) {
+      if (type == 'Inhaltesammlung') {
+        Vue.set(this.policy, 'target', {
+          '@type': 'AssetCollection',
+          uid: this.assetId,
+        });
+      } else if (type == 'Medieninhalt') {
+        Vue.set(this.policy, 'target', this.assetId);
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-.guid-input {
-  margin-left: 10px;
-  width: 175px;
+.id-input {
+  margin-left: 8px;
+}
+
+.input {
+  margin-left: 15px;
+  width: 185px;
+}
+
+.input-container {
+  margin-bottom: 25px;
+}
+
+.dropdown-button {
+  display: inline-block;
+}
+
+
+.asset-label-container {
+  display: inline-block;
+  width: 125px;
+}
+
+.base-button-textlike {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.constraints-container {
+  margin-top: 40px;
 }
 
 .add-constraint {
@@ -174,11 +253,11 @@ export default {
 
   /* disable text selection highlighting */
   -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
 }
 
 .logical-operator:hover {
