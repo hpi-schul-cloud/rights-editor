@@ -187,4 +187,28 @@ export const actionToRefinements = Object.freeze({
   Zitieren: {
     operands: [operandList[6]],
   },
+  archiving: {
+    operands: [operandList[5], operandList[6], operandList[7]],
+  },
+  editing: {
+    operands: [operandList[6]],
+  },
+  printing: {
+    operands: [operandList[6], operandList[7], operandList[8]],
+  },
+  copying: {
+    operands: [operandList[7], operandList[11]],
+  },
+  distributing: {
+    operands: [operandList[6], operandList[7], operandList[9], operandList[10], operandList[11]],
+  },
+  selling: {
+    operands: [operandList[12]],
+  },
+  demonstrating: {
+    operands: [operandList[6], operandList[7], operandList[9]],
+  },
+  quoting: {
+    operands: [operandList[6]],
+  },
 });

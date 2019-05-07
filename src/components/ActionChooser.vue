@@ -11,7 +11,7 @@
           :class="{selected: currentSelected === index}"
           @click="actionClicked(index)"
         >
-          {{ action }}
+          {{ action[lang] }}
         </li>
       </ul>
     </template>
@@ -32,6 +32,7 @@
 import BaseButton from './BaseButton.vue';
 import BaseModal from './BaseModal.vue';
 import { actionList } from '../libs/odrl/actions.js';
+import { lang } from '../libs/language/language.js';
 
 export default {
   name: 'ActionChooser',
@@ -46,6 +47,9 @@ export default {
     };
   },
   computed: {
+    lang() {
+      return lang;
+    },
     actions() {
       return actionList;
     },
@@ -59,7 +63,7 @@ export default {
       this.$emit('abort');
     },
     chosen(action) {
-      this.$emit('chosen', this.currentAction);
+      this.$emit('chosen', this.currentAction[lang]);
     },
   },
 };

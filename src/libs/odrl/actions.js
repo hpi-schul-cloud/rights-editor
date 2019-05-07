@@ -1,12 +1,12 @@
 export const actionList = Object.freeze([
-  'Archivieren',
-  'Bearbeiten',
-  'Drucken',
-  'Kopieren',
-  'Verbreiten',
-  'Verkaufen',
-  'Vorführen',
-  'Zitieren',
+  { id: 0, de: 'Archivieren', en: 'archiving' },
+  { id: 1, de: 'Bearbeiten', en: 'editing' },
+  { id: 2, de: 'Drucken', en: 'printing' },
+  { id: 3, de: 'Kopieren', en: 'copying' },
+  { id: 4, de: 'Verbreiten', en: 'distributing' },
+  { id: 5, de: 'Verkaufen', en: 'selling' },
+  { id: 6, de: 'Vorführen', en: 'demonstrating' },
+  { id: 7, de: 'Zitieren', en: 'quoting' },
 ]);
 
 class Action {
