@@ -23,9 +23,10 @@
 </template>
 
 <script>
-import { lang } from '../../libs/language/language.js';
+import { lang, placeholder } from '../../libs/language/language.js';
 import { RuleTypes } from '../../libs/odrl/rules';
 import PolicyTreeNode from './PolicyTreeNode.vue';
+import { actionList } from '../../libs/odrl/actions.js';
 
 export default {
   name: 'PolicyTreeRuleItem',
@@ -57,7 +58,11 @@ export default {
       if (Array.isArray(action)) {
         action = action[0]['rdf:value'];
       }
-      return [`${rType.name[lang]}: `, action];
+      if (action && action != placeholder) {
+        let actionLabel = actionList.find(obj => { return obj.odrl === action })[lang];
+        return [`${rType.name[lang]}: `, actionLabel];
+      }
+      return [`${rType.name[lang]}: `, placeholder];
     },
     subruleType() {
       const pathLen = this.path.length;

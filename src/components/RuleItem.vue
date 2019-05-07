@@ -334,9 +334,9 @@ export default {
     },
     getSubruleActionLabel(subrule) {
       if (Array.isArray(subrule.action)) {
-        return subrule.action[0]['rdf:value'];
+        return actionList.find(obj => { return obj.odrl === subrule.action[0]['rdf:value'] })[lang];
       }
-      return subrule.action;
+      return actionList.find(obj => { return obj.odrl === subrule.action })[lang];        
     },
 
     // constraints
