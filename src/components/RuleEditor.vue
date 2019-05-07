@@ -7,13 +7,16 @@
     </div>
     <div class="editor-header">
       <BaseButton @click="newPermission()">
-        Erlaubnis
+        <template v-if="lang == 'de'">Erlaubnis</template>
+        <template v-if="lang == 'en'">Permission</template>
       </BaseButton>
       <BaseButton @click="newObligation()">
-        Pflicht
+        <template v-if="lang == 'de'">Pflicht</template>
+        <template v-if="lang == 'en'">Obligation</template>
       </BaseButton>
       <BaseButton @click="newProhibition()">
-        Verbot
+        <template v-if="lang == 'de'">Verbot</template>
+        <template v-if="lang == 'en'">Prohibition</template>
       </BaseButton>
     </div>
 
@@ -50,6 +53,7 @@
 </template>
 
 <script>
+import { lang } from '../libs/language/language.js';
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
@@ -79,6 +83,9 @@ export default {
     };
   },
   computed: {
+    lang() {
+      return lang;
+    },
     showRulePane() {
       return this.editPath.length > 0;
     },

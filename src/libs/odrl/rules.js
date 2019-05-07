@@ -1,6 +1,6 @@
 export const RuleTypes = Object.freeze({
   permission: {    
-    name: { de: 'Erlaubnis', en: 'permission' },
+    name: { de: 'Erlaubnis', en: 'Permission' },
     gender: 'f',
     hasParentRule: false,
     subrule: 'duty',
@@ -9,7 +9,7 @@ export const RuleTypes = Object.freeze({
     icon: 'far fa-check-circle',
   },
   obligation: {
-    name: { de: 'Pflicht', en: 'obligation'},
+    name: { de: 'Pflicht', en: 'Obligation'},
     gender: 'f',
     hasParentRule: false,
     subrule: 'consequence',
@@ -18,7 +18,7 @@ export const RuleTypes = Object.freeze({
     icon: 'far fa-handshake',
   },
   prohibition: {
-    name: { de: 'Verbot', en: 'prohibition' },
+    name: { de: 'Verbot', en: 'Prohibition' },
     gender: 'n',
     hasParentRule: false,
     subrule: 'remedy',
@@ -27,8 +27,8 @@ export const RuleTypes = Object.freeze({
     icon: 'fas fa-ban',
   },
   duty: {
-    name: { de: 'Bedingung', en: 'duty' },
-    pluralName: { de: 'Bedingungen', en: 'duties' },
+    name: { de: 'Bedingung', en: 'Duty' },
+    pluralName: { de: 'Bedingungen', en: 'Duties' },
     gender: 'f',
     hasParentRule: true,
     subrule: 'consequence',
@@ -37,8 +37,8 @@ export const RuleTypes = Object.freeze({
     icon: 'far fa-hand-point-up',
   },
   consequence: {
-    name: { de: 'Konsequenz', en: 'consequence' },
-    pluralName: { de: 'Konsequenzen', en: 'consequences' },
+    name: { de: 'Konsequenz', en: 'Consequence' },
+    pluralName: { de: 'Konsequenzen', en: 'Consequences' },
     gender: 'f',
     hasParentRule: true,
     subrule: '',
@@ -47,8 +47,8 @@ export const RuleTypes = Object.freeze({
     icon: 'fas fa-gavel',
   },
   remedy: {
-    name: { de: 'Strafe', en: 'remedy' },
-    pluralName: { de: 'Strafen', en: 'remedies' },
+    name: { de: 'Strafe', en: 'Remedy' },
+    pluralName: { de: 'Strafen', en: 'Remedies' },
     gender: 'f',
     hasParentRule: true,
     subrule: '',
