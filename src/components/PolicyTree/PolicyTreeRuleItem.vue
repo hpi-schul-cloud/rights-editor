@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { lang } from '../../libs/language/language.js';
 import { RuleTypes } from '../../libs/odrl/rules';
 import PolicyTreeNode from './PolicyTreeNode.vue';
 
@@ -56,7 +57,7 @@ export default {
       if (Array.isArray(action)) {
         action = action[0]['rdf:value'];
       }
-      return [`${rType.name}: `, action];
+      return [`${rType.name[lang]}: `, action];
     },
     subruleType() {
       const pathLen = this.path.length;

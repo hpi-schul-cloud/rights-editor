@@ -23,8 +23,7 @@
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import ActionChooser from './ActionChooser.vue';
-
-const placeholderText = '<leer>';
+import { placeholder } from '../libs/language/language.js';
 
 export default {
   name: 'ActionItem',
@@ -59,7 +58,7 @@ export default {
     action: {
       get() {
         if (!this.rule.action) {
-          Vue.set(this.rule, 'action', placeholderText);
+          Vue.set(this.rule, 'action', placeholder);
         }
         if (Array.isArray(this.rule.action)) {
           return this.rule.action[0]['rdf:value'];
@@ -71,7 +70,7 @@ export default {
       },
     },
     displayActionChooser() {
-      return this.actionChooserShouldDisplay || this.rule.action === placeholderText;
+      return this.actionChooserShouldDisplay || this.rule.action === placeholder;
     },
   },
   methods: {
@@ -82,7 +81,7 @@ export default {
       this.actionChooserShouldDisplay = false;
     },
     choosingAborted() {
-      if (this.rule.action === placeholderText) {
+      if (this.rule.action === placeholder) {
         this.removeCallback();
       } else {
         this.hideActionChooser();

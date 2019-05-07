@@ -1,7 +1,7 @@
 <template>
   <div class="tree">
     <PolicyTreeNode
-      label="Lizenz"
+      :label="treeNodeLabel"
       :path="[]"
       :selected-path="selectedPath"
       @followPath="$emit('followPath', $event)"
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { lang } from '../../libs/language/language.js';
 import PolicyTreeRuleItem from './PolicyTreeRuleItem.vue';
 import PolicyTreeNode from './PolicyTreeNode.vue';
 
@@ -62,6 +63,15 @@ export default {
       required: true,
     },
   },
+  computed: {
+    treeNodeLabel() {
+      if (lang == 'de') {
+        return "Lizenz";
+      } else if (lang == 'en') {
+        return "License";
+      }
+    }
+  }
 };
 </script>
 

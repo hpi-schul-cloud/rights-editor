@@ -1,7 +1,7 @@
 <template>
   <div class="rule-container">
     <div class="rule-header">
-      <h3>{{ ruleInfo.name }} <i :class="ruleInfo.icon" /></h3>
+      <h3>{{ ruleInfo.name[lang] }} <i :class="ruleInfo.icon" /></h3>
       <BaseButton remove class="remove-button" v-bind:title="removeRuleText" @click="removeRule()">
         <i class="far fa-trash-alt" />
       </BaseButton>
@@ -10,11 +10,11 @@
     <!-- display action -->
     <p class="actions">
       <!-- main explanation -->
-      <EmbedInText text-before="Das" :text-after="ruleInfo.description">
+      <EmbedInText :text-before="sentenceStart" :text-after="ruleInfo.description[lang]">
         <ActionItem :policy="policy" :path="[...path, 'action']" :remove-callback="removeRule" />
       </EmbedInText>
       <!-- additional explanation -->
-      <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddon[0]" :text-after="ruleInfo.descriptionAddon[1]">
+      <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddon[lang][0]" :text-after="ruleInfo.descriptionAddon[lang][1]">
         {{ articles[parentRuleInfo.gender].def }}
         <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentRuleInfo.name }}</a>
       </EmbedInText>
@@ -22,7 +22,10 @@
 
     <!-- display and edit refinements -->
     <p class="refinements">
-      Das <em>{{ actionLabel }}</em> darf nur auf die folgende Art und Weise erfolgen...
+      {{ sentenceStart }}
+      <em>{{ actionLabel }}</em> 
+      <template v-if="lang == 'de'"> darf nur auf die folgende Art und Weise erfolgen...</template>
+      <template v-if="lang == 'en'"> may only be done in the following manner...</template>
       <em v-if="isLogicalRefinement && logicalRefinementOperatorText == 'ODER'">entweder</em>
     </p>
 
@@ -42,12 +45,14 @@
 
     <!-- add new refinement -->
     <BaseButton class="add-button" @click="addRefinement()">
-      Verfeinerung hinzufügen
+      <template v-if="lang == 'de'">Verfeinerung hinzufügen</template>
+      <template v-if="lang == 'en'">add refinement</template>
     </BaseButton>
 
     <!-- display and edit constraints -->
     <p class="constraints">
-      Insgesamt gilt {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em> nur, wenn...
+      <template v-if="lang == 'de'">Insgesamt gilt {{ articles[ruleInfo.gender].def[lang] }} <em>{{ ruleInfo.name[lang] }}</em> nur, wenn...</template>
+      <template v-if="lang == 'en'">In general, {{ articles[ruleInfo.gender].def[lang] }} <em>{{ ruleInfo.name[lang] }}</em> only applies, if...</template>
       <em v-if="isLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
     </p>
 
@@ -67,20 +72,26 @@
 
     <!-- add new constraint -->
     <BaseButton class="add-button" @click="addConstraint()">
-      Einschränkung hinzufügen
+      <template v-if="lang == 'de'">Einschränkung hinzufügen</template>
+      <template v-if="lang == 'en'">add constraint</template>
     </BaseButton>
 
     <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
 
-      Optional kann um folgende Regeln erweitert werden:
+      <template v-if="lang == 'de'">Optional kann um folgende Regeln erweitert werden:</template>
+      <template v-if="lang == 'en'">Optionally, you can extend by the following rules:</template>
       <p>
-        <BaseButton class="add-button" :name="subruleInfo.pluralName" @click="appendNewSubrule">
-          {{ subruleInfo.name }} hinzufügen</BaseButton>
+        <BaseButton class="add-button" :name="subruleInfo.pluralName[lang]" @click="appendNewSubrule">
+          <template v-if="lang == 'de'">{{ subruleInfo.name[lang] }} hinzufügen</template>
+          <template v-if="lang == 'en'">add {{ subruleInfo.name[lang] }}</template>
+        </BaseButton>
 
-        {{ subruleInfo.pluralName }} sind Pflichten, die geleistet werden müssen,
-        <EmbedInText :text-before="subruleInfo.descriptionAddon[0]" :text-after="subruleInfo.descriptionAddon[1]">
-          {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em>
+        {{ subruleInfo.pluralName[lang] }} 
+        <template v-if="lang == 'de'">sind Pflichten, die geleistet werden müssen,</template>
+        <template v-if="lang == 'en'">are obligations, that must be done,</template>
+        <EmbedInText :text-before="subruleInfo.descriptionAddon[lang][0]" :text-after="subruleInfo.descriptionAddon[lang][1]">
+          {{ articles[ruleInfo.gender].def[lang] }} <em>{{ ruleInfo.name[lang] }}</em>
         </EmbedInText>
       </P>
 
@@ -106,7 +117,7 @@ import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
-import { articles as articleMapping } from '../libs/language/language.js';
+import { articles as articleMapping, lang } from '../libs/language/language.js';
 import { logicalOperatorList } from '../libs/odrl/constraints.js';
 
 export default {
@@ -129,6 +140,15 @@ export default {
     },
   },
   computed: {
+    lang() {
+      return lang;
+    },
+    sentenceStart() {
+      if (lang == 'de')  {
+        return "Das";
+      }
+      return "";
+    },
     rule() {
       return this.policy.follow(this.path);
     },
@@ -137,7 +157,12 @@ export default {
       return RuleTypes[ruleTypeName];
     },
     removeRuleText() {
-      return this.ruleInfo.name + " löschen";
+      const r = this.ruleInfo.name[lang]; 
+      if (lang == 'de') {
+        return r + " löschen";
+      } else if (lang == 'en') {
+        return "delete " + r;
+      }
     },
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];

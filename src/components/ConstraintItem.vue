@@ -32,13 +32,13 @@
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseChooser from './BaseChooser.vue';
+import { placeholder } from '../libs/language/language.js';
 import {
   constraintOnlyOperandList,
   operandMapping,
   operatorList,
 } from '../libs/odrl/constraints';
 
-const placeholder = '<leer>';
 
 export default {
   name: 'ConstraintItem',
