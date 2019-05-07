@@ -2,12 +2,13 @@
   <div>
     <div class="input-container id-input">
       <template v-if="lang == 'de'">ID der Lizenz:</template>
-      <template v-if="lang == 'en'">license id:</template>
+      <template v-if="lang == 'en'">License ID:</template>
       <BaseInput v-model="policy['uid']" undercover class="input" />
     </div>
 
     <div class="input-container">
       <BaseDropdown
+        :width="'175px'"
         class="dropdown-button"
         :list="assetOptions[lang]"
         :init-value="assetLabel"

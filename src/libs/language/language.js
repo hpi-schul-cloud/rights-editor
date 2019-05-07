@@ -13,11 +13,11 @@ export const articles = Object.freeze({
   },
 });
 
-export function startSentence(word) {
+/*function startSentence(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
-}
-
-const placeholders = { de: '<leer>', en: '<empty>' };
+}*/
 
 export const lang = 'en';
+
+const placeholders = { de: '<leer>', en: '<empty>' };
 export const placeholder = placeholders[lang];

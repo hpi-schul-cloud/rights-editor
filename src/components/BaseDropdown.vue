@@ -5,6 +5,7 @@
       input
       :class="{ 'dropdown-button-drop': shouldDisplayList }"
       @click="clicked()"
+      :style="{ width: this.width }"
     >
       {{ selectedOption }}
       <i id="dropdown-icon" class="fas fa-caret-down" />
@@ -139,7 +140,15 @@ export default {
   margin-left: 10px;
 }
 
+#dropdown-icon {
+  text-align: right;
+  position: absolute;
+  right: 10px;
+}
+
 #dropdown-button {
+  position: relative;
+  text-align: left;
   margin-bottom: 0px;
   cursor: pointer;
 }

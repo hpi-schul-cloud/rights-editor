@@ -162,7 +162,6 @@ export const operandMapping = {
   },
 };
 
-// TODO: do this better!
 export const actionToRefinements = Object.freeze({
   // german version
   Archivieren: {

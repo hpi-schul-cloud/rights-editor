@@ -10,19 +10,19 @@
     <!-- display action -->
     <p class="actions">
       <!-- main explanation -->
-      <EmbedInText :text-before="sentenceStart" :text-after="ruleInfo.description[lang]">
+      <EmbedInText :text-ahead="textAheadOfActionLabel" :text-after="ruleInfo.description[lang]">
         <ActionItem :policy="policy" :path="[...path, 'action']" :remove-callback="removeRule" />
       </EmbedInText>
       <!-- additional explanation -->
-      <EmbedInText v-if="ruleInfo.hasParentRule" :text-before="ruleInfo.descriptionAddon[lang][0]" :text-after="ruleInfo.descriptionAddon[lang][1]">
-        {{ articles[parentRuleInfo.gender].def }}
-        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentRuleInfo.name }}</a>
+      <EmbedInText v-if="ruleInfo.hasParentRule" :text-ahead="ruleInfo.descriptionAddon[lang][0]" :text-after="ruleInfo.descriptionAddon[lang][1]">
+        {{ articles[parentRuleInfo.gender].def[lang] }}
+        <a href="#" @click="$emit('followLink', path.slice(0, path.length - 2))">{{ parentRuleInfo.name[lang] }}</a>
       </EmbedInText>
     </p>
 
     <!-- display and edit refinements -->
     <p class="refinements">
-      {{ sentenceStart }}
+      {{ textAheadOfActionLabel }}
       <em>{{ actionLabel }}</em> 
       <template v-if="lang == 'de'"> darf nur auf die folgende Art und Weise erfolgen...</template>
       <template v-if="lang == 'en'"> may only be done in the following manner...</template>
@@ -96,15 +96,23 @@
         {{ subruleInfo.pluralName[lang] }} 
         <template v-if="lang == 'de'">sind Pflichten, die geleistet werden müssen,</template>
         <template v-if="lang == 'en'">are obligations, that must be done,</template>
-        <EmbedInText :text-before="subruleInfo.descriptionAddon[lang][0]" :text-after="subruleInfo.descriptionAddon[lang][1]">
+        <EmbedInText :text-ahead="subruleInfo.descriptionAddon[lang][0]" :text-after="subruleInfo.descriptionAddon[lang][1]">
           {{ articles[ruleInfo.gender].def[lang] }} <em>{{ ruleInfo.name[lang] }}</em>
         </EmbedInText>
       </P>
 
       <!-- list all available subrules -->
       <p v-if="subrules">
-        Die {{ subrules.length == 1 ? subruleInfo.name : subruleInfo.pluralName }} diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
-        {{ subrules.length === 1 ? 'ist' : 'sind' }}<br>
+        <template v-if="lang == 'de'">Die </template>        
+        <template v-if="lang == 'en'">The </template>
+        {{ subrules.length == 1 ? subruleInfo.name[lang] : subruleInfo.pluralName[lang] }}
+        <template v-if="lang == 'de'">diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name[lang] }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
+          {{ subrules.length === 1 ? 'ist' : 'sind' }}<br>
+        </template>
+        <template v-if="lang == 'en'">of this {{ ruleInfo.name[lang] }}
+          {{ subrules.length === 1 ? 'is' : 'are' }}<br>
+        </template>
+        
         <span v-for="(subrule, index) in subrules" :key="index">
           <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ getSubruleActionLabel(subrule) }}</a>
           <span v-if="index + 1 < subrules.length">, <br></span>
@@ -149,7 +157,7 @@ export default {
     lang() {
       return lang;
     },
-    sentenceStart() {
+    textAheadOfActionLabel() {
       if (lang == 'de')  {
         return "Das";
       }
