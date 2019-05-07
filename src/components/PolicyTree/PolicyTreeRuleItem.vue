@@ -23,10 +23,11 @@
 </template>
 
 <script>
+import PolicyTreeNode from './PolicyTreeNode.vue';
 import { lang, placeholder } from '../../libs/language/language.js';
 import { RuleTypes } from '../../libs/odrl/rules';
-import PolicyTreeNode from './PolicyTreeNode.vue';
 import { actionList } from '../../libs/odrl/actions.js';
+import { actionToRefinements } from '../../libs/odrl/constraints';
 
 export default {
   name: 'PolicyTreeRuleItem',
@@ -55,14 +56,17 @@ export default {
       const pathLen = this.path.length;
       const rType = RuleTypes[this.path[pathLen - 2]];
       let action = this.rule.action;
+
       if (Array.isArray(action)) {
         action = action[0]['rdf:value'];
       }
+
+      let actionLabel = placeholder;
       if (action && action != placeholder) {
-        let actionLabel = actionList.find(obj => { return obj.odrl === action })[lang];
-        return [`${rType.name[lang]}: `, actionLabel];
+        actionLabel = actionList.find(obj => { return obj.odrl === action })[lang];
       }
-      return [`${rType.name[lang]}: `, placeholder];
+      
+      return [`${rType.name[lang]}: `, actionLabel];
     },
     subruleType() {
       const pathLen = this.path.length;

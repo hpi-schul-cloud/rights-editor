@@ -29,7 +29,7 @@
 
       <ul>
         <li v-for="(constraint, index) in constraints" :key="index">
-          <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
+          <ConstraintItem :policy="policy" :path="[...constraintPath, index]"/>
           <BaseButton
             v-if="isLogicalConstraint && index < constraints.length - 1"
             textlike
@@ -55,12 +55,7 @@ import BaseButton from './BaseButton.vue';
 import BaseDropdown from './BaseDropdown.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import { lang } from '../libs/language/language.js';
-import {
-  operandList,
-  operandMapping,
-  operatorList,
-  logicalOperatorList,
-} from '../libs/odrl/constraints';
+import { logicalOperatorList } from '../libs/odrl/constraints';
 
 export default {
   name: 'PolicyItem',
@@ -108,26 +103,6 @@ export default {
         return ['constraint', this.logicalConstraintOperatorShort, '@list'];
       }
       return ['constraint'];
-    },
-    opList() {
-      const filteredOperands = operandList.filter(
-        (value, index, arr) => 
-
-        // TODO: do this better!
-             value != 'Nutzungsdauer'
-          && value != 'Nutzeranzahl'
-          && value != 'Speichermedium'
-          && value != 'Anteil'
-          && value != 'Anzahl'
-          && value != 'Auflösung'
-          && value != 'Teilnehmer'
-          && value != 'Verbreitungsmethode'
-          && value != 'Dateiformat',
-      );
-      return filteredOperands;
-    },
-    opMapping() {
-      return operandMapping;
     },
     logicalConstraintOperatorText() {
       if (!this.policy.constraint) {
