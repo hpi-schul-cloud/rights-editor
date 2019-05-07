@@ -3,7 +3,7 @@
     <BaseChooser
       v-if="displayConstraintChooser"
       :object-to-edit="constraint"
-      :name="'Einschränkung'"
+      :name="constraintLabel"
       :operand-list="opList"
       :operand-mapping="opMapping"
       @chosen="hideConstraintChooser(); constraint = $event"
@@ -32,7 +32,7 @@
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseChooser from './BaseChooser.vue';
-import { placeholder } from '../libs/language/language.js';
+import { placeholder, lang } from '../libs/language/language.js';
 import {
   constraintOnlyOperandList,
   operandMapping,
@@ -69,6 +69,13 @@ export default {
       set(newConstraint) {
         Vue.set(this.constraintParent, this.path[this.path.length - 1], newConstraint);
       },
+    },
+    constraintLabel() {
+      if (lang == 'de') {
+        return 'Einschränkung';
+      } else if (lang == 'en') {
+        return 'Constraint';
+      }
     },
     constraintParent() {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);

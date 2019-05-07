@@ -2,8 +2,8 @@
   <div class="action-container">
     <ActionChooser
       v-if="displayActionChooser"
-      @chosen="hideActionChooser(); action = $event"
-      @abort="choosingAborted()"
+      @chosen="chosen($event)"
+      @abort="aborted()"
     />
 
     <!-- display and edit action -->
@@ -14,7 +14,7 @@
       type="button"
       @click="showActionChooser()"
     >
-      {{ action }}
+      {{ actionLabel }}
     </BaseButton>
   </div>
 </template>
@@ -23,7 +23,9 @@
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import ActionChooser from './ActionChooser.vue';
+import { lang } from '../libs/language/language.js';
 import { placeholder } from '../libs/language/language.js';
+import { actionList } from '../libs/odrl/actions.js';
 
 export default {
   name: 'ActionItem',
@@ -51,6 +53,9 @@ export default {
     };
   },
   computed: {
+    lang() {
+      return lang;
+    },
     rule() {
       const rulePath = this.path.slice(0, this.path.length - 1);
       return this.policy.follow(rulePath);
@@ -69,6 +74,12 @@ export default {
         this.rule.action = newAction;
       },
     },
+    actionLabel() {
+      if (this.action && this.action != placeholder) {
+        return actionList.find(obj => { return obj.odrl === this.action })[lang];
+      }
+      return placeholder;
+    },
     displayActionChooser() {
       return this.actionChooserShouldDisplay || this.rule.action === placeholder;
     },
@@ -80,7 +91,11 @@ export default {
     hideActionChooser() {
       this.actionChooserShouldDisplay = false;
     },
-    choosingAborted() {
+    chosen(actionObj) {
+      this.hideActionChooser();
+      this.action = actionObj.odrl;
+    },
+    aborted() {
       if (this.rule.action === placeholder) {
         this.removeCallback();
       } else {

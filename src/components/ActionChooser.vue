@@ -1,7 +1,8 @@
 <template>
   <BaseModal>
     <template v-slot:header>
-      <h1>Aktion auswählen</h1>
+      <h1 v-if="lang == 'de'">Aktion auswählen</h1>
+      <h1 v-if="lang == 'en'">Choose an Action</h1>
     </template>
     <template v-slot:body>
       <ul class="actions-list">
@@ -43,7 +44,7 @@ export default {
   data() {
     return {
       currentSelected: null,
-      currentAction: '',
+      currentAction: {},
     };
   },
   computed: {
@@ -63,7 +64,7 @@ export default {
       this.$emit('abort');
     },
     chosen(action) {
-      this.$emit('chosen', this.currentAction[lang]);
+      this.$emit('chosen', this.currentAction);
     },
   },
 };

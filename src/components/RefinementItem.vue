@@ -3,7 +3,7 @@
     <BaseChooser
       v-if="displayRefinementChooser"
       :object-to-edit="refinement"
-      :name="'Verfeinerung'"
+      :name="refinementLabel"
       :operand-list="opList"
       :operand-mapping="opMapping"
       @chosen="hideRefinementChooser(); refinement = $event"
@@ -31,7 +31,7 @@
 import Vue from 'vue';
 import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
-import { placeholder } from '../libs/language/language.js';
+import { placeholder, lang } from '../libs/language/language.js';
 import {
   operandMapping,
   operatorList,
@@ -67,6 +67,13 @@ export default {
       set(newRefinement) {
         Vue.set(this.refinementParent, this.path[this.path.length - 1], newRefinement);
       },
+    },
+    refinementLabel() {
+      if (lang == 'de') {
+        return 'Verfeinerung';
+      } else if (lang == 'en') {
+        return 'Refinement';
+      }
     },
     refinementParent() {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);

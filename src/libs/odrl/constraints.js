@@ -162,55 +162,30 @@ export const operandMapping = {
   },
 };
 
-export const actionToRefinements = Object.freeze({
-  // german version
-  Archivieren: {
-    operands: [operandList[5], operandList[6], operandList[7]],
-  },
-  Bearbeiten: {
-    operands: [operandList[6]],
-  },
-  Drucken: {
-    operands: [operandList[6], operandList[7], operandList[8]],
-  },
-  Kopieren: {
-    operands: [operandList[7], operandList[11]],
-  },
-  Verbreiten: {
-    operands: [operandList[6], operandList[7], operandList[9], operandList[10], operandList[11]],
-  },
-  Verkaufen: {
-    operands: [operandList[12]],
-  },
-  Vorführen: {
-    operands: [operandList[6], operandList[7], operandList[9]],
-  },
-  Zitieren: {
-    operands: [operandList[6]],
-  },
+export const actionToRefinements = Object.freeze({  
   // english version
-  archiving: {
+  'http://www.w3.org/ns/odrl/2/play': {
+    operands: [operandList[6], operandList[9]],
+  },
+  'http://www.w3.org/ns/odrl/2/archive': {
     operands: [operandList[5], operandList[6], operandList[7]],
   },
-  editing: {
+  'http://www.w3.org/ns/odrl/2/derive': {
     operands: [operandList[6]],
   },
-  printing: {
+  'http://www.w3.org/ns/odrl/2/print': {
     operands: [operandList[6], operandList[7], operandList[8]],
   },
-  copying: {
+  'http://www.w3.org/ns/odrl/2/reproduce': {
     operands: [operandList[7], operandList[11]],
   },
-  distributing: {
+  'http://www.w3.org/ns/odrl/2/distribute': {
     operands: [operandList[6], operandList[7], operandList[9], operandList[10], operandList[11]],
   },
-  selling: {
+  'http://www.w3.org/ns/odrl/2/compensate': {
     operands: [operandList[12]],
   },
-  demonstrating: {
+  'http://www.w3.org/ns/odrl/2/present': {
     operands: [operandList[6], operandList[7], operandList[9]],
-  },
-  quoting: {
-    operands: [operandList[6]],
   },
 });

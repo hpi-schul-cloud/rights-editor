@@ -49,7 +49,7 @@
     <!-- add new refinement -->
     <BaseButton class="add-button" @click="addRefinement()">
       <template v-if="lang == 'de'">Verfeinerung hinzufügen</template>
-      <template v-if="lang == 'en'">add refinement</template>
+      <template v-if="lang == 'en'">Add Refinement</template>
     </BaseButton>
 
     <!-- display and edit constraints -->
@@ -79,7 +79,7 @@
     <!-- add new constraint -->
     <BaseButton class="add-button" @click="addConstraint()">
       <template v-if="lang == 'de'">Einschränkung hinzufügen</template>
-      <template v-if="lang == 'en'">add constraint</template>
+      <template v-if="lang == 'en'">Add Constraint</template>
     </BaseButton>
 
     <!-- add subrules -->
@@ -90,7 +90,7 @@
       <p>
         <BaseButton class="add-button" :name="subruleInfo.pluralName[lang]" @click="appendNewSubrule">
           <template v-if="lang == 'de'">{{ subruleInfo.name[lang] }} hinzufügen</template>
-          <template v-if="lang == 'en'">add {{ subruleInfo.name[lang] }}</template>
+          <template v-if="lang == 'en'">Add {{ subruleInfo.name[lang] }}</template>
         </BaseButton>
 
         {{ subruleInfo.pluralName[lang] }} 
@@ -131,7 +131,8 @@ import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
-import { articles as articleMapping, lang } from '../libs/language/language.js';
+import { articles as articleMapping, lang, placeholder } from '../libs/language/language.js';
+import { actionList } from '../libs/odrl/actions.js';
 import { logicalOperatorList } from '../libs/odrl/constraints.js';
 
 export default {
@@ -202,8 +203,14 @@ export default {
     action() {
       return this.rule.action;
     },
-    actionLabel() {
+    actionString() {
       return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
+    },
+    actionLabel() {
+      if (this.actionString && this.actionString != placeholder) {
+        return actionList.find(obj => { return obj.odrl === this.actionString })[lang];
+      }
+      return placeholder;
     },
     constraints() {
       if (!this.rule.constraint) {

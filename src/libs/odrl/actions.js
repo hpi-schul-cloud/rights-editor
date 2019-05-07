@@ -1,12 +1,12 @@
 export const actionList = Object.freeze([
-  { id: 0, de: 'Archivieren', en: 'archiving' },
-  { id: 1, de: 'Bearbeiten', en: 'editing' },
-  { id: 2, de: 'Drucken', en: 'printing' },
-  { id: 3, de: 'Kopieren', en: 'copying' },
-  { id: 4, de: 'Verbreiten', en: 'distributing' },
-  { id: 5, de: 'Verkaufen', en: 'selling' },
-  { id: 6, de: 'Vorführen', en: 'demonstrating' },
-  { id: 7, de: 'Zitieren', en: 'quoting' },
+  { odrl: 'http://www.w3.org/ns/odrl/2/play', de: 'Abspielen', en: 'Playing'},
+  { odrl: 'http://www.w3.org/ns/odrl/2/archive', de: 'Archivieren', en: 'Archiving' },
+  { odrl: 'http://www.w3.org/ns/odrl/2/derive', de: 'Bearbeiten', en: 'Editing' },
+  { odrl: 'http://www.w3.org/ns/odrl/2/print', de: 'Drucken', en: 'Printing' },
+  { odrl: 'http://www.w3.org/ns/odrl/2/reproduce', de: 'Vervielfältigen', en: 'Reproducing' },
+  { odrl: 'http://www.w3.org/ns/odrl/2/distribute', de: 'Verbreiten', en: 'Distributing' },
+  { odrl: 'http://www.w3.org/ns/odrl/2/compensate', de: 'Verkaufen', en: 'Selling' },
+  { odrl: 'http://www.w3.org/ns/odrl/2/present', de: 'Vorführen', en: 'Presenting' },
 ]);
 
 class Action {

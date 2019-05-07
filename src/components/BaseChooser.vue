@@ -1,8 +1,14 @@
 <template>
   <BaseModal :width="'1000px'" :scrollable="false">
     <template v-slot:header>
-      <h1 v-if="objectToEdit == null">{{ name }} hinzufügen</h1>
-      <h1 v-else>{{ name }} bearbeiten</h1>
+      <h1 v-if="objectToEdit == null">
+        <template v-if="lang == 'de'">{{ name }}  hinzufügen</template>
+        <template v-if="lang == 'en'">Add {{ name }}</template>
+      </h1>
+      <h1 v-else>
+        <template v-if="lang == 'de'">{{ name }} bearbeiten</template>
+        <template v-if="lang == 'en'">Edit {{ name }}</template>
+      </h1>
     </template>
 
     <template v-slot:body>
@@ -77,6 +83,7 @@ import Vue from 'vue';
 import BaseInput from './BaseInput.vue';
 import BaseModal from './BaseModal.vue';
 import BaseButton from './BaseButton.vue';
+import { lang } from '../libs/language/language.js';
 
 export default {
   name: 'BaseChooser',
@@ -111,6 +118,9 @@ export default {
     };
   },
   computed: {
+    lang() {
+      return lang;
+    },
     operands() {
       return this.operandList;
     },
