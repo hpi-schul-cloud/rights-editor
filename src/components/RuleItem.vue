@@ -26,7 +26,10 @@
       <em>{{ actionLabel }}</em> 
       <template v-if="lang == 'de'"> darf nur auf die folgende Art und Weise erfolgen...</template>
       <template v-if="lang == 'en'"> may only be done in the following manner...</template>
-      <em v-if="isLogicalRefinement && logicalRefinementOperatorText == 'ODER'">entweder</em>
+      <em v-if="isLogicalRefinement && logicalRefinementOperatorShort == 'xone'">
+        <template v-if="lang == 'de'"> entweder</template>
+        <template v-if="lang == 'en'"> either</template>
+      </em>
     </p>
 
     <ul>
@@ -53,7 +56,10 @@
     <p class="constraints">
       <template v-if="lang == 'de'">Insgesamt gilt {{ articles[ruleInfo.gender].def[lang] }} <em>{{ ruleInfo.name[lang] }}</em> nur, wenn...</template>
       <template v-if="lang == 'en'">In general, {{ articles[ruleInfo.gender].def[lang] }} <em>{{ ruleInfo.name[lang] }}</em> only applies, if...</template>
-      <em v-if="isLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
+      <em v-if="isLogicalConstraint && logicalConstraintOperatorShort == 'xone'">
+        <template v-if="lang == 'de'"> entweder</template>
+        <template v-if="lang == 'en'"> either</template>
+      </em>
     </p>
 
     <ul>
@@ -247,7 +253,7 @@ export default {
         return null;
       }
 
-      return logicalOperatorList[this.logicalConstraintOperatorShort].text;
+      return logicalOperatorList[this.logicalConstraintOperatorShort].text[lang];
     },
     logicalConstraintOperatorShort() {
       if (!this.rule.constraint) {
@@ -265,7 +271,7 @@ export default {
         return null;
       }
 
-      return logicalOperatorList[this.logicalRefinementOperatorShort].text;
+      return logicalOperatorList[this.logicalRefinementOperatorShort].text[lang];
     },
     logicalRefinementOperatorShort() {
       if (!this.action[0].refinement) {

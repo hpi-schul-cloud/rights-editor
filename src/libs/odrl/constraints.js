@@ -32,13 +32,13 @@ export const operatorList = [
 
 export const logicalOperatorList = {
   or: {
-    text: 'UND/ODER',
+    text: { de: 'UND/ODER', en: 'AND/OR' }
   },
   xone: {
-    text: 'ODER',
+    text: { de: 'ODER', en: 'OR' },
   },
   and: {
-    text: 'UND',
+    text: { de: 'UND', en: 'AND' },
   },
 };
 
@@ -162,7 +162,9 @@ export const operandMapping = {
   },
 };
 
+// TODO: do this better!
 export const actionToRefinements = Object.freeze({
+  // german version
   Archivieren: {
     operands: [operandList[5], operandList[6], operandList[7]],
   },
@@ -187,6 +189,7 @@ export const actionToRefinements = Object.freeze({
   Zitieren: {
     operands: [operandList[6]],
   },
+  // english version
   archiving: {
     operands: [operandList[5], operandList[6], operandList[7]],
   },

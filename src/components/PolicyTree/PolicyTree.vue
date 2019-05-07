@@ -68,7 +68,7 @@ export default {
       if (lang == 'de') {
         return "Lizenz";
       } else if (lang == 'en') {
-        return "License";
+        return "license";
       }
     }
   }

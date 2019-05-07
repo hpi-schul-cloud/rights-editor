@@ -1,23 +1,30 @@
 <template>
   <div>
     <div class="input-container id-input">
-      ID der Lizenz:
+      <template v-if="lang == 'de'">ID der Lizenz:</template>
+      <template v-if="lang == 'en'">license id:</template>
       <BaseInput v-model="policy['uid']" undercover class="input" />
     </div>
 
     <div class="input-container">
       <BaseDropdown
         class="dropdown-button"
-        :list="assetOptions"
+        :list="assetOptions[lang]"
         :init-value="assetLabel"
         @selected="assetTypeSelected($event)"
       />
       <BaseInput v-model="assetId" undercover class="input" />
     </div>
 
-    <div class="constraints-container">
-      <h3>Global geltende Einschränkungen hinzufügen...</h3>Die Lizenz gilt nur, wenn
-      <em v-if="isLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
+    <div class="constraints-container">      
+      <h3 v-if="lang == 'de'">Global geltende Einschränkungen hinzufügen...</h3>
+      <h3 v-if="lang == 'en'">Add globally applicable constraints...</h3>
+      <template v-if="lang == 'de'">Die Lizenz gilt nur, wenn</template>
+      <template v-if="lang == 'en'">The license then only applies, if</template>
+      <em v-if="isLogicalConstraint && logicalConstraintOperatorShort == 'xone'">
+        <template v-if="lang == 'de'"> entweder</template>
+        <template v-if="lang == 'en'"> either</template>
+      </em>
 
       <ul>
         <li v-for="(constraint, index) in constraints" :key="index">
@@ -46,6 +53,7 @@ import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
 import BaseDropdown from './BaseDropdown.vue';
 import ConstraintItem from './ConstraintItem.vue';
+import { lang } from '../libs/language/language.js';
 import {
   operandList,
   operandMapping,
@@ -70,10 +78,13 @@ export default {
   },
   data() {
     return {
-      assetOptions: ['Medieninhalt', 'Inhaltesammlung'],
+      assetOptions: { de: ['Medieninhalt', 'Inhaltesammlung'],  en: ['Asset', 'Asset Collection' ] },
     };
   },
   computed: {
+    lang() {
+      return lang;
+    },
     constraints() {
       if (!this.policy.constraint) {
         return null;
@@ -99,7 +110,10 @@ export default {
     },
     opList() {
       const filteredOperands = operandList.filter(
-        (value, index, arr) => value != 'Nutzungsdauer'
+        (value, index, arr) => 
+
+        // TODO: do this better!
+             value != 'Nutzungsdauer'
           && value != 'Nutzeranzahl'
           && value != 'Speichermedium'
           && value != 'Anteil'
@@ -119,7 +133,7 @@ export default {
         return null;
       }
 
-      return logicalOperatorList[this.logicalConstraintOperatorShort].text;
+      return logicalOperatorList[this.logicalConstraintOperatorShort].text[lang];
     },
     logicalConstraintOperatorShort() {
       if (!this.policy.constraint) {
@@ -137,9 +151,9 @@ export default {
     },
     assetLabel() {
       if (this.assetIsString) {
-        return 'Medieninhalt';
+        return this.assetOptions[lang][0];
       }
-      return 'Inhaltesammlung';
+      return this.assetOptions[lang][1];
     },
     assetId: {
       get() {
