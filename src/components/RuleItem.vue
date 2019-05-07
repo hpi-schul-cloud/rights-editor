@@ -2,7 +2,7 @@
   <div class="rule-container">
     <div class="rule-header">
       <h3>{{ ruleInfo.name }} <i :class="ruleInfo.icon" /></h3>
-      <BaseButton remove class="remove-button" @click="removeRule()">
+      <BaseButton remove class="remove-button" title="Regel löschen" @click="removeRule()">
         <i class="far fa-trash-alt" />
       </BaseButton>
     </div>
