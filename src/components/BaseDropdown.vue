@@ -1,6 +1,11 @@
 <template>
   <div>
-    <BaseButton id="dropdown-button" input @click="clicked()">
+    <BaseButton
+      id="dropdown-button"
+      input
+      :class="{ 'dropdown-button-drop': shouldDisplayList }"
+      @click="clicked()"
+    >
       {{ selectedOption }}
       <i id="dropdown-icon" class="fas fa-caret-down" />
     </BaseButton>
@@ -135,14 +140,19 @@ export default {
 }
 
 #dropdown-button {
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   cursor: pointer;
+}
+
+.dropdown-button-drop {
+  border-bottom: 1px solid white;
 }
 
 .dropdown {
   background-color: white;
-  box-shadow: inset 0 0 1.5px #000;
+  border: 1px solid rgb(169, 169, 169);
   position: absolute;
+
   margin-left: 5px;
   padding: 10px;
   padding-bottom: 0px;
