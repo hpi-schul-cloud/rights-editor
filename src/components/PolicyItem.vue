@@ -17,7 +17,7 @@
       <BaseInput v-model="assetId" undercover class="input" />
     </div>
 
-    <div class="constraints-container">      
+    <div class="constraints-container">
       <h3 v-if="lang == 'de'">Global geltende Einschränkungen hinzufügen...</h3>
       <h3 v-if="lang == 'en'">Add globally applicable constraints...</h3>
       <template v-if="lang == 'de'">Die Lizenz gilt nur, wenn</template>
@@ -29,7 +29,7 @@
 
       <ul>
         <li v-for="(constraint, index) in constraints" :key="index">
-          <ConstraintItem :policy="policy" :path="[...constraintPath, index]"/>
+          <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
           <BaseButton
             v-if="isLogicalConstraint && index < constraints.length - 1"
             textlike
@@ -40,7 +40,12 @@
       </ul>
 
       <!-- add new constraint -->
-      <BaseButton class="add-constraint" type="button" title="Einschränkung hinzufügen" @click="addConstraint()">
+      <BaseButton
+        class="add-constraint"
+        type="button"
+        title="Einschränkung hinzufügen"
+        @click="addConstraint()"
+      >
         <i class="fas fa-plus" />
       </BaseButton>
     </div>
@@ -74,7 +79,7 @@ export default {
   },
   data() {
     return {
-      assetOptions: { de: ['Medieninhalt', 'Inhaltesammlung'],  en: ['Asset', 'Asset Collection' ] },
+      assetOptions: { de: ['Medieninhalt', 'Inhaltesammlung'], en: ['Asset', 'Asset Collection'] },
     };
   },
   computed: {

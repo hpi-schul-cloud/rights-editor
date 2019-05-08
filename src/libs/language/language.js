@@ -13,9 +13,9 @@ export const articles = Object.freeze({
   },
 });
 
-/*function startSentence(word) {
+/* function startSentence(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
-}*/
+} */
 
 export const lang = 'en';
 

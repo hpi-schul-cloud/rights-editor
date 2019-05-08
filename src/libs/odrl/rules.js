@@ -1,5 +1,5 @@
 export const RuleTypes = Object.freeze({
-  permission: {    
+  permission: {
     name: { de: 'Erlaubnis', en: 'Permission' },
     gender: 'f',
     hasParentRule: false,
@@ -9,7 +9,7 @@ export const RuleTypes = Object.freeze({
     icon: 'far fa-check-circle',
   },
   obligation: {
-    name: { de: 'Pflicht', en: 'Obligation'},
+    name: { de: 'Pflicht', en: 'Obligation' },
     gender: 'f',
     hasParentRule: false,
     subrule: 'consequence',
@@ -53,7 +53,7 @@ export const RuleTypes = Object.freeze({
     hasParentRule: true,
     subrule: '',
     description: { de: 'muss geleistet werden,', en: 'must be done.' },
-    descriptionAddon: { de: ['falls', 'missachtet wurde.'], en: ['in case', "was disregarded."] },
+    descriptionAddon: { de: ['falls', 'missachtet wurde.'], en: ['in case', 'was disregarded.'] },
     icon: 'fas fa-balance-scale',
   },
 });

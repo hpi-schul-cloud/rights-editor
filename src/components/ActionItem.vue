@@ -76,7 +76,7 @@ export default {
     },
     actionLabel() {
       if (this.action && this.action != placeholder) {
-        return actionList.find(obj => { return obj.odrl === this.action })[lang];
+        return actionList.find(obj => obj.odrl === this.action)[lang];
       }
       return placeholder;
     },

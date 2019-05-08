@@ -36,7 +36,7 @@ import {
   operandMapping,
   operatorList,
   actionToRefinements,
-  unitList
+  unitList,
 } from '../libs/odrl/constraints.js';
 
 export default {
@@ -72,7 +72,7 @@ export default {
     refinementLabel() {
       if (lang == 'de') {
         return 'Verfeinerung';
-      } else if (lang == 'en') {
+      } if (lang == 'en') {
         return 'Refinement';
       }
     },
@@ -101,13 +101,13 @@ export default {
       if (!this.refinement) {
         return placeholder;
       }
-      let desc = this.opList.find(obj => { return obj.odrl === this.refinement.leftOperand })[lang];
+      let desc = this.opList.find(obj => obj.odrl === this.refinement.leftOperand)[lang];
       desc += ` ${operatorList.find(op => (op.identifier === this.refinement.operator)).symbol}`;
       if (Array.isArray(this.refinement.rightOperand)) {
         desc += ` ${this.refinement.rightOperand.join(', ')}`;
       } else {
         desc += ` ${this.refinement.rightOperand['@value']}`;
-        desc += ` ${unitList.find(obj => { return obj.odrl === this.refinement.unit })[lang]}`;
+        desc += ` ${unitList.find(obj => obj.odrl === this.refinement.unit)[lang]}`;
       }
       return desc;
     },

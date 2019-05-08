@@ -1,5 +1,5 @@
 export const actionList = Object.freeze([
-  { odrl: 'http://www.w3.org/ns/odrl/2/play', de: 'Abspielen', en: 'Playing'},
+  { odrl: 'http://www.w3.org/ns/odrl/2/play', de: 'Abspielen', en: 'Playing' },
   { odrl: 'http://www.w3.org/ns/odrl/2/archive', de: 'Archivieren', en: 'Archiving' },
   { odrl: 'http://www.w3.org/ns/odrl/2/derive', de: 'Bearbeiten', en: 'Editing' },
   { odrl: 'http://www.w3.org/ns/odrl/2/print', de: 'Drucken', en: 'Printing' },

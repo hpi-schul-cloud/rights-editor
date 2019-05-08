@@ -157,7 +157,7 @@ export default {
     },
     leftOperand: {
       get() {
-        let operand = this.object.leftOperand;
+        const operand = this.object.leftOperand;
         if (!operand) {
           this.leftOperand = this.operands[0].odrl;
           return this.leftOperand;
@@ -222,7 +222,7 @@ export default {
     operators() {
       return this.operandMapping[this.leftOperand].operators;
     },
-    units() {      
+    units() {
       return this.operandMapping[this.leftOperand].units;
     },
     listItems() {

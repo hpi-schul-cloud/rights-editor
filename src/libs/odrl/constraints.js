@@ -1,3 +1,98 @@
+/* list of selectable options */
+
+import { lang } from '../language/language.js';
+
+const storageDevice = {
+  de: [
+    'Magnetband',
+    'Festplatte',
+    'CD/DVD',
+  ],
+  en: [
+    'magnetic tape',
+    'hard disk',
+    'CD/DVD',
+  ],
+}[lang];
+
+const attendees = {
+  de: [
+    'Schüler',
+    'Lehrer',
+    'Eltern',
+  ],
+  en: [
+    'students',
+    'teachers',
+    'parents',
+  ],
+}[lang];
+
+const communication = {
+  de: [
+    'E-Mail',
+    'USB-Stick',
+    'Cloud',
+  ],
+  en: [
+    'e-mail',
+    'flash drive',
+    'cloud',
+  ],
+}[lang];
+
+const fileFormat = [
+  '.mp3',
+  '.mp4',
+  '.pdf',
+  '.doc',
+  '.ppt',
+];
+
+export const states = {
+  de: [
+    'Baden-Württemberg',
+    'Bayern',
+    'Berlin',
+    'Brandenburg',
+    'Bremen',
+    'Hamburg',
+    'Hessen',
+    'Mecklenburg-Vorpommern',
+    'Niedersachsen',
+    'Nordrhein-Westfalen',
+    'Rheinland-Pfalz',
+    'Saarland',
+    'Sachsen',
+    'Sachsen-Anhalt',
+    'Schleswig-Holstein',
+    'Thüringen',
+  ],
+  en: [
+    'Arizona',
+    'California',
+    'Florida',
+    'Michigan',
+    'New York',
+    'Texas',
+  ],
+}[lang];
+
+export const groups = {
+  de: [
+    'Schüler',
+    'Lehrer',
+    'Eltern',
+    'Verwaltung',
+  ],
+  en: [
+    'students',
+    'teachers',
+    'parents',
+    'administrators',
+  ],
+}[lang];
+
 export const operandList = [
   { odrl: 'http://www.example.org/state', de: 'Bundesland', en: 'state' },
   { odrl: 'http://www.example.org/group-identity', de: 'Gruppenzugehörigkeit', en: 'group identity' },
@@ -15,7 +110,7 @@ export const operandList = [
 ];
 
 export const constraintOnlyOperandList = [
-  operandList[0], 
+  operandList[0],
   operandList[1],
   operandList[2],
   operandList[3],
@@ -32,7 +127,7 @@ export const operatorList = [
 
 export const logicalOperatorList = {
   or: {
-    text: { de: 'UND/ODER', en: 'AND/OR' }
+    text: { de: 'UND/ODER', en: 'AND/OR' },
   },
   xone: {
     text: { de: 'ODER', en: 'OR' },
@@ -54,58 +149,6 @@ export const unitList = [
   { odrl: 'http://www.example.org/resource/ppi', de: 'ppi', en: 'ppi' },
   { odrl: 'http://www.example.org/resource/euro', de: '€', en: '€' },
   { odrl: 'http://www.example.org/resource/dollar', de: '$', en: '$' },
-];
-
-const storageDevice = [
-  'Magnetband',
-  'Festplatte',
-  'CD/DVD',
-];
-
-const attendees = [
-  'Schüler',
-  'Lehrer',
-  'Eltern',
-  'Verwaltung',
-];
-
-const communication = [
-  'E-Mail',
-  'USB-Stick',
-  'Cloud',
-];
-
-const fileFormat = [
-  '.mp3',
-  '.mp4',
-  '.pdf',
-  '.doc',
-  '.ppt',
-];
-
-export const states = [
-  'Baden-Württemberg',
-  'Bayern',
-  'Berlin',
-  'Brandenburg',
-  'Bremen',
-  'Hamburg',
-  'Hessen',
-  'Mecklenburg-Vorpommern',
-  'Niedersachsen',
-  'Nordrhein-Westfalen',
-  'Rheinland-Pfalz',
-  'Saarland',
-  'Sachsen',
-  'Sachsen-Anhalt',
-  'Schleswig-Holstein',
-  'Thüringen',
-];
-
-export const groups = [
-  'Lehrer',
-  'Schüler',
-  'Verwaltung',
 ];
 
 export const operandMapping = Object.freeze({
@@ -163,8 +206,7 @@ export const operandMapping = Object.freeze({
   },
 });
 
-export const actionToRefinements = Object.freeze({  
-  // english version
+export const actionToRefinements = Object.freeze({
   'http://www.w3.org/ns/odrl/2/play': {
     operands: [operandList[6], operandList[9]],
   },

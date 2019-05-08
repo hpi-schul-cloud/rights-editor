@@ -66,12 +66,12 @@ export default {
   computed: {
     treeNodeLabel() {
       if (lang == 'de') {
-        return "Lizenz";
-      } else if (lang == 'en') {
-        return "License";
+        return 'Lizenz';
+      } if (lang == 'en') {
+        return 'License';
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

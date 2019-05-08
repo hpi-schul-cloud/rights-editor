@@ -2,7 +2,12 @@
   <div class="rule-container">
     <div class="rule-header">
       <h3>{{ ruleInfo.name[lang] }} <i :class="ruleInfo.icon" /></h3>
-      <BaseButton remove class="remove-button" v-bind:title="removeRuleText" @click="removeRule()">
+      <BaseButton
+        remove
+        class="remove-button"
+        :title="removeRuleText"
+        @click="removeRule()"
+      >
         <i class="far fa-trash-alt" />
       </BaseButton>
     </div>
@@ -23,7 +28,7 @@
     <!-- display and edit refinements -->
     <p class="refinements">
       {{ textAheadOfActionLabel }}
-      <em>{{ actionLabel }}</em> 
+      <em>{{ actionLabel }}</em>
       <template v-if="lang == 'de'"> darf nur auf die folgende Art und Weise erfolgen...</template>
       <template v-if="lang == 'en'"> may only be done in the following manner...</template>
       <em v-if="isLogicalRefinement && logicalRefinementOperatorShort == 'xone'">
@@ -93,7 +98,7 @@
           <template v-if="lang == 'en'">Add {{ subruleInfo.name[lang] }}</template>
         </BaseButton>
 
-        {{ subruleInfo.pluralName[lang] }} 
+        {{ subruleInfo.pluralName[lang] }}
         <template v-if="lang == 'de'">sind Pflichten, die geleistet werden müssen,</template>
         <template v-if="lang == 'en'">are obligations, that must be done,</template>
         <EmbedInText :text-ahead="subruleInfo.descriptionAddon[lang][0]" :text-after="subruleInfo.descriptionAddon[lang][1]">
@@ -103,7 +108,7 @@
 
       <!-- list all available subrules -->
       <p v-if="subrules">
-        <template v-if="lang == 'de'">Die </template>        
+        <template v-if="lang == 'de'">Die </template>
         <template v-if="lang == 'en'">The </template>
         {{ subrules.length == 1 ? subruleInfo.name[lang] : subruleInfo.pluralName[lang] }}
         <template v-if="lang == 'de'">diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name[lang] }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
@@ -112,7 +117,7 @@
         <template v-if="lang == 'en'">of this {{ ruleInfo.name[lang] }}
           {{ subrules.length === 1 ? 'is' : 'are' }}<br>
         </template>
-        
+
         <span v-for="(subrule, index) in subrules" :key="index">
           <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ getSubruleActionLabel(subrule) }}</a>
           <span v-if="index + 1 < subrules.length">, <br></span>
@@ -159,10 +164,10 @@ export default {
       return lang;
     },
     textAheadOfActionLabel() {
-      if (lang == 'de')  {
-        return "Das";
+      if (lang == 'de') {
+        return 'Das';
       }
-      return "";
+      return '';
     },
     rule() {
       return this.policy.follow(this.path);
@@ -172,11 +177,11 @@ export default {
       return RuleTypes[ruleTypeName];
     },
     removeRuleText() {
-      const r = this.ruleInfo.name[lang]; 
+      const r = this.ruleInfo.name[lang];
       if (lang == 'de') {
-        return r + " löschen";
-      } else if (lang == 'en') {
-        return "delete " + r;
+        return `${r} löschen`;
+      } if (lang == 'en') {
+        return `delete ${r}`;
       }
     },
     subruleInfo() {
@@ -208,7 +213,7 @@ export default {
     },
     actionLabel() {
       if (this.actionString && this.actionString != placeholder) {
-        return actionList.find(obj => { return obj.odrl === this.actionString })[lang];
+        return actionList.find(obj => obj.odrl === this.actionString)[lang];
       }
       return placeholder;
     },
@@ -334,9 +339,9 @@ export default {
     },
     getSubruleActionLabel(subrule) {
       if (Array.isArray(subrule.action)) {
-        return actionList.find(obj => { return obj.odrl === subrule.action[0]['rdf:value'] })[lang];
+        return actionList.find(obj => obj.odrl === subrule.action[0]['rdf:value'])[lang];
       }
-      return actionList.find(obj => { return obj.odrl === subrule.action })[lang];        
+      return actionList.find(obj => obj.odrl === subrule.action)[lang];
     },
 
     // constraints

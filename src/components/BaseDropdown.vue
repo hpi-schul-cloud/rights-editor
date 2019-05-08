@@ -4,8 +4,8 @@
       id="dropdown-button"
       input
       :class="{ 'dropdown-button-drop': shouldDisplayList }"
-      @click="clicked()"
       :style="{ width: this.width }"
+      @click="clicked()"
     >
       {{ selectedOption }}
       <i id="dropdown-icon" class="fas fa-caret-down" />

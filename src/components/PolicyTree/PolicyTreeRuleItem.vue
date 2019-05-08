@@ -63,9 +63,9 @@ export default {
 
       let actionLabel = placeholder;
       if (action && action != placeholder) {
-        actionLabel = actionList.find(obj => { return obj.odrl === action })[lang];
+        actionLabel = actionList.find(obj => obj.odrl === action)[lang];
       }
-      
+
       return [`${rType.name[lang]}: `, actionLabel];
     },
     subruleType() {

@@ -37,7 +37,7 @@ import {
   constraintOnlyOperandList,
   operandMapping,
   operatorList,
-  unitList
+  unitList,
 } from '../libs/odrl/constraints';
 
 
@@ -74,7 +74,7 @@ export default {
     constraintLabel() {
       if (lang == 'de') {
         return 'Einschränkung';
-      } else if (lang == 'en') {
+      } if (lang == 'en') {
         return 'Constraint';
       }
     },
@@ -89,13 +89,13 @@ export default {
       if (!this.constraint) {
         return placeholder;
       }
-      let desc = this.opList.find(obj => { return obj.odrl === this.constraint.leftOperand })[lang];        
+      let desc = this.opList.find(obj => obj.odrl === this.constraint.leftOperand)[lang];
       desc += ` ${operatorList.find(op => (op.identifier === this.constraint.operator)).symbol}`;
       if (Array.isArray(this.constraint.rightOperand)) {
         desc += ` ${this.constraint.rightOperand.join(', ')}`;
       } else {
         desc += ` ${this.constraint.rightOperand['@value']}`;
-        desc += ` ${unitList.find(obj => { return obj.odrl === this.constraint.unit })[lang]}`;
+        desc += ` ${unitList.find(obj => obj.odrl === this.constraint.unit)[lang]}`;
       }
       return desc;
     },

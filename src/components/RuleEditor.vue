@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import { lang } from '../libs/language/language.js';
 import Vue from 'vue';
+import { lang } from '../libs/language/language.js';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
