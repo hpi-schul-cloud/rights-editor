@@ -13,7 +13,7 @@ export const RuleTypes = Object.freeze({
     gender: 'f',
     hasParentRule: false,
     subrule: 'consequence',
-    description: { de: 'ist Pflicht.', en: ' is legally binding.' },
+    description: { de: 'ist Pflicht.', en: ' must be done.' },
     descriptionAddon: { de: ['', ''], en: ['', ''] },
     icon: 'far fa-handshake',
   },
