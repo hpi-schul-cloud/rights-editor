@@ -11,7 +11,7 @@
           :class="{selected: currentSelected === index}"
           @click="actionClicked(index)"
         >
-          {{ action }}
+          {{ action.label }}
         </li>
       </ul>
     </template>
@@ -32,12 +32,19 @@
 import BaseButton from './BaseButton.vue';
 import BaseModal from './BaseModal.vue';
 import { actionList } from '../libs/odrl/actions.js';
+import { RuleTypes } from '../libs/odrl/rules.js';
 
 export default {
   name: 'ActionChooser',
   components: {
     BaseButton,
     BaseModal,
+  },
+  props: {
+    ruleType: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -47,7 +54,9 @@ export default {
   },
   computed: {
     actions() {
-      return actionList;
+      const getParentRule = (type => RuleTypes[type].subrule === this.ruleType);
+      const ruleType = RuleTypes[this.ruleType].hasParentRule ? Object.keys(RuleTypes).filter(getParentRule)[0] : this.ruleType;
+      return actionList.filter(action => action[ruleType]);
     },
   },
   methods: {
@@ -59,7 +68,7 @@ export default {
       this.$emit('abort');
     },
     chosen(action) {
-      this.$emit('chosen', this.currentAction);
+      this.$emit('chosen', this.currentAction.label);
     },
   },
 };

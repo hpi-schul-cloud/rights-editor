@@ -187,4 +187,7 @@ export const actionToRefinements = Object.freeze({
   Zitieren: {
     operands: [operandList[6]],
   },
+  Namensnennung: {
+    operands: [],
+  },
 });

@@ -2,6 +2,7 @@
   <div class="action-container">
     <ActionChooser
       v-if="displayActionChooser"
+      :rule-type="ruleType"
       @chosen="hideActionChooser(); action = $event"
       @abort="choosingAborted()"
     />
@@ -55,6 +56,9 @@ export default {
     rule() {
       const rulePath = this.path.slice(0, this.path.length - 1);
       return this.policy.follow(rulePath);
+    },
+    ruleType() { // .../permission/3/action
+      return this.path[this.path.length - 3];
     },
     action: {
       get() {

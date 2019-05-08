@@ -1,13 +1,15 @@
 export const actionList = Object.freeze([
-  'Archivieren',
-  'Bearbeiten',
-  'Drucken',
-  'Kopieren',
-  'Verbreiten',
-  'Verkaufen',
-  'Vorführen',
-  'Zitieren',
+  { label: 'Archivieren', permission: true, prohibition: true },
+  { label: 'Bearbeiten', permission: true, prohibition: true },
+  { label: 'Drucken', permission: true, prohibition: true },
+  { label: 'Kopieren', permission: true, prohibition: true },
+  { label: 'Verbreiten', permission: true, prohibition: true },
+  { label: 'Verkaufen', permission: true, prohibition: true },
+  { label: 'Vorführen', permission: true, prohibition: true },
+  { label: 'Zitieren', permission: true, prohibition: true },
+  { label: 'Namensnennung', obligation: true },
 ]);
+
 
 class Action {
   constructor(definition, label, note, identifier, includedIn, includedBy) {

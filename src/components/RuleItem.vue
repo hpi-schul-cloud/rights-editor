@@ -2,7 +2,12 @@
   <div class="rule-container">
     <div class="rule-header">
       <h3>{{ ruleInfo.name }} <i :class="ruleInfo.icon" /></h3>
-      <BaseButton remove class="remove-button" v-bind:title="removeRuleText" @click="removeRule()">
+      <BaseButton
+        remove
+        class="remove-button"
+        :title="removeRuleText"
+        @click="removeRule()"
+      >
         <i class="far fa-trash-alt" />
       </BaseButton>
     </div>
@@ -107,7 +112,7 @@ import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
 import { articles as articleMapping } from '../libs/language/language.js';
-import { logicalOperatorList } from '../libs/odrl/constraints.js';
+import { logicalOperatorList, actionToRefinements } from '../libs/odrl/constraints.js';
 
 export default {
   name: 'RuleItem',
@@ -137,7 +142,7 @@ export default {
       return RuleTypes[ruleTypeName];
     },
     removeRuleText() {
-      return this.ruleInfo.name + " löschen";
+      return `${this.ruleInfo.name} löschen`;
     },
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];
@@ -252,6 +257,13 @@ export default {
         return Object.keys(logicalOperatorList)[0];
       }
       return op;
+    },
+    canHaveRefinement() {
+      let { action } = this.rule;
+      if (Array.isArray(this.rule.action)) {
+        action = this.rule.action[0]['rdf:value'];
+      }
+      return actionToRefinements[action] && actionToRefinements[action].operands.length > 0;
     },
   },
   methods: {
