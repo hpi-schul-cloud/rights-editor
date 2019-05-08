@@ -36,7 +36,8 @@ import {
   operandMapping,
   operatorList,
   actionToRefinements,
-} from '../libs/odrl/constraints';
+  unitList
+} from '../libs/odrl/constraints.js';
 
 export default {
   name: 'RefinementItem',
@@ -100,26 +101,22 @@ export default {
       if (!this.refinement) {
         return placeholder;
       }
-      let desc = this.refinement.leftOperand;
+      let desc = this.opList.find(obj => { return obj.odrl === this.refinement.leftOperand })[lang];
       desc += ` ${operatorList.find(op => (op.identifier === this.refinement.operator)).symbol}`;
       if (Array.isArray(this.refinement.rightOperand)) {
         desc += ` ${this.refinement.rightOperand.join(', ')}`;
       } else {
         desc += ` ${this.refinement.rightOperand['@value']}`;
-        desc += ` ${this.refinement.unit}`;
+        desc += ` ${unitList.find(obj => { return obj.odrl === this.refinement.unit })[lang]}`;
       }
       return desc;
     },
     opList() {
-      // get the action-specific refinement operands
+      // every action needs a different set of possible refinements
       return actionToRefinements[this.actionLabel].operands;
     },
     opMapping() {
-      // every action needs a different set of possible refinements
-      return this.opList.reduce((opMapping, operand) => {
-        opMapping[operand] = operandMapping[operand];
-        return opMapping;
-      }, {});
+      return operandMapping;
     },
   },
   methods: {

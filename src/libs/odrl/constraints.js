@@ -1,25 +1,25 @@
 export const operandList = [
-  'Bundesland',
-  'Gruppenzugehörigkeit',
-  'Alter',
-  'Nutzungsdauer',
-  'Nutzeranzahl',
-  'Speichermedium',
-  'Anteil',
-  'Anzahl',
-  'Auflösung',
-  'Teilnehmer',
-  'Verbreitungsmethode',
-  'Dateiformat',
-  'Betrag',
+  { odrl: 'http://www.example.org/state', de: 'Bundesland', en: 'state' },
+  { odrl: 'http://www.example.org/group-identity', de: 'Gruppenzugehörigkeit', en: 'group identity' },
+  { odrl: 'http://www.example.org/age', de: 'Alter', en: 'age' },
+  { odrl: 'http://www.example.org/time-of-use', de: 'Nutzungsdauer', en: 'time of use' },
+  { odrl: 'http://www.example.org/user-amount', de: 'Nutzeranzahl', en: 'user amount' },
+  { odrl: 'http://www.example.org/storage-device', de: 'Speichermedium', en: 'storage device' },
+  { odrl: 'http://www.example.org/share', de: 'Anteil', en: 'share' },
+  { odrl: 'http://www.example.org/amount', de: 'Anzahl', en: 'amount' },
+  { odrl: 'http://wwww.example.org/resolution', de: 'Auflösung', en: 'resolution' },
+  { odrl: 'http://www.example.org/participants', de: 'Teilnehmer', en: 'participants' },
+  { odrl: 'http://www.example.org/distribution-method', de: 'Verbreitungsmethode', en: 'distribution method' },
+  { odrl: 'http://www.example.org/file-format', de: 'Dateiformat', en: 'file format' },
+  { odrl: 'http://www.example.org/pay-amount', de: 'Geldbetrag', en: 'pay amount' },
 ];
 
 export const constraintOnlyOperandList = [
-  'Bundesland',
-  'Gruppenzugehörigkeit',
-  'Alter',
-  'Nutzungsdauer',
-  'Nutzeranzahl',
+  operandList[0], 
+  operandList[1],
+  operandList[2],
+  operandList[3],
+  operandList[4],
 ];
 
 export const operatorList = [
@@ -42,7 +42,21 @@ export const logicalOperatorList = {
   },
 };
 
-const storageMedium = [
+export const unitList = [
+  { odrl: 'http://www.example.org/resource/year', de: 'Jahre', en: 'years' },
+  { odrl: 'http://www.example.org/resource/day', de: 'Tage', en: 'days' },
+  { odrl: 'http://www.example.org/resource/hour', de: 'Stunden', en: 'hours' },
+  { odrl: 'http://www.example.org/resource/user', de: 'Nutzer', en: 'users' },
+  { odrl: 'http://www.example.org/resource/day', de: '%', en: '% ' },
+  { odrl: 'http://www.example.org/resource/piece', de: 'Stück', en: 'pieces' },
+  { odrl: 'http://www.example.org/resource/person', de: 'Personen', en: 'people' },
+  { odrl: 'http://www.example.org/resource/dpi', de: 'dpi', en: 'dpi' },
+  { odrl: 'http://www.example.org/resource/ppi', de: 'ppi', en: 'ppi' },
+  { odrl: 'http://www.example.org/resource/euro', de: '€', en: '€' },
+  { odrl: 'http://www.example.org/resource/dollar', de: '$', en: '$' },
+];
+
+const storageDevice = [
   'Magnetband',
   'Festplatte',
   'CD/DVD',
@@ -94,73 +108,60 @@ export const groups = [
   'Verwaltung',
 ];
 
-export const unitList = [
-  'Jahre',
-  'Tage',
-  'Stunden',
-  'Nutzer',
-  '%',
-  'Stück',
-  'Personen',
-  'dpi',
-  'ppi',
-  '€',
-];
-
-export const operandMapping = {
-  Bundesland: {
+export const operandMapping = Object.freeze({
+  'http://www.example.org/state': {
     operators: [operatorList[0]],
     list: states,
   },
-  Gruppenzugehörigkeit: {
+  'http://www.example.org/group-identity': {
     operators: [operatorList[0]],
     list: groups,
   },
-  Alter: {
+  'http://www.example.org/age': {
     operators: operatorList,
     units: [unitList[0]],
   },
-  Nutzungsdauer: {
+  'http://www.example.org/time-of-use': {
     operators: operatorList,
     units: [unitList[0], unitList[1], unitList[2]],
   },
-  Nutzeranzahl: {
+  'http://www.example.org/user-amount': {
     operators: operatorList,
     units: [unitList[3]],
   },
-  Speichermedium: {
+  'http://www.example.org/storage-device': {
     operators: [operatorList[0]],
-    list: storageMedium,
+    list: storageDevice,
   },
-  Anteil: {
+  'http://www.example.org/share': {
     operators: operatorList,
     units: [unitList[4]],
   },
-  Anzahl: {
+  'http://www.example.org/amount': {
     operators: operatorList,
     units: [unitList[5], unitList[6]],
   },
-  Auflösung: {
+  'http://wwww.example.org/resolution': {
     operators: operatorList,
     units: [unitList[7], unitList[8]],
   },
-  Teilnehmer: {
+  'http://www.example.org/participants': {
     operators: [operatorList[0]],
     list: attendees,
   },
-  Verbreitungsmethode: {
+  'http://www.example.org/distribution-method': {
     operators: [operatorList[0]],
     list: communication,
   },
-  Dateiformat: {
+  'http://www.example.org/file-format': {
     operators: [operatorList[0]],
     list: fileFormat,
   },
-  Betrag: {
+  'http://www.example.org/pay-amount': {
     operators: operatorList,
-    units: [unitList[9]],
+    units: [unitList[9], unitList[10]],
   },
-};
+});
 
 export const actionToRefinements = Object.freeze({  
   // english version

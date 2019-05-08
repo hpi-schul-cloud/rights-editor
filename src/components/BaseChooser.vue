@@ -16,9 +16,9 @@
         <li
           v-for="(op, index) in operands"
           :key="index"
-          :class="{ selected: leftOperand === op }"
-          @click="leftOperand = op"
-        >{{ op }}</li>
+          :class="{ selected: leftOperand === op.odrl }"
+          @click="leftOperand = op.odrl"
+        >{{ op[lang] }}</li>
       </ul>
       <ul class="list">
         <li
@@ -48,9 +48,9 @@
               <li
                 v-for="(u, index) in units"
                 :key="index"
-                :class="{ selected: unit === u }"
-                @click="unit = u"
-              >{{ u }}</li>
+                :class="{ selected: unit === u.odrl }"
+                @click="unit = u.odrl"
+              >{{ u[lang] }}</li>
             </ul>
           </div>
         </div>
@@ -159,8 +159,8 @@ export default {
       get() {
         let operand = this.object.leftOperand;
         if (!operand) {
-          operand = this.operands[0];
-          this.leftOperand = operand;
+          this.leftOperand = this.operands[0].odrl;
+          return this.leftOperand;
         }
         return operand;
       },
@@ -211,7 +211,7 @@ export default {
     unit: {
       get() {
         if (this.units.length === 1) {
-          this.unit = this.units[0];
+          this.unit = this.units[0].odrl;
         }
         return this.object.unit;
       },
@@ -222,7 +222,7 @@ export default {
     operators() {
       return this.operandMapping[this.leftOperand].operators;
     },
-    units() {
+    units() {      
       return this.operandMapping[this.leftOperand].units;
     },
     listItems() {
