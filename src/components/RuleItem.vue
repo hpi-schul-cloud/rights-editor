@@ -2,7 +2,12 @@
   <div class="rule-container">
     <div class="rule-header">
       <h3>{{ ruleInfo.name }} <i :class="ruleInfo.icon" /></h3>
-      <BaseButton remove class="remove-button" v-bind:title="removeRuleText" @click="removeRule()">
+      <BaseButton
+        remove
+        class="remove-button"
+        :title="removeRuleText"
+        @click="removeRule()"
+      >
         <i class="far fa-trash-alt" />
       </BaseButton>
     </div>
@@ -137,7 +142,7 @@ export default {
       return RuleTypes[ruleTypeName];
     },
     removeRuleText() {
-      return this.ruleInfo.name + " löschen";
+      return `${this.ruleInfo.name} löschen`;
     },
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];
