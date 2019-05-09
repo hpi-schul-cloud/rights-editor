@@ -3,7 +3,6 @@ import Router from 'vue-router';
 import Start from './views/Start.vue';
 import OER from './views/OER.vue';
 import FullEditor from './views/FullEditor.vue';
-import OfferCreation from './views/OfferCreation.vue';
 import SaveScreen from './views/SaveScreen.vue';
 import BuyCaseStudy from './views/BuyCaseStudy.vue';
 import SCEditor from './views/SCEditor.vue';
@@ -33,11 +32,6 @@ export default new Router({
       path: '/schul-cloud-editor',
       name: 'sc-editor',
       component: SCEditor,
-    },
-    { // should go into sc-editor
-      path: '/offer-creation',
-      name: 'offer-creation',
-      component: OfferCreation,
     },
     { // should go into sc-editor
       path: '/check-before-save',

@@ -12,7 +12,8 @@
           :key="index"
           :colspan="licenseInfo.optionsCount"
           class="policies-first-cell"
-        >{{ licenseInfo.label }}</th>
+        >{{ licenseInfo.label }} </th>
+        <th><button @click="$emit('addPolicy')"><i class="fas fa-plus-circle" /></button></th>
       </tr>
       <tr>
         <th>Lizenzgebiet</th>
@@ -35,7 +36,7 @@
             </select>
             <button @click="removePeriod(cell.licenseIndex, cell.periodIndex)"><i class="fas fa-trash-alt" /></button>
           </span>
-          <button v-else @click="addPeriod(cell.licenseIndex)"><i class="fas fa-plus-circle" /></button>
+          <button v-if="cell.type === 'add'" @click="addPeriod(cell.licenseIndex)"><i class="fas fa-plus-circle" /></button>
         </th>
       </tr>
       <tr>
@@ -75,8 +76,8 @@
 
 <script>
 import Vue from 'vue';
-import PriceInput from '../components/PriceInput.vue';
-import BaseButton from '../components/BaseButton.vue';
+import PriceInput from './PriceInput.vue';
+import BaseButton from './BaseButton.vue';
 
 const licenseEntities = ['state', 'county', 'school', 'teacher', 'pupil'];
 
@@ -86,19 +87,22 @@ export default {
     PriceInput,
     BaseButton,
   },
-  data() {
-    return {};
-  },
   props: {
     policies: {
-        type: Array,
-        required: [],
+      type: Array,
+      required: [],
     },
+  },
+  data() {
+    return {};
   },
   computed: {
     licenseInfos() {
       // return this.policies.map(license => ({ label: license.label, optionsCount: license.options.timeframes.length }));
       const infos = this.columnInformation.reduce((agregate, cell) => {
+        if (cell.type === 'empty') {
+          return agregate;
+        }
         if (agregate.length === 0) {
           return [{ label: this.policies[cell.licenseIndex].label, licenseIndex: cell.licenseIndex, optionsCount: 1 }];
         }
@@ -129,6 +133,7 @@ export default {
         info.push(...licenseInfos);
         info.push({ type: 'add', licenseIndex: lIndex });
       });
+      info.push({ type: 'empty' });
       return info;
     },
     warning() {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <RuleEditor v-if="mode === 'rules'" @abort="abort()" @goForth="goForth($event)" />
-    <DimensionEditor v-if="mode === 'dimensions'" :policies="policies" />
+    <DimensionEditor v-if="mode === 'dimensions'" :policies="policies" @addPolicy="editRules()" />
   </div>
 </template>
 
