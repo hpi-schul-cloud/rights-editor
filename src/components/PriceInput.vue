@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import { constants } from 'crypto';
-
 export default {
   name: 'PriceInput',
   props: {
@@ -36,11 +34,6 @@ export default {
     },
     enabled() {
       return !!this.price;
-    },
-  },
-  methods: {
-    write(what) {
-      console.log(what);
     },
   },
 };

@@ -20,53 +20,45 @@
         <th
           v-for="(cell, index) in columnInformation"
           :key="index"
-          :class="{ 'policies-first-cell': cell.periodIndex === 0, 'duplicate': warning && warning[cell.licenseIndex].duplicates.indexOf(cell.periodIndex) >= 0}"
+          :class="{ 'policies-first-cell': cell.timeframeIndex === 0, 'duplicate': warning && warning[cell.licenseIndex].duplicates.indexOf(cell.timeframeIndex) >= 0}"
         >
-          <span v-if="cell.type === 'period'">
-            <select @change="updatePeriod(cell.licenseIndex, cell.periodIndex, $event.target.value)">
-              <option :selected="cell.period === '10 Jahre'">10 Jahre</option>
-              <option :selected="cell.period === '9 Jahre'">9 Jahre</option>
-              <option :selected="cell.period === '8 Jahre'">8 Jahre</option>
-              <option :selected="cell.period === '7 Jahre'">7 Jahre</option>
-              <option :selected="cell.period === '6 Jahre'">6 Jahre</option>
-              <option :selected="cell.period === '5 Jahre'">5 Jahre</option>
-              <option :selected="cell.period === '48 Stunden'">48 Stunden</option>
-              <option :selected="cell.period === '24 Stunden'">24 Stunden</option>
-              <option :selected="cell.period === 'unbegrenzt'">unbegrenzt</option>
+          <span v-if="cell.type === 'timeframe'">
+            <select @change="updatetimeframe(cell.licenseIndex, cell.timeframeIndex, $event.target.value)">
+              <option v-for="(timeframeStep, index) in timeframeSteps" :key="index" :selected="cell.timeframe === timeframeStep">{{ timeframeStep }}</option>
             </select>
-            <button @click="removePeriod(cell.licenseIndex, cell.periodIndex)"><i class="fas fa-trash-alt" /></button>
+            <button @click="removetimeframe(cell.licenseIndex, cell.timeframeIndex)"><i class="fas fa-trash-alt" /></button>
           </span>
-          <button v-if="cell.type === 'add'" @click="addPeriod(cell.licenseIndex)"><i class="fas fa-plus-circle" /></button>
+          <button v-if="cell.type === 'add'" @click="addtimeframe(cell.licenseIndex)"><i class="fas fa-plus-circle" /></button>
         </th>
       </tr>
       <tr>
         <td>Land</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.periodIndex === 0 }">
-          <PriceInput v-if="column.type === 'period'" :price="column.state" @update:price="updatePrice('state', column.licenseIndex, column.periodIndex, $event)" />
+        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
+          <PriceInput v-if="column.type === 'timeframe'" :price="column.state" @update:price="updatePrice('state', column.licenseIndex, column.timeframeIndex, $event)" />
         </td>
       </tr>
       <tr>
         <td>Kreis</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.periodIndex === 0 }">
-          <PriceInput v-if="column.type === 'period'" :price="column.county" @update:price="updatePrice('county', column.licenseIndex, column.periodIndex, $event)" />
+        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
+          <PriceInput v-if="column.type === 'timeframe'" :price="column.county" @update:price="updatePrice('county', column.licenseIndex, column.timeframeIndex, $event)" />
         </td>
       </tr>
       <tr>
         <td>Schule</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.periodIndex === 0 }">
-          <PriceInput v-if="column.type === 'period'" :price="column.school" @update:price="updatePrice('school', column.licenseIndex, column.periodIndex, $event)" />
+        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
+          <PriceInput v-if="column.type === 'timeframe'" :price="column.school" @update:price="updatePrice('school', column.licenseIndex, column.timeframeIndex, $event)" />
         </td>
       </tr>
       <tr>
         <td>Lehrer</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.periodIndex === 0 }">
-          <PriceInput v-if="column.type === 'period'" :price="column.teacher" @update:price="updatePrice('teacher', column.licenseIndex, column.periodIndex, $event)" />
+        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
+          <PriceInput v-if="column.type === 'timeframe'" :price="column.teacher" @update:price="updatePrice('teacher', column.licenseIndex, column.timeframeIndex, $event)" />
         </td>
       </tr>
       <tr>
         <td>Schüler/Eltern</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.periodIndex === 0 }">
-          <PriceInput v-if="column.type === 'period'" :price="column.pupil" @update:price="updatePrice('pupil', column.licenseIndex, column.periodIndex, $event)" />
+        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
+          <PriceInput v-if="column.type === 'timeframe'" :price="column.pupil" @update:price="updatePrice('pupil', column.licenseIndex, column.timeframeIndex, $event)" />
         </td>
       </tr>
     </table>
@@ -80,6 +72,7 @@ import PriceInput from './PriceInput.vue';
 import BaseButton from './BaseButton.vue';
 
 const licenseEntities = ['state', 'county', 'school', 'teacher', 'pupil'];
+const timeframeSteps = ['10 Jahre', '9 Jahre', '8 Jahre', '7 Jahre', '6 Jahre', '5 Jahre', '48 Stunden', '24 Stunden', 'unbegrenzt'];
 
 export default {
   name: 'DimensionEditor',
@@ -98,7 +91,6 @@ export default {
   },
   computed: {
     licenseInfos() {
-      // return this.policies.map(license => ({ label: license.label, optionsCount: license.options.timeframes.length }));
       const infos = this.columnInformation.reduce((agregate, cell) => {
         if (cell.type === 'empty') {
           return agregate;
@@ -120,10 +112,10 @@ export default {
       const info = [];
       this.policies.forEach((license, lIndex) => {
         const licenseInfos = license.options.timeframes.map((timeframe, tIndex) => ({
-          type: 'period',
-          period: timeframe,
+          type: 'timeframe',
+          timeframe: timeframe,
           licenseIndex: lIndex,
-          periodIndex: tIndex,
+          timeframeIndex: tIndex,
           state: license.options.state[tIndex],
           county: license.options.county[tIndex],
           school: license.options.school[tIndex],
@@ -139,9 +131,9 @@ export default {
     warning() {
       const howManyDuplicatesPerLicense = ((license, index) => {
         const attachIndex = ((timeframe, index) => ({ timeframe, index }));
-        const onlyDuplicates = (counts => (periodInfo) => {
-          const count = (counts[periodInfo.timeframe] || 0);
-          return (counts[periodInfo.timeframe] = counts + 1) > 1;
+        const onlyDuplicates = (counts => (timeframeInfo) => {
+          const count = (counts[timeframeInfo.timeframe] || 0);
+          return (counts[timeframeInfo.timeframe] = counts + 1) > 1;
         })({});
         const stripToIndex = (info => info.index);
         const duplicatesIndices = license.options.timeframes
@@ -162,25 +154,28 @@ export default {
       }
       return false;
     },
+    timeframeSteps() {
+      return timeframeSteps;
+    }
   },
   methods: {
-    updatePrice(area, licenseIndex, periodIndex, priceInfo) {
+    updatePrice(area, licenseIndex, timeframeIndex, priceInfo) {
       let price = priceInfo;
       if (priceInfo) {
         price = Number(parseFloat(price).toFixed(2));
       }
-      Vue.set(this.policies[licenseIndex].options[area], periodIndex, price);
+      Vue.set(this.policies[licenseIndex].options[area], timeframeIndex, price);
     },
-    updatePeriod(licenseIndex, periodIndex, period) {
-      Vue.set(this.policies[licenseIndex].options.timeframes, periodIndex, period);
+    updatetimeframe(licenseIndex, timeframeIndex, timeframe) {
+      Vue.set(this.policies[licenseIndex].options.timeframes, timeframeIndex, timeframe);
     },
-    removePeriod(licenseIndex, periodIndex) {
-      Vue.delete(this.policies[licenseIndex].options.timeframes, periodIndex);
+    removetimeframe(licenseIndex, timeframeIndex) {
+      Vue.delete(this.policies[licenseIndex].options.timeframes, timeframeIndex);
       licenseEntities.forEach((entity) => {
-        Vue.delete(this.policies[licenseIndex].options[entity], periodIndex);
+        Vue.delete(this.policies[licenseIndex].options[entity], timeframeIndex);
       });
     },
-    addPeriod(licenseIndex) {
+    addtimeframe(licenseIndex) {
       licenseEntities.forEach((entity) => {
         const index = this.policies[licenseIndex].options[entity].length;
         Vue.set(this.policies[licenseIndex].options[entity], index, false);
