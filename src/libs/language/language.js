@@ -13,11 +13,17 @@ export const articles = Object.freeze({
   },
 });
 
-/* function startSentence(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-} */
+var lang = 'en';
 
-export const lang = 'en';
+export function getLanguage() {
+  console.log("get: " + lang);
+  return lang;
+}
+
+export function setLanguage(l) {
+  lang = l;
+  console.log("set: " + lang);
+}
 
 const placeholders = { de: '<leer>', en: '<empty>' };
 export const placeholder = placeholders[lang];

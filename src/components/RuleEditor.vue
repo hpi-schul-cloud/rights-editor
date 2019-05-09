@@ -18,6 +18,11 @@
         <template v-if="lang == 'de'">Verbot</template>
         <template v-if="lang == 'en'">Prohibition</template>
       </BaseButton>
+
+      <BaseButton textlike @click="switchLanguage()">
+        <i class="fas fa-language"></i>
+      </BaseButton>
+
     </div>
 
     <div class="editor-body">
@@ -54,12 +59,13 @@
 
 <script>
 import Vue from 'vue';
-import { lang } from '../libs/language/language.js';
+import { getLanguage, setLanguage } from '../libs/language/language.js';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
 import PolicyItem from './PolicyItem.vue';
+import { constants } from 'crypto';
 
 export default {
   name: 'RuleEditor',
@@ -83,8 +89,13 @@ export default {
     };
   },
   computed: {
-    lang() {
-      return lang;
+    lang: {
+      get() {
+        return getLanguage();
+      },
+      set(l) {
+        setLanguage(l);
+      }
     },
     showRulePane() {
       return this.editPath.length > 0;
@@ -120,7 +131,7 @@ export default {
       Vue.set(this.policy.permission, idx, {});
       this.editPath = ['permission', idx];
     },
-    newObligation() {
+    newObligation() {       
       if (!this.policy.obligation) {
         Vue.set(this.policy, 'obligation', []);
       }
@@ -136,6 +147,18 @@ export default {
       Vue.set(this.policy.prohibition, idx, {});
       this.editPath = ['prohibition', idx];
     },
+
+    switchLanguage() {
+      /*if (this.lang === 'de') {
+        this.lang = 'en';
+      } else if (this.lang === 'en') {
+        this.lang = 'de';
+      }*/
+
+      setLanguage('de');
+
+      // https://vuejs.org/v2/guide/mixins.html
+    }
   },
 };
 </script>

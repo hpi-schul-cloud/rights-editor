@@ -31,7 +31,7 @@
 import Vue from 'vue';
 import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
-import { placeholder, lang } from '../libs/language/language.js';
+import { placeholder, getLanguage } from '../libs/language/language.js';
 import {
   operandMapping,
   operatorList,
@@ -70,9 +70,9 @@ export default {
       },
     },
     refinementLabel() {
-      if (lang == 'de') {
+      if (getLanguage() == 'de') {
         return 'Verfeinerung';
-      } if (lang == 'en') {
+      } if (getLanguage() == 'en') {
         return 'Refinement';
       }
     },
@@ -101,13 +101,13 @@ export default {
       if (!this.refinement) {
         return placeholder;
       }
-      let desc = this.opList.find(obj => obj.odrl === this.refinement.leftOperand)[lang];
+      let desc = this.opList.find(obj => obj.odrl === this.refinement.leftOperand)[getLanguage()];
       desc += ` ${operatorList.find(op => (op.identifier === this.refinement.operator)).symbol}`;
       if (Array.isArray(this.refinement.rightOperand)) {
         desc += ` ${this.refinement.rightOperand.join(', ')}`;
       } else {
         desc += ` ${this.refinement.rightOperand['@value']}`;
-        desc += ` ${unitList.find(obj => obj.odrl === this.refinement.unit)[lang]}`;
+        desc += ` ${unitList.find(obj => obj.odrl === this.refinement.unit)[getLanguage()]}`;
       }
       return desc;
     },

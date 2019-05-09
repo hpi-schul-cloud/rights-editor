@@ -59,7 +59,7 @@ import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
 import BaseDropdown from './BaseDropdown.vue';
 import ConstraintItem from './ConstraintItem.vue';
-import { lang } from '../libs/language/language.js';
+import { getLanguage } from '../libs/language/language.js';
 import { logicalOperatorList } from '../libs/odrl/constraints';
 
 export default {
@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     lang() {
-      return lang;
+      return getLanguage();
     },
     constraints() {
       if (!this.policy.constraint) {
@@ -114,7 +114,7 @@ export default {
         return null;
       }
 
-      return logicalOperatorList[this.logicalConstraintOperatorShort].text[lang];
+      return logicalOperatorList[this.logicalConstraintOperatorShort].text[this.lang];
     },
     logicalConstraintOperatorShort() {
       if (!this.policy.constraint) {
@@ -132,9 +132,9 @@ export default {
     },
     assetLabel() {
       if (this.assetIsString) {
-        return this.assetOptions[lang][0];
+        return this.assetOptions[this.lang][0];
       }
-      return this.assetOptions[lang][1];
+      return this.assetOptions[this.lang][1];
     },
     assetId: {
       get() {

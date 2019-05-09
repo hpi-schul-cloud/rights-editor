@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { lang } from '../../libs/language/language.js';
+import { getLanguage } from '../../libs/language/language.js';
 import PolicyTreeRuleItem from './PolicyTreeRuleItem.vue';
 import PolicyTreeNode from './PolicyTreeNode.vue';
 
@@ -65,9 +65,9 @@ export default {
   },
   computed: {
     treeNodeLabel() {
-      if (lang == 'de') {
+      if (getLanguage() == 'de') {
         return 'Lizenz';
-      } if (lang == 'en') {
+      } if (getLanguage() == 'en') {
         return 'License';
       }
     },

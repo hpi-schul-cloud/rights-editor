@@ -136,7 +136,7 @@ import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
-import { articles as articleMapping, lang, placeholder } from '../libs/language/language.js';
+import { articles as articleMapping, placeholder, getLanguage } from '../libs/language/language.js';
 import { actionList } from '../libs/odrl/actions.js';
 import { logicalOperatorList } from '../libs/odrl/constraints.js';
 
@@ -161,10 +161,10 @@ export default {
   },
   computed: {
     lang() {
-      return lang;
+      return getLanguage();
     },
     textAheadOfActionLabel() {
-      if (lang == 'de') {
+      if (this.lang == 'de') {
         return 'Das';
       }
       return '';
@@ -177,10 +177,10 @@ export default {
       return RuleTypes[ruleTypeName];
     },
     removeRuleText() {
-      const r = this.ruleInfo.name[lang];
-      if (lang == 'de') {
+      const r = this.ruleInfo.name[this.lang];
+      if (this.lang == 'de') {
         return `${r} löschen`;
-      } if (lang == 'en') {
+      } if (this.lang == 'en') {
         return `delete ${r}`;
       }
     },
@@ -213,7 +213,7 @@ export default {
     },
     actionLabel() {
       if (this.actionString && this.actionString != placeholder) {
-        return actionList.find(obj => obj.odrl === this.actionString)[lang];
+        return actionList.find(obj => obj.odrl === this.actionString)[this.lang];
       }
       return placeholder;
     },
@@ -273,7 +273,7 @@ export default {
         return null;
       }
 
-      return logicalOperatorList[this.logicalConstraintOperatorShort].text[lang];
+      return logicalOperatorList[this.logicalConstraintOperatorShort].text[this.lang];
     },
     logicalConstraintOperatorShort() {
       if (!this.rule.constraint) {
@@ -291,7 +291,7 @@ export default {
         return null;
       }
 
-      return logicalOperatorList[this.logicalRefinementOperatorShort].text[lang];
+      return logicalOperatorList[this.logicalRefinementOperatorShort].text[this.lang];
     },
     logicalRefinementOperatorShort() {
       if (!this.action[0].refinement) {
@@ -339,9 +339,9 @@ export default {
     },
     getSubruleActionLabel(subrule) {
       if (Array.isArray(subrule.action)) {
-        return actionList.find(obj => obj.odrl === subrule.action[0]['rdf:value'])[lang];
+        return actionList.find(obj => obj.odrl === subrule.action[0]['rdf:value'])[this.lang];
       }
-      return actionList.find(obj => obj.odrl === subrule.action)[lang];
+      return actionList.find(obj => obj.odrl === subrule.action)[this.lang];
     },
 
     // constraints

@@ -24,7 +24,7 @@
 
 <script>
 import PolicyTreeNode from './PolicyTreeNode.vue';
-import { lang, placeholder } from '../../libs/language/language.js';
+import { getLanguage, placeholder } from '../../libs/language/language.js';
 import { RuleTypes } from '../../libs/odrl/rules';
 import { actionList } from '../../libs/odrl/actions.js';
 import { actionToRefinements } from '../../libs/odrl/constraints';
@@ -63,10 +63,10 @@ export default {
 
       let actionLabel = placeholder;
       if (action && action != placeholder) {
-        actionLabel = actionList.find(obj => obj.odrl === action)[lang];
+        actionLabel = actionList.find(obj => obj.odrl === action)[getLanguage()];
       }
 
-      return [`${rType.name[lang]}: `, actionLabel];
+      return [`${rType.name[getLanguage()]}: `, actionLabel];
     },
     subruleType() {
       const pathLen = this.path.length;

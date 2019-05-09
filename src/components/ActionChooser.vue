@@ -33,7 +33,7 @@
 import BaseButton from './BaseButton.vue';
 import BaseModal from './BaseModal.vue';
 import { actionList } from '../libs/odrl/actions.js';
-import { lang } from '../libs/language/language.js';
+import { getLanguage } from '../libs/language/language.js';
 
 export default {
   name: 'ActionChooser',
@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     lang() {
-      return lang;
+      return getLanguage();
     },
     actions() {
       return actionList;
