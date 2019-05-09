@@ -1,5 +1,5 @@
 <template>
-  <RuleEditor @abort="abort()" @goForth="goForth()" />
+  <RuleEditor @abort="abort()" @goForth="goForth($event)" />
 </template>
 
 <script>
@@ -17,8 +17,8 @@ export default {
     abort() {
       this.$router.push({ name: 'start' });
     },
-    goForth() {
-      console.error('not implemented');
+    goForth(policy) {
+      this.$router.push({ name: 'check-before-save', params: { policy } })
     },
   },
 };
