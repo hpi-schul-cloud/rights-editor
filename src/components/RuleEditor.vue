@@ -86,35 +86,32 @@ export default {
     licenceText() {
       let text = '';
 
-      if (this.policy.permission){
-
+      if (this.policy.permission) {
         text += 'Erlaubt ist: ';
         text += this.policy.permission[0].action;
 
-        for (let permissionNumber = 1; permissionNumber < this.policy.permission.length; permissionNumber++){
-          text += ', '
+        for (let permissionNumber = 1; permissionNumber < this.policy.permission.length; permissionNumber++) {
+          text += ', ';
           text += this.policy.permission[permissionNumber].action;
         }
       }
 
-      if (this.policy.obligation){
-
+      if (this.policy.obligation) {
         text += '<br>Verpflichtend ist: ';
         text += this.policy.obligation[0].action;
 
-        for (let obligationNumber = 1; obligationNumber < this.policy.obligation.length; obligationNumber++){
-          text += ', '
+        for (let obligationNumber = 1; obligationNumber < this.policy.obligation.length; obligationNumber++) {
+          text += ', ';
           text += this.policy.obligation[obligationNumber].action;
         }
       }
 
-      if (this.policy.prohibition){
-
+      if (this.policy.prohibition) {
         text += '<br>Verboten ist: ';
         text += this.policy.prohibition[0].action;
 
-        for (let prohibitionNumber = 1; prohibitionNumber < this.policy.prohibition.length; prohibitionNumber++){
-          text += ', '
+        for (let prohibitionNumber = 1; prohibitionNumber < this.policy.prohibition.length; prohibitionNumber++) {
+          text += ', ';
           text += this.policy.prohibition[prohibitionNumber].action;
         }
       }

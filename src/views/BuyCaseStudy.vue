@@ -198,7 +198,7 @@
 
           <div v-else>
             <p class="chosen-option" @click="rights.chosen = false">
-                <pre>{{ rights }}</pre>
+              <pre>{{ rights }}</pre>
             </p>
             Prize: 4.000 EUR <button type="button" style="font-size: 25px; border-radius: 5px">=&gt; JETZT richtig absahnen!!! &lt;=</button>
           </div>
