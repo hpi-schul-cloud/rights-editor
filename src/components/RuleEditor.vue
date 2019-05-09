@@ -2,14 +2,14 @@
   <div class="rule-editor">
     <EditorNavBar>
       <template v-slot:left>
-        <router-link to="/">
-          <i class="fas fa-arrow-circle-left" /> Start
-        </router-link>
+        <a href="#" @click="$emit('abort')">
+          <i class="fas fa-arrow-circle-left" /> Zurück
+        </a>
       </template>
       <template v-slot:right>
-        <router-link :to="{ name: 'check-before-save', params: { policy } }">
-          Fertig <i class="fas fa-check-circle" />
-        </router-link>
+        <a href="#" @click="$emit('goForth', policy)">
+          Weiter <i class="fas fa-arrow-circle-right" />
+        </a>
       </template>
     </EditorNavBar>
 

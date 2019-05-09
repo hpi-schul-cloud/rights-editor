@@ -2,7 +2,12 @@
   <div>
     <div class="input-container id-input">
       ID der Lizenz:
-      <BaseInput v-model="policy['uid']" undercover class="input" />
+      <BaseInput
+        undercover
+        class="input"
+        value="Wird automatisch erzeugt"
+        disabled
+      />
     </div>
 
     <div class="input-container">
