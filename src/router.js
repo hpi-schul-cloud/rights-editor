@@ -4,6 +4,7 @@ import Start from './views/Start.vue';
 import OER from './views/OER.vue';
 import Proprietary from './views/Proprietary.vue';
 import OfferCreation from './views/OfferCreation.vue';
+import BuyCaseStudy from './views/BuyCaseStudy';
 
 Vue.use(Router);
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/offer-creation',
       name: 'offer-creation',
       component: OfferCreation,
+    },
+    {
+      path: '/filmsortiment-case-study',
+      name: 'filmsortiment-case-study',
+      component: BuyCaseStudy,
     },
   ],
 });
