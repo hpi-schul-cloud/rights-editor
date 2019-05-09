@@ -4,7 +4,7 @@
     <!-- TODO: make this a dropdown -->
     <p>{{ $t('currentLanguage') }}</p>
     <BaseButton textlike @click="switchLanguage()">
-        <i class="fas fa-language"></i> {{ $t('languageButtonText') }}
+      <i class="fas fa-language" /> {{ $t('languageButtonText') }}
     </BaseButton>
 
     <div class="editor-back">
@@ -12,17 +12,17 @@
         <a><i class="fas fa-arrow-circle-left" /> Start</a>
       </router-link>
     </div>
-    
+
     <div class="editor-header">
       <BaseButton @click="newPermission()">
-        {{ $t('permissionButtonText') }}        
+        {{ $t('permissionButtonText') }}
       </BaseButton>
       <BaseButton @click="newObligation()">
-        {{ $t('obligationButtonText') }}        
+        {{ $t('obligationButtonText') }}
       </BaseButton>
       <BaseButton @click="newProhibition()">
-        {{ $t('prohibitionButtonText') }}        
-      </BaseButton>   
+        {{ $t('prohibitionButtonText') }}
+      </BaseButton>
 
     </div>
 
@@ -60,12 +60,12 @@
 
 <script>
 import Vue from 'vue';
+import { constants } from 'crypto';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
 import PolicyItem from './PolicyItem.vue';
-import { constants } from 'crypto';
 
 export default {
   name: 'RuleEditor',
@@ -123,7 +123,7 @@ export default {
       Vue.set(this.policy.permission, idx, {});
       this.editPath = ['permission', idx];
     },
-    newObligation() {       
+    newObligation() {
       if (!this.policy.obligation) {
         Vue.set(this.policy, 'obligation', []);
       }
@@ -141,12 +141,12 @@ export default {
     },
 
     switchLanguage() {
-      if (this.$i18n.locale == "de") {
-        this.$i18n.locale = "en";
-      } else if (this.$i18n.locale == "en") {
-        this.$i18n.locale = "de";
+      if (this.$i18n.locale == 'de') {
+        this.$i18n.locale = 'en';
+      } else if (this.$i18n.locale == 'en') {
+        this.$i18n.locale = 'de';
       }
-    }
+    },
   },
 };
 </script>

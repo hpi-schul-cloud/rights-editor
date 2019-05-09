@@ -1,7 +1,7 @@
 <template>
   <BaseModal>
     <template v-slot:header>
-      {{ $t('actionChooserHeader')}}      
+      {{ $t('actionChooserHeader') }}
     </template>
     <template v-slot:body>
       <ul class="actions-list">

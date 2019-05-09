@@ -63,7 +63,7 @@ export default {
         action = action[0]['rdf:value'];
       }
 
-      let placeholder = this.$i18n.t('placeholder');
+      const placeholder = this.$i18n.t('placeholder');
       let actionLabel = placeholder;
       if (action && action != placeholder) {
         actionLabel = actionList.find(obj => obj.odrl === action)[this.lang];

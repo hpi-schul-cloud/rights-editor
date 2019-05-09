@@ -31,7 +31,7 @@
       <em>{{ actionLabel }}</em>
       {{ $t('refinementTextAfterActionLabel') }}
       <em v-if="isLogicalRefinement && logicalRefinementOperatorShort == 'xone'">
-        {{ $t('either') }}        
+        {{ $t('either') }}
       </em>
     </p>
 
@@ -56,13 +56,13 @@
 
     <!-- display and edit constraints -->
     <p class="constraints">
-      {{ $t('constraintTextAheadOfRuleName') }} 
-      {{ articles[ruleInfo.gender].def[lang] }} 
+      {{ $t('constraintTextAheadOfRuleName') }}
+      {{ articles[ruleInfo.gender].def[lang] }}
       <em>{{ ruleInfo.name[lang] }}</em>
-      {{ $t('constraintTextAfterRuleName') }} 
+      {{ $t('constraintTextAfterRuleName') }}
 
       <em v-if="isLogicalConstraint && logicalConstraintOperatorShort == 'xone'">
-        {{ $t('either') }} 
+        {{ $t('either') }}
       </em>
     </p>
 
@@ -91,7 +91,7 @@
       {{ $t('subRuleText') }}
       <p>
         <BaseButton class="add-button" :name="subruleInfo.pluralName[lang]" @click="appendNewSubrule">
-          {{ subruleInfo.name[lang] }}         
+          {{ subruleInfo.name[lang] }}
         </BaseButton>
 
         {{ subruleInfo.pluralName[lang] }}
@@ -103,7 +103,7 @@
 
       <!-- list all available subrules -->
       <p v-if="subrules">
-        
+
         {{ subruleNameArticleCap }}
         {{ subrules.length == 1 ? subruleInfo.name[lang] : subruleInfo.pluralName[lang] }}
         <template v-if="lang == 'de'">diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name[lang] }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
