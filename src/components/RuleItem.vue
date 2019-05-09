@@ -105,7 +105,8 @@
         {{ subruleNameArticle }}
         {{ $tc(subruleDynamicName, subrules.length) }}
         
-        <!-- this is still kind of ugly -->
+        <!-- this is still kind of ugly
+        @Ivan: do better! -->
         <template v-if="lang == 'de'">diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleLanguageInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}</template>
         <template v-if="lang == 'en'">of this {{ ruleLanguageInfo.name }}</template>
         {{ $tc('is_are', subrules.length) }}:<br>
@@ -225,7 +226,7 @@ export default {
     },
     actionLabel() {
       if (this.actionString && this.actionString != this.placeholder) {
-        return actionList.find(obj => obj.odrl === this.actionString)[this.lang];
+        return this.$i18n.t(actionList.find(item => item === this.actionString));
       }
       return this.placeholder;
     },
@@ -350,9 +351,9 @@ export default {
     },
     getSubruleActionLabel(subrule) {
       if (Array.isArray(subrule.action)) {
-        return actionList.find(obj => obj.odrl === subrule.action[0]['rdf:value'])[this.lang];
+        return this.$i18n.t(actionList.find(item => item === subrule.action[0]['rdf:value']));
       }
-      return actionList.find(obj => obj.odrl === subrule.action)[this.lang];
+      return this.$i18n.t(actionList.find(item => item === subrule.action));
     },
 
     // constraints

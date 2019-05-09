@@ -81,7 +81,7 @@ export default {
 
       let actionLabel = this.placeholder;
       if (action && action != this.placeholder) {
-        actionLabel = actionList.find(obj => obj.odrl === action)[this.lang];
+        actionLabel = this.$i18n.t(actionList.find(item => item === action));
       }
 
       return [this.ruleLabel, actionLabel];

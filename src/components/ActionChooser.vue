@@ -11,7 +11,7 @@
           :class="{selected: currentSelected === index}"
           @click="actionClicked(index)"
         >
-          {{ action[lang] }}
+          {{ $t(action) }}
         </li>
       </ul>
     </template>
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       currentSelected: null,
-      currentAction: {},
+      currentAction: "",
     };
   },
   computed: {

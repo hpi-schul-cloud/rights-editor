@@ -1,13 +1,13 @@
-export const actionList = Object.freeze([
-  { odrl: 'http://www.w3.org/ns/odrl/2/play', de: 'Abspielen', en: 'Playing' },
-  { odrl: 'http://www.w3.org/ns/odrl/2/archive', de: 'Archivieren', en: 'Archiving' },
-  { odrl: 'http://www.w3.org/ns/odrl/2/derive', de: 'Bearbeiten', en: 'Editing' },
-  { odrl: 'http://www.w3.org/ns/odrl/2/print', de: 'Drucken', en: 'Printing' },
-  { odrl: 'http://www.w3.org/ns/odrl/2/reproduce', de: 'Vervielfältigen', en: 'Reproducing' },
-  { odrl: 'http://www.w3.org/ns/odrl/2/distribute', de: 'Verbreiten', en: 'Distributing' },
-  { odrl: 'http://www.w3.org/ns/odrl/2/compensate', de: 'Kompensieren', en: 'Compensating' },
-  { odrl: 'http://www.w3.org/ns/odrl/2/present', de: 'Vorführen', en: 'Presenting' },
-]);
+export const actionList = [
+  'http://www.w3.org/ns/odrl/2/play',
+  'http://www.w3.org/ns/odrl/2/archive',
+  'http://www.w3.org/ns/odrl/2/derive',
+  'http://www.w3.org/ns/odrl/2/print',
+  'http://www.w3.org/ns/odrl/2/reproduce',
+  'http://www.w3.org/ns/odrl/2/distribute',
+  'http://www.w3.org/ns/odrl/2/compensate',
+  'http://www.w3.org/ns/odrl/2/present',
+];
 
 class Action {
   constructor(definition, label, note, identifier, includedIn, includedBy) {

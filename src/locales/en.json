@@ -96,5 +96,14 @@
 
   
   "globalConstraintsText": "Add globally applicable constraints...",
-  "globalConstraintsDescription": "The license then only applies, if..."
+  "globalConstraintsDescription": "The license then only applies, if...",
+
+  "http://www.w3.org/ns/odrl/2/play": "Playing",
+  "http://www.w3.org/ns/odrl/2/archive": "Archiving",
+  "http://www.w3.org/ns/odrl/2/derive": "Editing",
+  "http://www.w3.org/ns/odrl/2/print": "Printing",
+  "http://www.w3.org/ns/odrl/2/reproduce": "Reproducing",
+  "http://www.w3.org/ns/odrl/2/distribute": "Distributing",
+  "http://www.w3.org/ns/odrl/2/compensate": "Compensating",
+  "http://www.w3.org/ns/odrl/2/present": "Presenting"
 }

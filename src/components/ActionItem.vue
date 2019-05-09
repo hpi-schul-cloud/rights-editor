@@ -77,7 +77,7 @@ export default {
     },
     actionLabel() {
       if (this.action && this.action != this.placeholder) {
-        return actionList.find(obj => obj.odrl === this.action)[this.lang];
+        return this.$i18n.t(actionList.find(item => item === this.action));
       }
       return this.placeholder;
     },
@@ -92,9 +92,9 @@ export default {
     hideActionChooser() {
       this.actionChooserShouldDisplay = false;
     },
-    chosen(actionObj) {
+    chosen(action) {
       this.hideActionChooser();
-      this.action = actionObj.odrl;
+      this.action = action;
     },
     aborted() {
       if (this.rule.action === this.placeholder) {
