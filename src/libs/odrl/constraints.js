@@ -1,5 +1,7 @@
 /* list of selectable options */
 
+/* hmm.. */
+
 const storageDevice = {
   de: [
     'Magnetband',

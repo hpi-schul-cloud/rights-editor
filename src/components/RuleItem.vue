@@ -105,7 +105,7 @@
       <p v-if="subrules">
 
         <!-- hmm.. -->
-        {{ subruleNameArticleCap }}
+        {{ subruleNameArticle }}
         {{ subrules.length == 1 ? subruleInfo.name[lang] : subruleInfo.pluralName[lang] }}
         <template v-if="lang == 'de'">diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name[lang] }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
           {{ subrules.length === 1 ? 'ist' : 'sind' }}<br>
@@ -162,7 +162,7 @@ export default {
     placeholder() {
       return this.$i18n.t('placeholder');
     },
-    subruleNameArticleCap() {
+    subruleNameArticle() {
       return capitalize(this.articles[this.subruleInfo.gender].def[this.lang]);
     },
     textAheadOfActionLabel() {

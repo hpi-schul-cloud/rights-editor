@@ -70,8 +70,8 @@
         <BaseButton
           textlike
           @click="$emit('abort');"
-        >Abbrechen</BaseButton>
-        <BaseButton :disabled="!complete()" @click="accept()">Annehmen</BaseButton>
+        >{{ $t('cancel') }}</BaseButton>
+        <BaseButton :disabled="!complete()" @click="accept()">{{ $t("accept") }}</BaseButton>
       </div>
     </template>
   </BaseModal>

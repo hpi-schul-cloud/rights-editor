@@ -4,7 +4,7 @@ export const RuleTypes = Object.freeze({
     gender: 'f',
     hasParentRule: false,
     subrule: 'duty',
-    description: { de: 'ist erlaubt.', en: ' is permitted.' },
+    description: { de: 'ist erlaubt.', en: ' is permitted.' }, /* hmm.. */
     descriptionAddon: { de: ['', ''], en: ['', ''] },
     icon: 'far fa-check-circle',
   },

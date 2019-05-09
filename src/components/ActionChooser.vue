@@ -18,10 +18,10 @@
     <template v-slot:footer>
       <div class="modal-footer">
         <BaseButton textlike @click="abort">
-          Abbrechen
+          {{ $t('cancel') }}
         </BaseButton>
         <BaseButton :disabled="currentAction == ''" @click="chosen($event)">
-          Annehmen
+          {{ $t('accept') }}
         </BaseButton>
       </div>
     </template>

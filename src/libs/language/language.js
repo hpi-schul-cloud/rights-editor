@@ -1,3 +1,4 @@
+/* hmm.. */
 export const articles = Object.freeze({
   f: {
     def: { de: 'die', en: 'the' },
