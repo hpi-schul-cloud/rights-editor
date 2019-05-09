@@ -1,18 +1,77 @@
 {
-  "message": "hello i18n !!",
   "currentLanguage": "Deutsch",
   "languageButtonText": "Sprache ändern",
 
+  "either": "entweder",
+  "is_are": "ist | sind",
+
   "placeholder": "<leer>",
+
   "license": "Lizenz",
+  "licenseIdText": "ID der Lizenz:",
+  "actionChooserHeader": "Aktion auswählen",
+  "removeRule": "Regel löschen",
+
+  "article": {
+    "f": {
+      "definite": "die",
+      "undefinite": "eine"
+    },
+    "m": {
+      "definite": "der",
+      "undefinite": "ein"
+    },
+    "n": {
+      "definite": "das",
+      "undefinite": "ein"
+    }
+  },
+
+  "rule": {
+    "permission": {
+      "name": "Erlaubnis",
+      "description": "ist erlaubt.",
+      "descriptionExtension": ["", ""]
+    },
+    "obligation": {
+      "name": "Pflicht",
+      "description": "ist Pflicht.",
+      "descriptionExtension": ["", ""]
+    },
+    "prohibition": {
+      "name": "Verbot",
+      "description": "ist verboten.",
+      "descriptionExtension": ["", ""]
+    },
+    "duty": {
+      "name": "Vorbedingung",
+      "pluralName": "Vorbedingungen",
+      "dynamicName": "Vorbedingung | Vorbedingungen",
+      "description": "muss geleistet werden,",
+      "descriptionExtension": ["damit", "gilt."]
+    },
+    "consequence": {
+      "name": "Konsequenz",
+      "pluralName": "Konsequenzen",
+      "dynamicName": "Konsequenz | Konsequenzen",
+      "description": "muss geleistet werden,",
+      "descriptionExtension": ["falls", "nicht eingehalten wurde."]
+    },
+    "remedy": {
+      "name": "Strafe",
+      "pluralName": "Strafen",
+      "dynamicName": "Strafe | Strafen",
+      "description": "muss geleistet werden,",
+      "descriptionExtension": ["falls", "missachtet wurde."]
+    }
+  },
 
   "permissionButtonText": "Erlaubnis",
   "obligationButtonText": "Pflicht",
   "prohibitionButtonText": "Verbot",  
 
   "accept": "Annehmen",
-  "cancel": "Abbrechen",
-  "either": "entweder",
+  "cancel": "Abbrechen",  
 
   "refinement": {
     "name": "Verfeinerung",
@@ -34,10 +93,7 @@
 
   "subRuleText": "Optional kann um folgende Regeln erweitert werden:",
   "subRuleDescription": "sind Pflichten, die geleistet werden müssen,",
-
-  "licenseIdText": "ID der Lizenz:",
+  
   "globalConstraintsText": "Global geltende Einschränkungen hinzufügen...",
-  "globalConstraintsDescription": "Die Lizenz gilt nur, wenn...",
-
-  "actionChooserHeader": "Aktion auswählen"
+  "globalConstraintsDescription": "Die Lizenz gilt nur, wenn..."  
 }

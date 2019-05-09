@@ -51,34 +51,41 @@ export default {
     lang() {
       return this.$i18n.locale;
     },
+    placeholder() {
+      return this.$i18n.t('placeholder');
+    },
     rule() {
       return this.policy.follow(this.path);
     },
-    name() {
+    ruleInfo() {
       const pathLen = this.path.length;
-      const rType = RuleTypes[this.path[pathLen - 2]];
+      return RuleTypes[this.path[pathLen - 2]];
+    },
+    subruleType() {      
+      return this.ruleInfo.subrule;
+    },
+    subrules() {
+      return this.rule[this.subruleType];
+    },
+    ruleLabel() {
+      const pathLen = this.path.length;
+      let ruleLanguageInfo = this.$i18n.t('rule')[this.path[pathLen - 2]];
+      return ruleLanguageInfo.name;
+    },
+    name() {
       let action = this.rule.action;
 
       if (Array.isArray(action)) {
         action = action[0]['rdf:value'];
       }
 
-      const placeholder = this.$i18n.t('placeholder');
-      let actionLabel = placeholder;
-      if (action && action != placeholder) {
+      let actionLabel = this.placeholder;
+      if (action && action != this.placeholder) {
         actionLabel = actionList.find(obj => obj.odrl === action)[this.lang];
       }
 
-      return [`${rType.name[this.lang]}: `, actionLabel];
-    },
-    subruleType() {
-      const pathLen = this.path.length;
-      const rType = RuleTypes[this.path[pathLen - 2]];
-      return rType.subrule;
-    },
-    subrules() {
-      return this.rule[this.subruleType];
-    },
+      return [this.ruleLabel, actionLabel];
+    },    
   },
 };
 </script>

@@ -1,18 +1,77 @@
 {
-  "message": "hello i18n !!",
   "currentLanguage": "English",
   "languageButtonText": "Change language",
 
+  "either": "either",
+  "is_are": "is | are",
+
   "placeholder": "<empty>",
+
   "license": "License",
+  "licenseIdText": "License ID:",
+  "actionChooserHeader": "Choose an Action",
+  "removeRule": "remove rule",
+
+  "article": {
+    "f": {
+      "definite": "the",
+      "undefinite": "a"
+    },
+    "m": {
+      "definite": "the",
+      "undefinite": "a"
+    },
+    "n": {
+      "definite": "the",
+      "undefinite": "a"
+    }
+  },
+
+  "rule": {
+    "permission": {
+      "name": "Permission",
+      "description": "is permitted.",
+      "descriptionExtension": ["", ""]
+    },
+    "obligation": {
+      "name": "Obligation",
+      "description": "must be done.",
+      "descriptionExtension": ["", ""]
+    },
+    "prohibition": {
+      "name": "Prohibition",
+      "description": "is prohibited.",
+      "descriptionExtension": ["", ""]
+    },
+    "duty": {
+      "name": "Duty",
+      "pluralName": "Duties",
+      "dynamicName": "Duty | Duties",
+      "description": "must be done,",
+      "descriptionExtension": ["in order for", "to apply."]
+    },
+    "consequence": {
+      "name": "Consequence",
+      "pluralName": "Consequences",
+      "dynamicName": "Consequence | Consequences",
+      "description": "must be done,",
+      "descriptionExtension": ["in case", "wasn't done."]
+    },
+    "remedy": {
+      "name": "Remedy",
+      "pluralName": "Remedies",
+      "dynamicName": "Remedy | Remedies",
+      "description": "must be done.",
+      "descriptionExtension": ["in case", "was disregarded."]
+    }
+  },
 
   "permissionButtonText": "Permission",
   "obligationButtonText": "Obligation",
   "prohibitionButtonText": "Prohibition",
  
   "accept": "Accept",
-  "cancel": "Cancel",
-  "either": "either",
+  "cancel": "Cancel",  
 
   "refinement": {
     "name": "Refinement",
@@ -35,9 +94,7 @@
   "subRuleText": "Optionally, you can extend by the following rules:",
   "subRuleDescription": "are obligations, that must be done,",
 
-  "licenseIdText": "License ID:",
+  
   "globalConstraintsText": "Add globally applicable constraints...",
-  "globalConstraintsDescription": "The license then only applies, if...",
-
-  "actionChooserHeader": "Choose an Action"
+  "globalConstraintsDescription": "The license then only applies, if..."
 }

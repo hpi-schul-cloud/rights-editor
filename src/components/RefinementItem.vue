@@ -31,7 +31,6 @@
 import Vue from 'vue';
 import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
-import { capitalize } from '../libs/language/language.js';
 import {
   operandMapping,
   operatorList,
