@@ -1,10 +1,18 @@
 <template>
   <div class="rule-editor">
-    <div class="editor-back">
-      <router-link to="/">
-        <a><i class="fas fa-arrow-circle-left" /> Start</a>
-      </router-link>
-    </div>
+    <EditorNavBar>
+      <template v-slot:left>
+        <router-link to="/">
+          <i class="fas fa-arrow-circle-left" /> Start
+        </router-link>
+      </template>
+      <template v-slot:right>
+        <router-link :to="{ name: 'check-before-save', params: { policy } }">
+          Fertig <i class="fas fa-check-circle" />
+        </router-link>
+      </template>
+    </EditorNavBar>
+
     <div class="editor-header">
       <BaseButton @click="newPermission()">
         Erlaubnis
@@ -56,7 +64,7 @@ import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
 import PolicyItem from './PolicyItem.vue';
-import { actionList } from '../libs/odrl/actions';
+import EditorNavBar from './EditorNavBar.vue';
 
 export default {
   name: 'RuleEditor',
@@ -66,6 +74,7 @@ export default {
     PolicyTree,
     RuleItem,
     PolicyItem,
+    EditorNavBar,
   },
   data() {
     return {
@@ -182,11 +191,23 @@ export default {
   padding-top: 24px;
 }
 
-.editor-back{
+.editor-nav{
   padding-top: 15px;
   padding-bottom: 5px;
   margin-left: 10px;
   color: #1f3b70;
+}
+
+.editor-nav .left{
+  float: left;
+}
+
+.editor-nav .right {
+  float: right;
+}
+
+editor-nav .clear {
+  clear: both;
 }
 
 input.guid-input {
