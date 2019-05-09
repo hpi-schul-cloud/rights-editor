@@ -33,7 +33,7 @@ import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseChooser from './BaseChooser.vue';
 import {
-  operandList,
+  constraintOnlyOperandList,
   operandMapping,
   operatorList,
 } from '../libs/odrl/constraints';
@@ -92,7 +92,7 @@ export default {
       return desc;
     },
     opList() {
-      return operandList;
+      return constraintOnlyOperandList;
     },
     opMapping() {
       return operandMapping;

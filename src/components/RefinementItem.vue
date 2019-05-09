@@ -35,7 +35,7 @@ import {
   operandMapping,
   operatorList,
   actionToRefinements,
-} from '../libs/odrl/refinements';
+} from '../libs/odrl/constraints';
 
 const placeholder = '<leer>';
 

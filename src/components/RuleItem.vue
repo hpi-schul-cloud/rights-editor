@@ -2,7 +2,7 @@
   <div class="rule-container">
     <div class="rule-header">
       <h3>{{ ruleInfo.name }} <i :class="ruleInfo.icon" /></h3>
-      <BaseButton remove class="remove-button" @click="removeRule()">
+      <BaseButton remove class="remove-button" v-bind:title="removeRuleText" @click="removeRule()">
         <i class="far fa-trash-alt" />
       </BaseButton>
     </div>
@@ -23,14 +23,14 @@
     <!-- display and edit refinements -->
     <p class="refinements">
       Das <em>{{ actionLabel }}</em> darf nur auf die folgende Art und Weise erfolgen...
-      <em v-if="usingLogicalRefinement && logicalRefinementOperatorText == 'ODER'">entweder</em>
+      <em v-if="isLogicalRefinement && logicalRefinementOperatorText == 'ODER'">entweder</em>
     </p>
 
     <ul>
       <li v-for="(refinement, index) in refinements" :key="index">
         <RefinementItem :policy="policy" :path="[...refinementPath, index]" />
         <BaseButton
-          v-if="usingLogicalRefinement && index < refinements.length - 1"
+          v-if="isLogicalRefinement && index < refinements.length - 1"
           textlike
           class="logical-operator"
           @click="nextLogicalRefinementOperator()"
@@ -48,14 +48,14 @@
     <!-- display and edit constraints -->
     <p class="constraints">
       Insgesamt gilt {{ articles[ruleInfo.gender].def }} <em>{{ ruleInfo.name }}</em> nur, wenn...
-      <em v-if="usingLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
+      <em v-if="isLogicalConstraint && logicalConstraintOperatorText == 'ODER'">entweder</em>
     </p>
 
     <ul>
       <li v-for="(constraint, index) in constraints" :key="index">
         <ConstraintItem :policy="policy" :path="[...constraintPath, index]" />
         <BaseButton
-          v-if="usingLogicalConstraint && index < constraints.length - 1"
+          v-if="isLogicalConstraint && index < constraints.length - 1"
           textlike
           class="logical-operator"
           @click="nextLogicalConstraintOperator()"
@@ -107,6 +107,7 @@ import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
 import { articles as articleMapping } from '../libs/language/language.js';
+import { logicalOperatorList } from '../libs/odrl/constraints.js';
 
 export default {
   name: 'RuleItem',
@@ -127,25 +128,6 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      logicalOperators: [
-        {
-          text: 'UND/ODER',
-          short: 'or',
-        },
-        {
-          text: 'ODER',
-          short: 'xone',
-        },
-        {
-          text: 'UND',
-          short: 'and',
-        }],
-      selectedLogicalConstraint: 0,
-      selectedLogicalRefinement: 0,
-    };
-  },
   computed: {
     rule() {
       return this.policy.follow(this.path);
@@ -153,6 +135,9 @@ export default {
     ruleInfo() {
       const ruleTypeName = this.path[this.path.length - 2];
       return RuleTypes[ruleTypeName];
+    },
+    removeRuleText() {
+      return this.ruleInfo.name + " löschen";
     },
     subruleInfo() {
       return RuleTypes[this.ruleInfo.subrule];
@@ -233,22 +218,40 @@ export default {
       return articleMapping;
     },
     logicalConstraintOperatorText() {
-      return this.logicalOperators[this.selectedLogicalConstraint].text;
+      if (!this.rule.constraint) {
+        return null;
+      }
+
+      return logicalOperatorList[this.logicalConstraintOperatorShort].text;
     },
     logicalConstraintOperatorShort() {
-      return this.logicalOperators[this.selectedLogicalConstraint].short;
+      if (!this.rule.constraint) {
+        return null;
+      }
+
+      const op = Object.keys(this.rule.constraint)[0];
+      if (op == undefined) {
+        return Object.keys(logicalOperatorList)[0];
+      }
+      return op;
     },
     logicalRefinementOperatorText() {
-      return this.logicalOperators[this.selectedLogicalRefinement].text;
+      if (!this.action[0].refinement) {
+        return null;
+      }
+
+      return logicalOperatorList[this.logicalRefinementOperatorShort].text;
     },
     logicalRefinementOperatorShort() {
-      return this.logicalOperators[this.selectedLogicalRefinement].short;
-    },
-    usingLogicalConstraint() {
-      return Array.isArray(this.constraints) && this.constraints.length > 1;
-    },
-    usingLogicalRefinement() {
-      return Array.isArray(this.refinements) && this.refinements.length > 1;
+      if (!this.action[0].refinement) {
+        return null;
+      }
+
+      const op = Object.keys(this.action[0].refinement)[0];
+      if (op == undefined) {
+        return Object.keys(logicalOperatorList)[0];
+      }
+      return op;
     },
   },
   methods: {
@@ -307,18 +310,17 @@ export default {
     },
     nextLogicalConstraintOperator() {
       const list = this.rule.constraint[this.logicalConstraintOperatorShort];
+      const oldOp = this.logicalConstraintOperatorShort;
+
       Vue.delete(this.rule.constraint, this.logicalConstraintOperatorShort);
 
-      // selectedLogicalConstraint is an index into the array of viable logical
-      // operators. It points to the currently selected operator. by incrementing
-      // it (and reseting to 0 when the index goes out of bounds) we cycle through
-      // the possible operators one by one.
-      this.selectedLogicalConstraint++;
-      if (this.selectedLogicalConstraint >= this.logicalOperators.length) {
-        this.selectedLogicalConstraint = 0;
-      }
+      const keys = Object.keys(logicalOperatorList);
+      // get the index of the current operator
+      const index = keys.indexOf(oldOp);
+      // the new logical operator is just the next one in the list
+      const nextOp = keys[(index + 1) % keys.length];
 
-      Vue.set(this.rule.constraint, this.logicalConstraintOperatorShort, list);
+      Vue.set(this.rule.constraint, nextOp, list);
     },
 
     // refinements
@@ -345,18 +347,17 @@ export default {
     nextLogicalRefinementOperator() {
       const ref = this.action[0].refinement;
       const list = ref[this.logicalRefinementOperatorShort];
+      const oldOp = this.logicalRefinementOperatorShort;
+
       Vue.delete(ref, this.logicalRefinementOperatorShort);
 
-      // selectedLogicalRefinement is an index into the array of viable logical
-      // operators. It points to the currently selected operator. by incrementing
-      // it (and reseting to 0 when the index goes out of bounds) we cycle through
-      // the possible operators one by one.
-      this.selectedLogicalRefinement++;
-      if (this.selectedLogicalRefinement >= this.logicalOperators.length) {
-        this.selectedLogicalRefinement = 0;
-      }
+      const keys = Object.keys(logicalOperatorList);
+      // get the index of the current operator
+      const index = keys.indexOf(oldOp);
+      // the new logical operator is just the next one in the list
+      const nextOp = keys[(index + 1) % keys.length];
 
-      Vue.set(ref, this.logicalRefinementOperatorShort, list);
+      Vue.set(ref, nextOp, list);
     },
   },
 };

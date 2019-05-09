@@ -263,8 +263,10 @@ export default {
   float: left;
   margin: 0px 10px;
   padding: 0px;
-  width: 300px;
   font-size: 16px;
+  width: 300px;
+  height: 250px;
+  overflow-y: auto;
 }
 .list li {
   padding: 0.5em;

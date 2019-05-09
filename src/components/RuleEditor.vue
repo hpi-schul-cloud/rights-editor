@@ -50,7 +50,7 @@
     <div class="policy-meaning">
 
       <h2>Was bedeutet diese Lizenz?</h2>
-      <pre>{{ licenceText }}</pre>
+      <p v-html="licenceText" />
       <h2>Provisorische Lizenz</h2>
       <pre>{{ policy }}</pre>
     </div>
@@ -80,7 +80,8 @@ export default {
     return {
       editPath: [],
       policy: {
-        uid: '007-asdf-3ddfi',
+        uid: '',
+        target: '',
         follow(path) {
           return path.reduce((result, pathSegment) => result[pathSegment], this);
         },
@@ -92,22 +93,39 @@ export default {
       return this.editPath.length > 0;
     },
     licenceText() {
-      let text = 'Erlaubt ist: ';
+      let text = '';
 
-      if (typeof this.policy.permission !== 'undefined') {
-        text += JSON.stringify(this.policy.permission);
+      if (this.policy.permission){
+
+        text += 'Erlaubt ist: ';
+        text += this.policy.permission[0].action;
+
+        for (let permissionNumber = 1; permissionNumber < this.policy.permission.length; permissionNumber++){
+          text += ', '
+          text += this.policy.permission[permissionNumber].action;
+        }
       }
 
-      text += '\nVerpflichtend ist: ';
+      if (this.policy.obligation){
 
-      if (typeof this.policy.obligation !== 'undefined') {
-        text += JSON.stringify(this.policy.obligation);
+        text += '<br>Verpflichtend ist: ';
+        text += this.policy.obligation[0].action;
+
+        for (let obligationNumber = 1; obligationNumber < this.policy.obligation.length; obligationNumber++){
+          text += ', '
+          text += this.policy.obligation[obligationNumber].action;
+        }
       }
 
-      text += '\nVerboten ist: ';
+      if (this.policy.prohibition){
 
-      if (typeof this.policy.prohibition !== 'undefined') {
-        text += JSON.stringify(this.policy.prohibition);
+        text += '<br>Verboten ist: ';
+        text += this.policy.prohibition[0].action;
+
+        for (let prohibitionNumber = 1; prohibitionNumber < this.policy.prohibition.length; prohibitionNumber++){
+          text += ', '
+          text += this.policy.prohibition[prohibitionNumber].action;
+        }
       }
 
       return text;

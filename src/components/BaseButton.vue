@@ -30,18 +30,18 @@ export default {
 
 <style scoped>
 .base-button {
-  font-family: "Roboto", sans-serif;
-  color: white;
   display: inline-block;
-
-  border: 0px rgb(0, 0, 0) solid;
+  color: white;
+  border: 0px black solid;
   border-radius: 2px;
   background-color: #1f3b70;
+
   margin: 10px;
   padding: 10px 20px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
   text-align: center;
   text-decoration: none;
-  font-size: 16px;
   cursor: pointer;
 }
 
@@ -65,8 +65,7 @@ export default {
 
 .base-button-input {
   background-color: white;
-  border: 0px #222222 solid;
-  border-bottom: 1px transparent solid;
+  border: 1px solid rgb(169, 169, 169);
   color: black;
 
   -webkit-appearance: none;
@@ -74,15 +73,12 @@ export default {
 
   font-family: inherit;
   font-size: 1em;
+  cursor: text;
 
   margin: 10px;
   padding: 10px;
   margin-left: 5px;
   margin-right: 5px;
-
-  border-bottom: none;
-  box-shadow: inset 0 0 1.5px #000;
-  cursor: text;
 }
 
 .base-button-remove {
