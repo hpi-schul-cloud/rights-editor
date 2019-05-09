@@ -32,7 +32,12 @@
       </ul>
 
       <!-- add new constraint -->
-      <BaseButton class="add-constraint" type="button" title="Einschränkung hinzufügen" @click="addConstraint()">
+      <BaseButton
+        class="add-constraint"
+        type="button"
+        title="Einschränkung hinzufügen"
+        @click="addConstraint()"
+      >
         <i class="fas fa-plus" />
       </BaseButton>
     </div>

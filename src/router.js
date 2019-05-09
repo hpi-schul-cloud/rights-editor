@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Start from './views/Start.vue';
 import OER from './views/OER.vue';
 import Proprietary from './views/Proprietary.vue';
+import BuyCaseStudy from './views/BuyCaseStudy';
 
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/proprietary',
       name: 'proprietary',
       component: Proprietary,
+    },
+    {
+      path: '/filmsortiment-case-study',
+      name: 'filmsortiment-case-study',
+      component: BuyCaseStudy,
     },
   ],
 });
