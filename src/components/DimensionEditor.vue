@@ -113,7 +113,7 @@ export default {
       this.policies.forEach((license, lIndex) => {
         const licenseInfos = license.options.timeframes.map((timeframe, tIndex) => ({
           type: 'timeframe',
-          timeframe: timeframe,
+          timeframe,
           licenseIndex: lIndex,
           timeframeIndex: tIndex,
           state: license.options.state[tIndex],
@@ -156,7 +156,7 @@ export default {
     },
     timeframeSteps() {
       return timeframeSteps;
-    }
+    },
   },
   methods: {
     updatePrice(area, licenseIndex, timeframeIndex, priceInfo) {

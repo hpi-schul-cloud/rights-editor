@@ -18,7 +18,7 @@ export default {
       this.$router.push({ name: 'start' });
     },
     goForth(policy) {
-      this.$router.push({ name: 'check-before-save', params: { policy } })
+      this.$router.push({ name: 'check-before-save', params: { policy } });
     },
   },
 };
