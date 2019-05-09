@@ -4,6 +4,22 @@ export const operandList = [
   'Alter',
   'Nutzungsdauer',
   'Nutzeranzahl',
+  'Speichermedium',
+  'Anteil',
+  'Anzahl',
+  'Auflösung',
+  'Teilnehmer',
+  'Verbreitungsmethode',
+  'Dateiformat',
+  'Betrag',
+];
+
+export const constraintOnlyOperandList = [
+  'Bundesland',
+  'Gruppenzugehörigkeit',
+  'Alter',
+  'Nutzungsdauer',
+  'Nutzeranzahl',
 ];
 
 export const operatorList = [
@@ -12,6 +28,45 @@ export const operatorList = [
   { symbol: '≤', identifier: 'lteq' },
   { symbol: '>', identifier: 'gt' },
   { symbol: '≥', identifier: 'gteq' },
+];
+
+export const logicalOperatorList = {
+  or: {
+    text: 'UND/ODER',
+  },
+  xone: {
+    text: 'ODER',
+  },
+  and: {
+    text: 'UND',
+  },
+};
+
+const storageMedium = [
+  'Magnetband',
+  'Festplatte',
+  'CD/DVD',
+];
+
+const attendees = [
+  'Schüler',
+  'Lehrer',
+  'Eltern',
+  'Verwaltung',
+];
+
+const communication = [
+  'E-Mail',
+  'USB-Stick',
+  'Cloud',
+];
+
+const fileFormat = [
+  '.mp3',
+  '.mp4',
+  '.pdf',
+  '.doc',
+  '.ppt',
 ];
 
 export const states = [
@@ -44,6 +99,12 @@ export const unitList = [
   'Tage',
   'Stunden',
   'Nutzer',
+  '%',
+  'Stück',
+  'Personen',
+  'dpi',
+  'ppi',
+  '€',
 ];
 
 export const operandMapping = {
@@ -67,4 +128,63 @@ export const operandMapping = {
     operators: operatorList,
     units: [unitList[3]],
   },
+  Speichermedium: {
+    operators: [operatorList[0]],
+    list: storageMedium,
+  },
+  Anteil: {
+    operators: operatorList,
+    units: [unitList[4]],
+  },
+  Anzahl: {
+    operators: operatorList,
+    units: [unitList[5], unitList[6]],
+  },
+  Auflösung: {
+    operators: operatorList,
+    units: [unitList[7], unitList[8]],
+  },
+  Teilnehmer: {
+    operators: [operatorList[0]],
+    list: attendees,
+  },
+  Verbreitungsmethode: {
+    operators: [operatorList[0]],
+    list: communication,
+  },
+  Dateiformat: {
+    operators: [operatorList[0]],
+    list: fileFormat,
+  },
+  Betrag: {
+    operators: operatorList,
+    units: [unitList[9]],
+  },
 };
+
+export const actionToRefinements = Object.freeze({
+  Archivieren: {
+    operands: [operandList[5], operandList[6], operandList[7]],
+  },
+  Bearbeiten: {
+    operands: [operandList[6]],
+  },
+  Drucken: {
+    operands: [operandList[6], operandList[7], operandList[8]],
+  },
+  Kopieren: {
+    operands: [operandList[7], operandList[11]],
+  },
+  Verbreiten: {
+    operands: [operandList[6], operandList[7], operandList[9], operandList[10], operandList[11]],
+  },
+  Verkaufen: {
+    operands: [operandList[12]],
+  },
+  Vorführen: {
+    operands: [operandList[6], operandList[7], operandList[9]],
+  },
+  Zitieren: {
+    operands: [operandList[6]],
+  },
+});

@@ -14,10 +14,10 @@
       <BaseButton
         input
         :width="'90%'"
-        @click="showConstraintChooser()"
         class="edit-constraint"
         name="constraint"
         type="button"
+        @click="showConstraintChooser()"
       >
         {{ description }}
       </BaseButton>
@@ -33,7 +33,7 @@ import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseChooser from './BaseChooser.vue';
 import {
-  operandList,
+  constraintOnlyOperandList,
   operandMapping,
   operatorList,
 } from '../libs/odrl/constraints';
@@ -92,7 +92,7 @@ export default {
       return desc;
     },
     opList() {
-      return operandList;
+      return constraintOnlyOperandList;
     },
     opMapping() {
       return operandMapping;

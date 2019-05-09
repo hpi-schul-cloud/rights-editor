@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Start from './views/Start.vue';
 import OER from './views/OER.vue';
-import Metadata from './views/Metadata.vue';
 import Proprietary from './views/Proprietary.vue';
 import BuyCaseStudy from './views/BuyCaseStudy';
 
