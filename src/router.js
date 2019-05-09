@@ -27,11 +27,6 @@ export default new Router({
       component: Proprietary,
     },
     {
-      path: '/meta',
-      name: 'meta',
-      component: Metadata,
-    },
-    {
       path: '/filmsortiment-case-study',
       name: 'filmsortiment-case-study',
       component: BuyCaseStudy,
