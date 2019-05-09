@@ -25,8 +25,7 @@ export default {
 <style scoped>
 input {
   background-color: white;
-  border: 0px black solid;
-  border-bottom: 1px transparent solid;
+  border: 1px solid rgb(169, 169, 169);
   color: black;
 
   -webkit-appearance: none;
@@ -39,17 +38,14 @@ input {
   margin: 10px;
   padding: 10px;
   margin-left: 0px;
-
-  border-bottom: 1px solid DarkGray;
-  box-shadow: inset 0 0 1.5px #000;
 }
 
 .base-input-undercover {
-  box-shadow: none;
+  border: 1px solid white;
+  border-bottom: 1px solid rgb(169, 169, 169);
 }
 
 .base-input-undercover:focus {
-  box-shadow: inset 0 0 1.5px #000;
-  border-bottom: 1px solid #fff;
+  border: 1px solid rgb(169, 169, 169);
 }
 </style>
