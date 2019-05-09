@@ -51,7 +51,7 @@
 
     <!-- add new refinement -->
     <BaseButton class="add-button" @click="addRefinement()">
-      {{ $t('addRefinementButtonText') }}
+      {{ $t('refinement.add') }}
     </BaseButton>
 
     <!-- display and edit constraints -->
@@ -82,7 +82,7 @@
 
     <!-- add new constraint -->
     <BaseButton class="add-button" @click="addConstraint()">
-      {{ $t('addConstraintButtonText') }}
+      {{ $t('constraint.add') }}
     </BaseButton>
 
     <!-- add subrules -->

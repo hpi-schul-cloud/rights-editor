@@ -3,7 +3,7 @@
     <BaseChooser
       v-if="displayRefinementChooser"
       :object-to-edit="refinement"
-      :name="refinementLabel"
+      :name="'refinement'"
       :operand-list="opList"
       :operand-mapping="opMapping"
       @chosen="hideRefinementChooser(); refinement = $event"
@@ -71,9 +71,6 @@ export default {
       set(newRefinement) {
         Vue.set(this.refinementParent, this.path[this.path.length - 1], newRefinement);
       },
-    },
-    refinementLabel() {
-      return capitalize(this.$i18n.t('refinement'));
     },
     refinementParent() {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);

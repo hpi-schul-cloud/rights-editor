@@ -8,21 +8,27 @@
 
   "permissionButtonText": "Erlaubnis",
   "obligationButtonText": "Pflicht",
-  "prohibitionButtonText": "Verbot",
+  "prohibitionButtonText": "Verbot",  
+
+  "either": "entweder",
+
+  "refinement": {
+    "name": "Verfeinerung",
+    "edit": "Verfeinerung bearbeiten",
+    "add": "Verfeinerung hinzufügen"
+  },
+
+  "constraint": {
+    "name": "Einschränkung",
+    "edit": "Einschränkung bearbeiten",
+    "add": "Einschränkung hinzufügen"
+  },
 
   "textAheadOfActionLabel": "Das ",
   "refinementTextAfterActionLabel": " darf nur auf die folgende Art und Weise erfolgen...",
 
-  "either": "entweder",
-  "add": "hinzufügen",
-  "refinement": "Verfeinerung",
-  "addRefinementButtonText": "Verfeinerung hinzufügen",
-
-  "constraint": "Einschränkung",
   "constraintTextAheadOfRuleName": "Insgesamt gilt ",
   "constraintTextAfterRuleName": " nur, wenn...",
-
-  "addConstraintButtonText": "Einschränkung hinzufügen",
 
   "subRuleText": "Optional kann um folgende Regeln erweitert werden:",
   "subRuleDescription": "sind Pflichten, die geleistet werden müssen,",

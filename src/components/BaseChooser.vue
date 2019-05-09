@@ -1,14 +1,12 @@
 <template>
   <BaseModal :width="'1000px'" :scrollable="false">
     <template v-slot:header>
-      <!-- hmm.. -->
+
       <h1 v-if="objectToEdit == null">
-        <template v-if="lang == 'de'">{{ name }}  hinzufügen</template>
-        <template v-if="lang == 'en'">Add {{ name }}</template>
+        {{ addObjectHeader }}
       </h1>
       <h1 v-else>
-        <template v-if="lang == 'de'">{{ name }} bearbeiten</template>
-        <template v-if="lang == 'en'">Edit {{ name }}</template>
+        {{ editObjectHeader }}
       </h1>
     </template>
 
@@ -120,6 +118,12 @@ export default {
   computed: {
     lang() {
       return this.$i18n.locale;
+    },
+    addObjectHeader() {
+      return this.$i18n.t(this.name + '.add');
+    },
+    editObjectHeader() {
+      return this.$i18n.t(this.name + '.edit');
     },
     operands() {
       return this.operandList;

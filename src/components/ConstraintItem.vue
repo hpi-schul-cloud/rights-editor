@@ -3,7 +3,7 @@
     <BaseChooser
       v-if="displayConstraintChooser"
       :object-to-edit="constraint"
-      :name="constraintLabel"
+      :name="'constraint'"
       :operand-list="opList"
       :operand-mapping="opMapping"
       @chosen="hideConstraintChooser(); constraint = $event"
@@ -73,9 +73,6 @@ export default {
       set(newConstraint) {
         Vue.set(this.constraintParent, this.path[this.path.length - 1], newConstraint);
       },
-    },
-    constraintLabel() {
-      return capitalize(this.$i18n.t('constraint'));
     },
     constraintParent() {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
