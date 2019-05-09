@@ -1,8 +1,7 @@
 <template>
   <BaseModal>
     <template v-slot:header>
-      <h1 v-if="lang == 'de'">Aktion auswählen</h1>
-      <h1 v-if="lang == 'en'">Choose an Action</h1>
+      {{ $t('actionChooserHeader')}}      
     </template>
     <template v-slot:body>
       <ul class="actions-list">
@@ -33,7 +32,6 @@
 import BaseButton from './BaseButton.vue';
 import BaseModal from './BaseModal.vue';
 import { actionList } from '../libs/odrl/actions.js';
-import { getLanguage } from '../libs/language/language.js';
 
 export default {
   name: 'ActionChooser',
@@ -49,7 +47,7 @@ export default {
   },
   computed: {
     lang() {
-      return getLanguage();
+      return this.$i18n.locale;
     },
     actions() {
       return actionList;

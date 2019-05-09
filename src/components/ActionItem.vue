@@ -23,7 +23,7 @@
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import ActionChooser from './ActionChooser.vue';
-import { getLanguage, placeholder } from '../libs/language/language.js';
+import { placeholder } from '../libs/language/language.js';
 import { actionList } from '../libs/odrl/actions.js';
 
 export default {
@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     lang() {
-      return getLanguage();
+      return this.$i18n.locale;
     },
     rule() {
       const rulePath = this.path.slice(0, this.path.length - 1);

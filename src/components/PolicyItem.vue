@@ -1,8 +1,7 @@
 <template>
   <div>
     <div class="input-container id-input">
-      <template v-if="lang == 'de'">ID der Lizenz:</template>
-      <template v-if="lang == 'en'">License ID:</template>
+      {{ $t('licenseIdText') }}
       <BaseInput v-model="policy['uid']" undercover class="input" />
     </div>
 
@@ -18,13 +17,10 @@
     </div>
 
     <div class="constraints-container">
-      <h3 v-if="lang == 'de'">Global geltende Einschränkungen hinzufügen...</h3>
-      <h3 v-if="lang == 'en'">Add globally applicable constraints...</h3>
-      <template v-if="lang == 'de'">Die Lizenz gilt nur, wenn</template>
-      <template v-if="lang == 'en'">The license then only applies, if</template>
+      <h3>{{ $t('globalConstraintsText') }}</h3>
+      {{ $t('globalConstraintsDescription') }}
       <em v-if="isLogicalConstraint && logicalConstraintOperatorShort == 'xone'">
-        <template v-if="lang == 'de'"> entweder</template>
-        <template v-if="lang == 'en'"> either</template>
+        {{ $t('either') }}
       </em>
 
       <ul>
@@ -59,7 +55,6 @@ import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
 import BaseDropdown from './BaseDropdown.vue';
 import ConstraintItem from './ConstraintItem.vue';
-import { getLanguage } from '../libs/language/language.js';
 import { logicalOperatorList } from '../libs/odrl/constraints';
 
 export default {
@@ -84,7 +79,7 @@ export default {
   },
   computed: {
     lang() {
-      return getLanguage();
+      return this.$i18n.locale;
     },
     constraints() {
       if (!this.policy.constraint) {

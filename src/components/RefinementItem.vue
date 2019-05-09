@@ -31,7 +31,7 @@
 import Vue from 'vue';
 import BaseChooser from './BaseChooser.vue';
 import BaseButton from './BaseButton.vue';
-import { placeholder, getLanguage } from '../libs/language/language.js';
+import { capitalize } from '../libs/language/language.js';
 import {
   operandMapping,
   operatorList,
@@ -70,11 +70,7 @@ export default {
       },
     },
     refinementLabel() {
-      if (getLanguage() == 'de') {
-        return 'Verfeinerung';
-      } if (getLanguage() == 'en') {
-        return 'Refinement';
-      }
+      return capizalize(this.$i18n.t('refinement'));
     },
     refinementParent() {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
@@ -99,7 +95,7 @@ export default {
     },
     description() {
       if (!this.refinement) {
-        return placeholder;
+        return this.$i18n.t('placeholder');
       }
       let desc = this.opList.find(obj => obj.odrl === this.refinement.leftOperand)[getLanguage()];
       desc += ` ${operatorList.find(op => (op.identifier === this.refinement.operator)).symbol}`;

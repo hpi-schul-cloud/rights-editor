@@ -1,27 +1,28 @@
 <template>
   <div class="rule-editor">
+
+    <!-- TODO: make this a dropdown -->
+    <p>{{ $t('currentLanguage') }}</p>
+    <BaseButton textlike @click="switchLanguage()">
+        <i class="fas fa-language"></i> {{ $t('languageButtonText') }}
+    </BaseButton>
+
     <div class="editor-back">
       <router-link to="/">
         <a><i class="fas fa-arrow-circle-left" /> Start</a>
       </router-link>
     </div>
+    
     <div class="editor-header">
       <BaseButton @click="newPermission()">
-        <template v-if="lang == 'de'">Erlaubnis</template>
-        <template v-if="lang == 'en'">Permission</template>
+        {{ $t('permissionButtonText') }}        
       </BaseButton>
       <BaseButton @click="newObligation()">
-        <template v-if="lang == 'de'">Pflicht</template>
-        <template v-if="lang == 'en'">Obligation</template>
+        {{ $t('obligationButtonText') }}        
       </BaseButton>
       <BaseButton @click="newProhibition()">
-        <template v-if="lang == 'de'">Verbot</template>
-        <template v-if="lang == 'en'">Prohibition</template>
-      </BaseButton>
-
-      <BaseButton textlike @click="switchLanguage()">
-        <i class="fas fa-language"></i>
-      </BaseButton>
+        {{ $t('prohibitionButtonText') }}        
+      </BaseButton>   
 
     </div>
 
@@ -59,7 +60,6 @@
 
 <script>
 import Vue from 'vue';
-import { getLanguage, setLanguage } from '../libs/language/language.js';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
@@ -89,14 +89,6 @@ export default {
     };
   },
   computed: {
-    lang: {
-      get() {
-        return getLanguage();
-      },
-      set(l) {
-        setLanguage(l);
-      }
-    },
     showRulePane() {
       return this.editPath.length > 0;
     },
@@ -149,15 +141,11 @@ export default {
     },
 
     switchLanguage() {
-      /*if (this.lang === 'de') {
-        this.lang = 'en';
-      } else if (this.lang === 'en') {
-        this.lang = 'de';
-      }*/
-
-      setLanguage('de');
-
-      // https://vuejs.org/v2/guide/mixins.html
+      if (this.$i18n.locale == "de") {
+        this.$i18n.locale = "en";
+      } else if (this.$i18n.locale == "en") {
+        this.$i18n.locale = "de";
+      }
     }
   },
 };

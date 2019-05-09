@@ -32,7 +32,7 @@
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseChooser from './BaseChooser.vue';
-import { placeholder, lang } from '../libs/language/language.js';
+import { capitalize } from '../libs/language/language.js';
 import {
   constraintOnlyOperandList,
   operandMapping,
@@ -63,6 +63,9 @@ export default {
     };
   },
   computed: {
+    lang() {
+      return this.$i18n.locale;
+    },
     constraint: {
       get() {
         return this.policy.follow(this.path);
@@ -72,11 +75,7 @@ export default {
       },
     },
     constraintLabel() {
-      if (lang == 'de') {
-        return 'Einschränkung';
-      } if (lang == 'en') {
-        return 'Constraint';
-      }
+      return capitalize(this.$i18n.t('constraint'));
     },
     constraintParent() {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
@@ -87,15 +86,15 @@ export default {
     },
     description() {
       if (!this.constraint) {
-        return placeholder;
+        return this.$i18n.t('placeholder');
       }
-      let desc = this.opList.find(obj => obj.odrl === this.constraint.leftOperand)[lang];
+      let desc = this.opList.find(obj => obj.odrl === this.constraint.leftOperand)[this.lang];
       desc += ` ${operatorList.find(op => (op.identifier === this.constraint.operator)).symbol}`;
       if (Array.isArray(this.constraint.rightOperand)) {
         desc += ` ${this.constraint.rightOperand.join(', ')}`;
       } else {
         desc += ` ${this.constraint.rightOperand['@value']}`;
-        desc += ` ${unitList.find(obj => obj.odrl === this.constraint.unit)[lang]}`;
+        desc += ` ${unitList.find(obj => obj.odrl === this.constraint.unit)[this.lang]}`;
       }
       return desc;
     },

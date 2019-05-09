@@ -27,13 +27,11 @@
 
     <!-- display and edit refinements -->
     <p class="refinements">
-      {{ textAheadOfActionLabel }}
+      {{ $t('textAheadOfActionLabel') }}
       <em>{{ actionLabel }}</em>
-      <template v-if="lang == 'de'"> darf nur auf die folgende Art und Weise erfolgen...</template>
-      <template v-if="lang == 'en'"> may only be done in the following manner...</template>
+      {{ $t('refinementTextAfterActionLabel') }}
       <em v-if="isLogicalRefinement && logicalRefinementOperatorShort == 'xone'">
-        <template v-if="lang == 'de'"> entweder</template>
-        <template v-if="lang == 'en'"> either</template>
+        {{ $t('either') }}        
       </em>
     </p>
 
@@ -53,17 +51,18 @@
 
     <!-- add new refinement -->
     <BaseButton class="add-button" @click="addRefinement()">
-      <template v-if="lang == 'de'">Verfeinerung hinzufügen</template>
-      <template v-if="lang == 'en'">Add Refinement</template>
+      {{ $t('addRefinementButtonText') }}
     </BaseButton>
 
     <!-- display and edit constraints -->
     <p class="constraints">
-      <template v-if="lang == 'de'">Insgesamt gilt {{ articles[ruleInfo.gender].def[lang] }} <em>{{ ruleInfo.name[lang] }}</em> nur, wenn...</template>
-      <template v-if="lang == 'en'">In general, {{ articles[ruleInfo.gender].def[lang] }} <em>{{ ruleInfo.name[lang] }}</em> only applies, if...</template>
+      {{ $t('constraintTextAheadOfRuleName') }} 
+      {{ articles[ruleInfo.gender].def[lang] }} 
+      <em>{{ ruleInfo.name[lang] }}</em>
+      {{ $t('constraintTextAfterRuleName') }} 
+
       <em v-if="isLogicalConstraint && logicalConstraintOperatorShort == 'xone'">
-        <template v-if="lang == 'de'"> entweder</template>
-        <template v-if="lang == 'en'"> either</template>
+        {{ $t('either') }} 
       </em>
     </p>
 
@@ -83,24 +82,20 @@
 
     <!-- add new constraint -->
     <BaseButton class="add-button" @click="addConstraint()">
-      <template v-if="lang == 'de'">Einschränkung hinzufügen</template>
-      <template v-if="lang == 'en'">Add Constraint</template>
+      {{ $t('addConstraintButtonText') }}
     </BaseButton>
 
     <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
 
-      <template v-if="lang == 'de'">Optional kann um folgende Regeln erweitert werden:</template>
-      <template v-if="lang == 'en'">Optionally, you can extend by the following rules:</template>
+      {{ $t('subRuleText') }}
       <p>
         <BaseButton class="add-button" :name="subruleInfo.pluralName[lang]" @click="appendNewSubrule">
-          <template v-if="lang == 'de'">{{ subruleInfo.name[lang] }} hinzufügen</template>
-          <template v-if="lang == 'en'">Add {{ subruleInfo.name[lang] }}</template>
+          {{ subruleInfo.name[lang] }}         
         </BaseButton>
 
         {{ subruleInfo.pluralName[lang] }}
-        <template v-if="lang == 'de'">sind Pflichten, die geleistet werden müssen,</template>
-        <template v-if="lang == 'en'">are obligations, that must be done,</template>
+        {{ $t('subRuleDescription') }}
         <EmbedInText :text-ahead="subruleInfo.descriptionAddon[lang][0]" :text-after="subruleInfo.descriptionAddon[lang][1]">
           {{ articles[ruleInfo.gender].def[lang] }} <em>{{ ruleInfo.name[lang] }}</em>
         </EmbedInText>
@@ -108,8 +103,8 @@
 
       <!-- list all available subrules -->
       <p v-if="subrules">
-        <template v-if="lang == 'de'">Die </template>
-        <template v-if="lang == 'en'">The </template>
+        
+        {{ subruleNameArticleCap }}
         {{ subrules.length == 1 ? subruleInfo.name[lang] : subruleInfo.pluralName[lang] }}
         <template v-if="lang == 'de'">diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name[lang] }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
           {{ subrules.length === 1 ? 'ist' : 'sind' }}<br>
@@ -136,7 +131,7 @@ import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
-import { articles as articleMapping, placeholder, getLanguage } from '../libs/language/language.js';
+import { articles as articleMapping, placeholder, capitalize } from '../libs/language/language.js';
 import { actionList } from '../libs/odrl/actions.js';
 import { logicalOperatorList } from '../libs/odrl/constraints.js';
 
@@ -161,14 +156,17 @@ export default {
   },
   computed: {
     lang() {
-      return getLanguage();
+      return this.$i18n.locale;
+    },
+
+    /* hmm */
+    subruleNameArticleCap() {
+      return capitalize(this.articles[this.subruleInfo.gender].def[this.lang]);
     },
     textAheadOfActionLabel() {
-      if (this.lang == 'de') {
-        return 'Das';
-      }
-      return '';
+      return this.$i18n.t('textAheadOfActionLabel');
     },
+
     rule() {
       return this.policy.follow(this.path);
     },
