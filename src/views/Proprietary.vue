@@ -11,8 +11,7 @@ export default {
     RuleEditor,
   },
   data() {
-    return {
-    };
+    return {};
   },
 };
 </script>
