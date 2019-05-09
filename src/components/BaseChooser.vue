@@ -1,6 +1,7 @@
 <template>
   <BaseModal :width="'1000px'" :scrollable="false">
     <template v-slot:header>
+      <!-- hmm.. -->
       <h1 v-if="objectToEdit == null">
         <template v-if="lang == 'de'">{{ name }}  hinzufügen</template>
         <template v-if="lang == 'en'">Add {{ name }}</template>
@@ -57,7 +58,7 @@
         <!-- input is selection from list -->
         <ul v-if="isListInput" class="value-list list">
           <li
-            v-for="(item, index) in listItems"
+            v-for="(item, index) in listItems[lang]"
             :key="index"
             :class="{ selected: Array.isArray(rightOperand) && rightOperand.indexOf(item) >= 0 }"
             @click="toggleRightOperand(item)"
@@ -83,7 +84,6 @@ import Vue from 'vue';
 import BaseInput from './BaseInput.vue';
 import BaseModal from './BaseModal.vue';
 import BaseButton from './BaseButton.vue';
-import { lang } from '../libs/language/language.js';
 
 export default {
   name: 'BaseChooser',
@@ -119,7 +119,7 @@ export default {
   },
   computed: {
     lang() {
-      return lang;
+      return this.$i18n.locale;
     },
     operands() {
       return this.operandList;

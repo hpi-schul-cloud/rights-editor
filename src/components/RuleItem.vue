@@ -104,6 +104,7 @@
       <!-- list all available subrules -->
       <p v-if="subrules">
 
+        <!-- hmm.. -->
         {{ subruleNameArticleCap }}
         {{ subrules.length == 1 ? subruleInfo.name[lang] : subruleInfo.pluralName[lang] }}
         <template v-if="lang == 'de'">diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleInfo.name[lang] }}{{ ruleInfo.gender === 'f' ? '' : 's' }}
@@ -131,7 +132,7 @@ import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
 import { RuleTypes } from '../libs/odrl/rules.js';
-import { articles as articleMapping, placeholder, capitalize } from '../libs/language/language.js';
+import { articles as articleMapping, capitalize } from '../libs/language/language.js';
 import { actionList } from '../libs/odrl/actions.js';
 import { logicalOperatorList } from '../libs/odrl/constraints.js';
 
@@ -158,8 +159,9 @@ export default {
     lang() {
       return this.$i18n.locale;
     },
-
-    /* hmm */
+    placeholder() {
+      return this.$i18n.t('placeholder');
+    },
     subruleNameArticleCap() {
       return capitalize(this.articles[this.subruleInfo.gender].def[this.lang]);
     },
@@ -210,10 +212,10 @@ export default {
       return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
     },
     actionLabel() {
-      if (this.actionString && this.actionString != placeholder) {
+      if (this.actionString && this.actionString != this.placeholder) {
         return actionList.find(obj => obj.odrl === this.actionString)[this.lang];
       }
-      return placeholder;
+      return this.placeholder;
     },
     constraints() {
       if (!this.rule.constraint) {

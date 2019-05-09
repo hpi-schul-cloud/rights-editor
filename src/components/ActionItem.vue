@@ -23,7 +23,6 @@
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
 import ActionChooser from './ActionChooser.vue';
-import { placeholder } from '../libs/language/language.js';
 import { actionList } from '../libs/odrl/actions.js';
 
 export default {
@@ -55,6 +54,9 @@ export default {
     lang() {
       return this.$i18n.locale;
     },
+    placeholder() {
+      return this.$i18n.t('placeholder');
+    },
     rule() {
       const rulePath = this.path.slice(0, this.path.length - 1);
       return this.policy.follow(rulePath);
@@ -62,7 +64,7 @@ export default {
     action: {
       get() {
         if (!this.rule.action) {
-          Vue.set(this.rule, 'action', placeholder);
+          Vue.set(this.rule, 'action', this.placeholder);
         }
         if (Array.isArray(this.rule.action)) {
           return this.rule.action[0]['rdf:value'];
@@ -74,13 +76,13 @@ export default {
       },
     },
     actionLabel() {
-      if (this.action && this.action != placeholder) {
+      if (this.action && this.action != this.placeholder) {
         return actionList.find(obj => obj.odrl === this.action)[this.lang];
       }
-      return placeholder;
+      return this.placeholder;
     },
     displayActionChooser() {
-      return this.actionChooserShouldDisplay || this.rule.action === placeholder;
+      return this.actionChooserShouldDisplay || this.rule.action === this.placeholder;
     },
   },
   methods: {
@@ -95,7 +97,7 @@ export default {
       this.action = actionObj.odrl;
     },
     aborted() {
-      if (this.rule.action === placeholder) {
+      if (this.rule.action === this.placeholder) {
         this.removeCallback();
       } else {
         this.hideActionChooser();

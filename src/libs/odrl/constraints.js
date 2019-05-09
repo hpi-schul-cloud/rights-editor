@@ -1,7 +1,5 @@
 /* list of selectable options */
 
-import { lang } from '../language/language.js';
-
 const storageDevice = {
   de: [
     'Magnetband',
@@ -13,7 +11,7 @@ const storageDevice = {
     'hard disk',
     'CD/DVD',
   ],
-}[lang];
+};
 
 const attendees = {
   de: [
@@ -26,7 +24,7 @@ const attendees = {
     'teachers',
     'parents',
   ],
-}[lang];
+};
 
 const communication = {
   de: [
@@ -39,7 +37,7 @@ const communication = {
     'flash drive',
     'cloud',
   ],
-}[lang];
+};
 
 const fileFormat = [
   '.mp3',
@@ -76,7 +74,7 @@ export const states = {
     'New York',
     'Texas',
   ],
-}[lang];
+};
 
 export const groups = {
   de: [
@@ -91,7 +89,7 @@ export const groups = {
     'parents',
     'administrators',
   ],
-}[lang];
+};
 
 export const operandList = [
   { odrl: 'http://www.example.org/state', de: 'Bundesland', en: 'state' },

@@ -59,8 +59,11 @@ export default {
     return {
       refinementChooserShouldDisplay: false,
     };
-  },
+  },  
   computed: {
+    lang() {
+      return this.$i18n.locale;
+    },
     refinement: {
       get() {
         return this.policy.follow(this.path);
@@ -70,7 +73,7 @@ export default {
       },
     },
     refinementLabel() {
-      return capizalize(this.$i18n.t('refinement'));
+      return capitalize(this.$i18n.t('refinement'));
     },
     refinementParent() {
       const pathWithoutLastElement = this.path.slice(0, this.path.length - 1);
@@ -97,13 +100,13 @@ export default {
       if (!this.refinement) {
         return this.$i18n.t('placeholder');
       }
-      let desc = this.opList.find(obj => obj.odrl === this.refinement.leftOperand)[getLanguage()];
+      let desc = this.opList.find(obj => obj.odrl === this.refinement.leftOperand)[this.lang];
       desc += ` ${operatorList.find(op => (op.identifier === this.refinement.operator)).symbol}`;
       if (Array.isArray(this.refinement.rightOperand)) {
         desc += ` ${this.refinement.rightOperand.join(', ')}`;
       } else {
         desc += ` ${this.refinement.rightOperand['@value']}`;
-        desc += ` ${unitList.find(obj => obj.odrl === this.refinement.unit)[getLanguage()]}`;
+        desc += ` ${unitList.find(obj => obj.odrl === this.refinement.unit)[this.lang]}`;
       }
       return desc;
     },
