@@ -169,6 +169,7 @@ export default {
   margin-left: 5px;
   padding-left: 10px;
   padding-top: 5px;
+  z-index: 4;
 }
 
 .dropdown ul {
