@@ -96,13 +96,20 @@ export default {
       if (!this.refinement) {
         return this.$i18n.t('placeholder');
       }
-      let desc = this.opList.find(obj => obj.odrl === this.refinement.leftOperand)[this.lang];
+
+      let desc = ` ${this.$i18n.t(this.refinement.leftOperand)}`;
       desc += ` ${operatorList.find(op => (op.identifier === this.refinement.operator)).symbol}`;
-      if (Array.isArray(this.refinement.rightOperand)) {
-        desc += ` ${this.refinement.rightOperand.join(', ')}`;
+
+      const rOperand = this.refinement.rightOperand;
+      if (Array.isArray(rOperand)) {
+        const translated = [];
+        for (let i = 0; i < rOperand.length; i++) {
+          translated.push(this.$i18n.t(rOperand[i]));
+        }
+        desc += ` ${translated.join(', ')}`;
       } else {
-        desc += ` ${this.refinement.rightOperand['@value']}`;
-        desc += ` ${unitList.find(obj => obj.odrl === this.refinement.unit)[this.lang]}`;
+        desc += ` ${this.$i18n.t(rOperand['@value'])}`;
+        desc += ` ${this.$i18n.t(this.refinement.unit)}`;
       }
       return desc;
     },

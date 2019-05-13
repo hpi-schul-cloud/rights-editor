@@ -1,5 +1,7 @@
 {
   "currentLanguage": "English",
+  "english": "English",
+  "german": "Deutsch",
   "languageButtonText": "Change language",
 
   "either": "either",
@@ -93,10 +95,13 @@
 
   "subRuleText": "Optionally, you can extend by the following rules:",
   "subRuleDescription": "are obligations, that must be done,",
-
   
   "globalConstraintsText": "Add globally applicable constraints...",
   "globalConstraintsDescription": "The license then only applies, if...",
+
+  "or": "AND/OR",
+  "xone": "OR",
+  "and": "AND",
 
   "http://www.w3.org/ns/odrl/2/play": "Playing",
   "http://www.w3.org/ns/odrl/2/archive": "Archiving",
@@ -105,5 +110,68 @@
   "http://www.w3.org/ns/odrl/2/reproduce": "Reproducing",
   "http://www.w3.org/ns/odrl/2/distribute": "Distributing",
   "http://www.w3.org/ns/odrl/2/compensate": "Compensating",
-  "http://www.w3.org/ns/odrl/2/present": "Presenting"
+  "http://www.w3.org/ns/odrl/2/present": "Presenting",
+
+  "http://www.example.org/state": "state",
+  "http://www.example.org/group-identity": "group identity",
+  "http://www.example.org/age": "age",
+  "http://www.example.org/time-of-use": "time of use",
+  "http://www.example.org/user-amount": "user amount",
+  "http://www.example.org/storage-device": "storage device",
+  "http://www.example.org/share": "share",
+  "http://www.example.org/amount": "amount",
+  "http://wwww.example.org/resolution": "resolution",
+  "http://www.example.org/participants": "participants",
+  "http://www.example.org/distribution-method": "distribution method",
+  "http://www.example.org/file-format": "file format",
+  "http://www.example.org/pay-amount": "pay amount",
+
+  "http://www.example.org/resource/year": "years",
+  "http://www.example.org/resource/day": "days",
+  "http://www.example.org/resource/hour": "hours",
+  "http://www.example.org/resource/user": "user",
+  "http://www.example.org/resource/percentage": "percent %",
+  "http://www.example.org/resource/piece": "units",
+  "http://www.example.org/resource/person": "people",
+  "http://www.example.org/resource/dpi": "dpi",
+  "http://www.example.org/resource/ppi": "ppi",
+  "http://www.example.org/resource/euro": "euro €",
+  "http://www.example.org/resource/dollar": "dollar $",
+
+  "http://www.example.org/storage-device/magnetic-tape": "magnetic tape",
+  "http://www.example.org/storage-device/hard-disk": "hard disk",
+  "http://www.example.org/storage-device/cd": "CD",
+  "http://www.example.org/storage-device/dvd": "DVD",
+
+  "http://www.example.org/person/student": "students",
+  "http://www.example.org/person/teacher": "teachers",
+  "http://www.example.org/person/parent": "parents",  
+  "http://www.example.org/person/administrator": "administration",
+
+  "http://www.example.org/communication/email": "email",
+  "http://www.example.org/communication/usb": "flash drive",
+  "http://www.example.org/communication/cloud": "cloud",
+
+  "http://www.example.org/file-format/mp3": ".mp3",
+  "http://www.example.org/file-format/mp4": ".mp4",
+  "http://www.example.org/file-format/pdf": ".pdf",
+  "http://www.example.org/file-format/doc": ".doc",
+  "http://www.example.org/file-format/ppt": ".ppt",
+
+  "http://schema.org/State/Germany/Baden-Württemberg": "Baden-Württemberg",
+  "http://schema.org/State/Germany/Bayern": "Bavaria",
+  "http://schema.org/State/Germany/Berlin": "Berlin",
+  "http://schema.org/State/Germany/Brandenburg": "Brandenburg",
+  "http://schema.org/State/Germany/Bremen": "Bremen",
+  "http://schema.org/State/Germany/Hamburg": "Hamburg",
+  "http://schema.org/State/Germany/Hessen": "Hesse",
+  "http://schema.org/State/Germany/Mecklenburg-Vorpommern": "Mecklenburg-Vorpommern",
+  "http://schema.org/State/Germany/Niedersachsen": "Lower Saxony",
+  "http://schema.org/State/Germany/Nordrhein-Westfalen": "North Rhine-Westphalia",
+  "http://schema.org/State/Germany/Rheinland-Pfalz": "Rhineland-Palatinate",
+  "http://schema.org/State/Germany/Saarland": "Saarland",
+  "http://schema.org/State/Germany/Sachsen": "Saxony",
+  "http://schema.org/State/Germany/Sachsen-Anhalt": "Saxony-Anhalt",
+  "http://schema.org/State/Germany/Schleswig-Holstein": "Schleswig-Holstein",
+  "http://schema.org/State/Germany/Thüringen": "Thuringia"
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <BaseButton
       id="dropdown-button"
       input
@@ -14,7 +14,7 @@
     <div
       v-if="shouldDisplayList"
       class="dropdown"
-      :style="{ width: this.width }"
+      :style="{ width: 'auto', minWidth: this.width }"
     >
       <ul
         v-closable="{ exclude: ['dropdown-button', 'dropdown-icon'],
@@ -140,6 +140,11 @@ export default {
   margin-left: 10px;
 }
 
+.container {
+  position: relative;  
+  text-align: left;
+}
+
 #dropdown-icon {
   text-align: right;
   position: absolute;
@@ -163,8 +168,7 @@ export default {
   position: absolute;
 
   margin-left: 5px;
-  padding: 10px;
-  padding-bottom: 0px;
+  padding-left: 10px;
   padding-top: 5px;
 }
 

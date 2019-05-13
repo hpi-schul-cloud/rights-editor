@@ -30,7 +30,7 @@
       {{ $t('textAheadOfActionLabel') }}
       <em>{{ actionLabel }}</em>
       {{ $t('refinementTextAfterActionLabel') }}
-      <em v-if="isLogicalRefinement && logicalRefinementOperatorShort == 'xone'">
+      <em v-if="isLogicalRefinement && logicalRefinementOperator == 'xone'">
         {{ $t('either') }}
       </em>
     </p>
@@ -44,7 +44,7 @@
           class="logical-operator"
           @click="nextLogicalRefinementOperator()"
         >
-          {{ logicalRefinementOperatorText }}
+          {{ $t(logicalRefinementOperator) }}
         </BaseButton>
       </li>
     </ul>
@@ -60,7 +60,7 @@
       {{ article[ruleInfo.gender].definite }}      
       <em>{{ ruleLanguageInfo.name }}</em>
       {{ $t('constraintTextAfterRuleName') }}
-      <em v-if="isLogicalConstraint && logicalConstraintOperatorShort == 'xone'">
+      <em v-if="isLogicalConstraint && logicalConstraintOperator == 'xone'">
         {{ $t('either') }}
       </em>
     </p>
@@ -74,7 +74,7 @@
           class="logical-operator"
           @click="nextLogicalConstraintOperator()"
         >
-          {{ logicalConstraintOperatorText }}
+          {{ $t(logicalConstraintOperator) }}
         </BaseButton>
       </li>
     </ul>
@@ -235,7 +235,7 @@ export default {
         return null;
       }
       if (this.isLogicalConstraint) {
-        return this.rule.constraint[this.logicalConstraintOperatorShort]['@list'];
+        return this.rule.constraint[this.logicalConstraintOperator]['@list'];
       }
       return this.rule.constraint;
     },
@@ -246,7 +246,7 @@ export default {
     },
     constraintPath() {
       if (this.isLogicalConstraint) {
-        return [...this.path, 'constraint', this.logicalConstraintOperatorShort, '@list'];
+        return [...this.path, 'constraint', this.logicalConstraintOperator, '@list'];
       }
       return [...this.path, 'constraint'];
     },
@@ -258,7 +258,7 @@ export default {
         return null;
       }
       if (this.isLogicalRefinement) {
-        return this.action[0].refinement[this.logicalRefinementOperatorShort]['@list'];
+        return this.action[0].refinement[this.logicalRefinementOperator]['@list'];
       }
       return this.action[0].refinement;
     },
@@ -275,45 +275,31 @@ export default {
         if (this.refinements.length <= 1) {
           return [...this.path, 'action', 0, 'refinement'];
         }
-        return [...this.path, 'action', 0, 'refinement', this.logicalRefinementOperatorShort, '@list'];
+        return [...this.path, 'action', 0, 'refinement', this.logicalRefinementOperator, '@list'];
       }
     },
     article() {
       return this.$i18n.t('article');
     },
-    logicalConstraintOperatorText() {
-      if (!this.rule.constraint) {
-        return null;
-      }
-
-      return logicalOperatorList[this.logicalConstraintOperatorShort].text[this.lang];
-    },
-    logicalConstraintOperatorShort() {
+    logicalConstraintOperator() {
       if (!this.rule.constraint) {
         return null;
       }
 
       const op = Object.keys(this.rule.constraint)[0];
       if (op == undefined) {
-        return Object.keys(logicalOperatorList)[0];
+        return logicalOperatorList[0];
       }
       return op;
     },
-    logicalRefinementOperatorText() {
-      if (!this.action[0].refinement) {
-        return null;
-      }
-
-      return logicalOperatorList[this.logicalRefinementOperatorShort].text[this.lang];
-    },
-    logicalRefinementOperatorShort() {
+    logicalRefinementOperator() {
       if (!this.action[0].refinement) {
         return null;
       }
 
       const op = Object.keys(this.action[0].refinement)[0];
       if (op == undefined) {
-        return Object.keys(logicalOperatorList)[0];
+        return logicalOperatorList[0];
       }
       return op;
     },
@@ -366,22 +352,24 @@ export default {
       if (this.constraints.length == 1) {
         const constraint = this.constraints;
         Vue.set(this.rule, 'constraint', {});
-        Vue.set(this.rule.constraint, this.logicalConstraintOperatorShort, { '@list': constraint });
+        Vue.set(this.rule.constraint, this.logicalConstraintOperator, { '@list': constraint });
       }
 
       this.constraints.push(null);
     },
     nextLogicalConstraintOperator() {
-      const list = this.rule.constraint[this.logicalConstraintOperatorShort];
-      const oldOp = this.logicalConstraintOperatorShort;
+      const list = this.rule.constraint[this.logicalConstraintOperator];
+      const oldOp = this.logicalConstraintOperator;
 
-      Vue.delete(this.rule.constraint, this.logicalConstraintOperatorShort);
+      Vue.delete(this.rule.constraint, this.logicalConstraintOperator);
+      
+      console.log(oldOp);
+      console.log(logicalOperatorList);
 
-      const keys = Object.keys(logicalOperatorList);
       // get the index of the current operator
-      const index = keys.indexOf(oldOp);
+      const index = logicalOperatorList.indexOf(oldOp);
       // the new logical operator is just the next one in the list
-      const nextOp = keys[(index + 1) % keys.length];
+      const nextOp = logicalOperatorList[(index + 1) % logicalOperatorList.length];
 
       Vue.set(this.rule.constraint, nextOp, list);
     },
@@ -402,23 +390,22 @@ export default {
       if (this.refinements.length == 1) {
         const refinement = this.refinements;
         Vue.set(this.action[0], 'refinement', {});
-        Vue.set(this.action[0].refinement, this.logicalRefinementOperatorShort, { '@list': refinement });
+        Vue.set(this.action[0].refinement, this.logicalRefinementOperator, { '@list': refinement });
       }
 
       this.refinements.push(null);
     },
     nextLogicalRefinementOperator() {
       const ref = this.action[0].refinement;
-      const list = ref[this.logicalRefinementOperatorShort];
-      const oldOp = this.logicalRefinementOperatorShort;
+      const list = ref[this.logicalRefinementOperator];
+      const oldOp = this.logicalRefinementOperator;
 
-      Vue.delete(ref, this.logicalRefinementOperatorShort);
+      Vue.delete(ref, this.logicalRefinementOperator);
 
-      const keys = Object.keys(logicalOperatorList);
       // get the index of the current operator
-      const index = keys.indexOf(oldOp);
+      const index = logicalOperatorList.indexOf(oldOp);
       // the new logical operator is just the next one in the list
-      const nextOp = keys[(index + 1) % keys.length];
+      const nextOp = logicalOperatorList[(index + 1) % logicalOperatorList.length];
 
       Vue.set(ref, nextOp, list);
     },

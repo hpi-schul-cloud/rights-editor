@@ -1,11 +1,17 @@
 <template>
   <div class="rule-editor">
 
-    <!-- TODO: make this a dropdown -->
-    <p>{{ $t('currentLanguage') }}</p>
-    <BaseButton textlike @click="switchLanguage()">
-      <i class="fas fa-language" /> {{ $t('languageButtonText') }}
-    </BaseButton>
+    <div class="language-container">
+      <i class="fas fa-language" /> 
+      {{ $t('languageButtonText') }}:
+      <BaseDropdown
+          :width="'150px'" 
+          class="language-dropdown"       
+          :list="languages"
+          :init-value="languages[0]"
+          @selected="switchLanguage($event)"
+      />
+    </div>
 
     <div class="editor-back">
       <router-link to="/">
@@ -62,6 +68,7 @@
 import Vue from 'vue';
 import { constants } from 'crypto';
 import BaseButton from './BaseButton.vue';
+import BaseDropdown from './BaseDropdown.vue';
 import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
@@ -72,6 +79,7 @@ export default {
   components: {
     BaseButton,
     BaseInput,
+    BaseDropdown,
     PolicyTree,
     RuleItem,
     PolicyItem,
@@ -89,6 +97,9 @@ export default {
     };
   },
   computed: {
+    languages() {
+      return [this.$i18n.t("german"), this.$i18n.t("english")];
+    },
     showRulePane() {
       return this.editPath.length > 0;
     },
@@ -140,12 +151,12 @@ export default {
       this.editPath = ['prohibition', idx];
     },
 
-    switchLanguage() {
-      if (this.$i18n.locale == 'de') {
-        this.$i18n.locale = 'en';
-      } else if (this.$i18n.locale == 'en') {
-        this.$i18n.locale = 'de';
-      }
+    switchLanguage(lang) {
+      console.log("Dropdown event: " + lang);
+      console.log("currentLanguage: " + this.$i18n.t("currentLanguage"));
+      if (this.$i18n.t("currentLanguage") != lang) {
+        this.$i18n.locale = lang[0].toLowerCase() + lang[1];
+      }      
     },
   },
 };
@@ -197,7 +208,28 @@ input.guid-input {
   width: 175px;
 }
 
+.language-container {
+  text-align: right;
+  width: 600px;
+  position: absolute;
+  right: 20px;
+}
+
+.language-dropdown {
+  display: inline-block;
+}
+
+.fa-language {
+  margin-right: 5px;
+}
+
 @media screen and (max-width: 840px) {
+  .language-container {
+    text-align: left;
+    width: auto;
+    position: relative;
+  }
+
   .policy-detail {
     display: inline-block;
     margin-left: 0px;

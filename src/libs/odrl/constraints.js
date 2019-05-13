@@ -1,112 +1,64 @@
-/* list of selectable options */
-
-/* hmm.. */
-
-const storageDevice = {
-  de: [
-    'Magnetband',
-    'Festplatte',
-    'CD/DVD',
-  ],
-  en: [
-    'magnetic tape',
-    'hard disk',
-    'CD/DVD',
-  ],
-};
-
-const attendees = {
-  de: [
-    'Schüler',
-    'Lehrer',
-    'Eltern',
-  ],
-  en: [
-    'students',
-    'teachers',
-    'parents',
-  ],
-};
-
-const communication = {
-  de: [
-    'E-Mail',
-    'USB-Stick',
-    'Cloud',
-  ],
-  en: [
-    'e-mail',
-    'flash drive',
-    'cloud',
-  ],
-};
-
-const fileFormat = [
-  '.mp3',
-  '.mp4',
-  '.pdf',
-  '.doc',
-  '.ppt',
+const storageDevice = [
+  "http://www.example.org/storage-device/magnetic-tape",
+  "http://www.example.org/storage-device/hard-disk",
+  "http://www.example.org/storage-device/cd",
+  "http://www.example.org/storage-device/dvd"
 ];
 
-export const states = {
-  de: [
-    'Baden-Württemberg',
-    'Bayern',
-    'Berlin',
-    'Brandenburg',
-    'Bremen',
-    'Hamburg',
-    'Hessen',
-    'Mecklenburg-Vorpommern',
-    'Niedersachsen',
-    'Nordrhein-Westfalen',
-    'Rheinland-Pfalz',
-    'Saarland',
-    'Sachsen',
-    'Sachsen-Anhalt',
-    'Schleswig-Holstein',
-    'Thüringen',
-  ],
-  en: [
-    'Arizona',
-    'California',
-    'Florida',
-    'Michigan',
-    'New York',
-    'Texas',
-  ],
-};
+const groups = [
+  "http://www.example.org/person/student",
+  "http://www.example.org/person/teacher",
+  "http://www.example.org/person/parent",  
+  "http://www.example.org/person/administrator"
+];
 
-export const groups = {
-  de: [
-    'Schüler',
-    'Lehrer',
-    'Eltern',
-    'Verwaltung',
-  ],
-  en: [
-    'students',
-    'teachers',
-    'parents',
-    'administrators',
-  ],
-};
+const communication = [
+  "http://www.example.org/communication/email",
+  "http://www.example.org/communication/usb",
+  "http://www.example.org/communication/cloud"
+];
+
+const fileFormat = [
+  "http://www.example.org/file-format/mp3",
+  "http://www.example.org/file-format/mp4",
+  "http://www.example.org/file-format/pdf",
+  "http://www.example.org/file-format/doc",
+  "http://www.example.org/file-format/ppt",
+];
+
+const states = [
+  "http://schema.org/State/Germany/Baden-Württemberg",
+  "http://schema.org/State/Germany/Bayern",
+  "http://schema.org/State/Germany/Berlin",
+  "http://schema.org/State/Germany/Brandenburg",
+  "http://schema.org/State/Germany/Bremen",
+  "http://schema.org/State/Germany/Hamburg",
+  "http://schema.org/State/Germany/Hessen",
+  "http://schema.org/State/Germany/Mecklenburg-Vorpommern",
+  "http://schema.org/State/Germany/Niedersachsen",
+  "http://schema.org/State/Germany/Nordrhein-Westfalen",
+  "http://schema.org/State/Germany/Rheinland-Pfalz",
+  "http://schema.org/State/Germany/Saarland",
+  "http://schema.org/State/Germany/Sachsen",
+  "http://schema.org/State/Germany/Sachsen-Anhalt",
+  "http://schema.org/State/Germany/Schleswig-Holstein",
+  "http://schema.org/State/Germany/Thüringen",
+];
 
 export const operandList = [
-  { odrl: 'http://www.example.org/state', de: 'Bundesland', en: 'state' },
-  { odrl: 'http://www.example.org/group-identity', de: 'Gruppenzugehörigkeit', en: 'group identity' },
-  { odrl: 'http://www.example.org/age', de: 'Alter', en: 'age' },
-  { odrl: 'http://www.example.org/time-of-use', de: 'Nutzungsdauer', en: 'time of use' },
-  { odrl: 'http://www.example.org/user-amount', de: 'Nutzeranzahl', en: 'user amount' },
-  { odrl: 'http://www.example.org/storage-device', de: 'Speichermedium', en: 'storage device' },
-  { odrl: 'http://www.example.org/share', de: 'Anteil', en: 'share' },
-  { odrl: 'http://www.example.org/amount', de: 'Anzahl', en: 'amount' },
-  { odrl: 'http://wwww.example.org/resolution', de: 'Auflösung', en: 'resolution' },
-  { odrl: 'http://www.example.org/participants', de: 'Teilnehmer', en: 'participants' },
-  { odrl: 'http://www.example.org/distribution-method', de: 'Verbreitungsmethode', en: 'distribution method' },
-  { odrl: 'http://www.example.org/file-format', de: 'Dateiformat', en: 'file format' },
-  { odrl: 'http://www.example.org/pay-amount', de: 'Geldbetrag', en: 'pay amount' },
+  'http://www.example.org/state',
+  'http://www.example.org/group-identity',
+  'http://www.example.org/age',
+  'http://www.example.org/time-of-use',
+  'http://www.example.org/user-amount',
+  'http://www.example.org/storage-device',
+  'http://www.example.org/share',
+  'http://www.example.org/amount',
+  'http://wwww.example.org/resolution',
+  'http://www.example.org/participants',
+  'http://www.example.org/distribution-method',
+  'http://www.example.org/file-format',
+  'http://www.example.org/pay-amount',
 ];
 
 export const constraintOnlyOperandList = [
@@ -125,30 +77,23 @@ export const operatorList = [
   { symbol: '≥', identifier: 'gteq' },
 ];
 
-export const logicalOperatorList = {
-  or: {
-    text: { de: 'UND/ODER', en: 'AND/OR' },
-  },
-  xone: {
-    text: { de: 'ODER', en: 'OR' },
-  },
-  and: {
-    text: { de: 'UND', en: 'AND' },
-  },
-};
+export const logicalOperatorList = [
+  "or",
+  "xone",
+  "and",
+];
 
 export const unitList = [
-  { odrl: 'http://www.example.org/resource/year', de: 'Jahre', en: 'years' },
-  { odrl: 'http://www.example.org/resource/day', de: 'Tage', en: 'days' },
-  { odrl: 'http://www.example.org/resource/hour', de: 'Stunden', en: 'hours' },
-  { odrl: 'http://www.example.org/resource/user', de: 'Nutzer', en: 'users' },
-  { odrl: 'http://www.example.org/resource/day', de: '%', en: '% ' },
-  { odrl: 'http://www.example.org/resource/piece', de: 'Stück', en: 'pieces' },
-  { odrl: 'http://www.example.org/resource/person', de: 'Personen', en: 'people' },
-  { odrl: 'http://www.example.org/resource/dpi', de: 'dpi', en: 'dpi' },
-  { odrl: 'http://www.example.org/resource/ppi', de: 'ppi', en: 'ppi' },
-  { odrl: 'http://www.example.org/resource/euro', de: '€', en: '€' },
-  { odrl: 'http://www.example.org/resource/dollar', de: '$', en: '$' },
+  'http://www.example.org/resource/year',
+  'http://www.example.org/resource/day',
+  'http://www.example.org/resource/hour',
+  'http://www.example.org/resource/user',
+  'http://www.example.org/resource/percentage',
+  'http://www.example.org/resource/piece',
+  'http://www.example.org/resource/dpi',
+  'http://www.example.org/resource/ppi',
+  'http://www.example.org/resource/euro',
+  'http://www.example.org/resource/dollar',
 ];
 
 export const operandMapping = Object.freeze({
@@ -182,15 +127,15 @@ export const operandMapping = Object.freeze({
   },
   'http://www.example.org/amount': {
     operators: operatorList,
-    units: [unitList[5], unitList[6]],
+    units: [unitList[5]],
   },
   'http://wwww.example.org/resolution': {
     operators: operatorList,
-    units: [unitList[7], unitList[8]],
+    units: [unitList[6], unitList[7]],
   },
   'http://www.example.org/participants': {
     operators: [operatorList[0]],
-    list: attendees,
+    list: [groups[0], groups[1], groups[2]],
   },
   'http://www.example.org/distribution-method': {
     operators: [operatorList[0]],
@@ -202,7 +147,7 @@ export const operandMapping = Object.freeze({
   },
   'http://www.example.org/pay-amount': {
     operators: operatorList,
-    units: [unitList[9], unitList[10]],
+    units: [unitList[8], unitList[9]],
   },
 });
 

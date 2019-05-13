@@ -84,13 +84,20 @@ export default {
       if (!this.constraint) {
         return this.$i18n.t('placeholder');
       }
-      let desc = this.opList.find(obj => obj.odrl === this.constraint.leftOperand)[this.lang];
+
+      let desc = ` ${this.$i18n.t(this.constraint.leftOperand)}`;
       desc += ` ${operatorList.find(op => (op.identifier === this.constraint.operator)).symbol}`;
-      if (Array.isArray(this.constraint.rightOperand)) {
-        desc += ` ${this.constraint.rightOperand.join(', ')}`;
+
+      const rOperand = this.constraint.rightOperand;
+      if (Array.isArray(rOperand)) {
+        const translated = [];
+        for (let i = 0; i < rOperand.length; i++) {
+          translated.push(this.$i18n.t(rOperand[i]));
+        }
+        desc += ` ${translated.join(', ')}`;
       } else {
-        desc += ` ${this.constraint.rightOperand['@value']}`;
-        desc += ` ${unitList.find(obj => obj.odrl === this.constraint.unit)[this.lang]}`;
+        desc += ` ${this.$i18n.t(rOperand['@value'])}`;
+        desc += ` ${this.$i18n.t(this.constraint.unit)}`;
       }
       return desc;
     },
