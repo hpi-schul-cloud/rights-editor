@@ -170,8 +170,6 @@ export default {
     },
 
     switchLanguage(lang) {
-      console.log("Dropdown event: " + lang);
-      console.log("currentLanguage: " + this.$i18n.t("currentLanguage"));
       if (this.$i18n.t("currentLanguage") != lang) {
         this.$i18n.locale = lang[0].toLowerCase() + lang[1];
       }      

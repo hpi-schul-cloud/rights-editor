@@ -363,9 +363,6 @@ export default {
 
       Vue.delete(this.rule.constraint, this.logicalConstraintOperator);
       
-      console.log(oldOp);
-      console.log(logicalOperatorList);
-
       // get the index of the current operator
       const index = logicalOperatorList.indexOf(oldOp);
       // the new logical operator is just the next one in the list
