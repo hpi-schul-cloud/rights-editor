@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-editor">    
+  <div class="rule-editor">
 
     <EditorNavBar>
       <template v-slot:left>
@@ -16,29 +16,29 @@
 
     <div class="header-wrapper">
 
-    <div class="language-container">
-      <i class="fas fa-language" /> 
-      {{ $t('languageButtonText') }}:
-      <BaseDropdown
-          :width="'150px'" 
-          class="language-dropdown"       
+      <div class="language-container">
+        <i class="fas fa-language" />
+        {{ $t('languageButtonText') }}:
+        <BaseDropdown
+          :width="'150px'"
+          class="language-dropdown"
           :list="languages"
           :init-value="languages[0]"
           @selected="switchLanguage($event)"
-      />
-    </div>
+        />
+      </div>
 
-    <div class="editor-header">
-      <BaseButton @click="newPermission()">
-        {{ $t('permissionButtonText') }}
-      </BaseButton>
-      <BaseButton @click="newObligation()">
-        {{ $t('obligationButtonText') }}
-      </BaseButton>
-      <BaseButton @click="newProhibition()">
-        {{ $t('prohibitionButtonText') }}
-      </BaseButton>
-    </div>
+      <div class="editor-header">
+        <BaseButton @click="newPermission()">
+          {{ $t('permissionButtonText') }}
+        </BaseButton>
+        <BaseButton @click="newObligation()">
+          {{ $t('obligationButtonText') }}
+        </BaseButton>
+        <BaseButton @click="newProhibition()">
+          {{ $t('prohibitionButtonText') }}
+        </BaseButton>
+      </div>
 
     </div>
 
@@ -110,7 +110,7 @@ export default {
   },
   computed: {
     languages() {
-      return [this.$i18n.t("german"), this.$i18n.t("english")];
+      return [this.$i18n.t('german'), this.$i18n.t('english')];
     },
     showRulePane() {
       return this.editPath.length > 0;
@@ -178,9 +178,9 @@ export default {
     },
 
     switchLanguage(lang) {
-      if (this.$i18n.t("currentLanguage") != lang) {
+      if (this.$i18n.t('currentLanguage') != lang) {
         this.$i18n.locale = lang[0].toLowerCase() + lang[1];
-      }      
+      }
     },
   },
 };
@@ -211,9 +211,9 @@ export default {
   box-shadow: 0px 3px 2px -3px gray;
 }
 
-.editor-header {  
-  overflow: hidden;  
-  
+.editor-header {
+  overflow: hidden;
+
   padding-bottom: 20px;
   padding-top: 0px;
   width: 50%;
@@ -221,10 +221,10 @@ export default {
 }
 
 .editor-body {
-  padding-top: 24px;  
+  padding-top: 24px;
 }
 
-.editor-nav{  
+.editor-nav{
   padding-top: 15px;
   padding-bottom: 5px;
   margin-left: 10px;

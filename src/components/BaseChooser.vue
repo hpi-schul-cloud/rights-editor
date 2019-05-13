@@ -120,10 +120,10 @@ export default {
       return this.$i18n.locale;
     },
     addObjectHeader() {
-      return this.$i18n.t(this.name + '.add');
+      return this.$i18n.t(`${this.name}.add`);
     },
     editObjectHeader() {
-      return this.$i18n.t(this.name + '.edit');
+      return this.$i18n.t(`${this.name}.edit`);
     },
     operands() {
       return this.operandList;

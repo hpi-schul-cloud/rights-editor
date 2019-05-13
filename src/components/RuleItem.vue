@@ -57,7 +57,7 @@
     <!-- display and edit constraints -->
     <p class="constraints">
       {{ $t('constraintTextAheadOfRuleName') }}
-      {{ article[ruleInfo.gender].definite }}      
+      {{ article[ruleInfo.gender].definite }}
       <em>{{ ruleLanguageInfo.name }}</em>
       {{ $t('constraintTextAfterRuleName') }}
       <em v-if="isLogicalConstraint && logicalConstraintOperator == 'xone'">
@@ -84,7 +84,7 @@
       {{ $t('constraint.add') }}
     </BaseButton>
 
-    <!-- add subrules -->    
+    <!-- add subrules -->
     <div v-if="canHaveSubrules" class="subrule-container">
 
       {{ $t('subRuleText') }}
@@ -101,10 +101,10 @@
       </P>
 
       <!-- list all available subrules -->
-      <p v-if="subrules">        
+      <p v-if="subrules">
         {{ subruleNameArticle }}
         {{ $tc(subruleDynamicName, subrules.length) }}
-        
+
         <!-- this is still kind of ugly
         @Ivan: do better! -->
         <template v-if="lang == 'de'">diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleLanguageInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}</template>
@@ -175,7 +175,7 @@ export default {
     },
     ruleInfo() {
       return RuleTypes[this.ruleTypeName];
-    },    
+    },
     ruleLanguageInfo() {
       return this.$i18n.t('rule')[this.ruleTypeName];
     },
@@ -192,18 +192,18 @@ export default {
       return this.$i18n.t('rule')[this.ruleInfo.subrule];
     },
     subruleDynamicName() {
-      return 'rule.' + this.subruleTypeName + '.dynamicName';
+      return `rule.${this.subruleTypeName}.dynamicName`;
     },
     parentRuleTypeName() {
       if (this.ruleInfo.hasParentRule) {
         return this.path[this.path.length - 4];
-      }      
+      }
     },
     parentRuleInfo() {
       if (!this.ruleInfo.hasParentRule) {
         console.error('has no parent');
         return null;
-      }      
+      }
       return RuleTypes[this.parentRuleTypeName];
     },
     parentRuleLanguageInfo() {
@@ -308,12 +308,12 @@ export default {
 
     // rules
     appendNewSubrule() {
-      if (!this.rule[this.subruleTypeName]) {      
+      if (!this.rule[this.subruleTypeName]) {
         Vue.set(this.rule, this.subruleTypeName, []);
       }
       const subrules = this.rule[this.subruleTypeName];
       const idx = subrules.length;
-      Vue.set(subrules, idx, {});            
+      Vue.set(subrules, idx, {});
       this.$emit('followLink', [...this.path, this.subruleTypeName, idx]);
     },
     removeRule() {
@@ -362,7 +362,7 @@ export default {
       const oldOp = this.logicalConstraintOperator;
 
       Vue.delete(this.rule.constraint, this.logicalConstraintOperator);
-      
+
       // get the index of the current operator
       const index = logicalOperatorList.indexOf(oldOp);
       // the new logical operator is just the next one in the list

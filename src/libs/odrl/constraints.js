@@ -1,48 +1,48 @@
 const storageDevice = [
-  "http://www.example.org/storage-device/magnetic-tape",
-  "http://www.example.org/storage-device/hard-disk",
-  "http://www.example.org/storage-device/cd",
-  "http://www.example.org/storage-device/dvd"
+  'http://www.example.org/storage-device/magnetic-tape',
+  'http://www.example.org/storage-device/hard-disk',
+  'http://www.example.org/storage-device/cd',
+  'http://www.example.org/storage-device/dvd',
 ];
 
 const groups = [
-  "http://www.example.org/person/student",
-  "http://www.example.org/person/teacher",
-  "http://www.example.org/person/parent",  
-  "http://www.example.org/person/administrator"
+  'http://www.example.org/person/student',
+  'http://www.example.org/person/teacher',
+  'http://www.example.org/person/parent',
+  'http://www.example.org/person/administrator',
 ];
 
 const communication = [
-  "http://www.example.org/communication/email",
-  "http://www.example.org/communication/usb",
-  "http://www.example.org/communication/cloud"
+  'http://www.example.org/communication/email',
+  'http://www.example.org/communication/usb',
+  'http://www.example.org/communication/cloud',
 ];
 
 const fileFormat = [
-  "http://www.example.org/file-format/mp3",
-  "http://www.example.org/file-format/mp4",
-  "http://www.example.org/file-format/pdf",
-  "http://www.example.org/file-format/doc",
-  "http://www.example.org/file-format/ppt",
+  'http://www.example.org/file-format/mp3',
+  'http://www.example.org/file-format/mp4',
+  'http://www.example.org/file-format/pdf',
+  'http://www.example.org/file-format/doc',
+  'http://www.example.org/file-format/ppt',
 ];
 
 const states = [
-  "http://schema.org/State/Germany/Baden-Württemberg",
-  "http://schema.org/State/Germany/Bayern",
-  "http://schema.org/State/Germany/Berlin",
-  "http://schema.org/State/Germany/Brandenburg",
-  "http://schema.org/State/Germany/Bremen",
-  "http://schema.org/State/Germany/Hamburg",
-  "http://schema.org/State/Germany/Hessen",
-  "http://schema.org/State/Germany/Mecklenburg-Vorpommern",
-  "http://schema.org/State/Germany/Niedersachsen",
-  "http://schema.org/State/Germany/Nordrhein-Westfalen",
-  "http://schema.org/State/Germany/Rheinland-Pfalz",
-  "http://schema.org/State/Germany/Saarland",
-  "http://schema.org/State/Germany/Sachsen",
-  "http://schema.org/State/Germany/Sachsen-Anhalt",
-  "http://schema.org/State/Germany/Schleswig-Holstein",
-  "http://schema.org/State/Germany/Thüringen",
+  'http://schema.org/State/Germany/Baden-Württemberg',
+  'http://schema.org/State/Germany/Bayern',
+  'http://schema.org/State/Germany/Berlin',
+  'http://schema.org/State/Germany/Brandenburg',
+  'http://schema.org/State/Germany/Bremen',
+  'http://schema.org/State/Germany/Hamburg',
+  'http://schema.org/State/Germany/Hessen',
+  'http://schema.org/State/Germany/Mecklenburg-Vorpommern',
+  'http://schema.org/State/Germany/Niedersachsen',
+  'http://schema.org/State/Germany/Nordrhein-Westfalen',
+  'http://schema.org/State/Germany/Rheinland-Pfalz',
+  'http://schema.org/State/Germany/Saarland',
+  'http://schema.org/State/Germany/Sachsen',
+  'http://schema.org/State/Germany/Sachsen-Anhalt',
+  'http://schema.org/State/Germany/Schleswig-Holstein',
+  'http://schema.org/State/Germany/Thüringen',
 ];
 
 export const operandList = [
@@ -78,9 +78,9 @@ export const operatorList = [
 ];
 
 export const logicalOperatorList = [
-  "or",
-  "xone",
-  "and",
+  'or',
+  'xone',
+  'and',
 ];
 
 export const unitList = [

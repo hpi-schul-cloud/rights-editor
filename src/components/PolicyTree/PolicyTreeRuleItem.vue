@@ -61,7 +61,7 @@ export default {
       const pathLen = this.path.length;
       return RuleTypes[this.path[pathLen - 2]];
     },
-    subruleType() {      
+    subruleType() {
       return this.ruleInfo.subrule;
     },
     subrules() {
@@ -69,7 +69,7 @@ export default {
     },
     ruleLabel() {
       const pathLen = this.path.length;
-      let ruleLanguageInfo = this.$i18n.t('rule')[this.path[pathLen - 2]];
+      const ruleLanguageInfo = this.$i18n.t('rule')[this.path[pathLen - 2]];
       return ruleLanguageInfo.name;
     },
     name() {
@@ -85,7 +85,7 @@ export default {
       }
 
       return [this.ruleLabel, actionLabel];
-    },    
+    },
   },
 };
 </script>

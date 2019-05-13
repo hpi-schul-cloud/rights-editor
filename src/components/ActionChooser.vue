@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       currentSelected: null,
-      currentAction: "",
+      currentAction: '',
     };
   },
   computed: {

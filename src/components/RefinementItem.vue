@@ -58,7 +58,7 @@ export default {
     return {
       refinementChooserShouldDisplay: false,
     };
-  },  
+  },
   computed: {
     lang() {
       return this.$i18n.locale;
