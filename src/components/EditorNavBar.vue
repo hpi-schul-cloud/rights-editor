@@ -17,6 +17,7 @@
   padding-bottom: 5px;
   margin-left: 10px;
   color: #1f3b70;
+  height: 25px;
 }
 
 .editor-nav .left{

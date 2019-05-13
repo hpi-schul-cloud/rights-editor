@@ -1,17 +1,5 @@
 <template>
-  <div class="rule-editor">
-
-    <div class="language-container">
-      <i class="fas fa-language" /> 
-      {{ $t('languageButtonText') }}:
-      <BaseDropdown
-          :width="'150px'" 
-          class="language-dropdown"       
-          :list="languages"
-          :init-value="languages[0]"
-          @selected="switchLanguage($event)"
-      />
-    </div>
+  <div class="rule-editor">    
 
     <EditorNavBar>
       <template v-slot:left>
@@ -26,6 +14,20 @@
       </template>
     </EditorNavBar>
 
+    <div class="header-wrapper">
+
+    <div class="language-container">
+      <i class="fas fa-language" /> 
+      {{ $t('languageButtonText') }}:
+      <BaseDropdown
+          :width="'150px'" 
+          class="language-dropdown"       
+          :list="languages"
+          :init-value="languages[0]"
+          @selected="switchLanguage($event)"
+      />
+    </div>
+
     <div class="editor-header">
       <BaseButton @click="newPermission()">
         {{ $t('permissionButtonText') }}
@@ -36,6 +38,7 @@
       <BaseButton @click="newProhibition()">
         {{ $t('prohibitionButtonText') }}
       </BaseButton>
+    </div>
 
     </div>
 
@@ -203,21 +206,25 @@ export default {
   padding: 10px;
 }
 
-.editor-header {
+.header-wrapper {
   background-color: white;
   box-shadow: 0px 3px 2px -3px gray;
-  overflow: hidden;
+}
 
+.editor-header {  
+  overflow: hidden;  
+  
   padding-bottom: 20px;
   padding-top: 0px;
-  width: 100%;
+  width: 50%;
+  min-width: 350px;
 }
 
 .editor-body {
-  padding-top: 24px;
+  padding-top: 24px;  
 }
 
-.editor-nav{
+.editor-nav{  
   padding-top: 15px;
   padding-bottom: 5px;
   margin-left: 10px;
@@ -242,10 +249,11 @@ input.guid-input {
 }
 
 .language-container {
+  float: right;
   text-align: right;
-  width: 600px;
-  position: absolute;
-  right: 20px;
+  width: 50%;
+  margin: 0px;
+  padding: 0px;
 }
 
 .language-dropdown {
@@ -259,8 +267,8 @@ input.guid-input {
 @media screen and (max-width: 840px) {
   .language-container {
     text-align: left;
-    width: auto;
-    position: relative;
+    float: left;
+    width: 100%;
   }
 
   .policy-detail {
