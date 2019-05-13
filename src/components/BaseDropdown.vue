@@ -177,7 +177,9 @@ export default {
 
 .dropdown li {
   line-height: 2.5em;
-  border-bottom: 1px lightgray solid;
+  margin-bottom: -1px;
+  border-bottom: 1px solid rgb(169, 169, 169);
+  width: 90%;
 }
 
 .dropdown li:hover {
