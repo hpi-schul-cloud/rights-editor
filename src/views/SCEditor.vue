@@ -1,18 +1,18 @@
 <template>
   <div>
-    <RuleEditor v-if="mode === 'rules'" @abort="abort()" @goForth="goForth($event)" />
+    <PresetEditor v-if="mode === 'rules'" @abort="abort()" @goForth="goForth($event)" />
     <DimensionEditor v-if="mode === 'dimensions'" :policies="policies" @addPolicy="editRules()" />
   </div>
 </template>
 
 <script>
-import RuleEditor from '../components/RuleEditor.vue';
+import PresetEditor from '../components/PresetEditor.vue';
 import DimensionEditor from '../components/DimensionEditor.vue';
 
 export default {
   name: 'Proprietary',
   components: {
-    RuleEditor,
+    PresetEditor,
     DimensionEditor,
   },
   data() {
