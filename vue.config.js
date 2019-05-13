@@ -1,5 +1,4 @@
 module.exports = {
-<<<<<<< HEAD
   pluginOptions: {
     i18n: {
       locale: 'de',
@@ -8,11 +7,9 @@ module.exports = {
       enableInSFC: true,
     },
   },
-=======
 	runtimeCompiler: true,
 	publicPath: process.env.VUE_APP_PUBLIC_PATH || "/",
 	css: {
 		sourceMap: true,
 	},
->>>>>>> master
 };

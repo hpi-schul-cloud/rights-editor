@@ -1,18 +1,13 @@
 <template>
   <div>
     <div class="input-container id-input">
-<<<<<<< HEAD
       {{ $t('licenseIdText') }}
-      <BaseInput v-model="policy['uid']" undercover class="input" />
-=======
-      ID der Lizenz:
       <BaseInput
         undercover
         class="input"
         value="Wird automatisch erzeugt"
         disabled
       />
->>>>>>> master
     </div>
 
     <div class="input-container">
