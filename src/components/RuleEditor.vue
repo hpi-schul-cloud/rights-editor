@@ -13,11 +13,18 @@
       />
     </div>
 
-    <div class="editor-back">
-      <router-link to="/">
-        <a><i class="fas fa-arrow-circle-left" /> Start</a>
-      </router-link>
-    </div>
+    <EditorNavBar>
+      <template v-slot:left>
+        <a href="#" @click="$emit('abort')">
+          <i class="fas fa-arrow-circle-left" /> Zurück
+        </a>
+      </template>
+      <template v-slot:right>
+        <a href="#" @click="$emit('goForth', policy)">
+          Weiter <i class="fas fa-arrow-circle-right" />
+        </a>
+      </template>
+    </EditorNavBar>
 
     <div class="editor-header">
       <BaseButton @click="newPermission()">
@@ -73,7 +80,7 @@ import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
 import PolicyItem from './PolicyItem.vue';
-import { actionList } from '../libs/odrl/actions';
+import EditorNavBar from './EditorNavBar.vue';
 
 export default {
   name: 'RuleEditor',
@@ -84,6 +91,7 @@ export default {
     PolicyTree,
     RuleItem,
     PolicyItem,
+    EditorNavBar,
   },
   data() {
     return {
@@ -107,35 +115,32 @@ export default {
     licenceText() {
       let text = '';
 
-      if (this.policy.permission){
-
+      if (this.policy.permission) {
         text += 'Erlaubt ist: ';
         text += this.policy.permission[0].action;
 
-        for (let permissionNumber = 1; permissionNumber < this.policy.permission.length; permissionNumber++){
-          text += ', '
+        for (let permissionNumber = 1; permissionNumber < this.policy.permission.length; permissionNumber++) {
+          text += ', ';
           text += this.policy.permission[permissionNumber].action;
         }
       }
 
-      if (this.policy.obligation){
-
+      if (this.policy.obligation) {
         text += '<br>Verpflichtend ist: ';
         text += this.policy.obligation[0].action;
 
-        for (let obligationNumber = 1; obligationNumber < this.policy.obligation.length; obligationNumber++){
-          text += ', '
+        for (let obligationNumber = 1; obligationNumber < this.policy.obligation.length; obligationNumber++) {
+          text += ', ';
           text += this.policy.obligation[obligationNumber].action;
         }
       }
 
-      if (this.policy.prohibition){
-
+      if (this.policy.prohibition) {
         text += '<br>Verboten ist: ';
         text += this.policy.prohibition[0].action;
 
-        for (let prohibitionNumber = 1; prohibitionNumber < this.policy.prohibition.length; prohibitionNumber++){
-          text += ', '
+        for (let prohibitionNumber = 1; prohibitionNumber < this.policy.prohibition.length; prohibitionNumber++) {
+          text += ', ';
           text += this.policy.prohibition[prohibitionNumber].action;
         }
       }
@@ -212,11 +217,23 @@ export default {
   padding-top: 24px;
 }
 
-.editor-back{
+.editor-nav{
   padding-top: 15px;
   padding-bottom: 5px;
   margin-left: 10px;
   color: #1f3b70;
+}
+
+.editor-nav .left{
+  float: left;
+}
+
+.editor-nav .right {
+  float: right;
+}
+
+editor-nav .clear {
+  clear: both;
 }
 
 input.guid-input {

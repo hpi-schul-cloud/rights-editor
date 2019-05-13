@@ -1,6 +1,5 @@
 <template>
   <div class="start-page">
-    <!-- TODO(hks): Breadcrums wär cool -->
     <div>
       <h1>Elektronisches Lizenz-Bearbeitungsprogramm (ELBP)</h1>
       <h2>Erlaubt die automatische Generierung von Lizenzen in maschinenlesbarem Format</h2>
@@ -26,7 +25,8 @@ export default {
     return {
       modes: [
         { name: 'OER (Creative Commons)', path: { name: 'oer' } },
-        { name: 'Proprietär (RightsML)', path: { name: 'proprietary' } },
+        { name: 'ODRL Editor', path: { name: 'odrl-editor' } },
+        { name: 'Schul-Cloud Editor', path: { name: 'sc-editor' } },
       ],
     };
   },
