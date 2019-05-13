@@ -4,12 +4,12 @@
     <EditorNavBar>
       <template v-slot:left>
         <a href="#" @click="$emit('abort')">
-          <i class="fas fa-arrow-circle-left" /> Zurück
+          <i class="fas fa-arrow-circle-left" /> {{ $t("back") }}
         </a>
       </template>
       <template v-slot:right>
         <a href="#" @click="$emit('goForth', policy)">
-          Weiter <i class="fas fa-arrow-circle-right" />
+          {{ $t("next") }} <i class="fas fa-arrow-circle-right" />
         </a>
       </template>
     </EditorNavBar>

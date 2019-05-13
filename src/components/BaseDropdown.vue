@@ -141,7 +141,6 @@ export default {
 }
 
 .container {
-  position: relative;  
   text-align: left;
 }
 
