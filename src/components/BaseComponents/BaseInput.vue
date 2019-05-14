@@ -48,4 +48,8 @@ input {
 .base-input-undercover:focus {
   border: 1px solid rgb(169, 169, 169);
 }
+
+.input:disabled {
+  color: gray;
+}
 </style>
