@@ -84,6 +84,8 @@ import RuleItem from './RuleItem.vue';
 import PolicyItem from './PolicyItem.vue';
 import EditorNavBar from './EditorNavBar.vue';
 
+import { jsonPath } from '../libs/jsonpath-0.8.0';
+
 export default {
   name: 'RuleEditor',
   components: {
@@ -119,12 +121,16 @@ export default {
 
       if (this.policy.permission) {
         text += 'Erlaubt ist: ';
-        text += this.policy.permission[0].action;
+       // text += this.policy.permission[0].action;
+       
 
-        for (let permissionNumber = 1; permissionNumber < this.policy.permission.length; permissionNumber++) {
-          text += ', ';
-          text += this.policy.permission[permissionNumber].action;
-        }
+        let res1 = jsonPath(this.policy, "$.permission[*].action").toJSONString();
+        text += res1;
+    
+        //for (let permissionNumber = 1; permissionNumber < this.policy.permission.length; permissionNumber++) {
+         // text += ', ';
+         // text += this.policy.permission[permissionNumber].action;
+       // }
       }
 
       if (this.policy.obligation) {
