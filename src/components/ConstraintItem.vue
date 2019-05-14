@@ -90,8 +90,8 @@ export default {
 
       const rOperand = this.constraint.rightOperand;
       if (Array.isArray(rOperand)) {
-        rOperand.forEach(item => { desc += ` ${this.$i18n.t(item)}, `; });        
-        desc = desc.substr(0, desc.length-2); // removes the last comma
+        rOperand.forEach((item) => { desc += ` ${this.$i18n.t(item)}, `; });
+        desc = desc.substr(0, desc.length - 2); // removes the last comma
       } else {
         desc += ` ${rOperand['@value']}`;
         desc += ` ${this.$i18n.t(this.constraint.unit)}`;

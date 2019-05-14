@@ -173,7 +173,7 @@ export default {
 
       Vue.delete(this.policy.constraint, this.logicalConstraintOperator);
 
-       // get the index of the current operator
+      // get the index of the current operator
       const index = logicalOperatorList.indexOf(oldOp);
       // the new logical operator is just the next one in the list
       const nextOp = logicalOperatorList[(index + 1) % logicalOperatorList.length];
