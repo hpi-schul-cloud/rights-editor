@@ -100,7 +100,7 @@
   "subRuleText": "Optionally, you can extend by the following rules:",
   "subRuleDescription": "are obligations, that must be done,",
   
-  "globalConstraintsText": "Add globally applicable constraints...",
+  "globalConstraintsText": "Add globally applicable constraints:",
   "globalConstraintsDescription": "The license then only applies, if...",
 
   "or": "AND/OR",

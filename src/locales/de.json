@@ -100,7 +100,7 @@
   "subRuleText": "Optional kann um folgende Regeln erweitert werden:",
   "subRuleDescription": "sind Pflichten, die geleistet werden müssen,",
   
-  "globalConstraintsText": "Global geltende Einschränkungen hinzufügen...",
+  "globalConstraintsText": "Global geltende Einschränkungen hinzufügen:",
   "globalConstraintsDescription": "Die Lizenz gilt nur, wenn...",
 
   "or": "UND/ODER",
