@@ -69,7 +69,7 @@
 <script>
 import Vue from 'vue';
 import PriceInput from './PriceInput.vue';
-import BaseButton from './BaseButton.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
 
 const licenseEntities = ['state', 'county', 'school', 'teacher', 'pupil'];
 const timeframeSteps = ['10 Jahre', '9 Jahre', '8 Jahre', '7 Jahre', '6 Jahre', '5 Jahre', '48 Stunden', '24 Stunden', 'unbegrenzt'];

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseChooser
+    <ConstraintChooser
       v-if="displayRefinementChooser"
       :object-to-edit="refinement"
       name="refinement"
@@ -29,8 +29,8 @@
 
 <script>
 import Vue from 'vue';
-import BaseChooser from './BaseChooser.vue';
-import BaseButton from './BaseButton.vue';
+import ConstraintChooser from './ConstraintChooser.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
 import {
   operandMapping,
   operatorList,
@@ -41,7 +41,7 @@ import {
 export default {
   name: 'RefinementItem',
   components: {
-    BaseChooser,
+    ConstraintChooser,
     BaseButton,
   },
   props: {

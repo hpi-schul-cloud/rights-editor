@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import BaseButton from './BaseButton.vue';
-import BaseModal from './BaseModal.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
+import BaseModal from './BaseComponents/BaseModal.vue';
 import { actionList } from '../libs/odrl/actions.js';
 
 export default {

@@ -125,7 +125,7 @@
 <script>
 import Vue from 'vue';
 import EmbedInText from './EmbedInText.vue';
-import BaseButton from './BaseButton.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
 import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
