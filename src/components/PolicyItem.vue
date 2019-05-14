@@ -2,7 +2,7 @@
   <div>
     <div class="input-container">
       <div class="input-label">
-      {{ $t('licenseIdLabel') }}
+        {{ $t('licenseIdLabel') }}
       </div>
       <BaseInput
         undercover
@@ -11,7 +11,7 @@
         :width="'225px'"
         disabled
       />
-    </div>    
+    </div>
 
     <div class="input-container">
       <div class="input-label">{{ $t('assigner') }}:</div>
@@ -20,12 +20,11 @@
 
     <div class="input-container">
       <div class="input-label">
-      {{ $t('assignee') }}:</div>
+        {{ $t('assignee') }}:</div>
       <BaseInput v-model="assignee" undercover class="input" />
     </div>
 
-    <div class="input-container">
-      <div class="input-label">
+    <div class="asset-container">
       <BaseDropdown
         :width="'170px'"
         class="dropdown-button"
@@ -33,7 +32,6 @@
         :init-value="assetTypeOptions[0]"
         @selected="assetTypeSelected($event)"
       />
-      </div>
       <BaseInput v-model="assetId" undercover class="input" />
     </div>
 
@@ -232,13 +230,13 @@ export default {
 
 <style scoped>
 .input {
-  margin-left: 20px;
+  margin-left: 30px;
   width: 185px;
 }
 
 .input-label {
   display: inline-block;
-  width: 175px;
+  width: 150px;
   text-align: right;
 }
 
@@ -250,9 +248,9 @@ export default {
   display: inline-block;
 }
 
-.asset-label-container {
-  display: inline-block;
-  width: 125px;
+.asset-container {
+  margin-top: 40px;
+  margin-bottom: 60px;
 }
 
 .base-button-textlike {
