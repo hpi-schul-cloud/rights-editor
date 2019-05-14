@@ -1,7 +1,7 @@
 <template>
   <div class="tree">
     <PolicyTreeNode
-      :label="treeNodeLabel"
+      :label="$i18n.t('license')"
       :path="[]"
       :selected-path="selectedPath"
       @followPath="$emit('followPath', $event)"
@@ -60,11 +60,6 @@ export default {
     selectedPath: {
       type: Array,
       required: true,
-    },
-  },
-  computed: {
-    treeNodeLabel() {
-      return this.$i18n.t('license');
     },
   },
 };

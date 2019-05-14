@@ -3,7 +3,7 @@
     <BaseChooser
       v-if="displayRefinementChooser"
       :object-to-edit="refinement"
-      :name="'refinement'"
+      name="refinement"
       :operand-list="opList"
       :operand-mapping="opMapping"
       @chosen="hideRefinementChooser(); refinement = $event"
@@ -102,13 +102,10 @@ export default {
 
       const rOperand = this.refinement.rightOperand;
       if (Array.isArray(rOperand)) {
-        const translated = [];
-        for (let i = 0; i < rOperand.length; i++) {
-          translated.push(this.$i18n.t(rOperand[i]));
-        }
-        desc += ` ${translated.join(', ')}`;
+        rOperand.forEach(item => { desc += ` ${this.$i18n.t(item)}, `; });        
+        desc = desc.substr(0, desc.length-2); // removes the last comma
       } else {
-        desc += ` ${this.$i18n.t(rOperand['@value'])}`;
+        desc += ` ${rOperand['@value']}`;
         desc += ` ${this.$i18n.t(this.refinement.unit)}`;
       }
       return desc;

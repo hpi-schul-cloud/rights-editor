@@ -14,7 +14,7 @@
   "placeholder": "<empty>",
 
   "license": "License",
-  "licenseIdText": "License ID:",
+  "licenseIdLabel": "License ID:",
   "actionChooserHeader": "Choose an Action",
   "removeRule": "remove rule",
 

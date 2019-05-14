@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="input-container id-input">
-      {{ $t('licenseIdText') }}
+      {{ $t('licenseIdLabel') }}
       <BaseInput
         undercover
         class="input"
@@ -25,7 +25,7 @@
     <div class="constraints-container">
       <h3>{{ $t('globalConstraintsText') }}</h3>
       {{ $t('globalConstraintsDescription') }}
-      <em v-if="isLogicalConstraint && logicalConstraintOperatorShort == 'xone'">
+      <em v-if="isLogicalConstraint && logicalConstraintOperator == 'xone'">
         {{ $t('either') }}
       </em>
 
@@ -37,7 +37,7 @@
             textlike
             class="logical-operator"
             @click="nextLogicalConstraintOperator()"
-          >{{ logicalConstraintOperatorText }}</BaseButton>
+          >{{ $t(logicalConstraintOperator) }}</BaseButton>
         </li>
       </ul>
 
@@ -95,7 +95,7 @@ export default {
         return null;
       }
       if (this.isLogicalConstraint) {
-        return this.policy.constraint[this.logicalConstraintOperatorShort][
+        return this.policy.constraint[this.logicalConstraintOperator][
           '@list'
         ];
       }
@@ -109,25 +109,18 @@ export default {
     },
     constraintPath() {
       if (this.isLogicalConstraint) {
-        return ['constraint', this.logicalConstraintOperatorShort, '@list'];
+        return ['constraint', this.logicalConstraintOperator, '@list'];
       }
       return ['constraint'];
     },
-    logicalConstraintOperatorText() {
-      if (!this.policy.constraint) {
-        return null;
-      }
-
-      return logicalOperatorList[this.logicalConstraintOperatorShort].text[this.lang];
-    },
-    logicalConstraintOperatorShort() {
+    logicalConstraintOperator() {
       if (!this.policy.constraint) {
         return null;
       }
 
       const op = Object.keys(this.policy.constraint)[0];
       if (op == undefined) {
-        return Object.keys(logicalOperatorList)[0];
+        return logicalOperatorList[0];
       }
       return op;
     },
@@ -167,7 +160,7 @@ export default {
       if (this.constraints.length == 1) {
         const constraint = this.constraints;
         Vue.set(this.policy, 'constraint', {});
-        Vue.set(this.policy.constraint, this.logicalConstraintOperatorShort, {
+        Vue.set(this.policy.constraint, this.logicalConstraintOperator, {
           '@list': constraint,
         });
       }
@@ -175,16 +168,15 @@ export default {
       this.constraints.push(null);
     },
     nextLogicalConstraintOperator() {
-      const list = this.policy.constraint[this.logicalConstraintOperatorShort];
-      const oldOp = this.logicalConstraintOperatorShort;
+      const list = this.policy.constraint[this.logicalConstraintOperator];
+      const oldOp = this.logicalConstraintOperator;
 
-      Vue.delete(this.policy.constraint, this.logicalConstraintOperatorShort);
+      Vue.delete(this.policy.constraint, this.logicalConstraintOperator);
 
-      const keys = Object.keys(logicalOperatorList);
-      // get the index of the current operator
-      const index = keys.indexOf(oldOp);
+       // get the index of the current operator
+      const index = logicalOperatorList.indexOf(oldOp);
       // the new logical operator is just the next one in the list
-      const nextOp = keys[(index + 1) % keys.length];
+      const nextOp = logicalOperatorList[(index + 1) % logicalOperatorList.length];
 
       Vue.set(this.policy.constraint, nextOp, list);
     },

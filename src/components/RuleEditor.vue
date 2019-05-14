@@ -76,7 +76,6 @@
 
 <script>
 import Vue from 'vue';
-import { constants } from 'crypto';
 import BaseButton from './BaseButton.vue';
 import BaseDropdown from './BaseDropdown.vue';
 import BaseInput from './BaseInput.vue';

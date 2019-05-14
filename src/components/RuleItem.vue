@@ -15,7 +15,7 @@
     <!-- display action -->
     <p class="actions">
       <!-- main explanation -->
-      <EmbedInText :text-ahead="textAheadOfActionLabel" :text-after="ruleLanguageInfo.description">
+      <EmbedInText :text-ahead="$i18n.t('textAheadOfActionLabel')" :text-after="ruleLanguageInfo.description">
         <ActionItem :policy="policy" :path="[...path, 'action']" :remove-callback="removeRule" />
       </EmbedInText>
       <!-- additional explanation -->
@@ -163,10 +163,6 @@ export default {
     subruleNameArticle() {
       return capitalize(this.article[this.subruleInfo.gender].definite);
     },
-    textAheadOfActionLabel() {
-      return this.$i18n.t('textAheadOfActionLabel');
-    },
-
     rule() {
       return this.policy.follow(this.path);
     },

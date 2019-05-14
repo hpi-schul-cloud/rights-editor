@@ -3,7 +3,7 @@
     <BaseChooser
       v-if="displayConstraintChooser"
       :object-to-edit="constraint"
-      :name="'constraint'"
+      name="constraint"
       :operand-list="opList"
       :operand-mapping="opMapping"
       @chosen="hideConstraintChooser(); constraint = $event"
@@ -90,13 +90,10 @@ export default {
 
       const rOperand = this.constraint.rightOperand;
       if (Array.isArray(rOperand)) {
-        const translated = [];
-        for (let i = 0; i < rOperand.length; i++) {
-          translated.push(this.$i18n.t(rOperand[i]));
-        }
-        desc += ` ${translated.join(', ')}`;
+        rOperand.forEach(item => { desc += ` ${this.$i18n.t(item)}, `; });        
+        desc = desc.substr(0, desc.length-2); // removes the last comma
       } else {
-        desc += ` ${this.$i18n.t(rOperand['@value'])}`;
+        desc += ` ${rOperand['@value']}`;
         desc += ` ${this.$i18n.t(this.constraint.unit)}`;
       }
       return desc;

@@ -14,7 +14,7 @@
   "placeholder": "<leer>",
 
   "license": "Lizenz",
-  "licenseIdText": "ID der Lizenz:",
+  "licenseIdLabel": "ID der Lizenz:",
   "actionChooserHeader": "Aktion auswählen",
   "removeRule": "Regel löschen",
 
