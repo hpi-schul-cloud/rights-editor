@@ -56,10 +56,10 @@
 
 <script>
 import Vue from 'vue';
-import BaseInput from './BaseInput.vue';
-import BaseChooser from './BaseChooser.vue';
-import BaseButton from './BaseButton.vue';
-import BaseDropdown from './BaseDropdown.vue';
+import BaseInput from './BaseComponents/BaseInput.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
+import BaseDropdown from './BaseComponents/BaseDropdown.vue';
+import ConstraintChooser from './ConstraintChooser.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import { logicalOperatorList } from '../libs/odrl/constraints';
 
@@ -69,7 +69,7 @@ export default {
     BaseInput,
     BaseButton,
     BaseDropdown,
-    BaseChooser,
+    ConstraintChooser,
     ConstraintItem,
   },
   props: {
