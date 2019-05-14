@@ -1,8 +1,13 @@
 <template>
   <BaseModal :width="'1000px'" :scrollable="false">
     <template v-slot:header>
-      <h1 v-if="objectToEdit == null">{{ name }} hinzufügen</h1>
-      <h1 v-else>{{ name }} bearbeiten</h1>
+
+      <h1 v-if="objectToEdit == null">
+        {{ addObjectHeader }}
+      </h1>
+      <h1 v-else>
+        {{ editObjectHeader }}
+      </h1>
     </template>
 
     <template v-slot:body>
@@ -12,7 +17,7 @@
           :key="index"
           :class="{ selected: leftOperand === op }"
           @click="leftOperand = op"
-        >{{ op }}</li>
+        >{{ $t(op) }}</li>
       </ul>
       <ul class="list">
         <li
@@ -44,7 +49,7 @@
                 :key="index"
                 :class="{ selected: unit === u }"
                 @click="unit = u"
-              >{{ u }}</li>
+              >{{ $t(u) }}</li>
             </ul>
           </div>
         </div>
@@ -53,9 +58,9 @@
           <li
             v-for="(item, index) in listItems"
             :key="index"
-            :class="{ selected: Array.isArray(rightOperand) && rightOperand.indexOf(item) >= 0 }"
+            :class="{ selected: rightOperand.indexOf(item) >= 0 }"
             @click="toggleRightOperand(item)"
-          >{{ item }}</li>
+          >{{ $t(item) }}</li>
         </ul>
       </div>
     </template>
@@ -65,8 +70,8 @@
         <BaseButton
           textlike
           @click="$emit('abort');"
-        >Abbrechen</BaseButton>
-        <BaseButton :disabled="!complete()" @click="accept()">Annehmen</BaseButton>
+        >{{ $t('cancel') }}</BaseButton>
+        <BaseButton :disabled="!complete()" @click="accept()">{{ $t("accept") }}</BaseButton>
       </div>
     </template>
   </BaseModal>
@@ -111,6 +116,15 @@ export default {
     };
   },
   computed: {
+    lang() {
+      return this.$i18n.locale;
+    },
+    addObjectHeader() {
+      return this.$i18n.t(`${this.name}.add`);
+    },
+    editObjectHeader() {
+      return this.$i18n.t(`${this.name}.edit`);
+    },
     operands() {
       return this.operandList;
     },
@@ -147,10 +161,10 @@ export default {
     },
     leftOperand: {
       get() {
-        let operand = this.object.leftOperand;
+        const operand = this.object.leftOperand;
         if (!operand) {
-          operand = this.operands[0];
-          this.leftOperand = operand;
+          this.leftOperand = this.operands[0];
+          return this.leftOperand;
         }
         return operand;
       },

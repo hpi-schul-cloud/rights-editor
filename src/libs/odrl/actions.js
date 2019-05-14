@@ -1,13 +1,13 @@
-export const actionList = Object.freeze([
-  'Archivieren',
-  'Bearbeiten',
-  'Drucken',
-  'Kopieren',
-  'Verbreiten',
-  'Verkaufen',
-  'Vorführen',
-  'Zitieren',
-]);
+export const actionList = [
+  'http://www.w3.org/ns/odrl/2/play',
+  'http://www.w3.org/ns/odrl/2/archive',
+  'http://www.w3.org/ns/odrl/2/derive',
+  'http://www.w3.org/ns/odrl/2/print',
+  'http://www.w3.org/ns/odrl/2/reproduce',
+  'http://www.w3.org/ns/odrl/2/distribute',
+  'http://www.w3.org/ns/odrl/2/compensate',
+  'http://www.w3.org/ns/odrl/2/present',
+];
 
 class Action {
   constructor(definition, label, note, identifier, includedIn, includedBy) {

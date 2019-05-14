@@ -23,8 +23,10 @@
 </template>
 
 <script>
-import { RuleTypes } from '../../libs/odrl/rules';
 import PolicyTreeNode from './PolicyTreeNode.vue';
+import { RuleTypes } from '../../libs/odrl/rules';
+import { actionList } from '../../libs/odrl/actions.js';
+import { actionToRefinements } from '../../libs/odrl/constraints';
 
 export default {
   name: 'PolicyTreeRuleItem',
@@ -46,25 +48,43 @@ export default {
     },
   },
   computed: {
+    lang() {
+      return this.$i18n.locale;
+    },
+    placeholder() {
+      return this.$i18n.t('placeholder');
+    },
     rule() {
       return this.policy.follow(this.path);
     },
-    name() {
+    ruleInfo() {
       const pathLen = this.path.length;
-      const rType = RuleTypes[this.path[pathLen - 2]];
-      let action = this.rule.action;
-      if (Array.isArray(action)) {
-        action = action[0]['rdf:value'];
-      }
-      return [`${rType.name}: `, action];
+      return RuleTypes[this.path[pathLen - 2]];
     },
     subruleType() {
-      const pathLen = this.path.length;
-      const rType = RuleTypes[this.path[pathLen - 2]];
-      return rType.subrule;
+      return this.ruleInfo.subrule;
     },
     subrules() {
       return this.rule[this.subruleType];
+    },
+    ruleLabel() {
+      const pathLen = this.path.length;
+      const ruleLanguageInfo = this.$i18n.t('rule')[this.path[pathLen - 2]];
+      return ruleLanguageInfo.name;
+    },
+    name() {
+      let action = this.rule.action;
+
+      if (Array.isArray(action)) {
+        action = action[0]['rdf:value'];
+      }
+
+      let actionLabel = this.placeholder;
+      if (action && action != this.placeholder) {
+        actionLabel = this.$i18n.t(actionList.find(item => item === action));
+      }
+
+      return [this.ruleLabel, actionLabel];
     },
   },
 };

@@ -3,7 +3,7 @@
     <BaseChooser
       v-if="displayConstraintChooser"
       :object-to-edit="constraint"
-      :name="'Einschränkung'"
+      name="constraint"
       :operand-list="opList"
       :operand-mapping="opMapping"
       @chosen="hideConstraintChooser(); constraint = $event"
@@ -36,9 +36,9 @@ import {
   constraintOnlyOperandList,
   operandMapping,
   operatorList,
+  unitList,
 } from '../libs/odrl/constraints';
 
-const placeholder = '<leer>';
 
 export default {
   name: 'ConstraintItem',
@@ -62,6 +62,9 @@ export default {
     };
   },
   computed: {
+    lang() {
+      return this.$i18n.locale;
+    },
     constraint: {
       get() {
         return this.policy.follow(this.path);
@@ -79,15 +82,19 @@ export default {
     },
     description() {
       if (!this.constraint) {
-        return placeholder;
+        return this.$i18n.t('placeholder');
       }
-      let desc = this.constraint.leftOperand;
+
+      let desc = ` ${this.$i18n.t(this.constraint.leftOperand)}`;
       desc += ` ${operatorList.find(op => (op.identifier === this.constraint.operator)).symbol}`;
-      if (Array.isArray(this.constraint.rightOperand)) {
-        desc += ` ${this.constraint.rightOperand.join(', ')}`;
+
+      const rOperand = this.constraint.rightOperand;
+      if (Array.isArray(rOperand)) {
+        rOperand.forEach((item) => { desc += ` ${this.$i18n.t(item)}, `; });
+        desc = desc.substr(0, desc.length - 2); // removes the last comma
       } else {
-        desc += ` ${this.constraint.rightOperand['@value']}`;
-        desc += ` ${this.constraint.unit}`;
+        desc += ` ${rOperand['@value']}`;
+        desc += ` ${this.$i18n.t(this.constraint.unit)}`;
       }
       return desc;
     },

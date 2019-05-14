@@ -1,28 +1,45 @@
 <template>
   <div class="rule-editor">
+
     <EditorNavBar>
       <template v-slot:left>
         <a href="#" @click="$emit('abort')">
-          <i class="fas fa-arrow-circle-left" /> Zurück
+          <i class="fas fa-arrow-circle-left" /> {{ $t("back") }}
         </a>
       </template>
       <template v-slot:right>
         <a href="#" @click="$emit('goForth', policy)">
-          Weiter <i class="fas fa-arrow-circle-right" />
+          {{ $t("next") }} <i class="fas fa-arrow-circle-right" />
         </a>
       </template>
     </EditorNavBar>
 
-    <div class="editor-header">
-      <BaseButton @click="newPermission()">
-        Erlaubnis
-      </BaseButton>
-      <BaseButton @click="newObligation()">
-        Pflicht
-      </BaseButton>
-      <BaseButton @click="newProhibition()">
-        Verbot
-      </BaseButton>
+    <div class="header-wrapper">
+
+      <div class="language-container">
+        <i class="fas fa-language" />
+        {{ $t('languageButtonText') }}:
+        <BaseDropdown
+          :width="'150px'"
+          class="language-dropdown"
+          :list="languages"
+          :init-value="languages[0]"
+          @selected="switchLanguage($event)"
+        />
+      </div>
+
+      <div class="editor-header">
+        <BaseButton @click="newPermission()">
+          {{ $t('permissionButtonText') }}
+        </BaseButton>
+        <BaseButton @click="newObligation()">
+          {{ $t('obligationButtonText') }}
+        </BaseButton>
+        <BaseButton @click="newProhibition()">
+          {{ $t('prohibitionButtonText') }}
+        </BaseButton>
+      </div>
+
     </div>
 
     <div class="editor-body">
@@ -60,6 +77,7 @@
 <script>
 import Vue from 'vue';
 import BaseButton from './BaseButton.vue';
+import BaseDropdown from './BaseDropdown.vue';
 import BaseInput from './BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
@@ -71,6 +89,7 @@ export default {
   components: {
     BaseButton,
     BaseInput,
+    BaseDropdown,
     PolicyTree,
     RuleItem,
     PolicyItem,
@@ -89,6 +108,9 @@ export default {
     };
   },
   computed: {
+    languages() {
+      return [this.$i18n.t('german'), this.$i18n.t('english')];
+    },
     showRulePane() {
       return this.editPath.length > 0;
     },
@@ -153,6 +175,12 @@ export default {
       Vue.set(this.policy.prohibition, idx, {});
       this.editPath = ['prohibition', idx];
     },
+
+    switchLanguage(lang) {
+      if (this.$i18n.t('currentLanguage') != lang) {
+        this.$i18n.locale = lang[0].toLowerCase() + lang[1];
+      }
+    },
   },
 };
 </script>
@@ -177,14 +205,18 @@ export default {
   padding: 10px;
 }
 
-.editor-header {
+.header-wrapper {
   background-color: white;
   box-shadow: 0px 3px 2px -3px gray;
+}
+
+.editor-header {
   overflow: hidden;
 
   padding-bottom: 20px;
   padding-top: 0px;
-  width: 100%;
+  width: 50%;
+  min-width: 350px;
 }
 
 .editor-body {
@@ -215,7 +247,29 @@ input.guid-input {
   width: 175px;
 }
 
+.language-container {
+  float: right;
+  text-align: right;
+  width: 50%;
+  margin: 0px;
+  padding: 0px;
+}
+
+.language-dropdown {
+  display: inline-block;
+}
+
+.fa-language {
+  margin-right: 5px;
+}
+
 @media screen and (max-width: 840px) {
+  .language-container {
+    text-align: left;
+    float: left;
+    width: 100%;
+  }
+
   .policy-detail {
     display: inline-block;
     margin-left: 0px;
