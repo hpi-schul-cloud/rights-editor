@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseChooser
+    <ConstraintChooser
       v-if="displayConstraintChooser"
       :object-to-edit="constraint"
       name="constraint"
@@ -30,8 +30,8 @@
 
 <script>
 import Vue from 'vue';
-import BaseButton from './BaseButton.vue';
-import BaseChooser from './BaseChooser.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
+import ConstraintChooser from './ConstraintChooser.vue';
 import {
   constraintOnlyOperandList,
   operandMapping,
@@ -43,7 +43,7 @@ import {
 export default {
   name: 'ConstraintItem',
   components: {
-    BaseChooser,
+    ConstraintChooser,
     BaseButton,
   },
   props: {

@@ -21,7 +21,7 @@
 
 <script>
 import Vue from 'vue';
-import BaseButton from './BaseButton.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
 import ActionChooser from './ActionChooser.vue';
 import { actionList } from '../libs/odrl/actions.js';
 

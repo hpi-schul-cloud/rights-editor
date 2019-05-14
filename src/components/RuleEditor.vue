@@ -76,9 +76,9 @@
 
 <script>
 import Vue from 'vue';
-import BaseButton from './BaseButton.vue';
-import BaseDropdown from './BaseDropdown.vue';
-import BaseInput from './BaseInput.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
+import BaseDropdown from './BaseComponents/BaseDropdown.vue';
+import BaseInput from './BaseComponents/BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
 import PolicyItem from './PolicyItem.vue';

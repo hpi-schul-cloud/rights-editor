@@ -79,12 +79,12 @@
 
 <script>
 import Vue from 'vue';
-import BaseInput from './BaseInput.vue';
-import BaseModal from './BaseModal.vue';
-import BaseButton from './BaseButton.vue';
+import BaseInput from './BaseComponents/BaseInput.vue';
+import BaseModal from './BaseComponents/BaseModal.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
 
 export default {
-  name: 'BaseChooser',
+  name: 'ConstraintChooser',
   components: {
     BaseInput,
     BaseModal,
