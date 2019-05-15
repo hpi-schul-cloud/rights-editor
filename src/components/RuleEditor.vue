@@ -85,6 +85,7 @@ import PolicyItem from './PolicyItem.vue';
 import EditorNavBar from './EditorNavBar.vue';
 
 import { jsonPath } from '../libs/jsonpath-0.8.0';
+import { actionList } from '../libs/odrl/actions.js';
 
 export default {
   name: 'RuleEditor',
@@ -121,36 +122,50 @@ export default {
 
       if (this.policy.permission) {
         text += 'Erlaubt ist: ';
-       // text += this.policy.permission[0].action;
        
+        // Gets all actions via jsonPath
+        let actions = jsonPath(this.policy, "$.permission[*].action");
 
-        let res1 = jsonPath(this.policy, "$.permission[*].action").toJSONString();
-        text += res1;
-    
-        //for (let permissionNumber = 1; permissionNumber < this.policy.permission.length; permissionNumber++) {
-         // text += ', ';
-         // text += this.policy.permission[permissionNumber].action;
-       // }
+        // Searches label for each action
+        for (let i = 0; i < actions.length; i++) { 
+          text += this.$i18n.t(actionList.find(item => item === (actions[i])));
+          text += ", ";
+        }
+
+        // Removes last comma
+        text = text.substr(0, text.length-2)
       }
 
       if (this.policy.obligation) {
         text += '<br>Verpflichtend ist: ';
-        text += this.policy.obligation[0].action;
+        
+        // Gets all actions via jsonPath
+        let actions = jsonPath(this.policy, "$.obligation[*].action");
 
-        for (let obligationNumber = 1; obligationNumber < this.policy.obligation.length; obligationNumber++) {
-          text += ', ';
-          text += this.policy.obligation[obligationNumber].action;
+        // Searches label for each action
+        for (let i = 0; i < actions.length; i++) { 
+          text += this.$i18n.t(actionList.find(item => item === (actions[i])));
+          text += ", ";
         }
+
+        // Removes last comma
+        text = text.substr(0, text.length-2)
       }
 
       if (this.policy.prohibition) {
         text += '<br>Verboten ist: ';
-        text += this.policy.prohibition[0].action;
 
-        for (let prohibitionNumber = 1; prohibitionNumber < this.policy.prohibition.length; prohibitionNumber++) {
-          text += ', ';
-          text += this.policy.prohibition[prohibitionNumber].action;
+        // Gets all actions via jsonPath
+        let actions = jsonPath(this.policy, "$.prohibition[*].action");
+
+        // Searches label for each action
+        for (let i = 0; i < actions.length; i++) { 
+          text += this.$i18n.t(actionList.find(item => item === (actions[i])));
+          text += ", ";
         }
+
+        // Removes last comma
+        text = text.substr(0, text.length-2)
       }
 
       return text;
@@ -181,7 +196,6 @@ export default {
       Vue.set(this.policy.prohibition, idx, {});
       this.editPath = ['prohibition', idx];
     },
-
     switchLanguage(lang) {
       if (this.$i18n.t('currentLanguage') != lang) {
         this.$i18n.locale = lang[0].toLowerCase() + lang[1];
