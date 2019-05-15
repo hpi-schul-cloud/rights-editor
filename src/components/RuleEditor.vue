@@ -8,7 +8,7 @@
         </a>
       </template>
       <template v-slot:right>
-        <a href="#" @click="$emit('goForth', policy)">
+        <a href="#" @click="tryToGoForth()">
           {{ $t("next") }} <i class="fas fa-arrow-circle-right" />
         </a>
       </template>
@@ -180,6 +180,130 @@ export default {
       if (this.$i18n.t('currentLanguage') != lang) {
         this.$i18n.locale = lang[0].toLowerCase() + lang[1];
       }
+    },
+    tryToGoForth() {
+      // validate license
+      if (this.valid()) {
+        // this.$emit('goForth', this.policy);
+        console.log('VALID');
+      }
+    },
+    valid() {
+      let valid = true;
+
+      // target
+      if (typeof this.policy.target === 'string') {
+        if (this.policy.target.length <= 0) {
+          console.log('Warning: Target uid is empty.');
+          valid = false;
+        }
+      } else if (this.policy.target.uid.length <= 0) {
+        console.log('Warning: Target uid is empty.');
+        valid = false;
+      }
+
+      // assigner
+      if (this.policy.assigner) {
+        if (typeof this.policy.assigner === 'string') {
+          if (this.policy.assigner.length <= 0) {
+            console.log('Warning: Assigner uid is empty.');
+            valid = false;
+          }
+        } else if (this.policy.assigner.uid.length <= 0) {
+          console.log('Warning: Assigner uid is empty.');
+          valid = false;
+        }
+      }
+
+      // assignee
+      if (this.policy.assignee) {
+        if (typeof this.policy.assignee === 'string') {
+          if (this.policy.assignee.length <= 0) {
+            console.log('Warning: Assignee uid is empty.');
+            valid = false;
+          }
+        } else if (this.policy.assignee.uid.length <= 0) {
+          console.log('Warning: Assignee uid is empty.');
+          valid = false;
+        }
+      }
+
+      if (this.policy.permission) {
+        this.policy.permission.forEach((perm) => {
+          if (perm.action[0].refinement && !Array.isArray(perm.action[0].refinement)) {
+            // there is more than one refinement...
+            const logicalOperator = Object.keys(perm.action[0].refinement)[0];
+            const refinements = perm.action[0].refinement[logicalOperator]['@list'];
+
+            // collect all conditions
+            const conditions = {};
+            if (logicalOperator == 'and') {
+              refinements.forEach((ref) => {
+                if (!conditions[ref.leftOperand]) {
+                  conditions[ref.leftOperand] = [];
+                }
+                if (!Array.isArray(ref.rightOperand)) {
+                  conditions[ref.leftOperand].push({ op: ref.operator, val: ref.rightOperand['@value'], unit: ref.unit });
+                }
+              });
+
+              const valuesPerOperator = {
+                gt: [], gteq: [], lt: [], lteq: [], eq: [],
+              };
+
+              Object.keys(conditions).forEach((key) => {
+                const conditionsOfSameOperand = conditions[key];
+
+                // check if units are selected ambiguously
+                const units = [];
+                conditionsOfSameOperand.forEach((item) => {
+                  if (!units.includes(item.unit)) {
+                    units.push(item.unit);
+                  }
+                });
+
+                if (units.length > 1) {
+                  console.log("Warning: Choose one unit only per distinct refinement operand if linked by 'and' operator.");
+                  valid = false;
+                }
+
+                if (conditionsOfSameOperand.length > 1) {
+                  conditionsOfSameOperand.forEach((cond) => {
+                    valuesPerOperator[cond.op].push(parseFloat(cond.val));
+                  });
+                }
+              });
+
+              const uniqueEqualValues = valuesPerOperator.eq.filter((v, i) => valuesPerOperator.eq.indexOf(v) === i);
+              if (uniqueEqualValues.length > 1) {
+                console.log('Error: Refinement can never be fullfilled.');
+                valid = false;
+              }
+
+              // check if conditions have collisions
+              const gtMax = Math.max(...valuesPerOperator.gt);
+              const gteqMax = Math.max(...valuesPerOperator.gteq);
+              const ltMin = Math.min(...valuesPerOperator.lt);
+              const lteqMin = Math.min(...valuesPerOperator.lteq);
+
+              if (gtMax >= ltMin || gtMax >= lteqMin || gteqMax >= ltMin || gteqMax > lteqMin) {
+                console.log('Error: Refinement can never be fullfilled.');
+                valid = false;
+              }
+
+              if (uniqueEqualValues.length > 0) {
+                const eq = uniqueEqualValues[0];
+                if (gtMax >= eq || gteqMax > eq || ltMin <= eq || lteqMin < eq) {
+                  console.log('Error: Refinement can never be fullfilled.');
+                  valid = false;
+                }
+              }
+            }
+          }
+        });
+      }
+
+      return valid;
     },
   },
 };
