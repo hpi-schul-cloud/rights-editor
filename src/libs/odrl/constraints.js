@@ -26,7 +26,7 @@ const fileFormat = [
   'http://www.example.org/file-format/ppt',
 ];
 
-const states = [
+export const states = [
   'http://schema.org/State/Germany/Baden-Württemberg',
   'http://schema.org/State/Germany/Bayern',
   'http://schema.org/State/Germany/Berlin',

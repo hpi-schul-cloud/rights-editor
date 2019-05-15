@@ -86,6 +86,7 @@ import EditorNavBar from './EditorNavBar.vue';
 
 import { jsonPath } from '../libs/jsonpath-0.8.0';
 import { actionList } from '../libs/odrl/actions.js';
+import { logicalOperatorList, operatorList, operandList, states, operandMapping } from '../libs/odrl/constraints.js';
 
 export default {
   name: 'RuleEditor',
@@ -134,6 +135,17 @@ export default {
 
         // Removes last comma
         text = text.substr(0, text.length-2)
+
+        // Gets all constraints
+       text += " ("
+       let leftOperands = jsonPath(this.policy, "$.permission[*].constraint..leftOperand");
+       text += this.$i18n.t(operandList.find(item => item === (leftOperands[0])));
+       let operators = jsonPath(this.policy, "$.permission[*].constraint..operator");
+       text += this.$i18n.t(operatorList.find(item => item === (operators[0])));
+       let rightOperands = jsonPath(this.policy, "$.permission[*].constraint..rightOperand");
+       text += this.$i18n.t(states.find(item => item === (rightOperands[0])));
+       text += ")"
+
       }
 
       if (this.policy.obligation) {
