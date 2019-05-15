@@ -103,6 +103,15 @@
   "globalConstraintsText": "Add globally applicable constraints:",
   "globalConstraintsDescription": "The license then only applies, if...",
 
+  "target": "Target",
+  "asset": "Asset",
+  "assetCollection": "Asset Collection",
+  "assigner": "Assigner",
+  "assignee": "Assignee",
+  "individual": "Individual",
+  "group": "Group",
+  "organization": "Organization",  
+
   "or": "AND/OR",
   "xone": "OR",
   "and": "AND",
