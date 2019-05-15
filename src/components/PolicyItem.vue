@@ -236,8 +236,9 @@ export default {
 
 .input-label {
   display: inline-block;
-  width: 150px;
+  font-weight: bold;
   text-align: right;
+  width: 150px;
 }
 
 .input-container {
