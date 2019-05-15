@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- uid -->
     <div class="input-container">
       <div class="input-label">
         {{ $t('licenseIdLabel') }}
@@ -13,6 +14,7 @@
       />
     </div>
 
+    <!-- assigner -->
     <div class="input-container">
       <div class="input-label">{{ $t('assigner') }}:</div>
       <BaseInput v-model="assigner" undercover class="input" />
@@ -25,6 +27,7 @@
       />
     </div>
 
+    <!-- assignee -->
     <div class="input-container">
       <div class="input-label">{{ $t('assignee') }}:</div>
       <BaseInput v-model="assignee" undercover class="input" />
@@ -37,6 +40,7 @@
       />
     </div>
 
+    <!-- asset -->
     <div class="input-container">
       <div class="input-label">{{ $t('target') }}:</div>
       <BaseInput v-model="assetId" undercover class="input" />
@@ -49,6 +53,7 @@
       />
     </div>
 
+    <!-- display constraints -->
     <div class="constraints-container">
       <h3>{{ $t('globalConstraintsText') }}</h3>
       {{ $t('globalConstraintsDescription') }}
