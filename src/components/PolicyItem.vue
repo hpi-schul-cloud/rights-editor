@@ -24,7 +24,7 @@
       <BaseInput v-model="assignee" undercover class="input" />
     </div>
 
-    <div class="asset-container">
+    <div class="input-container">
       <BaseDropdown
         :width="'170px'"
         class="dropdown-button"
@@ -231,14 +231,14 @@ export default {
 <style scoped>
 .input {
   margin-left: 30px;
-  width: 185px;
+  width: 225px;
 }
 
 .input-label {
   display: inline-block;
   font-weight: bold;
   text-align: right;
-  width: 150px;
+  width: 190px;
 }
 
 .input-container {
@@ -247,6 +247,7 @@ export default {
 
 .dropdown-button {
   display: inline-block;
+  width: 190px;
 }
 
 .asset-container {
