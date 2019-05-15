@@ -101,6 +101,8 @@ export default {
       policy: {
         uid: '',
         target: '',
+        assigner: '',
+        assignee: '',
         follow(path) {
           return path.reduce((result, pathSegment) => result[pathSegment], this);
         },
