@@ -103,6 +103,15 @@
   "globalConstraintsText": "Global geltende Einschränkungen hinzufügen:",
   "globalConstraintsDescription": "Die Lizenz gilt nur, wenn...",
 
+  "target": "Lizenzgegenstand",
+  "asset": "Medieninhalt",
+  "assetCollection": "Inhaltesammlung",
+  "assigner": "Lizenzgeber",
+  "assignee": "Lizenznehmer",
+  "individual": "Einzelperson",
+  "group": "Gruppe",
+  "organization": "Organisation/Unternehmen",  
+
   "or": "UND/ODER",
   "xone": "ODER",
   "and": "UND",

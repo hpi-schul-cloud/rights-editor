@@ -29,13 +29,13 @@
       </div>
 
       <div class="editor-header">
-        <BaseButton @click="newPermission()">
+        <BaseButton @click="newRule('permission')">
           {{ $t('permissionButtonText') }}
         </BaseButton>
-        <BaseButton @click="newObligation()">
+        <BaseButton @click="newRule('obligation')">
           {{ $t('obligationButtonText') }}
         </BaseButton>
-        <BaseButton @click="newProhibition()">
+        <BaseButton @click="newRule('prohibition')">
           {{ $t('prohibitionButtonText') }}
         </BaseButton>
       </div>
@@ -104,6 +104,8 @@ export default {
       policy: {
         uid: '',
         target: '',
+        assigner: '',
+        assignee: '',
         follow(path) {
           return path.reduce((result, pathSegment) => result[pathSegment], this);
         },
@@ -172,29 +174,13 @@ export default {
     },
   },
   methods: {
-    newPermission() {
-      if (!this.policy.permission) {
-        Vue.set(this.policy, 'permission', []);
+    newRule(type) {
+      if (!this.policy[type]) {
+        Vue.set(this.policy, type, []);
       }
-      const idx = this.policy.permission.length;
-      Vue.set(this.policy.permission, idx, {});
-      this.editPath = ['permission', idx];
-    },
-    newObligation() {
-      if (!this.policy.obligation) {
-        Vue.set(this.policy, 'obligation', []);
-      }
-      const idx = this.policy.obligation.length;
-      Vue.set(this.policy.obligation, idx, {});
-      this.editPath = ['obligation', idx];
-    },
-    newProhibition() {
-      if (!this.policy.prohibition) {
-        Vue.set(this.policy, 'prohibition', []);
-      }
-      const idx = this.policy.prohibition.length;
-      Vue.set(this.policy.prohibition, idx, {});
-      this.editPath = ['prohibition', idx];
+      const idx = this.policy[type].length;
+      Vue.set(this.policy[type], idx, {});
+      this.editPath = [type, idx];
     },
     switchLanguage(lang) {
       if (this.$i18n.t('currentLanguage') != lang) {
