@@ -86,6 +86,7 @@ import EditorNavBar from './EditorNavBar.vue';
 
 import { jsonPath } from '../libs/jsonpath-0.8.0';
 import { actionList } from '../libs/odrl/actions.js';
+import { operandMapping } from '../libs/odrl/constraints.js';
 
 export default {
   name: 'RuleEditor',
@@ -124,50 +125,50 @@ export default {
 
       if (this.policy.permission) {
         text += 'Erlaubt ist: ';
-       
+
         // Gets all actions via jsonPath
-        let actions = jsonPath(this.policy, "$.permission[*].action");
+        const actions = jsonPath(this.policy, '$.permission[*].action');
 
         // Searches label for each action
-        for (let i = 0; i < actions.length; i++) { 
+        for (let i = 0; i < actions.length; i++) {
           text += this.$i18n.t(actionList.find(item => item === (actions[i])));
-          text += ", ";
+          text += ', ';
         }
 
         // Removes last comma
-        text = text.substr(0, text.length-2)
+        text = text.substr(0, text.length - 2);
       }
 
       if (this.policy.obligation) {
         text += '<br>Verpflichtend ist: ';
-        
+
         // Gets all actions via jsonPath
-        let actions = jsonPath(this.policy, "$.obligation[*].action");
+        const actions = jsonPath(this.policy, '$.obligation[*].action');
 
         // Searches label for each action
-        for (let i = 0; i < actions.length; i++) { 
+        for (let i = 0; i < actions.length; i++) {
           text += this.$i18n.t(actionList.find(item => item === (actions[i])));
-          text += ", ";
+          text += ', ';
         }
 
         // Removes last comma
-        text = text.substr(0, text.length-2)
+        text = text.substr(0, text.length - 2);
       }
 
       if (this.policy.prohibition) {
         text += '<br>Verboten ist: ';
 
         // Gets all actions via jsonPath
-        let actions = jsonPath(this.policy, "$.prohibition[*].action");
+        const actions = jsonPath(this.policy, '$.prohibition[*].action');
 
         // Searches label for each action
-        for (let i = 0; i < actions.length; i++) { 
+        for (let i = 0; i < actions.length; i++) {
           text += this.$i18n.t(actionList.find(item => item === (actions[i])));
-          text += ", ";
+          text += ', ';
         }
 
         // Removes last comma
-        text = text.substr(0, text.length-2)
+        text = text.substr(0, text.length - 2);
       }
 
       return text;
@@ -189,12 +190,12 @@ export default {
     },
     tryToGoForth() {
       // validate license
-      if (this.valid()) {
+      if (this.validatePolicy()) {
         // this.$emit('goForth', this.policy);
         console.log('VALID');
       }
     },
-    valid() {
+    validatePolicy() {
       let valid = true;
 
       // target
@@ -209,104 +210,133 @@ export default {
       }
 
       // assigner
-      if (this.policy.assigner) {
-        if (typeof this.policy.assigner === 'string') {
-          if (this.policy.assigner.length <= 0) {
-            console.log('Warning: Assigner uid is empty.');
-            valid = false;
-          }
-        } else if (this.policy.assigner.uid.length <= 0) {
+      if (typeof this.policy.assigner === 'string') {
+        if (this.policy.assigner.length <= 0) {
           console.log('Warning: Assigner uid is empty.');
           valid = false;
         }
+      } else if (this.policy.assigner.uid.length <= 0) {
+        console.log('Warning: Assigner uid is empty.');
+        valid = false;
       }
 
       // assignee
-      if (this.policy.assignee) {
-        if (typeof this.policy.assignee === 'string') {
-          if (this.policy.assignee.length <= 0) {
-            console.log('Warning: Assignee uid is empty.');
-            valid = false;
-          }
-        } else if (this.policy.assignee.uid.length <= 0) {
+      if (typeof this.policy.assignee === 'string') {
+        if (this.policy.assignee.length <= 0) {
           console.log('Warning: Assignee uid is empty.');
           valid = false;
         }
+      } else if (this.policy.assignee.uid.length <= 0) {
+        console.log('Warning: Assignee uid is empty.');
+        valid = false;
       }
 
       if (this.policy.permission) {
-        this.policy.permission.forEach((perm) => {
-          if (perm.action[0].refinement && !Array.isArray(perm.action[0].refinement)) {
-            // there is more than one refinement...
-            const logicalOperator = Object.keys(perm.action[0].refinement)[0];
-            const refinements = perm.action[0].refinement[logicalOperator]['@list'];
+        this.policy.permission.forEach((rule) => {
+          valid = this.validateConstraints(rule.action[0].refinement);
+          valid = this.validateConstraints(rule.constraint);
+        });
+      }
 
-            // collect all conditions
-            const conditions = {};
-            if (logicalOperator == 'and') {
-              refinements.forEach((ref) => {
-                if (!conditions[ref.leftOperand]) {
-                  conditions[ref.leftOperand] = [];
-                }
-                if (!Array.isArray(ref.rightOperand)) {
-                  conditions[ref.leftOperand].push({ op: ref.operator, val: ref.rightOperand['@value'], unit: ref.unit });
+      if (this.policy.obligation) {
+        this.policy.obligation.forEach((rule) => {
+          valid = this.validateConstraints(rule.action[0].refinement);
+          valid = this.validateConstraints(rule.constraint);
+        });
+      }
+
+      if (this.policy.prohibition) {
+        this.policy.prohibition.forEach((rule) => {
+          valid = this.validateConstraints(rule.action[0].refinement);
+          valid = this.validateConstraints(rule.constraint);
+        });
+      }
+
+      return valid;
+    },
+    validateConstraints(constraint) {
+      let valid = true;
+
+      if (constraint && !Array.isArray(constraint)) {
+        // there is more than one constraint...
+        const logicalOperator = Object.keys(constraint)[0];
+        const constraints = constraint[logicalOperator]['@list'];
+
+        // collect all conditions
+        const conditions = {};
+        if (logicalOperator == 'and') {
+          constraints.forEach((ref) => {
+            if (!conditions[ref.leftOperand]) {
+              conditions[ref.leftOperand] = [];
+            }
+            if (!Array.isArray(ref.rightOperand)) {
+              // right operand is number with unit
+              conditions[ref.leftOperand].push({ op: ref.operator, val: ref.rightOperand['@value'], unit: ref.unit });
+            } else {
+              // right operand is selection from list of options
+              conditions[ref.leftOperand].push(ref.rightOperand);
+            }
+          });
+
+          const valuesPerOperator = {
+            gt: [], gteq: [], lt: [], lteq: [], eq: [],
+          };
+
+          Object.keys(conditions).forEach((key) => {
+            const conditionsOfSameOperand = conditions[key];
+
+            if (operandMapping[key].units) {
+              // check if units are selected ambiguously
+              const units = [];
+              conditionsOfSameOperand.forEach((item) => {
+                if (!units.includes(item.unit)) {
+                  units.push(item.unit);
                 }
               });
 
-              const valuesPerOperator = {
-                gt: [], gteq: [], lt: [], lteq: [], eq: [],
-              };
+              if (units.length > 1) {
+                console.log('Warning: Constraint/Refinement units are ambiguous.');
+                valid = false;
+              }
 
-              Object.keys(conditions).forEach((key) => {
-                const conditionsOfSameOperand = conditions[key];
-
-                // check if units are selected ambiguously
-                const units = [];
-                conditionsOfSameOperand.forEach((item) => {
-                  if (!units.includes(item.unit)) {
-                    units.push(item.unit);
-                  }
+              if (conditionsOfSameOperand.length > 1) {
+                conditionsOfSameOperand.forEach((cond) => {
+                  valuesPerOperator[cond.op].push(parseFloat(cond.val));
                 });
-
-                if (units.length > 1) {
-                  console.log("Warning: Choose one unit only per distinct refinement operand if linked by 'and' operator.");
-                  valid = false;
-                }
-
-                if (conditionsOfSameOperand.length > 1) {
-                  conditionsOfSameOperand.forEach((cond) => {
-                    valuesPerOperator[cond.op].push(parseFloat(cond.val));
-                  });
-                }
-              });
-
-              const uniqueEqualValues = valuesPerOperator.eq.filter((v, i) => valuesPerOperator.eq.indexOf(v) === i);
-              if (uniqueEqualValues.length > 1) {
-                console.log('Error: Refinement can never be fullfilled.');
-                valid = false;
               }
-
-              // check if conditions have collisions
-              const gtMax = Math.max(...valuesPerOperator.gt);
-              const gteqMax = Math.max(...valuesPerOperator.gteq);
-              const ltMin = Math.min(...valuesPerOperator.lt);
-              const lteqMin = Math.min(...valuesPerOperator.lteq);
-
-              if (gtMax >= ltMin || gtMax >= lteqMin || gteqMax >= ltMin || gteqMax > lteqMin) {
-                console.log('Error: Refinement can never be fullfilled.');
+            } else if (operandMapping[key].list) {
+              if (conditionsOfSameOperand.length > 1) {
+                console.log('Error: Constraint/Refinement selection is ambiguous.');
                 valid = false;
-              }
-
-              if (uniqueEqualValues.length > 0) {
-                const eq = uniqueEqualValues[0];
-                if (gtMax >= eq || gteqMax > eq || ltMin <= eq || lteqMin < eq) {
-                  console.log('Error: Refinement can never be fullfilled.');
-                  valid = false;
-                }
               }
             }
+          });
+
+          const uniqueEqualValues = valuesPerOperator.eq.filter((v, i) => valuesPerOperator.eq.indexOf(v) === i);
+          if (uniqueEqualValues.length > 1) {
+            console.log('Error: Constraint/Refinement can never be fullfilled.');
+            valid = false;
           }
-        });
+
+          // check if conditions have collisions
+          const gtMax = Math.max(...valuesPerOperator.gt);
+          const gteqMax = Math.max(...valuesPerOperator.gteq);
+          const ltMin = Math.min(...valuesPerOperator.lt);
+          const lteqMin = Math.min(...valuesPerOperator.lteq);
+
+          if (gtMax >= ltMin || gtMax >= lteqMin || gteqMax >= ltMin || gteqMax > lteqMin) {
+            console.log('Error: Constraint/Refinement can never be fullfilled.');
+            valid = false;
+          }
+
+          if (uniqueEqualValues.length > 0) {
+            const eq = uniqueEqualValues[0];
+            if (gtMax >= eq || gteqMax > eq || ltMin <= eq || lteqMin < eq) {
+              console.log('Error: Constraint/Refinement can never be fullfilled.');
+              valid = false;
+            }
+          }
+        }
       }
 
       return valid;
