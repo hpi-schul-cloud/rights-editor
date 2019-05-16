@@ -40,6 +40,15 @@
         </BaseButton>
       </div>
 
+      <div v-if="warnings.length > 0" class="warnings">
+        {{ warnings.length }} {{ $t('errors_found') }}.
+        <ul>
+          <li v-for="(warning, index) in warnings" :key="index">
+            <a href="#" @click="editPath = warning.path">{{ warning.message }}</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
 
     <div class="editor-body">
@@ -102,6 +111,7 @@ export default {
   data() {
     return {
       editPath: [],
+      warnings: [],
       policy: {
         uid: '',
         target: '',
@@ -196,66 +206,71 @@ export default {
       }
     },
     validatePolicy() {
-      let valid = true;
+      let errors = 0;
+      this.warnings = [];
 
       // target
       if (typeof this.policy.target === 'string') {
         if (this.policy.target.length <= 0) {
-          console.log('Warning: Target uid is empty.');
-          valid = false;
+          this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('target')} ${this.$i18n.t('is_empty')}.` });
+          errors++;
         }
       } else if (this.policy.target.uid.length <= 0) {
-        console.log('Warning: Target uid is empty.');
-        valid = false;
+        this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('target')} ${this.$i18n.t('is_empty')}.` });
+        errors++;
       }
 
       // assigner
       if (typeof this.policy.assigner === 'string') {
         if (this.policy.assigner.length <= 0) {
-          console.log('Warning: Assigner uid is empty.');
-          valid = false;
+          this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('assigner')} ${this.$i18n.t('is_empty')}.` });
+          errors++;
         }
       } else if (this.policy.assigner.uid.length <= 0) {
-        console.log('Warning: Assigner uid is empty.');
-        valid = false;
+        this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('assigner')} ${this.$i18n.t('is_empty')}.` });
+        errors++;
       }
 
       // assignee
       if (typeof this.policy.assignee === 'string') {
         if (this.policy.assignee.length <= 0) {
-          console.log('Warning: Assignee uid is empty.');
-          valid = false;
+          this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('assignee')} ${this.$i18n.t('is_empty')}.` });
+          errors++;
         }
       } else if (this.policy.assignee.uid.length <= 0) {
-        console.log('Warning: Assignee uid is empty.');
-        valid = false;
+        this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('assignee')} ${this.$i18n.t('is_empty')}.` });
+        errors++;
       }
 
       if (this.policy.permission) {
-        this.policy.permission.forEach((rule) => {
-          valid = this.validateConstraints(rule.action[0].refinement);
-          valid = this.validateConstraints(rule.constraint);
+        this.policy.permission.forEach((rule, index) => {
+          errors += this.validateRefinements(rule.action[0].refinement, ['permission', index]);
+          errors += this.validateConstraints(rule.constraint, ['permission', index]);
         });
       }
 
       if (this.policy.obligation) {
-        this.policy.obligation.forEach((rule) => {
-          valid = this.validateConstraints(rule.action[0].refinement);
-          valid = this.validateConstraints(rule.constraint);
+        this.policy.obligation.forEach((rule, index) => {
+          errors += this.validateRefinements(rule.action[0].refinement, ['obligation', index]);
+          errors += this.validateConstraints(rule.constraint, ['obligation', index]);
         });
       }
 
       if (this.policy.prohibition) {
-        this.policy.prohibition.forEach((rule) => {
-          valid = this.validateConstraints(rule.action[0].refinement);
-          valid = this.validateConstraints(rule.constraint);
+        this.policy.prohibition.forEach((rule, index) => {
+          errors += this.validateRefinements(rule.action[0].refinement, ['prohibition', index]);
+          errors += this.validateConstraints(rule.constraint, ['prohibition', index]);
         });
       }
 
-      return valid;
+      return errors == 0;
     },
-    validateConstraints(constraint) {
-      let valid = true;
+    validateRefinements(refinement, rulePath) {
+      return this.validateConstraints(refinement, rulePath, 'refinement');
+    },
+    validateConstraints(constraint, rulePath, type) {
+      if (type === undefined) type = 'constraint';
+      let errors = 0;
 
       if (constraint && !Array.isArray(constraint)) {
         // there is more than one constraint...
@@ -295,8 +310,8 @@ export default {
               });
 
               if (units.length > 1) {
-                console.log('Warning: Constraint/Refinement units are ambiguous.');
-                valid = false;
+                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('units_ambiguous')}.` });
+                errors++;
               }
 
               if (conditionsOfSameOperand.length > 1) {
@@ -306,16 +321,16 @@ export default {
               }
             } else if (operandMapping[key].list) {
               if (conditionsOfSameOperand.length > 1) {
-                console.log('Error: Constraint/Refinement selection is ambiguous.');
-                valid = false;
+                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('selection_ambiguous')}.` });
+                errors++;
               }
             }
           });
 
           const uniqueEqualValues = valuesPerOperator.eq.filter((v, i) => valuesPerOperator.eq.indexOf(v) === i);
           if (uniqueEqualValues.length > 1) {
-            console.log('Error: Constraint/Refinement can never be fullfilled.');
-            valid = false;
+            this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('never_fullfilled')}.` });
+            errors++;
           }
 
           // check if conditions have collisions
@@ -325,21 +340,21 @@ export default {
           const lteqMin = Math.min(...valuesPerOperator.lteq);
 
           if (gtMax >= ltMin || gtMax >= lteqMin || gteqMax >= ltMin || gteqMax > lteqMin) {
-            console.log('Error: Constraint/Refinement can never be fullfilled.');
-            valid = false;
+            this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('never_fullfilled')}.` });
+            errors++;
           }
 
           if (uniqueEqualValues.length > 0) {
             const eq = uniqueEqualValues[0];
             if (gtMax >= eq || gteqMax > eq || ltMin <= eq || lteqMin < eq) {
-              console.log('Error: Constraint/Refinement can never be fullfilled.');
-              valid = false;
+              this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('never_fullfilled')}.` });
+              errors++;
             }
           }
         }
       }
 
-      return valid;
+      return errors;
     },
   },
 };
@@ -421,6 +436,15 @@ input.guid-input {
 
 .fa-language {
   margin-right: 5px;
+}
+
+.warnings {
+  padding-bottom: 5px;
+}
+
+.warnings a {
+  color: rgb(200, 0, 0);
+  font-weight: normal;
 }
 
 @media screen and (max-width: 840px) {

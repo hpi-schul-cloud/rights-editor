@@ -10,8 +10,16 @@
 
   "either": "entweder",
   "is_are": "ist | sind",
+  "in": "in",
 
   "placeholder": "<leer>",
+
+  "error": "Fehler",
+  "errors_found": "Fehler gefunden",
+  "is_empty": "angegeben",
+  "units_ambiguous": "Einheit ist uneindeutig",
+  "selection_ambiguous": "Auswahl ist uneindeutig",
+  "never_fullfilled": "Kann niemals erfüllt werden",
 
   "license": "Lizenz",
   "licenseIdLabel": "ID der Lizenz:",

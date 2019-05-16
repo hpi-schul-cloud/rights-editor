@@ -10,8 +10,16 @@
 
   "either": "either",
   "is_are": "is | are",
+  "in": "in",
 
   "placeholder": "<empty>",
+
+  "error": "Error",
+  "errors_found": "errors found",
+  "is_empty": "is empty",
+  "units_ambiguous": "Unit is ambiguous",
+  "selection_ambiguous": "Selection is ambiguous",
+  "never_fullfilled": "Can never be fullfilled",
 
   "license": "License",
   "licenseIdLabel": "License ID:",
@@ -103,7 +111,7 @@
   "globalConstraintsText": "Add globally applicable constraints:",
   "globalConstraintsDescription": "The license then only applies, if...",
 
-  "target": "Target",
+  "target": "License Subject",
   "asset": "Asset",
   "assetCollection": "Asset Collection",
   "assigner": "Assigner",
