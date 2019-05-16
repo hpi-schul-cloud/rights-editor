@@ -199,7 +199,7 @@ export default {
       }
     },
     tryToGoForth() {
-      // validate license (@Ivan TODO: should do this every time user changes the policy!)
+      // validate license (@Ivan TODO: should do this every time user changes the policy after the user tried to click next for the first time!)
       if (this.validatePolicy()) {
         // this.$emit('goForth', this.policy);
         console.log('VALID');
@@ -314,7 +314,7 @@ export default {
               });
 
               if (units.length > 1) {
-                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('units_ambiguous')}.` });
+                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('units_ambiguous')} ${this.$i18n.t('for')} ${this.$i18n.t(key)}.`});
                 errors++;
               }
 
@@ -325,7 +325,7 @@ export default {
               }
             } else if (operandMapping[key].list) {
               if (conditionsOfSameOperand.length > 1) {
-                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('selection_ambiguous')}.` });
+                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('selection_ambiguous')} ${this.$i18n.t('for')} ${this.$i18n.t(key)}.`});
                 errors++;
               }
             }
