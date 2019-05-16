@@ -199,7 +199,7 @@ export default {
       }
     },
     tryToGoForth() {
-      // validate license
+      // validate license (@Ivan TODO: should do this every time user changes the policy!)
       if (this.validatePolicy()) {
         // this.$emit('goForth', this.policy);
         console.log('VALID');
@@ -240,6 +240,10 @@ export default {
       } else if (this.policy.assignee.uid.length <= 0) {
         this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('assignee')} ${this.$i18n.t('is_empty')}.` });
         errors++;
+      }
+
+      if (this.policy.constraint) {
+        errors += this.validateConstraints(this.policy.constraint, []);
       }
 
       if (this.policy.permission) {
