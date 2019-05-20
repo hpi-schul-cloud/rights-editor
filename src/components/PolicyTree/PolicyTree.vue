@@ -2,6 +2,7 @@
   <div class="tree">
     <PolicyTreeNode
       :label="$i18n.t('license')"
+      :addition="$t('general_information')"
       :path="[]"
       :selected-path="selectedPath"
       @followPath="$emit('followPath', $event)"
@@ -64,9 +65,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.rules {
-    padding-left: 20px;
-}
-</style>

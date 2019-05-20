@@ -8,7 +8,7 @@
       @followPath="$emit('followPath', $event)"
     />
 
-    <!-- Display subrules recursively -->
+    <!-- display subrules recursively -->
     <div v-if="subrules" class="subrules">
       <PolicyTreeRuleItem
         v-for="(subrule, index) in subrules"
@@ -89,9 +89,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.subrules {
-  padding-left: 20px;
-}
-</style>

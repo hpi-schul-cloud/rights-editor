@@ -225,7 +225,7 @@ export default {
 <style scoped>
 .policy-tree {
   float: left;
-  width: 200px;
+  width: 250px;
   padding: 0px 8px;
   box-sizing: border-box;
   box-shadow: 3px 0px 2px -3px gray;
@@ -233,7 +233,7 @@ export default {
 }
 
 .policy-detail {
-  margin-left: 220px;
+  margin-left: 270px;
   padding: 0px 0px 0px 15px;
 }
 
