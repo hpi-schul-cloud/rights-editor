@@ -6,7 +6,7 @@
       :path="path"
       :selected-path="selectedPath"
       :arrow-down="showSubrules"
-      :hideArrow="!subrulesExist"
+      :hide-arrow="!subrulesExist"
       @followPath="$emit('followPath', $event)"
       @arrowClicked="arrowClicked($event)"
     />

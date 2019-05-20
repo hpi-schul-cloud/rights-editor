@@ -63,7 +63,7 @@ export default {
       type: Boolean,
       default: false,
       required: false,
-    }
+    },
   },
   computed: {
     isPartOfPath() {
@@ -116,16 +116,20 @@ export default {
   font-size: 15px;
 }
 
+/* on hover styling */
+
 .container:hover:not(.selected) .label {
   font-weight: bold;
   color: #323232;
 }
 
 .container:hover:not(.selected) .addition,
-.container:hover:not(.selected, .hide) .arrow-container {
+.container:hover:not(.selected) .arrow-container {
   font-weight: normal;
   color: #323232;
 }
+
+/* highlight the selected node */
 
 .label-container.selected {
   border-top: 1px #1f3b70 solid;
@@ -142,10 +146,14 @@ export default {
   font-style: italic;
 }
 
+/* highlight nodes that are part of the path */
+
 .label.part,
 .arrow-container.part {
   color: #1f3b70;
 }
+
+/* hide arrow for leafs of the tree */
 
 .arrow-container.hide {
   color: transparent;
@@ -153,5 +161,9 @@ export default {
 
 .label-container.selected.hide {
   margin-left: 8%;
+}
+
+.container:hover:not(.selected) .arrow-container.hide {
+  color: transparent;
 }
 </style>
