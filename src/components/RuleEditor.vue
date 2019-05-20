@@ -95,7 +95,7 @@ import EditorNavBar from './EditorNavBar.vue';
 
 import { jsonPath } from '../libs/jsonpath-0.8.0';
 import { actionList } from '../libs/odrl/actions.js';
-import { operandMapping } from '../libs/odrl/constraints.js';
+import { validatePolicy } from '../libs/odrl/validate.js';
 
 export default {
   name: 'RuleEditor',
@@ -189,7 +189,7 @@ export default {
     policy: {
       handler(newPolicy, oldPolicy) {
         if (this.validateOnChange) {
-          this.validatePolicy();
+          validatePolicy(this.policy, this.warnings);
         }
       },
       deep: true,
@@ -209,176 +209,14 @@ export default {
         this.$i18n.locale = lang[0].toLowerCase() + lang[1];
       }
       if (this.validateOnChange) {
-        this.validatePolicy();
+        validatePolicy(this.policy, this.warnings);
       }
     },
     tryToGoForth() {
       this.validateOnChange = true;
-      // validate license
-      if (this.validatePolicy()) {
+      if (validatePolicy(this.policy, this.warnings)) {
         this.$emit('goForth', this.policy);
       }
-    },
-    validatePolicy() {
-      let errors = 0;
-      this.warnings = [];
-
-      // target
-      if (typeof this.policy.target === 'string') {
-        if (this.policy.target.length <= 0) {
-          this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('target')} ${this.$i18n.t('is_empty')}.` });
-          errors++;
-        }
-      } else if (this.policy.target.uid.length <= 0) {
-        this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('target')} ${this.$i18n.t('is_empty')}.` });
-        errors++;
-      }
-
-      // assigner
-      if (typeof this.policy.assigner === 'string') {
-        if (this.policy.assigner.length <= 0) {
-          this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('assigner')} ${this.$i18n.t('is_empty')}.` });
-          errors++;
-        }
-      } else if (this.policy.assigner.uid.length <= 0) {
-        this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('assigner')} ${this.$i18n.t('is_empty')}.` });
-        errors++;
-      }
-
-      // assignee
-      if (typeof this.policy.assignee === 'string') {
-        if (this.policy.assignee.length <= 0) {
-          this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('assignee')} ${this.$i18n.t('is_empty')}.` });
-          errors++;
-        }
-      } else if (this.policy.assignee.uid.length <= 0) {
-        this.warnings.push({ path: [], message: `${this.$i18n.t('error')}: ${this.$i18n.t('assignee')} ${this.$i18n.t('is_empty')}.` });
-        errors++;
-      }
-
-      if (this.policy.constraint) {
-        errors += this.validateConstraints(this.policy.constraint, []);
-      }
-
-      if (this.policy.permission) {
-        this.policy.permission.forEach((rule, index) => {
-          if (Array.isArray(rule.action)) {
-            errors += this.validateRefinements(rule.action[0].refinement, ['permission', index]);
-          }
-          errors += this.validateConstraints(rule.constraint, ['permission', index]);
-        });
-      }
-
-      if (this.policy.obligation) {
-        this.policy.obligation.forEach((rule, index) => {
-          if (Array.isArray(rule.action)) {
-            errors += this.validateRefinements(rule.action[0].refinement, ['obligation', index]);
-          }
-          errors += this.validateConstraints(rule.constraint, ['obligation', index]);
-        });
-      }
-
-      if (this.policy.prohibition) {
-        this.policy.prohibition.forEach((rule, index) => {
-          if (Array.isArray(rule.action)) {
-            errors += this.validateRefinements(rule.action[0].refinement, ['prohibition', index]);
-          }
-          errors += this.validateConstraints(rule.constraint, ['prohibition', index]);
-        });
-      }
-
-      return errors == 0;
-    },
-    validateRefinements(refinement, rulePath) {
-      return this.validateConstraints(refinement, rulePath, 'refinement');
-    },
-    validateConstraints(constraint, rulePath, type) {
-      if (type === undefined) type = 'constraint';
-      let errors = 0;
-
-      if (constraint && !Array.isArray(constraint)) {
-        // there is more than one constraint...
-        const logicalOperator = Object.keys(constraint)[0];
-        const constraints = constraint[logicalOperator]['@list'];
-
-        // collect all conditions
-        const conditions = {};
-        if (logicalOperator == 'and') {
-          constraints.forEach((ref) => {
-            if (!conditions[ref.leftOperand]) {
-              conditions[ref.leftOperand] = [];
-            }
-            if (!Array.isArray(ref.rightOperand)) {
-              // right operand is number with unit
-              conditions[ref.leftOperand].push({ op: ref.operator, val: ref.rightOperand['@value'], unit: ref.unit });
-            } else {
-              // right operand is selection from list of options
-              conditions[ref.leftOperand].push(ref.rightOperand);
-            }
-          });
-
-          const valuesPerOperator = {
-            gt: [], gteq: [], lt: [], lteq: [], eq: [],
-          };
-
-          Object.keys(conditions).forEach((key) => {
-            const conditionsOfSameOperand = conditions[key];
-
-            if (operandMapping[key].units) {
-              // check if units are selected ambiguously
-              const units = [];
-              conditionsOfSameOperand.forEach((item) => {
-                if (!units.includes(item.unit)) {
-                  units.push(item.unit);
-                }
-              });
-
-              if (units.length > 1) {
-                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('units_ambiguous')} ${this.$i18n.t('for')} ${this.$i18n.t(key)}.` });
-                errors++;
-              }
-
-              if (conditionsOfSameOperand.length > 1) {
-                conditionsOfSameOperand.forEach((cond) => {
-                  valuesPerOperator[cond.op].push(parseFloat(cond.val));
-                });
-              }
-            } else if (operandMapping[key].list) {
-              if (conditionsOfSameOperand.length > 1) {
-                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('selection_ambiguous')} ${this.$i18n.t('for')} ${this.$i18n.t(key)}.` });
-                errors++;
-              }
-            }
-          });
-
-          const uniqueEqualValues = valuesPerOperator.eq.filter((v, i) => valuesPerOperator.eq.indexOf(v) === i);
-          if (uniqueEqualValues.length > 1) {
-            this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('never_fullfilled')}.` });
-            errors++;
-          }
-
-          // check if conditions have collisions
-          const gtMax = Math.max(...valuesPerOperator.gt);
-          const gteqMax = Math.max(...valuesPerOperator.gteq);
-          const ltMin = Math.min(...valuesPerOperator.lt);
-          const lteqMin = Math.min(...valuesPerOperator.lteq);
-
-          if (gtMax >= ltMin || gtMax >= lteqMin || gteqMax >= ltMin || gteqMax > lteqMin) {
-            this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('never_fullfilled')}.` });
-            errors++;
-          }
-
-          if (uniqueEqualValues.length > 0) {
-            const eq = uniqueEqualValues[0];
-            if (gtMax >= eq || gteqMax > eq || ltMin <= eq || lteqMin < eq) {
-              this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('never_fullfilled')}.` });
-              errors++;
-            }
-          }
-        }
-      }
-
-      return errors;
     },
   },
 };
