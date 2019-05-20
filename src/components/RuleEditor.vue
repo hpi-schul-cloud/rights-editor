@@ -238,7 +238,7 @@ export default {
 }
 
 .policy-meaning{
-  margin-left: 200px;
+  margin-left: 250px;
   padding: 10px;
 }
 
