@@ -112,6 +112,7 @@ export default {
     return {
       editPath: [],
       warnings: [],
+      validateOnChange: false,
       policy: {
         uid: '',
         target: '',
@@ -184,6 +185,16 @@ export default {
       return text;
     },
   },
+  watch: {
+    policy: {
+      handler(newPolicy, oldPolicy) {
+        if (this.validateOnChange) {
+          this.validatePolicy();
+        }
+      },
+      deep: true,
+    },
+  },
   methods: {
     newRule(type) {
       if (!this.policy[type]) {
@@ -197,12 +208,15 @@ export default {
       if (this.$i18n.t('currentLanguage') != lang) {
         this.$i18n.locale = lang[0].toLowerCase() + lang[1];
       }
+      if (this.validateOnChange) {
+        this.validatePolicy();
+      }
     },
     tryToGoForth() {
-      // validate license (@Ivan TODO: should do this every time user changes the policy after the user tried to click next for the first time!)
+      this.validateOnChange = true;
+      // validate license
       if (this.validatePolicy()) {
-        // this.$emit('goForth', this.policy);
-        console.log('VALID');
+        this.$emit('goForth', this.policy);
       }
     },
     validatePolicy() {
@@ -248,21 +262,27 @@ export default {
 
       if (this.policy.permission) {
         this.policy.permission.forEach((rule, index) => {
-          errors += this.validateRefinements(rule.action[0].refinement, ['permission', index]);
+          if (Array.isArray(rule.action)) {
+            errors += this.validateRefinements(rule.action[0].refinement, ['permission', index]);
+          }
           errors += this.validateConstraints(rule.constraint, ['permission', index]);
         });
       }
 
       if (this.policy.obligation) {
         this.policy.obligation.forEach((rule, index) => {
-          errors += this.validateRefinements(rule.action[0].refinement, ['obligation', index]);
+          if (Array.isArray(rule.action)) {
+            errors += this.validateRefinements(rule.action[0].refinement, ['obligation', index]);
+          }
           errors += this.validateConstraints(rule.constraint, ['obligation', index]);
         });
       }
 
       if (this.policy.prohibition) {
         this.policy.prohibition.forEach((rule, index) => {
-          errors += this.validateRefinements(rule.action[0].refinement, ['prohibition', index]);
+          if (Array.isArray(rule.action)) {
+            errors += this.validateRefinements(rule.action[0].refinement, ['prohibition', index]);
+          }
           errors += this.validateConstraints(rule.constraint, ['prohibition', index]);
         });
       }
@@ -314,7 +334,7 @@ export default {
               });
 
               if (units.length > 1) {
-                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('units_ambiguous')} ${this.$i18n.t('for')} ${this.$i18n.t(key)}.`});
+                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('units_ambiguous')} ${this.$i18n.t('for')} ${this.$i18n.t(key)}.` });
                 errors++;
               }
 
@@ -325,7 +345,7 @@ export default {
               }
             } else if (operandMapping[key].list) {
               if (conditionsOfSameOperand.length > 1) {
-                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('selection_ambiguous')} ${this.$i18n.t('for')} ${this.$i18n.t(key)}.`});
+                this.warnings.push({ path: rulePath, message: `${this.$i18n.t('error')} ${this.$i18n.t('in')} ${this.$i18n.t(`${type}.name`)}: ${this.$i18n.t('selection_ambiguous')} ${this.$i18n.t('for')} ${this.$i18n.t(key)}.` });
                 errors++;
               }
             }
