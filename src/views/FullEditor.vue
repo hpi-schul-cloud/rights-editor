@@ -1,5 +1,5 @@
 <template>
-  <RuleEditor @abort="abort()" @goForth="goForth($event)" />
+  <RuleEditor :outsetPolicy="policy" @abort="abort()" @goForth="goForth($event)" />
 </template>
 
 <script>
@@ -12,6 +12,11 @@ export default {
   },
   data() {
     return {};
+  },
+  props: {
+    policy: {
+      type: Object,
+    },
   },
   methods: {
     abort() {

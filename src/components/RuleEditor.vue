@@ -109,11 +109,7 @@ export default {
     EditorNavBar,
   },
   data() {
-    return {
-      editPath: [],
-      warnings: [],
-      validateOnChange: false,
-      policy: {
+    let policy = {
         uid: '',
         target: '',
         assigner: '',
@@ -121,8 +117,26 @@ export default {
         follow(path) {
           return path.reduce((result, pathSegment) => result[pathSegment], this);
         },
-      },
+      };
+    if (this.$props.outsetPolicy) {
+      policy = this.$props.outsetPolicy;
+      policy.follow = (path) => {
+        console.log(path);
+        return path.reduce((result, pathSegment) => result[pathSegment], this); 
+      };
+      console.log(policy);
+    }
+    return {
+      warnings: [],
+      validateOnChange: false,
+      editPath: [],
+      policy
     };
+  },
+  props: {
+    outsetPolicy: {
+      type: Object,
+    },
   },
   computed: {
     languages() {

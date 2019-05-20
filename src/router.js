@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Start from './views/Start.vue';
 import OER from './views/OER.vue';
+import RecentsScreen from './views/RecentsScreen.vue';
 import FullEditor from './views/FullEditor.vue';
 import SaveScreen from './views/SaveScreen.vue';
 import BuyCaseStudy from './views/BuyCaseStudy.vue';
@@ -24,9 +25,15 @@ export default new Router({
       component: OER,
     },
     {
+      path: '/odrl-recents',
+      name: 'odrl-recents',
+      component: RecentsScreen,
+    },
+    {
       path: '/odrl-editor',
       name: 'odrl-editor',
       component: FullEditor,
+      props: true,
     },
     {
       path: '/schul-cloud-editor',
