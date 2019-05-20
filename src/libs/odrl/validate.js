@@ -8,33 +8,33 @@ export function validatePolicy(policy, warnings) {
   // target
   if (typeof policy.target === 'string') {
     if (policy.target.length <= 0) {
-      warnings.push({ path: [], message: `${i18n.t('error')}: ${i18n.t('target')} ${i18n.t('is_empty')}.` });
+      warnings.push({ path: [], message: `${i18n.t('target')} ${i18n.t('is_empty')}.` });
       errors++;
     }
   } else if (policy.target.uid.length <= 0) {
-    warnings.push({ path: [], message: `${i18n.t('error')}: ${i18n.t('target')} ${i18n.t('is_empty')}.` });
+    warnings.push({ path: [], message: `${i18n.t('target')} ${i18n.t('is_empty')}.` });
     errors++;
   }
 
   // assigner
   if (typeof policy.assigner === 'string') {
     if (policy.assigner.length <= 0) {
-      warnings.push({ path: [], message: `${i18n.t('error')}: ${i18n.t('assigner')} ${i18n.t('is_empty')}.` });
+      warnings.push({ path: [], message: `${i18n.t('assigner')} ${i18n.t('is_empty')}.` });
       errors++;
     }
   } else if (policy.assigner.uid.length <= 0) {
-    warnings.push({ path: [], message: `${i18n.t('error')}: ${i18n.t('assigner')} ${i18n.t('is_empty')}.` });
+    warnings.push({ path: [], message: `${i18n.t('assigner')} ${i18n.t('is_empty')}.` });
     errors++;
   }
 
   // assignee
   if (typeof policy.assignee === 'string') {
     if (policy.assignee.length <= 0) {
-      warnings.push({ path: [], message: `${i18n.t('error')}: ${i18n.t('assignee')} ${i18n.t('is_empty')}.` });
+      warnings.push({ path: [], message: `${i18n.t('assignee')} ${i18n.t('is_empty')}.` });
       errors++;
     }
   } else if (policy.assignee.uid.length <= 0) {
-    warnings.push({ path: [], message: `${i18n.t('error')}: ${i18n.t('assignee')} ${i18n.t('is_empty')}.` });
+    warnings.push({ path: [], message: `${i18n.t('assignee')} ${i18n.t('is_empty')}.` });
     errors++;
   }
 
@@ -121,7 +121,7 @@ function validateConditions(constraint, rulePath, type, warnings) {
           });
 
           if (units.length > 1) {
-            warnings.push({ path: rulePath, message: `${i18n.t('error')} ${i18n.t('in')} ${i18n.t(`${type}.name`)}: ${i18n.t('units_ambiguous')} ${i18n.t('for')} ${i18n.t(key)}.` });
+            warnings.push({ path: rulePath, message: `${i18n.t(`${type}.name`)}: ${i18n.t('units_ambiguous')} ${i18n.t('for')} ${i18n.t(key)}.` });
             errors++;
             return errors;
           }
@@ -133,7 +133,7 @@ function validateConditions(constraint, rulePath, type, warnings) {
           }
         } else if (operandMapping[key].list) {
           if (conditionsOfSameOperand.length > 1) {
-            warnings.push({ path: rulePath, message: `${i18n.t('error')} ${i18n.t('in')} ${i18n.t(`${type}.name`)}: ${i18n.t('selection_ambiguous')} ${i18n.t('for')} ${i18n.t(key)}.` });
+            warnings.push({ path: rulePath, message: `${i18n.t(`${type}.name`)}: ${i18n.t('selection_ambiguous')} ${i18n.t('for')} ${i18n.t(key)}.` });
             errors++;
           }
         }
@@ -141,7 +141,7 @@ function validateConditions(constraint, rulePath, type, warnings) {
 
       const uniqueEqualValues = valuesPerOperator.eq.filter((v, i) => valuesPerOperator.eq.indexOf(v) === i);
       if (uniqueEqualValues.length > 1) {
-        warnings.push({ path: rulePath, message: `${i18n.t('error')} ${i18n.t('in')} ${i18n.t(`${type}.name`)}: ${i18n.t('never_fullfilled')}.` });
+        warnings.push({ path: rulePath, message: `${i18n.t(`${type}.name`)} ${i18n.t('never_fullfilled')}.` });
         errors++;
       }
 
@@ -152,14 +152,14 @@ function validateConditions(constraint, rulePath, type, warnings) {
       const lteqMin = Math.min(...valuesPerOperator.lteq);
 
       if (gtMax >= ltMin || gtMax >= lteqMin || gteqMax >= ltMin || gteqMax > lteqMin) {
-        warnings.push({ path: rulePath, message: `${i18n.t('error')} ${i18n.t('in')} ${i18n.t(`${type}.name`)}: ${i18n.t('never_fullfilled')}.` });
+        warnings.push({ path: rulePath, message: `${i18n.t(`${type}.name`)} ${i18n.t('never_fullfilled')}.` });
         errors++;
       }
 
       if (uniqueEqualValues.length > 0) {
         const eq = uniqueEqualValues[0];
         if (gtMax >= eq || gteqMax > eq || ltMin <= eq || lteqMin < eq) {
-          warnings.push({ path: rulePath, message: `${i18n.t('error')} ${i18n.t('in')} ${i18n.t(`${type}.name`)}: ${i18n.t('never_fullfilled')}.` });
+          warnings.push({ path: rulePath, message: `${i18n.t(`${type}.name`)} ${i18n.t('never_fullfilled')}.` });
           errors++;
         }
       }

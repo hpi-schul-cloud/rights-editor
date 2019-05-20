@@ -41,7 +41,7 @@
       </div>
 
       <div v-if="warnings.length > 0" class="warnings">
-        {{ warnings.length }} {{ $t('errors_found') }}.
+        {{ warnings.length }} {{ $t('errors_found') }}:
         <ul>
           <li v-for="(warning, index) in warnings" :key="index">
             <a href="#" @click="editPath = warning.path">{{ warning.message }}</a>
@@ -302,11 +302,13 @@ input.guid-input {
 
 .warnings {
   padding-bottom: 5px;
+  margin-left: 10px;
 }
 
 .warnings a {
   color: rgb(200, 0, 0);
   font-weight: normal;
+  line-height: 1.35em;
 }
 
 @media screen and (max-width: 840px) {
