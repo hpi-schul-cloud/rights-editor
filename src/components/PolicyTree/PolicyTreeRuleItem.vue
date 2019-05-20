@@ -6,6 +6,7 @@
       :path="path"
       :selected-path="selectedPath"
       :arrow-down="showSubrules"
+      :hideArrow="!subrulesExist"
       @followPath="$emit('followPath', $event)"
       @arrowClicked="arrowClicked($event)"
     />
@@ -75,6 +76,12 @@ export default {
     subrules() {
       return this.rule[this.subruleType];
     },
+    subrulesExist() {
+      if (this.subrules) {
+        return this.subrules.length > 0;
+      }
+      return false;
+    },
     showSubrules() {
       return this.rule[this.subruleType] && this.shouldDisplaySubrules;
     },
@@ -100,12 +107,6 @@ export default {
   },
   methods: {
     arrowClicked(path) {
-      console.log(this.selectedPath.join());
-      console.log(' includes ');
-      console.log(path.join());
-      console.log('?');
-      console.log(this.selectedPath.join().includes(path.join()));
-
       // if (!this.selectedPath.join().includes(path.join())) {
       this.shouldDisplaySubrules = !this.shouldDisplaySubrules;
       // }

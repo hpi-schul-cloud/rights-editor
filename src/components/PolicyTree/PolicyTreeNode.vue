@@ -8,7 +8,7 @@
     <!-- arrow -->
     <div
       class="arrow-container"
-      :class="{ selected: isSelected, part: isPartOfPath }"
+      :class="{ selected: isSelected, part: isPartOfPath, hide: hideArrow }"
       @click="$emit('arrowClicked', path)"
     >
       <i v-if="arrowDown" class="fas fa-chevron-down" />
@@ -18,7 +18,7 @@
     <!-- labels -->
     <div
       class="label-container"
-      :class="{ selected: isSelected, part: isPartOfPath }"
+      :class="{ selected: isSelected, part: isPartOfPath, hide: hideArrow }"
       @click="$emit('followPath', path)"
     >
       <a
@@ -59,6 +59,11 @@ export default {
       default: true,
       required: false,
     },
+    hideArrow: {
+      type: Boolean,
+      default: false,
+      required: false,
+    }
   },
   computed: {
     isPartOfPath() {
@@ -117,7 +122,7 @@ export default {
 }
 
 .container:hover:not(.selected) .addition,
-.container:hover:not(.selected) .arrow-container {
+.container:hover:not(.selected, .hide) .arrow-container {
   font-weight: normal;
   color: #323232;
 }
@@ -140,5 +145,13 @@ export default {
 .label.part,
 .arrow-container.part {
   color: #1f3b70;
+}
+
+.arrow-container.hide {
+  color: transparent;
+}
+
+.label-container.selected.hide {
+  margin-left: 8%;
 }
 </style>
