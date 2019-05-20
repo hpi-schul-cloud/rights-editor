@@ -9,8 +9,9 @@
     <div
       class="arrow-container"
       :class="{ selected: isSelected, part: isPartOfPath }"
+      @click="$emit('arrowClicked', path)"
     >
-      <i v-if="isPartOfPath" class="fas fa-chevron-down" />
+      <i v-if="arrowDown" class="fas fa-chevron-down" />
       <i v-else class="fas fa-chevron-right" />
     </div>
 
@@ -53,10 +54,14 @@ export default {
       type: Array,
       required: true,
     },
+    arrowDown: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
   },
   computed: {
     isPartOfPath() {
-      console.log(this.path);
       return this.selectedPath.join().includes(this.path.join());
     },
     isSelected() {
@@ -86,6 +91,7 @@ export default {
   float: left;
   width: 10%;
   height: 54px;
+  color: #323232;
 }
 
 .label-container {
@@ -110,8 +116,9 @@ export default {
   color: #323232;
 }
 
-.container:hover:not(.selected) .addition {
-  font-weight: bold;
+.container:hover:not(.selected) .addition,
+.container:hover:not(.selected) .arrow-container {
+  font-weight: normal;
   color: #323232;
 }
 
@@ -130,10 +137,7 @@ export default {
   font-style: italic;
 }
 
-.label.part {
-  color: #1f3b70;
-}
-
+.label.part,
 .arrow-container.part {
   color: #1f3b70;
 }
