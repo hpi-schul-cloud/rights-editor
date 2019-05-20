@@ -8,7 +8,7 @@
         </a>
       </template>
       <template v-slot:right>
-        <a href="#" @click="$emit('goForth', policy)">
+        <a href="#" @click="tryToGoForth()">
           {{ $t("next") }} <i class="fas fa-arrow-circle-right" />
         </a>
       </template>
@@ -38,6 +38,15 @@
         <BaseButton @click="newRule('prohibition')">
           {{ $t('prohibitionButtonText') }}
         </BaseButton>
+      </div>
+
+      <div v-if="warnings.length > 0" class="warnings">
+        {{ warnings.length }} {{ $t('errors_found') }}.
+        <ul>
+          <li v-for="(warning, index) in warnings" :key="index">
+            <a href="#" @click="editPath = warning.path">{{ warning.message }}</a>
+          </li>
+        </ul>
       </div>
 
     </div>
@@ -86,6 +95,7 @@ import EditorNavBar from './EditorNavBar.vue';
 
 import { jsonPath } from '../libs/jsonpath-0.8.0';
 import { actionList } from '../libs/odrl/actions.js';
+import { validatePolicy } from '../libs/odrl/validate.js';
 
 export default {
   name: 'RuleEditor',
@@ -101,6 +111,8 @@ export default {
   data() {
     return {
       editPath: [],
+      warnings: [],
+      validateOnChange: false,
       policy: {
         uid: '',
         target: '',
@@ -124,53 +136,63 @@ export default {
 
       if (this.policy.permission) {
         text += 'Erlaubt ist: ';
-       
+
         // Gets all actions via jsonPath
-        let actions = jsonPath(this.policy, "$.permission[*].action");
+        const actions = jsonPath(this.policy, '$.permission[*].action');
 
         // Searches label for each action
-        for (let i = 0; i < actions.length; i++) { 
+        for (let i = 0; i < actions.length; i++) {
           text += this.$i18n.t(actionList.find(item => item === (actions[i])));
-          text += ", ";
+          text += ', ';
         }
 
         // Removes last comma
-        text = text.substr(0, text.length-2)
+        text = text.substr(0, text.length - 2);
       }
 
       if (this.policy.obligation) {
         text += '<br>Verpflichtend ist: ';
-        
+
         // Gets all actions via jsonPath
-        let actions = jsonPath(this.policy, "$.obligation[*].action");
+        const actions = jsonPath(this.policy, '$.obligation[*].action');
 
         // Searches label for each action
-        for (let i = 0; i < actions.length; i++) { 
+        for (let i = 0; i < actions.length; i++) {
           text += this.$i18n.t(actionList.find(item => item === (actions[i])));
-          text += ", ";
+          text += ', ';
         }
 
         // Removes last comma
-        text = text.substr(0, text.length-2)
+        text = text.substr(0, text.length - 2);
       }
 
       if (this.policy.prohibition) {
         text += '<br>Verboten ist: ';
 
         // Gets all actions via jsonPath
-        let actions = jsonPath(this.policy, "$.prohibition[*].action");
+        const actions = jsonPath(this.policy, '$.prohibition[*].action');
 
         // Searches label for each action
-        for (let i = 0; i < actions.length; i++) { 
+        for (let i = 0; i < actions.length; i++) {
           text += this.$i18n.t(actionList.find(item => item === (actions[i])));
-          text += ", ";
+          text += ', ';
         }
 
         // Removes last comma
-        text = text.substr(0, text.length-2)
+        text = text.substr(0, text.length - 2);
       }
 
       return text;
+    },
+  },
+  watch: {
+    policy: {
+      handler(newPolicy, oldPolicy) {
+        if (this.validateOnChange) {
+          validatePolicy(this.policy, this.warnings);
+        }
+      },
+      deep: true,
     },
   },
   methods: {
@@ -185,6 +207,15 @@ export default {
     switchLanguage(lang) {
       if (this.$i18n.t('currentLanguage') != lang) {
         this.$i18n.locale = lang[0].toLowerCase() + lang[1];
+      }
+      if (this.validateOnChange) {
+        validatePolicy(this.policy, this.warnings);
+      }
+    },
+    tryToGoForth() {
+      this.validateOnChange = true;
+      if (validatePolicy(this.policy, this.warnings)) {
+        this.$emit('goForth', this.policy);
       }
     },
   },
@@ -267,6 +298,15 @@ input.guid-input {
 
 .fa-language {
   margin-right: 5px;
+}
+
+.warnings {
+  padding-bottom: 5px;
+}
+
+.warnings a {
+  color: rgb(200, 0, 0);
+  font-weight: normal;
 }
 
 @media screen and (max-width: 840px) {
