@@ -310,6 +310,9 @@ export default {
     width: 100%;
     box-shadow: none;
     border-bottom: 1px solid darkgray;
+    border-top: 1px solid darkgray;
+    padding-top: 10px;
+    padding-bottom: 18px;
   }
 
   .policy-detail {
@@ -323,6 +326,10 @@ export default {
 
   .editor-body {
     padding: 10px;
+  }
+
+  .policy-detail {
+    margin-top: 10px;
   }
 }
 
