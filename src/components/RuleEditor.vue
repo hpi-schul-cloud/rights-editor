@@ -75,12 +75,12 @@
     </div>
 
     <div class="policy-meaning">
-
       <h2>Was bedeutet diese Lizenz?</h2>
       <p v-html="licenceText" />
       <h2>Provisorische Lizenz</h2>
       <pre>{{ policy }}</pre>
     </div>
+
   </div>
 </template>
 
@@ -238,7 +238,7 @@ export default {
   padding: 0px 0px 0px 15px;
 }
 
-.policy-meaning{
+.policy-meaning {
   margin-left: 250px;
   padding: 10px;
 }
@@ -269,12 +269,6 @@ export default {
   padding-top: 24px;
 }
 
-input.guid-input {
-  margin-left: 10px;
-  width: 175px;
-}
-
-
 .language-dropdown {
   display: inline-block;
 }
@@ -283,7 +277,7 @@ input.guid-input {
   margin-right: 5px;
 }
 
-.fas {
+.fa-plus {
   margin-right: 3px;
   margin-left: 10px;
   font-size: 0.9em;
@@ -307,13 +301,28 @@ input.guid-input {
     width: 100%;
   }
 
+  .fa-language {
+    margin-left: 10px;
+  }
+
+  .policy-tree {
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: none;
+    border-bottom: 1px solid darkgray;
+  }
+
   .policy-detail {
     display: inline-block;
     margin-left: 0px;
   }
 
+  .header-wrapper {
+    box-shadow: none;
+  }
+
   .editor-body {
-    padding: 0px;
+    padding: 10px;
   }
 }
 
