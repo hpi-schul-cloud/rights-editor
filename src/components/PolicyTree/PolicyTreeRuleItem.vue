@@ -5,11 +5,14 @@
       :addition="name[1]"
       :path="path"
       :selected-path="selectedPath"
+      :arrow-down="showSubrules"
+      :hide-arrow="!subrulesExist"
       @followPath="$emit('followPath', $event)"
+      @arrowClicked="arrowClicked($event)"
     />
 
-    <!-- Display subrules recursively -->
-    <div v-if="subrules" class="subrules">
+    <!-- display subrules recursively -->
+    <div v-if="showSubrules" class="subrules">
       <PolicyTreeRuleItem
         v-for="(subrule, index) in subrules"
         :key="index"
@@ -23,10 +26,11 @@
 </template>
 
 <script>
+import { constants } from 'crypto';
 import PolicyTreeNode from './PolicyTreeNode.vue';
 import { RuleTypes } from '../../libs/odrl/rules';
 import { actionList } from '../../libs/odrl/actions.js';
-import { actionToRefinements } from '../../libs/odrl/constraints';
+import { actionToRefinements, constraintOnlyOperandList } from '../../libs/odrl/constraints';
 
 export default {
   name: 'PolicyTreeRuleItem',
@@ -46,6 +50,11 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  data() {
+    return {
+      shouldDisplaySubrules: true,
+    };
   },
   computed: {
     lang() {
@@ -67,6 +76,15 @@ export default {
     subrules() {
       return this.rule[this.subruleType];
     },
+    subrulesExist() {
+      if (this.subrules) {
+        return this.subrules.length > 0;
+      }
+      return false;
+    },
+    showSubrules() {
+      return this.rule[this.subruleType] && this.shouldDisplaySubrules;
+    },
     ruleLabel() {
       const pathLen = this.path.length;
       const ruleLanguageInfo = this.$i18n.t('rule')[this.path[pathLen - 2]];
@@ -87,11 +105,12 @@ export default {
       return [this.ruleLabel, actionLabel];
     },
   },
+  methods: {
+    arrowClicked(path) {
+      // if (!this.selectedPath.join().includes(path.join())) {
+      this.shouldDisplaySubrules = !this.shouldDisplaySubrules;
+      // }
+    },
+  },
 };
 </script>
-
-<style scoped>
-.subrules {
-  padding-left: 20px;
-}
-</style>

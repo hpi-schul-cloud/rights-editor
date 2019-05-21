@@ -41,7 +41,7 @@
       </div>
 
       <div v-if="warnings.length > 0" class="warnings">
-        {{ warnings.length }} {{ $t('errors_found') }}.
+        {{ warnings.length }} {{ $t('errors_found') }}:
         <ul>
           <li v-for="(warning, index) in warnings" :key="index">
             <a href="#" @click="editPath = warning.path">{{ warning.message }}</a>
@@ -225,7 +225,7 @@ export default {
 <style scoped>
 .policy-tree {
   float: left;
-  width: 200px;
+  width: 250px;
   padding: 0px 8px;
   box-sizing: border-box;
   box-shadow: 3px 0px 2px -3px gray;
@@ -233,12 +233,12 @@ export default {
 }
 
 .policy-detail {
-  margin-left: 220px;
+  margin-left: 270px;
   padding: 0px 0px 0px 15px;
 }
 
 .policy-meaning{
-  margin-left: 200px;
+  margin-left: 250px;
   padding: 10px;
 }
 
@@ -302,11 +302,13 @@ input.guid-input {
 
 .warnings {
   padding-bottom: 5px;
+  margin-left: 10px;
 }
 
 .warnings a {
   color: rgb(200, 0, 0);
   font-weight: normal;
+  line-height: 1.35em;
 }
 
 @media screen and (max-width: 840px) {
