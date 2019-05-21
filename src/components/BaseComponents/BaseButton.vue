@@ -101,7 +101,8 @@ export default {
   padding-right: 5px;
 }
 
-.base-button-remove:active {
+.base-button-remove:active,
+.base-button-input:active {
   box-shadow: none;
 }
 
