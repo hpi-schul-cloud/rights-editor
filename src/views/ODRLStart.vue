@@ -3,7 +3,10 @@
     <h1>ODRL-Editor</h1>
     <div class="button-container"><BaseButton class="start-empty" @click="startEmpty()">Leer starten</BaseButton></div>
     <h2>Kürzlich bearbeitet</h2>
-    <p>Nutzen Sie eine andere Bearbeitung als Vorlage.</p>
+    <p>
+      Bitte beachten Sie, dass Sie die bereits erstellten Lizenzen nicht ändern können.
+      Sie stehen Ihnen hier zur Verfügung, um als Vorlage benutzt zu werden.
+    </p>
     <p v-if="state === 'loading'" class="message">Wird geladen...</p>
     <p v-if="state === 'noConnection'" class="message">Server ist nicht erreichbar!</p>
     <p v-if="state === 'loaded' && policies.length === 0" class="message">Es sind keine vorige Bearbeitungen vorhanden.</p>
@@ -17,7 +20,7 @@
 </template>
 
 <script>
-import BaseButton from '../components/BaseButton.vue';
+import BaseButton from '../components/BaseComponents/BaseButton.vue';
 
 export default {
   name: 'RecentsScreen',
@@ -48,6 +51,7 @@ export default {
         .then((result) => {
           result.json()
             .then((json) => {
+              console.log(json);
               this.data = json;
               this.state = 'loaded';
             })
@@ -97,14 +101,14 @@ h1 {
     font-size: 32px;
 }
 li {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  padding: 8px;
-  background-color: #eee;
-  border-radius: 4px;
+  border-bottom: 1px solid #1f3b70;
+  padding: 16px 8px;
+}
+li:first-child {
+  border-top: 1px solid #1f3b70;
 }
 li:hover {
-  background-color: #dedede;
+  color: #1f3b70;
   cursor: pointer;
 }
 

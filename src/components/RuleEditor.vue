@@ -121,10 +121,8 @@ export default {
     if (this.$props.outsetPolicy) {
       policy = this.$props.outsetPolicy;
       policy.follow = (path) => {
-        console.log(path);
-        return path.reduce((result, pathSegment) => result[pathSegment], this); 
+        return path.reduce((result, pathSegment) => result[pathSegment], this.policy); 
       };
-      console.log(policy);
     }
     return {
       warnings: [],
