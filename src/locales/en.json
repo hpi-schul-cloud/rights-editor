@@ -111,7 +111,7 @@
   "subRuleDescription": "are obligations, that must be done,",
   
   "globalConstraintsText": "Add globally applicable constraints:",
-  "globalConstraintsDescription": "The license then only applies, if...",
+  "globalConstraintsDescription": "The license only applies, if...",
 
   "target": "License Subject",
   "asset": "Asset",

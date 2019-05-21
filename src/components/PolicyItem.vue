@@ -55,7 +55,7 @@
 
     <!-- display constraints -->
     <div class="constraints-container">
-      <h3>{{ $t('globalConstraintsText') }}</h3>
+      <!--<h3>{{ $t('globalConstraintsText') }}</h3>-->
       {{ $t('globalConstraintsDescription') }}
       <em v-if="isLogicalConstraint && logicalConstraintOperator == 'xone'">
         {{ $t('either') }}
@@ -77,10 +77,9 @@
       <BaseButton
         class="add-constraint"
         type="button"
-        title="Einschränkung hinzufügen"
         @click="addConstraint()"
       >
-        <i class="fas fa-plus" />
+        <i class="fas fa-plus" /> {{ $t('constraint.add') }}
       </BaseButton>
     </div>
   </div>
@@ -339,5 +338,10 @@ export default {
 
 .logical-operator:hover {
   cursor: pointer;
+}
+
+.fas {
+  font-size: 14px;
+  margin-right: 3px;
 }
 </style>
