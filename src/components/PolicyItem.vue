@@ -348,4 +348,39 @@ ul {
   font-size: 14px;
   margin-right: 3px;
 }
+
+@media screen and (max-width: 1100px) {
+
+  .input-label {
+    display: inline-block;
+    font-weight: bold;
+    text-align: left;
+    width: 150px;
+  }
+
+  .input {
+    margin-left: 15px;
+    width: 175px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+
+  .input-container {
+    margin-bottom: 40px;
+  }
+
+  .input-label {
+    margin-left: 5px;
+  }
+
+  .input {
+    margin-left: 0px;
+  }
+
+  .dropdown-button {
+    display: block;
+  }
+}
+
 </style>
