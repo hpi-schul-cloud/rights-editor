@@ -79,7 +79,7 @@
         type="button"
         @click="addConstraint()"
       >
-        <i class="fas fa-plus" /> {{ $t('constraint.add') }}
+        {{ $t('constraint.add') }}
       </BaseButton>
     </div>
   </div>
@@ -279,6 +279,10 @@ export default {
 </script>
 
 <style scoped>
+ul {
+  margin: 0px;
+}
+
 .input {
   margin-left: 30px;
   width: 225px;

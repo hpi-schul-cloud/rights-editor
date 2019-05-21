@@ -18,7 +18,7 @@
 
       <div class="language-container">
         <i class="fas fa-language" />
-        {{ $t('languageButtonText') }}:
+        {{ $t('languageButtonText') }}:<br>
         <BaseDropdown
           :width="'150px'"
           class="language-dropdown"
@@ -28,7 +28,8 @@
         />
       </div>
 
-      <div class="editor-header">
+      <div class="add-rule-container">
+        <i class="fas fa-plus" /> {{ $t('addRule') }}: <br>
         <BaseButton @click="newRule('permission')">
           {{ $t('permissionButtonText') }}
         </BaseButton>
@@ -247,36 +248,25 @@ export default {
   box-shadow: 0px 3px 2px -3px gray;
 }
 
-.editor-header {
-  overflow: hidden;
-
-  padding-bottom: 20px;
-  padding-top: 0px;
+.add-rule-container {
   width: 50%;
   min-width: 350px;
+  padding-bottom: 12px;
+  padding-top: 0px;
+  margin-top: 20px;
+}
+
+.language-container {
+  float: right;
+  text-align: right;
+  width: 50%;
+  padding-bottom: 20px;
+  padding-top: 0px;
+  margin-top: 0px;
 }
 
 .editor-body {
   padding-top: 24px;
-}
-
-.editor-nav{
-  padding-top: 15px;
-  padding-bottom: 5px;
-  margin-left: 10px;
-  color: #1f3b70;
-}
-
-.editor-nav .left{
-  float: left;
-}
-
-.editor-nav .right {
-  float: right;
-}
-
-editor-nav .clear {
-  clear: both;
 }
 
 input.guid-input {
@@ -284,13 +274,6 @@ input.guid-input {
   width: 175px;
 }
 
-.language-container {
-  float: right;
-  text-align: right;
-  width: 50%;
-  margin: 0px;
-  padding: 0px;
-}
 
 .language-dropdown {
   display: inline-block;
@@ -298,6 +281,12 @@ input.guid-input {
 
 .fa-language {
   margin-right: 5px;
+}
+
+.fas {
+  margin-right: 3px;
+  margin-left: 10px;
+  font-size: 0.9em;
 }
 
 .warnings {
