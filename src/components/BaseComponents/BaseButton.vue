@@ -68,7 +68,6 @@ export default {
 .base-button-textlike:active {
   background: none;
   box-shadow: none;
-  border: 1px solid rgb(169, 169, 169);
 }
 
 .base-button-input {
