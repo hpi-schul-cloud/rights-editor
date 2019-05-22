@@ -25,7 +25,7 @@ export default {
     return {
       modes: [
         { name: 'OER (Creative Commons)', path: { name: 'oer' } },
-        { name: 'ODRL Editor', path: { name: 'odrl-editor' } },
+        { name: 'ODRL Editor', path: { name: 'odrl-start' } },
         { name: 'Schul-Cloud Editor', path: { name: 'sc-editor' } },
       ],
     };

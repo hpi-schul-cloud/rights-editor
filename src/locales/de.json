@@ -22,6 +22,21 @@
   "selection_ambiguous": "Auswahl ist uneindeutig",
   "never_fullfilled": "kann niemals erfüllt werden",
 
+  "odrl_editor": "ODRL-Editor",
+  "start_empty": "Leer starten",
+  "recently_edited": "Kürzlich bearbeitet",
+  "recently_edit_list_explanation": "Bitte beachten Sie, dass Sie die bereits erstellten Lizenzen nicht ändern können. Sie stehen Ihnen hier zur Verfügung, um als Vorlage benutzt zu werden.",
+  "loading": "Wird geladen...",
+  "server_unreachable": "Server ist nicht erreichbar!",
+  "no_recent_edits": "Es sind keine vorige Bearbeitungen vorhanden.",
+  "edited": "Bearbeitet",
+
+  "check_before_save": "Überprüfen Sie Ihre Lizenz vor dem Abspeichern",
+  "summarization": "Zusammenfassung",
+  "name_the_license": "Benennen Sie die Lizenz",
+  "save": "Speichern",
+  "problem_cannot_save_license": "Ein Problem ist aufgetreten: Momentan kann die Lizenz nicht gespeichert werden.",
+
   "license": "Lizenz",
   "licenseIdLabel": "ID der Lizenz:",
   "actionChooserHeader": "Aktion auswählen",

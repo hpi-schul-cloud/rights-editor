@@ -109,20 +109,30 @@ export default {
     PolicyItem,
     EditorNavBar,
   },
+  props: {
+    outsetPolicy: {
+      type: Object,
+    },
+  },
   data() {
+    let policy = {
+      uid: '',
+      target: '',
+      assigner: '',
+      assignee: '',
+      follow(path) {
+        return path.reduce((result, pathSegment) => result[pathSegment], this);
+      },
+    };
+    if (this.$props.outsetPolicy) {
+      policy = this.$props.outsetPolicy;
+      policy.follow = path => path.reduce((result, pathSegment) => result[pathSegment], this.policy);
+    }
     return {
-      editPath: [],
       warnings: [],
       validateOnChange: false,
-      policy: {
-        uid: '',
-        target: '',
-        assigner: '',
-        assignee: '',
-        follow(path) {
-          return path.reduce((result, pathSegment) => result[pathSegment], this);
-        },
-      },
+      editPath: [],
+      policy,
     };
   },
   computed: {
