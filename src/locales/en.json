@@ -31,6 +31,11 @@
   "no_recent_edits": "There are no previously created licenses.",
   "edited": "Edited",
 
+  "check_before_save": "Check your license before saving",
+  "summarization": "Summarization",
+  "name_the_license": "Name the license",
+  "save": "Save",
+  "problem_cannot_save_license": "A problem has occurred: The license cannot be saved.",
 
   "license": "License",
   "licenseIdLabel": "License ID:",
