@@ -4,12 +4,11 @@
     <div class="button-container"><BaseButton class="start-empty" @click="startEmpty()">{{ $t('start_empty') }}</BaseButton></div>
     <h2>{{ $t('recently_edited') }}</h2>
     <p>{{ $t('recently_edit_list_explanation') }}</p>
-    <!-- {{ $t('') }} -->
     <p v-if="state === 'loading'" class="message">{{ $t('loading') }}</p>
     <p v-if="state === 'noConnection'" class="message">{{ $t('server_unreachable') }}</p>
     <p v-if="state === 'loaded' && policies.length === 0" class="message">{{ $t('no_recent_edits') }}</p>
     <ul v-if="state === 'loaded' && policies.length > 0">
-      <li :key="index" v-for="(policy, index) in policies" @click="startWithPolicy(policy.odrl)">
+      <li v-for="(policy, index) in policies" :key="index" @click="startWithPolicy(policy.odrl)">
         <h3>{{ policy.name }}</h3>
         <p>{{ $t('edited') }}: {{ date(policy.updatedAt) }}</p>
       </li>
@@ -61,10 +60,10 @@ export default {
       this.$router.push({ name: 'odrl-editor' });
     },
     startWithPolicy(policy) {
-      this.$router.push({ name: 'odrl-editor', params: { policy }})
+      this.$router.push({ name: 'odrl-editor', params: { policy } });
     },
     date(time) {
-      return new Date(time).toLocaleString('de-DE');
+      return new Date(time).toLocaleString(this.$i18n.locale);
     },
   },
 };

@@ -108,33 +108,31 @@ export default {
     PolicyItem,
     EditorNavBar,
   },
+  props: {
+    outsetPolicy: {
+      type: Object,
+    },
+  },
   data() {
     let policy = {
-        uid: '',
-        target: '',
-        assigner: '',
-        assignee: '',
-        follow(path) {
-          return path.reduce((result, pathSegment) => result[pathSegment], this);
-        },
-      };
+      uid: '',
+      target: '',
+      assigner: '',
+      assignee: '',
+      follow(path) {
+        return path.reduce((result, pathSegment) => result[pathSegment], this);
+      },
+    };
     if (this.$props.outsetPolicy) {
       policy = this.$props.outsetPolicy;
-      policy.follow = (path) => {
-        return path.reduce((result, pathSegment) => result[pathSegment], this.policy); 
-      };
+      policy.follow = path => path.reduce((result, pathSegment) => result[pathSegment], this.policy);
     }
     return {
       warnings: [],
       validateOnChange: false,
       editPath: [],
-      policy
+      policy,
     };
-  },
-  props: {
-    outsetPolicy: {
-      type: Object,
-    },
   },
   computed: {
     languages() {
