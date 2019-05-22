@@ -55,7 +55,6 @@
 
     <!-- display constraints -->
     <div class="constraints-container">
-      <!--<h3>{{ $t('globalConstraintsText') }}</h3>-->
       {{ $t('globalConstraintsDescription') }}
       <em v-if="isLogicalConstraint && logicalConstraintOperator == 'xone'">
         {{ $t('either') }}
