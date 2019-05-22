@@ -26,10 +26,9 @@
 </template>
 
 <script>
-import { constants } from 'crypto';
 import PolicyTreeNode from './PolicyTreeNode.vue';
 import { RuleTypes } from '../../libs/odrl/rules';
-import { actionList } from '../../libs/odrl/actions.js';
+import { actionList } from '../../libs/odrl/actions';
 import { actionToRefinements, constraintOnlyOperandList } from '../../libs/odrl/constraints';
 
 export default {
@@ -98,7 +97,7 @@ export default {
       }
 
       let actionLabel = this.placeholder;
-      if (action && action != this.placeholder) {
+      if (action && action !== this.placeholder) {
         actionLabel = this.$i18n.t(actionList.find(item => item === action));
       }
 

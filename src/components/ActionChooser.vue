@@ -31,7 +31,7 @@
 <script>
 import BaseButton from './BaseComponents/BaseButton.vue';
 import BaseModal from './BaseComponents/BaseModal.vue';
-import { actionList } from '../libs/odrl/actions.js';
+import { actionList } from '../libs/odrl/actions';
 
 export default {
   name: 'ActionChooser',

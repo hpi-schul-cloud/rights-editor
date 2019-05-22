@@ -29,7 +29,7 @@
       </div>
 
       <div class="add-rule-container">
-        <i class="fas fa-plus" /> {{ $t('addRule') }}: <br>
+        {{ $t('addRule') }}: <br>
         <BaseButton @click="newRule('permission')">
           {{ $t('permissionButtonText') }}
         </BaseButton>
@@ -88,21 +88,19 @@
 import Vue from 'vue';
 import BaseButton from './BaseComponents/BaseButton.vue';
 import BaseDropdown from './BaseComponents/BaseDropdown.vue';
-import BaseInput from './BaseComponents/BaseInput.vue';
 import PolicyTree from './PolicyTree/PolicyTree.vue';
 import RuleItem from './RuleItem.vue';
 import PolicyItem from './PolicyItem.vue';
 import EditorNavBar from './EditorNavBar.vue';
 
 import { jsonPath } from '../libs/jsonpath-0.8.0';
-import { actionList } from '../libs/odrl/actions.js';
-import { validatePolicy } from '../libs/odrl/validate.js';
+import { actionList } from '../libs/odrl/actions';
+import { validatePolicy } from '../libs/odrl/validate';
 
 export default {
   name: 'RuleEditor',
   components: {
     BaseButton,
-    BaseInput,
     BaseDropdown,
     PolicyTree,
     RuleItem,
@@ -142,7 +140,7 @@ export default {
         const actions = jsonPath(this.policy, '$.permission[*].action');
 
         // Searches label for each action
-        for (let i = 0; i < actions.length; i++) {
+        for (let i = 0; i < actions.length; i += 1) {
           text += this.$i18n.t(actionList.find(item => item === (actions[i])));
           text += ', ';
         }
@@ -158,7 +156,7 @@ export default {
         const actions = jsonPath(this.policy, '$.obligation[*].action');
 
         // Searches label for each action
-        for (let i = 0; i < actions.length; i++) {
+        for (let i = 0; i < actions.length; i += 1) {
           text += this.$i18n.t(actionList.find(item => item === (actions[i])));
           text += ', ';
         }
@@ -174,7 +172,7 @@ export default {
         const actions = jsonPath(this.policy, '$.prohibition[*].action');
 
         // Searches label for each action
-        for (let i = 0; i < actions.length; i++) {
+        for (let i = 0; i < actions.length; i += 1) {
           text += this.$i18n.t(actionList.find(item => item === (actions[i])));
           text += ', ';
         }
@@ -206,7 +204,7 @@ export default {
       this.editPath = [type, idx];
     },
     switchLanguage(lang) {
-      if (this.$i18n.t('currentLanguage') != lang) {
+      if (this.$i18n.t('currentLanguage') !== lang) {
         this.$i18n.locale = lang[0].toLowerCase() + lang[1];
       }
       if (this.validateOnChange) {

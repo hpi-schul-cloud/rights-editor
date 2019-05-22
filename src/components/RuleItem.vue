@@ -129,10 +129,10 @@ import BaseButton from './BaseComponents/BaseButton.vue';
 import ActionItem from './ActionItem.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import RefinementItem from './RefinementItem.vue';
-import { RuleTypes } from '../libs/odrl/rules.js';
-import { capitalize } from '../libs/language/language.js';
-import { actionList } from '../libs/odrl/actions.js';
-import { logicalOperatorList } from '../libs/odrl/constraints.js';
+import { RuleTypes } from '../libs/odrl/rules';
+import { capitalize } from '../libs/language/language';
+import { actionList } from '../libs/odrl/actions';
+import { logicalOperatorList } from '../libs/odrl/constraints';
 
 export default {
   name: 'RuleItem',
@@ -221,7 +221,7 @@ export default {
       return Array.isArray(this.action) ? this.action[0]['rdf:value'] : this.action;
     },
     actionLabel() {
-      if (this.actionString && this.actionString != this.placeholder) {
+      if (this.actionString && this.actionString !== this.placeholder) {
         return this.$i18n.t(actionList.find(item => item === this.actionString));
       }
       return this.placeholder;
@@ -283,7 +283,7 @@ export default {
       }
 
       const op = Object.keys(this.rule.constraint)[0];
-      if (op == undefined) {
+      if (op === undefined) {
         return logicalOperatorList[0];
       }
       return op;
@@ -294,7 +294,7 @@ export default {
       }
 
       const op = Object.keys(this.action[0].refinement)[0];
-      if (op == undefined) {
+      if (op === undefined) {
         return logicalOperatorList[0];
       }
       return op;
@@ -345,7 +345,7 @@ export default {
       }
 
       // make use of the logical operator to combine more than one constraint
-      if (this.constraints.length == 1) {
+      if (this.constraints.length === 1) {
         const constraint = this.constraints;
         Vue.set(this.rule, 'constraint', {});
         Vue.set(this.rule.constraint, this.logicalConstraintOperator, { '@list': constraint });
@@ -380,7 +380,7 @@ export default {
 
       // and when more refinements are added, these multiple refinements
       // are combined in a list by a logical operator
-      if (this.refinements.length == 1) {
+      if (this.refinements.length === 1) {
         const refinement = this.refinements;
         Vue.set(this.action[0], 'refinement', {});
         Vue.set(this.action[0].refinement, this.logicalRefinementOperator, { '@list': refinement });

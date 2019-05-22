@@ -89,7 +89,6 @@ import Vue from 'vue';
 import BaseInput from './BaseComponents/BaseInput.vue';
 import BaseButton from './BaseComponents/BaseButton.vue';
 import BaseDropdown from './BaseComponents/BaseDropdown.vue';
-import ConstraintChooser from './ConstraintChooser.vue';
 import ConstraintItem from './ConstraintItem.vue';
 import { logicalOperatorList } from '../libs/odrl/constraints';
 
@@ -99,7 +98,6 @@ export default {
     BaseInput,
     BaseButton,
     BaseDropdown,
-    ConstraintChooser,
     ConstraintItem,
   },
   props: {
@@ -150,7 +148,7 @@ export default {
       }
 
       const op = Object.keys(this.policy.constraint)[0];
-      if (op == undefined) {
+      if (op === undefined) {
         return logicalOperatorList[0];
       }
       return op;
@@ -224,7 +222,7 @@ export default {
       }
 
       // make use of the logical operator to combine more than one constraint
-      if (this.constraints.length == 1) {
+      if (this.constraints.length === 1) {
         const constraint = this.constraints;
         Vue.set(this.policy, 'constraint', {});
         Vue.set(this.policy.constraint, this.logicalConstraintOperator, {
@@ -249,24 +247,24 @@ export default {
     },
     // assets
     assetTypeSelected(type) {
-      if (type == this.$i18n.t('assetCollection')) {
+      if (type === this.$i18n.t('assetCollection')) {
         Vue.set(this.policy, 'target', {
           '@type': 'AssetCollection',
           uid: this.assetId,
         });
-      } else if (type == this.$i18n.t('asset')) {
+      } else if (type === this.$i18n.t('asset')) {
         Vue.set(this.policy, 'target', this.assetId);
       }
     },
     partyTypeSelected(party, type) {
-      if (type == this.$i18n.t('individual')) {
+      if (type === this.$i18n.t('individual')) {
         Vue.set(this.policy, party, this[party]);
-      } else if (type == this.$i18n.t('group')) {
+      } else if (type === this.$i18n.t('group')) {
         Vue.set(this.policy, party, {
           '@type': ['PartyCollection', 'vcard:Group'],
           uid: this[party],
         });
-      } else if (type == this.$i18n.t('organization')) {
+      } else if (type === this.$i18n.t('organization')) {
         Vue.set(this.policy, party, {
           '@type': ['Party', 'vcard:Organization'],
           uid: this[party],
