@@ -25,6 +25,7 @@
   "license": "Lizenz",
   "licenseIdLabel": "ID der Lizenz:",
   "actionChooserHeader": "Aktion auswählen",
+  "addRule": "Regeln hinzufügen",
   "removeRule": "Regel löschen",
 
   "article": {
@@ -109,9 +110,7 @@
   "subRuleText": "Optional kann um folgende Regeln erweitert werden:",
   "subRuleDescription": "sind Pflichten, die geleistet werden müssen,",
   
-  "globalConstraintsText": "Global geltende Einschränkungen hinzufügen:",
   "globalConstraintsDescription": "Die Lizenz gilt nur, wenn...",
-
   "target": "Lizenzgegenstand",
   "asset": "Medieninhalt",
   "assetCollection": "Inhaltesammlung",

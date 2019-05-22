@@ -18,7 +18,7 @@
 
       <div class="language-container">
         <i class="fas fa-language" />
-        {{ $t('languageButtonText') }}:
+        {{ $t('languageButtonText') }}:<br>
         <BaseDropdown
           :width="'150px'"
           class="language-dropdown"
@@ -28,7 +28,8 @@
         />
       </div>
 
-      <div class="editor-header">
+      <div class="add-rule-container">
+        <i class="fas fa-plus" /> {{ $t('addRule') }}: <br>
         <BaseButton @click="newRule('permission')">
           {{ $t('permissionButtonText') }}
         </BaseButton>
@@ -74,12 +75,12 @@
     </div>
 
     <div class="policy-meaning">
-
       <h2>Was bedeutet diese Lizenz?</h2>
       <p v-html="licenceText" />
       <h2>Provisorische Lizenz</h2>
       <pre>{{ policy }}</pre>
     </div>
+
   </div>
 </template>
 
@@ -237,7 +238,7 @@ export default {
   padding: 0px 0px 0px 15px;
 }
 
-.policy-meaning{
+.policy-meaning {
   margin-left: 250px;
   padding: 10px;
 }
@@ -247,49 +248,25 @@ export default {
   box-shadow: 0px 3px 2px -3px gray;
 }
 
-.editor-header {
-  overflow: hidden;
-
-  padding-bottom: 20px;
-  padding-top: 0px;
+.add-rule-container {
   width: 50%;
   min-width: 350px;
-}
-
-.editor-body {
-  padding-top: 24px;
-}
-
-.editor-nav{
-  padding-top: 15px;
-  padding-bottom: 5px;
-  margin-left: 10px;
-  color: #1f3b70;
-}
-
-.editor-nav .left{
-  float: left;
-}
-
-.editor-nav .right {
-  float: right;
-}
-
-editor-nav .clear {
-  clear: both;
-}
-
-input.guid-input {
-  margin-left: 10px;
-  width: 175px;
+  padding-bottom: 12px;
+  padding-top: 0px;
+  margin-top: 20px;
 }
 
 .language-container {
   float: right;
   text-align: right;
   width: 50%;
-  margin: 0px;
-  padding: 0px;
+  padding-bottom: 20px;
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.editor-body {
+  padding-top: 24px;
 }
 
 .language-dropdown {
@@ -298,6 +275,12 @@ input.guid-input {
 
 .fa-language {
   margin-right: 5px;
+}
+
+.fa-plus {
+  margin-right: 3px;
+  margin-left: 10px;
+  font-size: 0.9em;
 }
 
 .warnings {
@@ -318,13 +301,35 @@ input.guid-input {
     width: 100%;
   }
 
+  .fa-language {
+    margin-left: 10px;
+  }
+
+  .policy-tree {
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: none;
+    border-bottom: 1px solid darkgray;
+    border-top: 1px solid darkgray;
+    padding-top: 10px;
+    padding-bottom: 18px;
+  }
+
   .policy-detail {
     display: inline-block;
     margin-left: 0px;
   }
 
+  .header-wrapper {
+    box-shadow: none;
+  }
+
   .editor-body {
-    padding: 0px;
+    padding: 10px;
+  }
+
+  .policy-detail {
+    margin-top: 10px;
   }
 }
 

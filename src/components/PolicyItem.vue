@@ -55,7 +55,6 @@
 
     <!-- display constraints -->
     <div class="constraints-container">
-      <h3>{{ $t('globalConstraintsText') }}</h3>
       {{ $t('globalConstraintsDescription') }}
       <em v-if="isLogicalConstraint && logicalConstraintOperator == 'xone'">
         {{ $t('either') }}
@@ -77,10 +76,9 @@
       <BaseButton
         class="add-constraint"
         type="button"
-        title="Einschränkung hinzufügen"
         @click="addConstraint()"
       >
-        <i class="fas fa-plus" />
+        {{ $t('constraint.add') }}
       </BaseButton>
     </div>
   </div>
@@ -280,6 +278,10 @@ export default {
 </script>
 
 <style scoped>
+ul {
+  margin: 0px;
+}
+
 .input {
   margin-left: 30px;
   width: 225px;
@@ -340,4 +342,44 @@ export default {
 .logical-operator:hover {
   cursor: pointer;
 }
+
+.fas {
+  font-size: 14px;
+  margin-right: 3px;
+}
+
+@media screen and (max-width: 1100px) {
+
+  .input-label {
+    display: inline-block;
+    font-weight: bold;
+    text-align: left;
+    width: 150px;
+  }
+
+  .input {
+    margin-left: 15px;
+    width: 175px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+
+  .input-container {
+    margin-bottom: 40px;
+  }
+
+  .input-label {
+    margin-left: 5px;
+  }
+
+  .input {
+    margin-left: 0px;
+  }
+
+  .dropdown-button {
+    display: block;
+  }
+}
+
 </style>

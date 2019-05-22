@@ -45,6 +45,12 @@ export default {
   cursor: pointer;
 }
 
+.base-button:active {
+  -webkit-box-shadow: 0px 2px 4px 3px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 2px 4px 3px rgba(0,0,0,0.1);
+  box-shadow: 0px 2px 4px 3px rgba(0,0,0,0.1);
+}
+
 .base-button-disabled {
   background-color: gray;
 }
@@ -56,11 +62,12 @@ export default {
 .base-button-textlike {
   color: black;
   background: none;
-  border: none;
+  border: 1px solid transparent;
 }
 
 .base-button-textlike:active {
   background: none;
+  box-shadow: none;
 }
 
 .base-button-input {
@@ -91,6 +98,11 @@ export default {
   padding: 0;
   padding-left: 5px;
   padding-right: 5px;
+}
+
+.base-button-remove:active,
+.base-button-input:active {
+  box-shadow: none;
 }
 
 @media screen and (max-width: 500px) {
