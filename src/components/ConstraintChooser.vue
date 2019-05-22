@@ -116,9 +116,6 @@ export default {
     };
   },
   computed: {
-    lang() {
-      return this.$i18n.locale;
-    },
     addObjectHeader() {
       return this.$i18n.t(`${this.name}.add`);
     },

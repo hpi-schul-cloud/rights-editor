@@ -60,9 +60,6 @@ export default {
     };
   },
   computed: {
-    lang() {
-      return this.$i18n.locale;
-    },
     refinement: {
       get() {
         return this.policy.follow(this.path);

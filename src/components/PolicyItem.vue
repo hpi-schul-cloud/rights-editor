@@ -109,9 +109,6 @@ export default {
     },
   },
   computed: {
-    lang() {
-      return this.$i18n.locale;
-    },
     assetTypeOptions() {
       return [this.$i18n.t('asset'), this.$i18n.t('assetCollection')];
     },
@@ -157,12 +154,6 @@ export default {
     },
     assetIsString() {
       return typeof this.policy.target === 'string';
-    },
-    assetLabel() {
-      if (this.assetIsString) {
-        return this.assetOptions[this.lang][0];
-      }
-      return this.assetOptions[this.lang][1];
     },
     assetId: {
       get() {

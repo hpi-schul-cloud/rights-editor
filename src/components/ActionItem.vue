@@ -51,9 +51,6 @@ export default {
     };
   },
   computed: {
-    lang() {
-      return this.$i18n.locale;
-    },
     placeholder() {
       return this.$i18n.t('placeholder');
     },

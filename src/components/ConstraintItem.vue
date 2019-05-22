@@ -62,9 +62,6 @@ export default {
     };
   },
   computed: {
-    lang() {
-      return this.$i18n.locale;
-    },
     constraint: {
       get() {
         return this.policy.follow(this.path);
