@@ -1,19 +1,17 @@
 <template>
   <div class="recents-screen">
-    <h1>ODRL-Editor</h1>
-    <div class="button-container"><BaseButton class="start-empty" @click="startEmpty()">Leer starten</BaseButton></div>
-    <h2>Kürzlich bearbeitet</h2>
-    <p>
-      Bitte beachten Sie, dass Sie die bereits erstellten Lizenzen nicht ändern können.
-      Sie stehen Ihnen hier zur Verfügung, um als Vorlage benutzt zu werden.
-    </p>
-    <p v-if="state === 'loading'" class="message">Wird geladen...</p>
-    <p v-if="state === 'noConnection'" class="message">Server ist nicht erreichbar!</p>
-    <p v-if="state === 'loaded' && policies.length === 0" class="message">Es sind keine vorige Bearbeitungen vorhanden.</p>
+    <h1>{{ $t('odrl_editor') }}</h1>
+    <div class="button-container"><BaseButton class="start-empty" @click="startEmpty()">{{ $t('start_empty') }}</BaseButton></div>
+    <h2>{{ $t('recently_edited') }}</h2>
+    <p>{{ $t('recently_edit_list_explanation') }}</p>
+    <!-- {{ $t('') }} -->
+    <p v-if="state === 'loading'" class="message">{{ $t('loading') }}</p>
+    <p v-if="state === 'noConnection'" class="message">{{ $t('server_unreachable') }}</p>
+    <p v-if="state === 'loaded' && policies.length === 0" class="message">{{ $t('no_recent_edits') }}</p>
     <ul v-if="state === 'loaded' && policies.length > 0">
       <li :key="index" v-for="(policy, index) in policies" @click="startWithPolicy(policy.odrl)">
         <h3>{{ policy.name }}</h3>
-        <p>Bearbeitet: {{ date(policy.updatedAt) }}</p>
+        <p>{{ $t('edited') }}: {{ date(policy.updatedAt) }}</p>
       </li>
     </ul>
   </div>

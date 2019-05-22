@@ -8,13 +8,13 @@
       </template>
     </EditorNavBar>
     <div>
-      <h1>Überprüfen Sie Ihre Lizenz vor dem Abspeichern</h1>
-      <h2>Zusammenfassung</h2>
+      <h1>{{ $t('check_before_save') }}</h1>
+      <h2>{{ $t('summarization') }}</h2>
       <p>{{ summarization }}</p>
     </div>
-    Benennen Sie die Lizenz: <BaseInput v-model="name" placeholder="Name" />
-    <BaseButton @click="save">Speichern</BaseButton>
-    <p class="problem" v-if="problemWhileSaving">Ein Problem ist aufgetreten: Momentan kann die Lizenz nicht gespeichert werden.</p>
+    {{ $t('name_the_license') }}: <BaseInput v-model="name" placeholder="Name" />
+    <BaseButton @click="save">{{ $t('save') }}</BaseButton>
+    <p class="problem" v-if="problemWhileSaving">{{ $t('problem_cannot_save_license') }}</p>
   </div>
 </template>
 
@@ -47,7 +47,7 @@ export default {
     summarization() {
       let text = [];
       if (this.policy.permission) {
-        text.push('Erlaubnis: ' + this.policy.permission
+        text.push(this.$t('rule.permission.name') + ': ' + this.policy.permission
           .map(p => {
             let actionID = p.action;
             if (Array.isArray(p.action)) {
@@ -58,7 +58,7 @@ export default {
           .join(', '));
       };
       if (this.policy.obligation) {
-        text.push('Pflicht: ' + this.policy.obligation
+        text.push(this.$t('rule.obligation.name') + ': ' + this.policy.obligation
           .map(o => {
             let actionID = o.action;
             if (Array.isArray(o.action)) {
@@ -69,7 +69,7 @@ export default {
           .join(', '));
       }
       if (this.policy.prohibition) {
-        text.push('Verbot: ' + this.policy.prohibition
+        text.push(this.$t('rule.prohibition.name') + ': ' + this.policy.prohibition
           .map(p => {
             let actionID = p.action;
             if (Array.isArray(p.action)) {
