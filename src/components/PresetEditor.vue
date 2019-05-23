@@ -37,19 +37,8 @@
 <script>
 import Vue from 'vue';
 import EditorNavBar from './EditorNavBar.vue';
-import BaseButton from './BaseButton.vue';
-
-
-const rules = [
-  { name: 'Nicht-gewerbliche, öffentliche Vorführung', description: 'TODO: Dies ist die Beschreibung von ' },
-  { name: 'Download', description: 'TODO: Dies ist die Beschreibung von ' },
-  { name: 'Streaming', description: 'TODO: Dies ist die Beschreibung von ' },
-  { name: 'Speichern', description: 'TODO: Dies ist die Beschreibung von ' },
-  { name: 'Bearbeitung', description: 'TODO: Dies ist die Beschreibung von ' },
-  { name: 'Remix', description: 'TODO: Dies ist die Beschreibung von ' },
-  { name: 'Öffentliche Zugänglichmachung bearbeiteter Materialien', description: 'TODO: Dies ist die Beschreibung von ' },
-  { name: 'Thumbnailerzeugung', description: 'TODO: Dies ist die Beschreibung von ' },
-];
+import BaseButton from './BaseComponents/BaseButton.vue';
+import { ruleOptions } from '../libs/license-options/license-options';
 
 export default {
   name: 'PresetEditor',
@@ -65,13 +54,13 @@ export default {
   },
   computed: {
     rules() {
-      return rules.map((rule, index) => ({
+      return ruleOptions.map((rule, index) => ({
         name: rule.name,
         selected: this.selectedRules.indexOf(index) >= 0,
       }));
     },
     activeRule() {
-      return rules[this.activeRuleIndex];
+      return ruleOptions[this.activeRuleIndex];
     },
   },
   methods: {
