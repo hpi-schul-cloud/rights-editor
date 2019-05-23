@@ -1,25 +1,72 @@
+const storageDevice = [
+  'http://www.example.org/storage-device/magnetic-tape',
+  'http://www.example.org/storage-device/hard-disk',
+  'http://www.example.org/storage-device/cd',
+  'http://www.example.org/storage-device/dvd',
+];
+
+const groups = [
+  'http://www.example.org/person/student',
+  'http://www.example.org/person/teacher',
+  'http://www.example.org/person/parent',
+  'http://www.example.org/person/administrator',
+];
+
+const communication = [
+  'http://www.example.org/communication/email',
+  'http://www.example.org/communication/usb',
+  'http://www.example.org/communication/cloud',
+];
+
+const fileFormat = [
+  'http://www.example.org/file-format/mp3',
+  'http://www.example.org/file-format/mp4',
+  'http://www.example.org/file-format/pdf',
+  'http://www.example.org/file-format/doc',
+  'http://www.example.org/file-format/ppt',
+];
+
+const states = [
+  'http://schema.org/State/Germany/Baden-Württemberg',
+  'http://schema.org/State/Germany/Bayern',
+  'http://schema.org/State/Germany/Berlin',
+  'http://schema.org/State/Germany/Brandenburg',
+  'http://schema.org/State/Germany/Bremen',
+  'http://schema.org/State/Germany/Hamburg',
+  'http://schema.org/State/Germany/Hessen',
+  'http://schema.org/State/Germany/Mecklenburg-Vorpommern',
+  'http://schema.org/State/Germany/Niedersachsen',
+  'http://schema.org/State/Germany/Nordrhein-Westfalen',
+  'http://schema.org/State/Germany/Rheinland-Pfalz',
+  'http://schema.org/State/Germany/Saarland',
+  'http://schema.org/State/Germany/Sachsen',
+  'http://schema.org/State/Germany/Sachsen-Anhalt',
+  'http://schema.org/State/Germany/Schleswig-Holstein',
+  'http://schema.org/State/Germany/Thüringen',
+];
+
 export const operandList = [
-  'Bundesland',
-  'Gruppenzugehörigkeit',
-  'Alter',
-  'Nutzungsdauer',
-  'Nutzeranzahl',
-  'Speichermedium',
-  'Anteil',
-  'Anzahl',
-  'Auflösung',
-  'Teilnehmer',
-  'Verbreitungsmethode',
-  'Dateiformat',
-  'Betrag',
+  'http://www.example.org/state',
+  'http://www.example.org/group-identity',
+  'http://www.example.org/age',
+  'http://www.example.org/time-of-use',
+  'http://www.example.org/user-amount',
+  'http://www.example.org/storage-device',
+  'http://www.example.org/share',
+  'http://www.example.org/amount',
+  'http://wwww.example.org/resolution',
+  'http://www.example.org/participants',
+  'http://www.example.org/distribution-method',
+  'http://www.example.org/file-format',
+  'http://www.example.org/pay-amount',
 ];
 
 export const constraintOnlyOperandList = [
-  'Bundesland',
-  'Gruppenzugehörigkeit',
-  'Alter',
-  'Nutzungsdauer',
-  'Nutzeranzahl',
+  operandList[0],
+  operandList[1],
+  operandList[2],
+  operandList[3],
+  operandList[4],
 ];
 
 export const operatorList = [
@@ -30,161 +77,103 @@ export const operatorList = [
   { symbol: '≥', identifier: 'gteq' },
 ];
 
-export const logicalOperatorList = {
-  or: {
-    text: 'UND/ODER',
-  },
-  xone: {
-    text: 'ODER',
-  },
-  and: {
-    text: 'UND',
-  },
-};
-
-const storageMedium = [
-  'Magnetband',
-  'Festplatte',
-  'CD/DVD',
-];
-
-const attendees = [
-  'Schüler',
-  'Lehrer',
-  'Eltern',
-  'Verwaltung',
-];
-
-const communication = [
-  'E-Mail',
-  'USB-Stick',
-  'Cloud',
-];
-
-const fileFormat = [
-  '.mp3',
-  '.mp4',
-  '.pdf',
-  '.doc',
-  '.ppt',
-];
-
-export const states = [
-  'Baden-Württemberg',
-  'Bayern',
-  'Berlin',
-  'Brandenburg',
-  'Bremen',
-  'Hamburg',
-  'Hessen',
-  'Mecklenburg-Vorpommern',
-  'Niedersachsen',
-  'Nordrhein-Westfalen',
-  'Rheinland-Pfalz',
-  'Saarland',
-  'Sachsen',
-  'Sachsen-Anhalt',
-  'Schleswig-Holstein',
-  'Thüringen',
-];
-
-export const groups = [
-  'Lehrer',
-  'Schüler',
-  'Verwaltung',
+export const logicalOperatorList = [
+  'or',
+  'xone',
+  'and',
 ];
 
 export const unitList = [
-  'Jahre',
-  'Tage',
-  'Stunden',
-  'Nutzer',
-  '%',
-  'Stück',
-  'Personen',
-  'dpi',
-  'ppi',
-  '€',
+  'http://www.example.org/resource/year',
+  'http://www.example.org/resource/day',
+  'http://www.example.org/resource/hour',
+  'http://www.example.org/resource/user',
+  'http://www.example.org/resource/percentage',
+  'http://www.example.org/resource/piece',
+  'http://www.example.org/resource/dpi',
+  'http://www.example.org/resource/ppi',
+  'http://www.example.org/resource/euro',
+  'http://www.example.org/resource/dollar',
 ];
 
-export const operandMapping = {
-  Bundesland: {
+export const operandMapping = Object.freeze({
+  'http://www.example.org/state': {
     operators: [operatorList[0]],
     list: states,
   },
-  Gruppenzugehörigkeit: {
+  'http://www.example.org/group-identity': {
     operators: [operatorList[0]],
     list: groups,
   },
-  Alter: {
+  'http://www.example.org/age': {
     operators: operatorList,
     units: [unitList[0]],
   },
-  Nutzungsdauer: {
+  'http://www.example.org/time-of-use': {
     operators: operatorList,
     units: [unitList[0], unitList[1], unitList[2]],
   },
-  Nutzeranzahl: {
+  'http://www.example.org/user-amount': {
     operators: operatorList,
     units: [unitList[3]],
   },
-  Speichermedium: {
+  'http://www.example.org/storage-device': {
     operators: [operatorList[0]],
-    list: storageMedium,
+    list: storageDevice,
   },
-  Anteil: {
+  'http://www.example.org/share': {
     operators: operatorList,
     units: [unitList[4]],
   },
-  Anzahl: {
+  'http://www.example.org/amount': {
     operators: operatorList,
-    units: [unitList[5], unitList[6]],
+    units: [unitList[5]],
   },
-  Auflösung: {
+  'http://wwww.example.org/resolution': {
     operators: operatorList,
-    units: [unitList[7], unitList[8]],
+    units: [unitList[6], unitList[7]],
   },
-  Teilnehmer: {
+  'http://www.example.org/participants': {
     operators: [operatorList[0]],
-    list: attendees,
+    list: [groups[0], groups[1], groups[2]],
   },
-  Verbreitungsmethode: {
+  'http://www.example.org/distribution-method': {
     operators: [operatorList[0]],
     list: communication,
   },
-  Dateiformat: {
+  'http://www.example.org/file-format': {
     operators: [operatorList[0]],
     list: fileFormat,
   },
-  Betrag: {
+  'http://www.example.org/pay-amount': {
     operators: operatorList,
-    units: [unitList[9]],
+    units: [unitList[8], unitList[9]],
   },
-};
+});
 
 export const actionToRefinements = Object.freeze({
-  Archivieren: {
+  'http://www.w3.org/ns/odrl/2/play': {
+    operands: [operandList[6], operandList[9]],
+  },
+  'http://www.w3.org/ns/odrl/2/archive': {
     operands: [operandList[5], operandList[6], operandList[7]],
   },
-  Bearbeiten: {
+  'http://www.w3.org/ns/odrl/2/derive': {
     operands: [operandList[6]],
   },
-  Drucken: {
+  'http://www.w3.org/ns/odrl/2/print': {
     operands: [operandList[6], operandList[7], operandList[8]],
   },
-  Kopieren: {
+  'http://www.w3.org/ns/odrl/2/reproduce': {
     operands: [operandList[7], operandList[11]],
   },
-  Verbreiten: {
+  'http://www.w3.org/ns/odrl/2/distribute': {
     operands: [operandList[6], operandList[7], operandList[9], operandList[10], operandList[11]],
   },
-  Verkaufen: {
+  'http://www.w3.org/ns/odrl/2/compensate': {
     operands: [operandList[12]],
   },
-  Vorführen: {
+  'http://www.w3.org/ns/odrl/2/present': {
     operands: [operandList[6], operandList[7], operandList[9]],
-  },
-  Zitieren: {
-    operands: [operandList[6]],
   },
 });

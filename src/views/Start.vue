@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import BaseButton from '../components/BaseButton.vue';
+import BaseButton from '../components/BaseComponents/BaseButton.vue';
 
 export default {
   name: 'Start',
@@ -25,7 +25,7 @@ export default {
     return {
       modes: [
         { name: 'OER (Creative Commons)', path: { name: 'oer' } },
-        { name: 'ODRL Editor', path: { name: 'odrl-editor' } },
+        { name: 'ODRL Editor', path: { name: 'odrl-start' } },
         { name: 'Schul-Cloud Editor', path: { name: 'sc-editor' } },
       ],
     };

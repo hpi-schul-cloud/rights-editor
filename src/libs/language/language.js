@@ -1,18 +1,8 @@
-export const articles = Object.freeze({
-  f: {
-    def: 'die',
-    undef: 'eine',
-  },
-  m: {
-    def: 'der',
-    undef: 'ein',
-  },
-  n: {
-    def: 'das',
-    undef: 'ein',
-  },
-});
-
-export function startSentence(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
+export function capitalize(text) {
+  if (!text) {
+    text = '';
+  } else {
+    text = text.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+  }
+  return text;
 }

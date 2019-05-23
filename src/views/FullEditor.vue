@@ -1,5 +1,5 @@
 <template>
-  <RuleEditor @abort="abort()" @goForth="goForth($event)" />
+  <RuleEditor :outset-policy="policy" @abort="abort()" @goForth="goForth($event)" />
 </template>
 
 <script>
@@ -9,6 +9,11 @@ export default {
   name: 'FullEditor',
   components: {
     RuleEditor,
+  },
+  props: {
+    policy: {
+      type: Object,
+    },
   },
   data() {
     return {};

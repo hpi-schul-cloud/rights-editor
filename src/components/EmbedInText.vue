@@ -1,6 +1,6 @@
 <template>
   <span>
-    {{ textBefore }}
+    {{ textAhead }}
     <slot />
     {{ textAfter }}
   </span>
@@ -10,7 +10,7 @@
 export default {
   name: 'EmbedInText',
   props: {
-    textBefore: {
+    textAhead: {
       type: String,
       default: '',
     },

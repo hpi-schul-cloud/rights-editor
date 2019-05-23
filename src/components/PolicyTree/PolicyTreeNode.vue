@@ -1,13 +1,37 @@
 <template>
-  <a
-    href="#"
-    class="label"
-    :class="{ selected: isSelected }"
-    @click="$emit('followPath', path)"
+  <div
+    class="container"
+    :class="{ selected: isSelected, part: isPartOfPath }"
+    :style="{ paddingLeft: path.length * 10 + 'px' }"
   >
-    {{ label }}
-    <span class="action" if="addition"><br>{{ addition }}</span>
-  </a>
+
+    <!-- arrow -->
+    <div
+      class="arrow-container"
+      :class="{ selected: isSelected, part: isPartOfPath, hide: hideArrow }"
+      @click="$emit('arrowClicked', path)"
+    >
+      <i v-if="arrowDown" class="fas fa-chevron-down" />
+      <i v-else class="fas fa-chevron-right" />
+    </div>
+
+    <!-- labels -->
+    <div
+      class="label-container"
+      :class="{ selected: isSelected, part: isPartOfPath, hide: hideArrow }"
+      @click="$emit('followPath', path)"
+    >
+      <a
+        href="#"
+        :class="{ selected: isSelected, part: isPartOfPath }"
+        class="label"
+      >
+        {{ label }}
+        <span v-if="addition" class="addition"><br>{{ addition }}</span>
+      </a>
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -30,50 +54,116 @@ export default {
       type: Array,
       required: true,
     },
+    arrowDown: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
+    hideArrow: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   computed: {
+    isPartOfPath() {
+      return this.selectedPath.join().includes(this.path.join());
+    },
     isSelected() {
-      return this.path.join() === this.selectedPath.join();
+      return this.selectedPath.join() === this.path.join();
     },
   },
 };
 </script>
 
 <style scoped>
+.container {
+  display: block;
+  margin: 1px;
+  cursor: pointer;
+
+  border-top: 1px transparent solid;
+  border-bottom: 1px transparent solid;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow-container {
+  padding-top: 8px;
+  padding-left: 3px;
+  float: left;
+  width: 10%;
+  height: 54px;
+  color: #323232;
+}
+
+.label-container {
+  padding: 8px 0px;
+  border-top: 1px transparent solid;
+  border-bottom: 1px transparent solid;
+  width: 90%;
+}
+
 .label {
-    display: block;
-    margin: 0px;
-    padding: 8px 0px;
-    cursor: pointer;
+  color: black;
+  font-weight: normal;
+  text-decoration: none;
+}
 
-    color: black;
-    font-weight: normal;
-    text-decoration: none;
-    border-top: 1px transparent solid;
-    border-bottom: 1px transparent solid;
+.addition {
+  font-size: 15px;
+}
 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.label:hover:not(.selected) {
-    font-weight: bold;
-    color: #323232;
-}
-.subrules {
-    padding-left: 20px;
-}
-.label.selected {
-  color: #1f3b70;
+/* on hover styling */
+
+.container:hover:not(.selected) .label {
   font-weight: bold;
+  color: #323232;
+}
+
+.container:hover:not(.selected) .addition,
+.container:hover:not(.selected) .arrow-container {
+  font-weight: normal;
+  color: #323232;
+}
+
+/* highlight the selected node */
+
+.label-container.selected {
   border-top: 1px #1f3b70 solid;
   border-bottom: 1px #1f3b70 solid;
 }
-.action {
-  font-size: 15px;
+
+.label.selected {
+  color: #1f3b70;
+  font-weight: bold;
 }
-.selected .action {
+
+.selected .addition {
   font-weight: normal;
   font-style: italic;
+}
+
+/* highlight nodes that are part of the path */
+
+.label.part,
+.arrow-container.part {
+  color: #1f3b70;
+}
+
+/* hide arrow for leafs of the tree */
+
+.arrow-container.hide {
+  color: transparent;
+}
+
+.label-container.selected.hide {
+  margin-left: 8%;
+}
+
+.container:hover:not(.selected) .arrow-container.hide {
+  color: transparent;
 }
 </style>

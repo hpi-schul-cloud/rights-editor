@@ -1,9 +1,9 @@
 <template>
   <div>
-    <BaseChooser
+    <ConstraintChooser
       v-if="displayRefinementChooser"
       :object-to-edit="refinement"
-      :name="'Verfeinerung'"
+      name="refinement"
       :operand-list="opList"
       :operand-mapping="opMapping"
       @chosen="hideRefinementChooser(); refinement = $event"
@@ -29,20 +29,19 @@
 
 <script>
 import Vue from 'vue';
-import BaseChooser from './BaseChooser.vue';
-import BaseButton from './BaseButton.vue';
+import ConstraintChooser from './ConstraintChooser.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
 import {
   operandMapping,
   operatorList,
   actionToRefinements,
-} from '../libs/odrl/constraints';
-
-const placeholder = '<leer>';
+  unitList,
+} from '../libs/odrl/constraints.js';
 
 export default {
   name: 'RefinementItem',
   components: {
-    BaseChooser,
+    ConstraintChooser,
     BaseButton,
   },
   props: {
@@ -92,28 +91,28 @@ export default {
     },
     description() {
       if (!this.refinement) {
-        return placeholder;
+        return this.$i18n.t('placeholder');
       }
-      let desc = this.refinement.leftOperand;
+
+      let desc = ` ${this.$i18n.t(this.refinement.leftOperand)}`;
       desc += ` ${operatorList.find(op => (op.identifier === this.refinement.operator)).symbol}`;
-      if (Array.isArray(this.refinement.rightOperand)) {
-        desc += ` ${this.refinement.rightOperand.join(', ')}`;
+
+      const rOperand = this.refinement.rightOperand;
+      if (Array.isArray(rOperand)) {
+        rOperand.forEach((item) => { desc += ` ${this.$i18n.t(item)}, `; });
+        desc = desc.substr(0, desc.length - 2); // removes the last comma
       } else {
-        desc += ` ${this.refinement.rightOperand['@value']}`;
-        desc += ` ${this.refinement.unit}`;
+        desc += ` ${rOperand['@value']}`;
+        desc += ` ${this.$i18n.t(this.refinement.unit)}`;
       }
       return desc;
     },
     opList() {
-      // get the action-specific refinement operands
+      // every action needs a different set of possible refinements
       return actionToRefinements[this.actionLabel].operands;
     },
     opMapping() {
-      // every action needs a different set of possible refinements
-      return this.opList.reduce((opMapping, operand) => {
-        opMapping[operand] = operandMapping[operand];
-        return opMapping;
-      }, {});
+      return operandMapping;
     },
   },
   methods: {

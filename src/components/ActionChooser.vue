@@ -1,7 +1,7 @@
 <template>
   <BaseModal>
     <template v-slot:header>
-      <h1>Aktion auswählen</h1>
+      <h1>{{ $t('actionChooserHeader') }}</h1>
     </template>
     <template v-slot:body>
       <ul class="actions-list">
@@ -11,17 +11,17 @@
           :class="{selected: currentSelected === index}"
           @click="actionClicked(index)"
         >
-          {{ action }}
+          {{ $t(action) }}
         </li>
       </ul>
     </template>
     <template v-slot:footer>
       <div class="modal-footer">
         <BaseButton textlike @click="abort">
-          Abbrechen
+          {{ $t('cancel') }}
         </BaseButton>
         <BaseButton :disabled="currentAction == ''" @click="chosen($event)">
-          Annehmen
+          {{ $t('accept') }}
         </BaseButton>
       </div>
     </template>
@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import BaseButton from './BaseButton.vue';
-import BaseModal from './BaseModal.vue';
+import BaseButton from './BaseComponents/BaseButton.vue';
+import BaseModal from './BaseComponents/BaseModal.vue';
 import { actionList } from '../libs/odrl/actions.js';
 
 export default {

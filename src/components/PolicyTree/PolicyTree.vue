@@ -1,13 +1,16 @@
 <template>
   <div class="tree">
     <PolicyTreeNode
-      label="Lizenz"
+      :label="$i18n.t('license')"
+      :addition="$t('general_information')"
       :path="[]"
       :selected-path="selectedPath"
+      :arrow-down="shouldDisplayRules"
       @followPath="$emit('followPath', $event)"
+      @arrowClicked="arrowClicked($event)"
     />
 
-    <div v-if="policy['permission']" class="rules">
+    <div v-if="policy['permission'] && shouldDisplayRules" class="rules">
       <PolicyTreeRuleItem
         v-for="(permission, index) in policy['permission']"
         :key="index"
@@ -18,7 +21,7 @@
       />
     </div>
 
-    <div v-if="policy['obligation']" class="rules">
+    <div v-if="policy['obligation'] && shouldDisplayRules" class="rules">
       <PolicyTreeRuleItem
         v-for="(obligation, index) in policy['obligation']"
         :key="index"
@@ -29,7 +32,7 @@
       />
     </div>
 
-    <div v-if="policy['prohibition']" class="rules">
+    <div v-if="policy['prohibition'] && shouldDisplayRules" class="rules">
       <PolicyTreeRuleItem
         v-for="(prohibition, index) in policy['prohibition']"
         :key="index"
@@ -62,11 +65,15 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      shouldDisplayRules: true,
+    };
+  },
+  methods: {
+    arrowClicked(path) {
+      this.shouldDisplayRules = !this.shouldDisplayRules;
+    },
+  },
 };
 </script>
-
-<style scoped>
-.rules {
-    padding-left: 20px;
-}
-</style>

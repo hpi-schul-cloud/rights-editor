@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="container">
     <BaseButton
       id="dropdown-button"
       input
       :class="{ 'dropdown-button-drop': shouldDisplayList }"
+      :style="{ width: this.width }"
       @click="clicked()"
     >
       {{ selectedOption }}
@@ -13,7 +14,7 @@
     <div
       v-if="shouldDisplayList"
       class="dropdown"
-      :style="{ width: this.width }"
+      :style="{ width: 'auto', minWidth: this.width }"
     >
       <ul
         v-closable="{ exclude: ['dropdown-button', 'dropdown-icon'],
@@ -139,7 +140,19 @@ export default {
   margin-left: 10px;
 }
 
+.container {
+  text-align: left;
+}
+
+#dropdown-icon {
+  text-align: right;
+  position: absolute;
+  right: 10px;
+}
+
 #dropdown-button {
+  position: relative;
+  text-align: left;
   margin-bottom: 0px;
   cursor: pointer;
 }
@@ -154,9 +167,9 @@ export default {
   position: absolute;
 
   margin-left: 5px;
-  padding: 10px;
-  padding-bottom: 0px;
+  padding-left: 10px;
   padding-top: 5px;
+  z-index: 4;
 }
 
 .dropdown ul {
@@ -165,7 +178,9 @@ export default {
 
 .dropdown li {
   line-height: 2.5em;
-  border-bottom: 1px lightgray solid;
+  margin-bottom: -1px;
+  border-bottom: 1px solid rgb(169, 169, 169);
+  width: 90%;
 }
 
 .dropdown li:hover {
