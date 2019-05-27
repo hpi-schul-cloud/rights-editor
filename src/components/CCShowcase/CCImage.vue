@@ -52,6 +52,6 @@ img.active {
   box-shadow: 0px 6px 3px -3px gray;
 }
 .ccImages{
-  color: #1f3b70;
+  color: #000000;
 }
 </style>

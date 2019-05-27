@@ -36,7 +36,6 @@ import {
   constraintOnlyOperandList,
   operandMapping,
   operatorList,
-  unitList,
 } from '../libs/odrl/constraints';
 
 
