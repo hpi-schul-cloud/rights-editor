@@ -24,8 +24,8 @@
       <div v-if="activeRule">
         <h2>{{ activeRule.name }}</h2>
         <p>{{ activeRule.description }}{{ activeRule.name }}.</p>
-        <BaseButton v-if="selectedRules.indexOf(activeRuleIndex) >= 0" @click="removeRule(activeRuleIndex)">Regel entfernen</BaseButton>
-        <BaseButton v-else @click="addRule(activeRuleIndex)">Regel hinzufügen</BaseButton>
+        <BaseButton v-if="selectedRules[activeRule.id]" @click="removeRule(activeRule.id)">Regel entfernen</BaseButton>
+        <BaseButton v-else @click="addRule(activeRule.id)">Regel hinzufügen</BaseButton>
       </div>
       <p v-else class="placeholder">Es sind noch keine Regeln ausgewählt.</p>
     </div>
@@ -49,14 +49,15 @@ export default {
   data() {
     return {
       activeRuleIndex: -1,
-      selectedRules: [],
+      selectedRules: {},
     };
   },
   computed: {
     rules() {
       return ruleOptions.map((rule, index) => ({
         name: rule.name,
-        selected: this.selectedRules.indexOf(index) >= 0,
+        id: rule.id,
+        selected: !!this.selectedRules[rule.id],
       }));
     },
     activeRule() {
@@ -64,11 +65,11 @@ export default {
     },
   },
   methods: {
-    addRule(index) {
-      this.selectedRules.push(index);
+    addRule(id) {
+      Vue.set(this.selectedRules, id, true);
     },
-    removeRule(index) {
-      Vue.delete(this.selectedRules, this.selectedRules.indexOf(index));
+    removeRule(id) {
+      Vue.delete(this.selectedRules, id);
     },
   },
 };
