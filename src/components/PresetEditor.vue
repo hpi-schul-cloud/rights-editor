@@ -6,6 +6,11 @@
           <i class="fas fa-arrow-circle-left" /> Zurück
         </a>
       </template>
+      <template v-slot:right>
+        <a href="#" @click="$emit('goForth', makePolicy())">
+          {{ $t("next") }} <i class="fas fa-arrow-circle-right" />
+        </a>
+      </template>
     </EditorNavBar>
     <h1>Regel-Editor</h1>
     <div class="info">
@@ -70,6 +75,17 @@ export default {
     },
     removeRule(id) {
       Vue.delete(this.selectedRules, id);
+    },
+    makePolicy() {
+      return {
+        uid: '',
+        target: '',
+        assigner: '',
+        assignee: '',
+        permission: Object.keys(this.selectedRules).map(id => ({
+          action: id,
+        })),
+      };
     },
   },
 };
