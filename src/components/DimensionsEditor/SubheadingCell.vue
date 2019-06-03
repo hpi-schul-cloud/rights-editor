@@ -19,5 +19,10 @@ h3 {
     font-size: inherit;
     margin: 0px;
     padding: 0px;
+
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #777;
+  text-align: center;
 }
 </style>

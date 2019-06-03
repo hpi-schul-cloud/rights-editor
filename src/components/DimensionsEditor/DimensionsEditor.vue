@@ -15,6 +15,7 @@
             :key="columnIndex"
             :rowspan="cell.rowspan || 1"
             :colspan="cell.colspan || 1"
+            :class="cell.classes"
           >
             <component :is="cell.component" v-if="cell.component" />
             <span v-else>({{ rowIndex }}:{{ columnIndex }}) {{ cell }}</span>
@@ -26,7 +27,7 @@
             :key="columnIndex"
             :rowspan="cell.rowspan || 1"
             :colspan="cell.colspan || 1"
-            :class="[cell.type]"
+            :class="cell.classes"
           >
             <component
               :is="cell.component"
@@ -42,64 +43,6 @@
       </tr>
     </table>
 
-    <table>
-      <tr>
-        <th />
-        <th
-          v-for="(licenseInfo, index) in licenseInfos"
-          :key="index"
-          :colspan="licenseInfo.optionsCount"
-          class="policies-first-cell"
-        >{{ licenseInfo.label }} </th>
-        <th><button @click="$emit('addPolicy')"><i class="fas fa-plus-circle" /></button></th>
-      </tr>
-      <tr>
-        <th>Lizenzgebiet</th>
-        <th
-          v-for="(cell, index) in columnInformation"
-          :key="index"
-          :class="{ 'policies-first-cell': cell.timeframeIndex === 0, 'duplicate': warning && warning[cell.licenseIndex].duplicates.indexOf(cell.timeframeIndex) >= 0}"
-        >
-          <span v-if="cell.type === 'timeframe'">
-            <select @change="updatetimeframe(cell.licenseIndex, cell.timeframeIndex, $event.target.value)">
-              <option v-for="(timeframeStep, index) in timeframeSteps" :key="index" :selected="cell.timeframe === timeframeStep">{{ timeframeStep }}</option>
-            </select>
-            <button @click="removetimeframe(cell.licenseIndex, cell.timeframeIndex)"><i class="fas fa-trash-alt" /></button>
-          </span>
-          <button v-if="cell.type === 'add'" @click="addtimeframe(cell.licenseIndex)"><i class="fas fa-plus-circle" /></button>
-        </th>
-      </tr>
-      <tr>
-        <td>Land</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
-          <PriceInput v-if="column.type === 'timeframe'" :price="column.state" @update:price="updatePrice('state', column.licenseIndex, column.timeframeIndex, $event)" />
-        </td>
-      </tr>
-      <tr>
-        <td>Kreis</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
-          <PriceInput v-if="column.type === 'timeframe'" :price="column.county" @update:price="updatePrice('county', column.licenseIndex, column.timeframeIndex, $event)" />
-        </td>
-      </tr>
-      <tr>
-        <td>Schule</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
-          <PriceInput v-if="column.type === 'timeframe'" :price="column.school" @update:price="updatePrice('school', column.licenseIndex, column.timeframeIndex, $event)" />
-        </td>
-      </tr>
-      <tr>
-        <td>Lehrer</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
-          <PriceInput v-if="column.type === 'timeframe'" :price="column.teacher" @update:price="updatePrice('teacher', column.licenseIndex, column.timeframeIndex, $event)" />
-        </td>
-      </tr>
-      <tr>
-        <td>Schüler/Eltern</td>
-        <td v-for="(column, index) in columnInformation" :key="index" :class="{ 'policies-first-cell': column.timeframeIndex === 0 }">
-          <PriceInput v-if="column.type === 'timeframe'" :price="column.pupil" @update:price="updatePrice('pupil', column.licenseIndex, column.timeframeIndex, $event)" />
-        </td>
-      </tr>
-    </table>
     <pre>{{ policies }}</pre>
   </div>
 </template>
@@ -175,8 +118,9 @@ class DimensionRow {
 }
 
 class DimensionCell {
-  constructor() {
+  constructor(_classes = []) {
     this.type = emptyCellName;
+    this.classes = [this.type];
   }
 }
 
@@ -193,6 +137,7 @@ class TitleRow extends DimensionRow {
       ...this.titleCells(),
       {
         type: addLicenseCellName,
+        classes: [addLicenseCellName],
         component: AddCell,
         events: {
           add: () => {
@@ -207,6 +152,7 @@ class TitleRow extends DimensionRow {
     return this.policies.map(
       (policy, index) => ({
         type: titleCellName,
+        classes: [titleCellName],
         colspan: this.policyCellsCounts()[index],
         component: TitleCell,
         props: {
@@ -231,6 +177,7 @@ class DescriptionRow extends TitleRow {
 
       return {
         type: descriptionCellName,
+        classes: [descriptionCellName],
         colspan: cell.colspan,
         component: DescriptionCell,
         props: {
@@ -255,6 +202,7 @@ class SubheadingRow extends TitleRow {
 
       return {
         type: subheadingCellName,
+        classes: [subheadingCellName],
         colspan: cell.colspan,
         component: SubheadingCell,
         props: {
@@ -266,6 +214,7 @@ class SubheadingRow extends TitleRow {
     const subheadings = super.cells().map(titleToSubheadingCells);
     subheadings[0] = {
       type: subheadingCellName,
+      classes: [subheadingCellName],
       rowspan: 2,
       component: SubheadingCell,
       props: {
@@ -293,6 +242,7 @@ class TimeframesRow extends DimensionRow {
     const toTimeframeCells = (policy, policyIndex) => [
       ...policy.options.timeframes.map((timeframe, timeframeIndex) => ({
         type: timeframeCellName,
+        classes: [timeframeCellName],
         component: TimeframeCell,
         props: { timeframe },
         events: {
@@ -309,6 +259,7 @@ class TimeframesRow extends DimensionRow {
       })),
       {
         type: addTimeframeCellName,
+        classes: [addTimeframeCellName],
         component: AddCell,
         events: {
           add: () => {
@@ -336,6 +287,7 @@ class LicenseeRow extends DimensionRow {
     return [
       {
         type: licenseeCellName,
+        classes: [licenseeCellName],
         component: LicenseeCell,
         props: {
           name: licenseEntitiesName[this.licensee],
@@ -351,6 +303,7 @@ class LicenseeRow extends DimensionRow {
     const toPriceCells = (policy, policyIndex) => [
       ...policy.options[this.licensee].map((price, optionsIndex) => ({
         type: priceCellName,
+        classes: [priceCellName],
         component: PriceCell,
         props: { price },
         events: {
@@ -359,7 +312,7 @@ class LicenseeRow extends DimensionRow {
           },
         },
       })),
-      { type: emptyCellName },
+      new DimensionCell(),
     ];
     const flattenArray = (result, array) => [...result, ...array];
     return this.policies.map(toPriceCells).reduce(flattenArray);
@@ -384,30 +337,8 @@ export default {
   },
   computed: {
     rows() {
-      const emitFunc = (eventName) => {this.$emit(eventName);};
+      const emitFunc = (eventName) => { this.$emit(eventName); };
       return new DimensionTable(this.policies).rows(emitFunc);
-    },
-    licenseNamesCells() {
-      const toNameCells = policy => ({
-        kind: 'NameCell',
-        label: policy.label,
-      });
-      return [
-        this.emptyCell(),
-        this.emptyCell(),
-        ...this.policies.map(toNameCells),
-      ];
-    },
-    licenseDetailsCells() {
-      const toDetailsCells = policy => ({
-        kind: 'DetailsCell',
-        label: 'TODO',
-      });
-      return [
-        this.emptyCell(),
-        this.emptyCell(),
-        ...this.policies.map(toDetailsCells),
-      ];
     },
 
 
@@ -511,26 +442,6 @@ export default {
 table {
     border-collapse: collapse;
 }
-.policies-first-cell {
-  border-left: 1px solid black;
-}
-button {
-  font-size: inherit;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  padding: 0px;
-  margin: 0px 8px;
-  color: #444;
-}
-button:hover {
-  color: black;
-}
-select {
-  font-size: inherit;
-  border: none;
-  background-color: transparent;
-}
 .warning {
   background: rgb(255, 219, 219);
   border-radius: 3px 3px;
@@ -546,9 +457,25 @@ th.duplicate {
   min-width: 8px;
   min-height: 8px;
 }
-td:not(.empty-cell) .cell, th:not(.empty-cell) .cell {
-  background-color: #dfdfdf;
-  display: block;
+.subheading-cell:first-child, .licensee-cell, .timeframe-cell, .description-cell, .add-timeframe-cell, .price-cell {
+  border-bottom: 1px solid black;
+}
+.subheading-cell:not(:first-child), .licensee-cell, .title-cell, .timeframe-cell, .description-cell, .add-timeframe-cell, .price-cell{
+  border-right: 1px solid black;
+}
+.subheading-cell:not(:first-child), .title-cell, .timeframe-cell, .description-cell, .price-cell {
+  border-left: 1px solid black;
+}
+
+.subheading-cell {
+  vertical-align: bottom;
+}
+
+.timeframe-cell, .add-timeframe-cell, .description-cell, .subheading-cell:first-child {
+  padding-top: 0px;
+}
+
+td, th {
   padding: 8px;
 }
 

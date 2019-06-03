@@ -25,3 +25,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+span {
+  font-style: italic;
+  font-size: 0.8em;
+}
+</style>
