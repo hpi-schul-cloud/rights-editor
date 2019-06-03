@@ -297,7 +297,7 @@ class TimeframesRow extends DimensionRow {
       },
     ];
     const flattenArray = (result, array) => [...result, ...array];
-    return this.policies.map(toTimeframeCells).reduce(flattenArray);
+    return this.policies.map(toTimeframeCells).reduce(flattenArray, []);
   }
 }
 
@@ -343,7 +343,7 @@ class LicenseeRow extends DimensionRow {
       new DimensionCell(),
     ];
     const flattenArray = (result, array) => [...result, ...array];
-    return this.policies.map(toPriceCells).reduce(flattenArray);
+    return this.policies.map(toPriceCells).reduce(flattenArray, []);
   }
 }
 
@@ -413,7 +413,7 @@ export default {
       })
         .then((response) => {
           this.problemWhileSaving = false;
-          // this.$router.push({ name: 'sc-start' });
+          this.$router.push({ name: 'sc-start' });
         })
         .catch((response) => {
           console.log('Problem:');

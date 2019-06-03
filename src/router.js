@@ -7,6 +7,7 @@ import FullEditor from './views/FullEditor.vue';
 import SaveScreen from './views/SaveScreen.vue';
 import BuyCaseStudy from './views/BuyCaseStudy.vue';
 import SCEditor from './views/SCEditor.vue';
+import SCStart from './views/SCStart.vue';
 
 Vue.use(Router);
 
@@ -36,9 +37,15 @@ export default new Router({
       props: true,
     },
     {
+      path: '/schul-cloud-start',
+      name: 'sc-start',
+      component: SCStart,
+    },
+    {
       path: '/schul-cloud-editor',
       name: 'sc-editor',
       component: SCEditor,
+      props: true,
     },
     { // should go into sc-editor
       path: '/check-before-save',

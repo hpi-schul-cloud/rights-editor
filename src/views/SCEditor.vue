@@ -17,9 +17,14 @@ export default {
   },
   data() {
     return {
-      mode: 'rules',
-      policies: [],
+      mode: 'dimensions',
     };
+  },
+  props: {
+    policies: {
+      type: Array,
+      default: () => {return []},
+    },
   },
   methods: {
     abort() {
@@ -33,12 +38,12 @@ export default {
         label: `Lizenz ${this.policies.length + 1}`,
         odrl: policy,
         options: {
-          timeframes: [],
-          state: [],
-          county: [],
-          school: [],
-          teacher: [],
-          pupil: [],
+          timeframes: ['unbegrenzt'],
+          state: [false],
+          county: [false],
+          school: [false],
+          teacher: [false],
+          pupil: [false],
         },
       });
       this.editDimensions();
