@@ -35,7 +35,6 @@
       <p v-else class="placeholder">Es sind noch keine Regeln ausgewählt.</p>
     </div>
   </div>
-  </div>
 </template>
 
 

@@ -1,6 +1,6 @@
 export const ruleOptions = [
   {
-    name: 'Nicht-gewerbliche, öffentliche Vorführung',
+    name: 'Nicht-gewerbliche öffentliche Vorführung',
     description: 'TODO: Dies ist die Beschreibung von ',
     id: 'http://schul-could.org/license-vocabulary/nicht-gewerbliche-oeffentliche-vorfuehrung',
   },

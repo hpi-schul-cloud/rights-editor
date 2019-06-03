@@ -7,7 +7,7 @@
 
 <script>
 import PresetEditor from '../components/PresetEditor.vue';
-import DimensionEditor from '../components/DimensionEditor.vue';
+import DimensionEditor from '../components/DimensionsEditor/DimensionsEditor.vue';
 
 export default {
   name: 'Proprietary',
