@@ -2,7 +2,9 @@
   <input
     :class="{ 'base-input-undercover': undercover }"
     :style="{ width: this.width }"
+    :type="type"
     :value="value"
+    :placeholder="placeholder"
     @input="$emit('input', $event.target.value)"
   >
 </template>
@@ -11,11 +13,18 @@
 export default {
   name: 'BaseInput',
   props: {
-    value: {},
-    width: {
-      default: '',
+    value: {
       type: String,
-      required: false,
+    },
+    width: {
+      type: String,
+    },
+    placeholder: {
+      type: String,
+    },
+    type: {
+      type: String,
+      default: 'text',
     },
     undercover: Boolean,
   },

@@ -1,8 +1,22 @@
 <template>
   <div>
-    <h1>Gebiete und Laufzeiten</h1>
+    <BaseButton class="save-button" @click="save()">Speichern</BaseButton>
+    <h1>Lizenz zusammenstellen</h1>
 
-    <p v-if="warning" class="warning">Einige Laufzeiten sind innerhalb einer Lizenz mehrfach angegeben.</p>
+    <p v-if="problemWhileSaving" class="warning">Während des Speicherns ist ein Problem aufgetreten</p>
+
+    <h2 class="section-heading">Name des Lizenzangebotes</h2>
+    <p>Bennenen Sie das Lizenzangebot, damit Sie in Übersichten schneller erkennen, um welches es sich handelt.</p>
+    <BaseInput
+      v-model="name"
+      type="text"
+      placeholder="Name für das Lizenzangebot"
+      class="name-input"
+    />
+    <h2 class="section-heading">Gebiete und Laufzeiten</h2>
+    <p>Stellen Sie verschiedene Lizenzmodelle zu einer flexiblen Lizenz zusammen.
+
+    </p><p v-if="warning" class="warning">Einige Laufzeiten sind innerhalb einer Lizenz mehrfach angegeben.</p>
 
     <table>
       <tr
@@ -17,7 +31,14 @@
             :colspan="cell.colspan || 1"
             :class="cell.classes"
           >
-            <component :is="cell.component" v-if="cell.component" />
+            <component
+              :is="cell.component"
+              v-if="cell.component"
+              v-bind="cell.props"
+              class="cell"
+              v-on="cell.events || {}"
+            />
+            <div v-else-if="cell.type === 'empty-cell'" class="cell" />
             <span v-else>({{ rowIndex }}:{{ columnIndex }}) {{ cell }}</span>
           </th>
         </template>
@@ -49,9 +70,10 @@
 
 <script>
 import Vue from 'vue';
-import TitleCell from './TitleCell.vue';
-import PriceInput from './PriceInput.vue';
+import BaseInput from '../BaseComponents/BaseInput.vue';
 import BaseButton from '../BaseComponents/BaseButton.vue';
+
+import TitleCell from './TitleCell.vue';
 import DescriptionCell from './DescriptionCell.vue';
 import SubheadingCell from './SubheadingCell.vue';
 import LicenseeCell from './LicenseeCell.vue';
@@ -128,6 +150,7 @@ class TitleRow extends DimensionRow {
   constructor(_policies, _emit) {
     super(_policies);
     this.emit = _emit;
+    this.isHeadRow = true;
   }
 
   cells() {
@@ -228,6 +251,7 @@ class SubheadingRow extends TitleRow {
 class TimeframesRow extends DimensionRow {
   constructor(_policies) {
     super(_policies);
+    this.isHeadRow = true;
   }
 
   cells() {
@@ -308,7 +332,11 @@ class LicenseeRow extends DimensionRow {
         props: { price },
         events: {
           'update:price': (newValue) => {
-            Vue.set(this.policies[policyIndex].options[this.licensee], optionsIndex, newValue);
+            let price = newValue;
+            if (price) {
+              price = Number(parseFloat(price).toFixed(2));
+            }
+            Vue.set(this.policies[policyIndex].options[this.licensee], optionsIndex, price);
           },
         },
       })),
@@ -323,7 +351,7 @@ class LicenseeRow extends DimensionRow {
 export default {
   name: 'DimensionEditor',
   components: {
-    PriceInput,
+    BaseInput,
     BaseButton,
   },
   props: {
@@ -333,52 +361,15 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      name: '',
+      problemWhileSaving: false,
+    };
   },
   computed: {
     rows() {
       const emitFunc = (eventName) => { this.$emit(eventName); };
       return new DimensionTable(this.policies).rows(emitFunc);
-    },
-
-
-    licenseInfos() {
-      const infos = this.columnInformation.reduce((agregate, cell) => {
-        if (cell.type === 'empty') {
-          return agregate;
-        }
-        if (agregate.length === 0) {
-          return [{ label: this.policies[cell.licenseIndex].label, licenseIndex: cell.licenseIndex, optionsCount: 1 }];
-        }
-        const prev = agregate[agregate.length - 1];
-        if (prev.licenseIndex === cell.licenseIndex) {
-          prev.optionsCount++;
-          agregate[agregate.length - 1] = prev;
-          return agregate;
-        }
-        return [...agregate, { label: this.policies[cell.licenseIndex].label, licenseIndex: cell.licenseIndex, optionsCount: 1 }];
-      }, []);
-      return infos;
-    },
-    columnInformation() {
-      const info = [];
-      this.policies.forEach((license, lIndex) => {
-        const licenseInfos = license.options.timeframes.map((timeframe, tIndex) => ({
-          type: 'timeframe',
-          timeframe,
-          licenseIndex: lIndex,
-          timeframeIndex: tIndex,
-          state: license.options.state[tIndex],
-          county: license.options.county[tIndex],
-          school: license.options.school[tIndex],
-          teacher: license.options.teacher[tIndex],
-          pupil: license.options.pupil[tIndex],
-        }));
-        info.push(...licenseInfos);
-        info.push({ type: 'add', licenseIndex: lIndex });
-      });
-      info.push({ type: 'empty' });
-      return info;
     },
     warning() {
       const howManyDuplicatesPerLicense = ((license, index) => {
@@ -411,36 +402,48 @@ export default {
     },
   },
   methods: {
-    updatePrice(area, licenseIndex, timeframeIndex, priceInfo) {
-      let price = priceInfo;
-      if (priceInfo) {
-        price = Number(parseFloat(price).toFixed(2));
-      }
-      Vue.set(this.policies[licenseIndex].options[area], timeframeIndex, price);
-    },
-    updatetimeframe(licenseIndex, timeframeIndex, timeframe) {
-      Vue.set(this.policies[licenseIndex].options.timeframes, timeframeIndex, timeframe);
-    },
-    removetimeframe(licenseIndex, timeframeIndex) {
-      Vue.delete(this.policies[licenseIndex].options.timeframes, timeframeIndex);
-      licenseEntities.forEach((entity) => {
-        Vue.delete(this.policies[licenseIndex].options[entity], timeframeIndex);
-      });
-    },
-    addtimeframe(licenseIndex) {
-      licenseEntities.forEach((entity) => {
-        const index = this.policies[licenseIndex].options[entity].length;
-        Vue.set(this.policies[licenseIndex].options[entity], index, false);
-      });
-      this.policies[licenseIndex].options.timeframes.push('unbegrenzt');
+    save() {
+      return fetch('http://localhost:5050/sc-licenses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: this.name || 'Unbenannte Lizenz',
+          policies: this.policies,
+        }),
+      })
+        .then((response) => {
+          this.problemWhileSaving = false;
+          // this.$router.push({ name: 'sc-start' });
+        })
+        .catch((response) => {
+          console.log('Problem:');
+          console.log(response);
+          this.problemWhileSaving = true;
+        });
     },
   },
 };
 </script>
 
 <style scoped>
+.section-heading {
+  margin-top: 50px;
+}
+.name-input {
+  display: block;
+  width: 100%;
+}
+.save-button {
+  float: right;
+  background-color: green;
+}
+
 table {
-    border-collapse: collapse;
+  margin-top: 30px;
+  border-collapse: collapse;
+}
+th {
+  font-weight: normal;
 }
 .warning {
   background: rgb(255, 219, 219);
