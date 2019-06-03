@@ -13,12 +13,15 @@
       placeholder="Name für das Lizenzangebot"
       class="name-input"
     />
+
+    <RuleSection :permissions.sync="policy.odrl.permission" />
+
     <h2 class="section-heading">Gebiete und Laufzeiten</h2>
     <p>Stellen Sie verschiedene Lizenzmodelle zu einer flexiblen Lizenz zusammen.
 
     </p><p v-if="warning" class="warning">Einige Laufzeiten sind innerhalb einer Lizenz mehrfach angegeben.</p>
 
-    <table>
+    <table class="prices-table">
       <tr
         v-for="(row, rowIndex) in rows"
         :key="rowIndex"
@@ -64,7 +67,7 @@
       </tr>
     </table>
 
-    <pre>{{ policies }}</pre>
+    <pre>{{ policy }}</pre>
   </div>
 </template>
 
@@ -73,6 +76,8 @@ import Vue from 'vue';
 import BaseInput from '../BaseComponents/BaseInput.vue';
 import BaseButton from '../BaseComponents/BaseButton.vue';
 
+import RuleSection from './RuleSection.vue';
+
 import TitleCell from './TitleCell.vue';
 import DescriptionCell from './DescriptionCell.vue';
 import SubheadingCell from './SubheadingCell.vue';
@@ -80,6 +85,8 @@ import LicenseeCell from './LicenseeCell.vue';
 import TimeframeCell from './TimeframeCell.vue';
 import PriceCell from './PriceCell.vue';
 import AddCell from './AddCell.vue';
+
+import { ruleOptions } from '../../libs/license-options/license-options';
 
 const licenseEntities = ['state', 'county', 'school', 'teacher', 'pupil'];
 const licenseEntitiesName = {
@@ -98,37 +105,28 @@ const licenseeCellName = 'licensee-cell';
 const priceCellName = 'price-cell';
 
 class DimensionTable {
-  constructor(_policies) {
-    this.policies = _policies;
+  constructor(_policy) {
+    this.policy = _policy;
   }
 
   rows(emitFunc) {
     return [
-      new TitleRow(this.policies, emitFunc),
-      new DescriptionRow(this.policies),
-      new DimensionRow(this.policies),
-      new SubheadingRow(this.policies),
-      new TimeframesRow(this.policies),
-      ...licenseEntities.map(entity => new LicenseeRow(this.policies, entity)),
+      new SubheadingRow(this.policy),
+      new TimeframesRow(this.policy),
+      ...licenseEntities.map(entity => new LicenseeRow(this.policy, entity)),
     ];
   }
 }
 
 class DimensionRow {
-  constructor(_policies) {
-    this.policies = _policies;
+  constructor(_policy) {
+    this.policy = _policy;
     this.isHeadRow = false;
   }
 
   cellsCount() {
-    const byAdding = (sum, count) => sum + count;
-    const licenseCells = this.policyCellsCounts().reduce(byAdding, 0);
-    return 2 + licenseCells + 1;
-  }
-
-  policyCellsCounts() {
-    const toCellsCount = policy => policy.options.timeframes.length + 1;
-    return this.policies.map(toCellsCount);
+    const policyCellCount = this.policy.options.timeframes.length;
+    return 2 + policyCellCount + 1;
   }
 
   cells() {
@@ -146,96 +144,23 @@ class DimensionCell {
   }
 }
 
-class TitleRow extends DimensionRow {
-  constructor(_policies, _emit) {
-    super(_policies);
-    this.emit = _emit;
+class SubheadingRow extends DimensionRow {
+  constructor(_policy) {
+    super(_policy, null);
     this.isHeadRow = true;
   }
 
   cells() {
     return [
-      new DimensionCell(),
-      new DimensionCell(),
-      ...this.titleCells(),
-      {
-        type: addLicenseCellName,
-        classes: [addLicenseCellName],
-        component: AddCell,
-        events: {
-          add: () => {
-            this.emit('addPolicy');
-          },
-        },
-      },
+      this.areaCell(),
+      // new DimensionCell(),
+      this.timeframeCell(),
+      new DimensionCell()
     ];
   }
 
-  titleCells() {
-    return this.policies.map(
-      (policy, index) => ({
-        type: titleCellName,
-        classes: [titleCellName],
-        colspan: this.policyCellsCounts()[index],
-        component: TitleCell,
-        props: {
-          policy,
-          index,
-        },
-      }),
-    );
-  }
-}
-
-class DescriptionRow extends TitleRow {
-  constructor(_policies) {
-    super(_policies, null);
-  }
-
-  cells() {
-    const titleToDescriptionCells = (cell) => {
-      if (cell.type !== titleCellName) {
-        return new DimensionCell();
-      }
-
-      return {
-        type: descriptionCellName,
-        classes: [descriptionCellName],
-        colspan: cell.colspan,
-        component: DescriptionCell,
-        props: {
-          policy: cell.props.policy,
-        },
-      };
-    };
-    return super.cells().map(titleToDescriptionCells);
-  }
-}
-
-class SubheadingRow extends TitleRow {
-  constructor(_policies) {
-    super(_policies, null);
-  }
-
-  cells() {
-    const titleToSubheadingCells = (cell) => {
-      if (cell.type !== titleCellName) {
-        return new DimensionCell();
-      }
-
-      return {
-        type: subheadingCellName,
-        classes: [subheadingCellName],
-        colspan: cell.colspan,
-        component: SubheadingCell,
-        props: {
-          text: 'Laufzeit',
-        },
-      };
-    };
-
-    const subheadings = super.cells().map(titleToSubheadingCells);
-    subheadings[0] = {
+  areaCell() {
+    return {
       type: subheadingCellName,
       classes: [subheadingCellName],
       rowspan: 2,
@@ -244,66 +169,77 @@ class SubheadingRow extends TitleRow {
         text: 'Geltungsbereiche',
       },
     };
-    return subheadings;
   }
+
+  timeframeCell() {
+    return {
+      type: subheadingCellName,
+      classes: [subheadingCellName],
+      colspan: this.policy.options.timeframes.length,
+      component: SubheadingCell,
+      props: {
+        text: 'Laufzeit',
+      },
+    };
+  }
+
 }
 
 class TimeframesRow extends DimensionRow {
-  constructor(_policies) {
-    super(_policies);
+  constructor(_policy) {
+    super(_policy);
     this.isHeadRow = true;
   }
 
   cells() {
     return [
-      new DimensionCell(),
+      // new DimensionCell(),
       ...this.timeframeCells(),
-      new DimensionCell(),
+      this.addingCell()
     ];
   }
 
   timeframeCells() {
-    const toTimeframeCells = (policy, policyIndex) => [
-      ...policy.options.timeframes.map((timeframe, timeframeIndex) => ({
-        type: timeframeCellName,
-        classes: [timeframeCellName],
-        component: TimeframeCell,
-        props: { timeframe },
-        events: {
-          'update-timeframe': (newTimeframe) => {
-            Vue.set(this.policies[policyIndex].options.timeframes, timeframeIndex, newTimeframe);
-          },
-          'remove-timeframe': () => {
-            const options = Object.keys(this.policies[policyIndex].options);
-            options.map((optionName) => {
-              Vue.delete(this.policies[policyIndex].options[optionName], timeframeIndex);
-            });
-          },
+    return this.policy.options.timeframes.map((timeframe, timeframeIndex) => ({
+      type: timeframeCellName,
+      classes: [timeframeCellName],
+      component: TimeframeCell,
+      props: { timeframe },
+      events: {
+        'update-timeframe': (newTimeframe) => {
+          Vue.set(this.policy.options.timeframes, timeframeIndex, newTimeframe);
         },
-      })),
-      {
-        type: addTimeframeCellName,
-        classes: [addTimeframeCellName],
-        component: AddCell,
-        events: {
-          add: () => {
-            licenseEntities.forEach((entity) => {
-              const index = this.policies[policyIndex].options[entity].length;
-              Vue.set(this.policies[policyIndex].options[entity], index, false);
-            });
-            this.policies[policyIndex].options.timeframes.push('unbegrenzt');
-          },
+        'remove-timeframe': () => {
+          const options = Object.keys(this.policy.options);
+          options.map((optionName) => {
+            Vue.delete(this.policy.options[optionName], timeframeIndex);
+          });
         },
       },
-    ];
-    const flattenArray = (result, array) => [...result, ...array];
-    return this.policies.map(toTimeframeCells).reduce(flattenArray, []);
+    }));
+  }
+
+  addingCell() {
+    return {
+      type: addTimeframeCellName,
+      classes: [addTimeframeCellName],
+      component: AddCell,
+      events: {
+        add: () => {
+          licenseEntities.forEach((entity) => {
+            const index = this.policy.options[entity].length;
+            Vue.set(this.policy.options[entity], index, false);
+          });
+          this.policy.options.timeframes.push('unbegrenzt');
+        },
+      },
+    };
   }
 }
 
 class LicenseeRow extends DimensionRow {
-  constructor(_policies, _licensee) {
-    super(_policies);
+  constructor(_policy, _licensee) {
+    super(_policy);
     this.licensee = _licensee;
   }
 
@@ -317,33 +253,28 @@ class LicenseeRow extends DimensionRow {
           name: licenseEntitiesName[this.licensee],
         },
       },
-      new DimensionCell(),
+      // new DimensionCell(),
       ...this.priceCells(),
       new DimensionCell(),
     ];
   }
 
   priceCells() {
-    const toPriceCells = (policy, policyIndex) => [
-      ...policy.options[this.licensee].map((price, optionsIndex) => ({
-        type: priceCellName,
-        classes: [priceCellName],
-        component: PriceCell,
-        props: { price },
-        events: {
-          'update:price': (newValue) => {
-            let price = newValue;
-            if (price) {
-              price = Number(parseFloat(price).toFixed(2));
-            }
-            Vue.set(this.policies[policyIndex].options[this.licensee], optionsIndex, price);
-          },
+    return this.policy.options[this.licensee].map((price, optionsIndex) => ({
+      type: priceCellName,
+      classes: [priceCellName],
+      component: PriceCell,
+      props: { price },
+      events: {
+        'update:price': (newValue) => {
+          let price = newValue;
+          if (price) {
+            price = Number(parseFloat(price).toFixed(2));
+          }
+          Vue.set(this.policy.options[this.licensee], optionsIndex, price);
         },
-      })),
-      new DimensionCell(),
-    ];
-    const flattenArray = (result, array) => [...result, ...array];
-    return this.policies.map(toPriceCells).reduce(flattenArray, []);
+      },
+    }));
   }
 }
 
@@ -353,11 +284,23 @@ export default {
   components: {
     BaseInput,
     BaseButton,
+    RuleSection,
   },
   props: {
-    policies: {
-      type: Array,
-      required: [],
+    policy: {
+      type: Object,
+      default: () => ({
+        name: '',
+        odrl: {},
+        options: {
+          timeframes: ['unbegrenzt'],
+          state: [false],
+          county: [false],
+          school: [false],
+          teacher: [false],
+          pupil: [false],
+        },
+      }),
     },
   },
   data() {
@@ -367,34 +310,37 @@ export default {
     };
   },
   computed: {
+    rules() {
+      return ruleOptions;
+    },
     rows() {
       const emitFunc = (eventName) => { this.$emit(eventName); };
-      return new DimensionTable(this.policies).rows(emitFunc);
+      return new DimensionTable(this.policy).rows(emitFunc);
     },
     warning() {
-      const howManyDuplicatesPerLicense = ((license, index) => {
-        const attachIndex = ((timeframe, index) => ({ timeframe, index }));
-        const onlyDuplicates = (counts => (timeframeInfo) => {
-          const count = (counts[timeframeInfo.timeframe] || 0);
-          return (counts[timeframeInfo.timeframe] = counts + 1) > 1;
-        })({});
-        const stripToIndex = (info => info.index);
-        const duplicatesIndices = license.options.timeframes
-          .map(attachIndex)
-          .filter(onlyDuplicates)
-          .map(stripToIndex);
-        return {
-          licenseIndex: index,
-          hasDuplicates: duplicatesIndices.length > 0,
-          duplicates: duplicatesIndices,
-        };
-      });
-      const duplicatesInfo = this.policies.map(howManyDuplicatesPerLicense);
-      const orAll = (seenAnyDuplicate, info) => (seenAnyDuplicate || info.hasDuplicates);
-      const anyDuplicates = duplicatesInfo.reduce(orAll, false);
-      if (anyDuplicates) {
-        return duplicatesInfo;
-      }
+      // const howManyDuplicatesPerLicense = ((license, index) => {
+      //   const attachIndex = ((timeframe, index) => ({ timeframe, index }));
+      //   const onlyDuplicates = (counts => (timeframeInfo) => {
+      //     const count = (counts[timeframeInfo.timeframe] || 0);
+      //     return (counts[timeframeInfo.timeframe] = counts + 1) > 1;
+      //   })({});
+      //   const stripToIndex = (info => info.index);
+      //   const duplicatesIndices = license.options.timeframes
+      //     .map(attachIndex)
+      //     .filter(onlyDuplicates)
+      //     .map(stripToIndex);
+      //   return {
+      //     licenseIndex: index,
+      //     hasDuplicates: duplicatesIndices.length > 0,
+      //     duplicates: duplicatesIndices,
+      //   };
+      // });
+      // const duplicatesInfo = this.policy.map(howManyDuplicatesPerLicense);
+      // const orAll = (seenAnyDuplicate, info) => (seenAnyDuplicate || info.hasDuplicates);
+      // const anyDuplicates = duplicatesInfo.reduce(orAll, false);
+      // if (anyDuplicates) {
+      //   return duplicatesInfo;
+      // }
       return false;
     },
     timeframeSteps() {
@@ -406,18 +352,19 @@ export default {
       return fetch('http://localhost:5050/sc-licenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: this.name || 'Unbenannte Lizenz',
-          policies: this.policies,
-        }),
+        body: JSON.stringify(this.policy),
       })
         .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          return response;
+        }).then((response) => {
+          console.log(response);
           this.problemWhileSaving = false;
           this.$router.push({ name: 'sc-start' });
-        })
-        .catch((response) => {
-          console.log('Problem:');
-          console.log(response);
+        }).catch((error) => {
+          console.error(error);
           this.problemWhileSaving = true;
         });
     },
@@ -438,7 +385,7 @@ export default {
   background-color: green;
 }
 
-table {
+table.prices-table {
   margin-top: 30px;
   border-collapse: collapse;
 }
@@ -460,13 +407,13 @@ th.duplicate {
   min-width: 8px;
   min-height: 8px;
 }
-.subheading-cell:first-child, .licensee-cell, .timeframe-cell, .description-cell, .add-timeframe-cell, .price-cell {
+.subheading-cell:first-child, .licensee-cell, .timeframe-cell, .add-timeframe-cell, .price-cell {
   border-bottom: 1px solid black;
 }
-.subheading-cell:not(:first-child), .licensee-cell, .title-cell, .timeframe-cell, .description-cell, .add-timeframe-cell, .price-cell{
+.licensee-cell, .title-cell, .timeframe-cell, .price-cell{
   border-right: 1px solid black;
 }
-.subheading-cell:not(:first-child), .title-cell, .timeframe-cell, .description-cell, .price-cell {
+.title-cell, .timeframe-cell, .price-cell {
   border-left: 1px solid black;
 }
 

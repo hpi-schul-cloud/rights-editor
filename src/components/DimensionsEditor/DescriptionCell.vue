@@ -29,6 +29,5 @@ export default {
 <style scoped>
 span {
   font-style: italic;
-  font-size: 0.8em;
 }
 </style>
