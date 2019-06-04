@@ -18,9 +18,9 @@
     <RuleSection :permissions.sync="policy.odrl.permission" />
 
     <h2 class="section-heading">Gebiete und Laufzeiten</h2>
-    <p>Stellen Sie verschiedene Lizenzmodelle zu einer flexiblen Lizenz zusammen.
+    <p>Stellen Sie verschiedene Lizenzmodelle zu einer flexiblen Lizenz zusammen.</p>
 
-    </p><p v-if="duplicates.length > 0" class="warning">Einige Laufzeiten sind innerhalb einer Lizenz mehrfach angegeben.</p>
+    <p v-if="duplicates.length > 0" class="warning">Einige Laufzeiten sind innerhalb einer Lizenz mehrfach angegeben.</p>
 
     <table class="prices-table">
       <tr>
@@ -138,7 +138,7 @@ export default {
     },
     removeTimeframe(index) {
       const options = Object.keys(this.policy.options);
-      options.map((optionName) => {
+      options.forEach((optionName) => {
         Vue.delete(this.policy.options[optionName], index);
       });
     },
@@ -159,9 +159,12 @@ export default {
     save() {
       if (this.policy.name.length === 0) {
         this.problemNoName = true;
-        return
+        return;
       }
-      return fetch('http://localhost:5050/sc-licenses', {
+      if (this.duplicates.length > 0) {
+        return;
+      }
+      fetch('http://localhost:5050/sc-licenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.policy),

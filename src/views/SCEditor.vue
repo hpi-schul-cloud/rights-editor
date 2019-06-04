@@ -12,14 +12,12 @@
 
 <script>
 import Vue from 'vue';
-import PresetEditor from '../components/PresetEditor.vue';
 import DimensionEditor from '../components/DimensionsEditor/DimensionsEditor.vue';
 import EditorNavBar from '../components/EditorNavBar.vue';
 
 export default {
   name: 'SCEditor',
   components: {
-    PresetEditor,
     DimensionEditor,
     EditorNavBar,
   },
