@@ -8,7 +8,7 @@
     <h2 class="section-heading">Name des Lizenzangebotes</h2>
     <p>Bennenen Sie das Lizenzangebot, damit Sie in Übersichten schneller erkennen, um welches es sich handelt.</p>
     <BaseInput
-      v-model="name"
+      v-model="policy.name"
       type="text"
       placeholder="Name für das Lizenzangebot"
       class="name-input"
@@ -19,7 +19,67 @@
     <h2 class="section-heading">Gebiete und Laufzeiten</h2>
     <p>Stellen Sie verschiedene Lizenzmodelle zu einer flexiblen Lizenz zusammen.
 
-    </p><p v-if="warning" class="warning">Einige Laufzeiten sind innerhalb einer Lizenz mehrfach angegeben.</p>
+    </p><p v-if="duplicates.length > 0" class="warning">Einige Laufzeiten sind innerhalb einer Lizenz mehrfach angegeben.</p>
+
+    <table class="prices-table">
+      <tr><th colspan="2"></th><th colspan="policy.options.timeframes.length">Laufzeit</th><th></th></tr>
+      <tr><th></th><th>Geltungsbereiche</th>
+        <th v-for="(timeframe, index) in policy.options.timeframes" :key="index">{{ timeframe }}</th><th> + </th></tr>
+      <tr><td></td><td>Land</td>
+        <td v-for="(price, index) in policy.options.state" :key="index">{{ price }}</td><td></td></tr>
+      <tr><td></td><td>Kreis</td>
+        <td v-for="(price, index) in policy.options.county" :key="index">{{ price }}</td><td></td></tr>
+      <tr><td></td><td>Schule</td>
+        <td v-for="(price, index) in policy.options.school" :key="index">{{ price }}</td><td></td></tr>
+      <tr><td></td><td>Lehrer</td>
+        <td v-for="(price, index) in policy.options.teacher" :key="index">{{ price }}</td><td></td></tr>
+      <tr><td></td><td>Schüler/Eltern</td>
+        <td v-for="(price, index) in policy.options.pupil" :key="index">{{ price }}</td><td></td></tr>
+      <tr
+        v-for="(row, rowIndex) in rows"
+        :key="rowIndex"
+      >
+        <template v-if="row.isHeadRow">
+          <th
+            v-for="(cell, columnIndex) in row.cells()"
+            :key="columnIndex"
+            :rowspan="cell.rowspan || 1"
+            :colspan="cell.colspan || 1"
+            :class="cell.classes"
+          >
+            <component
+              :is="cell.component"
+              v-if="cell.component"
+              v-bind="cell.props"
+              class="cell"
+              v-on="cell.events || {}"
+            />
+            <div v-else-if="cell.type === 'empty-cell'" class="cell" />
+            <span v-else>({{ rowIndex }}:{{ columnIndex }}) {{ cell }}</span>
+          </th>
+        </template>
+        <template v-else>
+          <td
+            v-for="(cell, columnIndex) in row.cells()"
+            :key="columnIndex"
+            :rowspan="cell.rowspan || 1"
+            :colspan="cell.colspan || 1"
+            :class="cell.classes"
+          >
+            <component
+              :is="cell.component"
+              v-if="cell.component"
+              v-bind="cell.props"
+              class="cell"
+              v-on="cell.events || {}"
+            />
+            <div v-else-if="cell.type === 'empty-cell'" class="cell" />
+            <span v-else>({{ rowIndex }}:{{ columnIndex }}) {{ cell }}</span>
+          </td>
+        </template>
+      </tr>
+    </table>
+
 
     <table class="prices-table">
       <tr
@@ -67,6 +127,7 @@
       </tr>
     </table>
 
+    <pre>{{ duplicates }}</pre>
     <pre>{{ policy }}</pre>
   </div>
 </template>
@@ -155,7 +216,7 @@ class SubheadingRow extends DimensionRow {
       this.areaCell(),
       // new DimensionCell(),
       this.timeframeCell(),
-      new DimensionCell()
+      new DimensionCell(),
     ];
   }
 
@@ -182,7 +243,6 @@ class SubheadingRow extends DimensionRow {
       },
     };
   }
-
 }
 
 class TimeframesRow extends DimensionRow {
@@ -195,7 +255,7 @@ class TimeframesRow extends DimensionRow {
     return [
       // new DimensionCell(),
       ...this.timeframeCells(),
-      this.addingCell()
+      this.addingCell(),
     ];
   }
 
@@ -305,7 +365,6 @@ export default {
   },
   data() {
     return {
-      name: '',
       problemWhileSaving: false,
     };
   },
@@ -317,31 +376,19 @@ export default {
       const emitFunc = (eventName) => { this.$emit(eventName); };
       return new DimensionTable(this.policy).rows(emitFunc);
     },
-    warning() {
-      // const howManyDuplicatesPerLicense = ((license, index) => {
-      //   const attachIndex = ((timeframe, index) => ({ timeframe, index }));
-      //   const onlyDuplicates = (counts => (timeframeInfo) => {
-      //     const count = (counts[timeframeInfo.timeframe] || 0);
-      //     return (counts[timeframeInfo.timeframe] = counts + 1) > 1;
-      //   })({});
-      //   const stripToIndex = (info => info.index);
-      //   const duplicatesIndices = license.options.timeframes
-      //     .map(attachIndex)
-      //     .filter(onlyDuplicates)
-      //     .map(stripToIndex);
-      //   return {
-      //     licenseIndex: index,
-      //     hasDuplicates: duplicatesIndices.length > 0,
-      //     duplicates: duplicatesIndices,
-      //   };
-      // });
-      // const duplicatesInfo = this.policy.map(howManyDuplicatesPerLicense);
-      // const orAll = (seenAnyDuplicate, info) => (seenAnyDuplicate || info.hasDuplicates);
-      // const anyDuplicates = duplicatesInfo.reduce(orAll, false);
-      // if (anyDuplicates) {
-      //   return duplicatesInfo;
-      // }
-      return false;
+    duplicates() {
+        const attachIndex = ((timeframe, index) => ({ timeframe, index}));
+        const onlyDuplicates = (counts => (timeframeInfo) => {
+          // counts is a map the function closes over
+          // below the outer function is invoced with {} as argument
+          const count = (counts[timeframeInfo.timeframe] || 0);
+          return (counts[timeframeInfo.timeframe] = count + 1) > 1;
+        })({});
+        const stripToIndex = (info => info.index);
+        return this.policy.options.timeframes
+          .map(attachIndex)
+          .filter(onlyDuplicates)
+          .map(stripToIndex);
     },
     timeframeSteps() {
       return timeframeSteps;
@@ -373,9 +420,6 @@ export default {
 </script>
 
 <style scoped>
-.section-heading {
-  margin-top: 50px;
-}
 .name-input {
   display: block;
   width: 100%;
@@ -386,8 +430,8 @@ export default {
 }
 
 table.prices-table {
-  margin-top: 30px;
   border-collapse: collapse;
+  margin: 0px auto;
 }
 th {
   font-weight: normal;

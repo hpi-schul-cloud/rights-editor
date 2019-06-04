@@ -8,7 +8,7 @@
     <p v-if="state === 'noConnection'" class="message">{{ $t('server_unreachable') }}</p>
     <p v-if="state === 'loaded' && licenses.length === 0" class="message">{{ $t('no_recent_edits') }}</p>
     <ul v-if="state === 'loaded' && licenses.length > 0">
-      <li v-for="(license, index) in licenses" :key="index" @click="startWithPolicy(license.policies)">
+      <li v-for="(license, index) in licenses" :key="index" @click="startWithPolicy(license)">
         <h3>{{ license.name }}</h3>
         <p>{{ $t('edited') }}: {{ date(license.updatedAt) }}</p>
       </li>
@@ -20,20 +20,15 @@
 import BaseButton from '../components/BaseComponents/BaseButton.vue';
 
 export default {
-  name: 'RecentsScreen',
+  name: 'SCStart',
   components: {
     BaseButton,
   },
   data() {
     return {
       state: '',
-      data: null,
+      licenses: [],
     };
-  },
-  computed: {
-    licenses() {
-      return this.data.data;
-    },
   },
   created() {
     this.queryRecentLicenses();
@@ -49,7 +44,7 @@ export default {
           result.json()
             .then((json) => {
               console.log(json);
-              this.data = json;
+              this.licenses = json.data;
               this.state = 'loaded';
             })
             .catch(setStateNoConnection);
@@ -59,8 +54,18 @@ export default {
     startEmpty() {
       this.$router.push({ name: 'sc-editor' });
     },
-    startWithPolicy(policies) {
-      this.$router.push({ name: 'sc-editor', params: { policies } });
+    startWithPolicy(policy) {
+      this.$router.push({
+        name: 'sc-editor',
+        params: {
+        // white-list the properties we want to pass on
+          policy: {
+            name: policy.name,
+            odrl: policy.odrl,
+            options: policy.options,
+          },
+        },
+      });
     },
     date(time) {
       return new Date(time).toLocaleString(this.$i18n.locale);

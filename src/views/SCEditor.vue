@@ -1,7 +1,12 @@
 <template>
   <div>
-    <PresetEditor v-if="mode === 'rules'" @abort="abort()" @goForth="goForth($event)" />
-    <DimensionEditor v-if="mode === 'dimensions'" :policy="policy" @addPolicy="editRules()" />
+    <EditorNavBar>
+      <template v-slot:left>
+        <a href="#" @click="back">
+          <i class="fas fa-arrow-circle-left" /> Zurück zur Übersicht</a>
+      </template>
+    </EditorNavBar>
+    <DimensionEditor :policy="policy" @addPolicy="editRules()" />
   </div>
 </template>
 
@@ -9,12 +14,14 @@
 import Vue from 'vue';
 import PresetEditor from '../components/PresetEditor.vue';
 import DimensionEditor from '../components/DimensionsEditor/DimensionsEditor.vue';
+import EditorNavBar from '../components/EditorNavBar.vue';
 
 export default {
   name: 'SCEditor',
   components: {
     PresetEditor,
     DimensionEditor,
+    EditorNavBar,
   },
   props: {
     policy: {
@@ -34,16 +41,11 @@ export default {
     },
   },
   data() {
-    return {
-      mode: 'rules',
-    };
+    return {};
   },
   methods: {
-    abort() {
-      if (this.policies.length === 0) {
-        // there is nothing to go back to
-        this.$router.push({ name: 'start' });
-      }
+    back() {
+        this.$router.go(-1);
     },
     goForth(odrl) {
       Vue.set(this.policy, 'odrl', odrl);

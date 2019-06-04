@@ -10,7 +10,7 @@
       :key="rule.id"
     >
       <tr>
-        <td><input type="checkbox" @click="toggle(rule.id, $event.target.checked)" :checked="indexOfRule(rule.id) >= 0"></td>
+        <td><input type="checkbox" :checked="indexOfRule(rule.id) >= 0" @click="toggle(rule.id, $event.target.checked)"></td>
         <td><h3>{{ rule.name }}</h3></td>
       </tr>
       <tr>
@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import { ruleOptions } from '../../libs/license-options/license-options';
 import Vue from 'vue';
+import { ruleOptions } from '../../libs/license-options/license-options';
 
 export default {
   name: 'RuleSection',
