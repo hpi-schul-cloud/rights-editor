@@ -7,6 +7,7 @@
 
     <h2 class="section-heading">Name des Lizenzangebotes</h2>
     <p>Bennenen Sie das Lizenzangebot, damit Sie in Übersichten schneller erkennen, um welches es sich handelt.</p>
+    <p v-if="problemNoName" class="warning">Bitte geben Sie einen Namen an.</p>
     <BaseInput
       v-model="policy.name"
       type="text"
@@ -109,6 +110,7 @@ export default {
   data() {
     return {
       problemWhileSaving: false,
+      problemNoName: false,
     };
   },
   computed: {
@@ -155,6 +157,10 @@ export default {
       Vue.set(this.policy.options[licenseEntityKey], timeframeIndex, price);
     },
     save() {
+      if (this.policy.name.length === 0) {
+        this.problemNoName = true;
+        return
+      }
       return fetch('http://localhost:5050/sc-licenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
