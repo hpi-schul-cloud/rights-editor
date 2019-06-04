@@ -35,8 +35,7 @@ import {
   operandMapping,
   operatorList,
   actionToRefinements,
-  unitList,
-} from '../libs/odrl/constraints.js';
+} from '../libs/odrl/constraints';
 
 export default {
   name: 'RefinementItem',

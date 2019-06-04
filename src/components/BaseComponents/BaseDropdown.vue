@@ -58,7 +58,7 @@ Vue.directive('closable', {
           if (!e.target.id) {
             clickedOnExcludedEl = false;
           } else {
-            clickedOnExcludedEl = excludeId == e.target.id;
+            clickedOnExcludedEl = excludeId === e.target.id;
           }
         }
       });

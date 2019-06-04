@@ -67,7 +67,6 @@ import BaseButton from '../BaseComponents/BaseButton.vue';
 import RuleSection from './RuleSection.vue';
 
 import SubheadingCell from './SubheadingCell.vue';
-import LicenseeCell from './LicenseeCell.vue';
 import TimeframeCell from './TimeframeCell.vue';
 import PriceCell from './PriceCell.vue';
 import AddCell from './AddCell.vue';
