@@ -7,7 +7,7 @@
         :selected="timeframe === timeframeStep"
       >{{ timeframeStep }}</option>
     </select>
-    <button @click="$emit('remove-timeframe')" :disabled="preventDelete">
+    <button :disabled="preventDelete" @click="$emit('remove-timeframe')">
       <i class="fas fa-trash-alt" />
     </button>
   </div>
@@ -25,7 +25,7 @@ export default {
     preventDelete: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   computed: {
     timeframeSteps() {

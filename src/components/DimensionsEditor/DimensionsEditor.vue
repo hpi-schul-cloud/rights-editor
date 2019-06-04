@@ -29,8 +29,18 @@
       <tr>
         <th />
         <th class="subheading-cell"><SubheadingCell text="Geltungsbereiche" /></th>
-        <th v-for="(timeframe, index) in policy.options.timeframes" :key="index" :class="{'duplicate': duplicates.indexOf(index) >= 0}" class="timeframe-cell">
-          <TimeframeCell :timeframe="timeframe" :prevent-delete="policy.options.timeframes.length === 1" @update-timeframe="updateTimeframe(index, $event)" @remove-timeframe="removeTimeframe(index)" />
+        <th
+          v-for="(timeframe, index) in policy.options.timeframes"
+          :key="index"
+          :class="{'duplicate': duplicates.indexOf(index) >= 0}"
+          class="timeframe-cell"
+        >
+          <TimeframeCell
+            :timeframe="timeframe"
+            :prevent-delete="policy.options.timeframes.length === 1"
+            @update-timeframe="updateTimeframe(index, $event)"
+            @remove-timeframe="removeTimeframe(index)"
+          />
         </th>
         <th class="add-timeframe-cell"><AddCell @add="addTimeframe()" /></th>
       </tr>
