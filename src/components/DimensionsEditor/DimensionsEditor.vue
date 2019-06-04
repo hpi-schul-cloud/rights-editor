@@ -54,53 +54,6 @@
       </tr>
     </table>
 
-
-    <!-- <table class="prices-table">
-      <tr
-        v-for="(row, rowIndex) in rows"
-        :key="rowIndex"
-      >
-        <template v-if="row.isHeadRow">
-          <th
-            v-for="(cell, columnIndex) in row.cells()"
-            :key="columnIndex"
-            :rowspan="cell.rowspan || 1"
-            :colspan="cell.colspan || 1"
-            :class="cell.classes"
-          >
-            <component
-              :is="cell.component"
-              v-if="cell.component"
-              v-bind="cell.props"
-              class="cell"
-              v-on="cell.events || {}"
-            />
-            <div v-else-if="cell.type === 'empty-cell'" class="cell" />
-            <span v-else>({{ rowIndex }}:{{ columnIndex }}) {{ cell }}</span>
-          </th>
-        </template>
-        <template v-else>
-          <td
-            v-for="(cell, columnIndex) in row.cells()"
-            :key="columnIndex"
-            :rowspan="cell.rowspan || 1"
-            :colspan="cell.colspan || 1"
-            :class="cell.classes"
-          >
-            <component
-              :is="cell.component"
-              v-if="cell.component"
-              v-bind="cell.props"
-              class="cell"
-              v-on="cell.events || {}"
-            />
-            <div v-else-if="cell.type === 'empty-cell'" class="cell" />
-            <span v-else>({{ rowIndex }}:{{ columnIndex }}) {{ cell }}</span>
-          </td>
-        </template>
-      </tr>
-    </table> -->
-
     <pre>{{ policy }}</pre>
   </div>
 </template>
