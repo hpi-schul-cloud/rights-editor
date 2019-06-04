@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: 'PriceInput',
+  name: 'PriceCell',
   props: {
     price: {
       required: true,

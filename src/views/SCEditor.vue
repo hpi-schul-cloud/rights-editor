@@ -1,46 +1,52 @@
 <template>
   <div>
-    <RuleEditor v-if="mode === 'rules'" @abort="abort()" @goForth="goForth($event)" />
-    <DimensionEditor v-if="mode === 'dimensions'" :policies="policies" @addPolicy="editRules()" />
+    <EditorNavBar>
+      <template v-slot:left>
+        <a href="#" @click="back">
+          <i class="fas fa-arrow-circle-left" /> Zurück zur Übersicht</a>
+      </template>
+    </EditorNavBar>
+    <DimensionEditor :policy="policy" @addPolicy="editRules()" />
   </div>
 </template>
 
 <script>
-import RuleEditor from '../components/RuleEditor.vue';
-import DimensionEditor from '../components/DimensionEditor.vue';
+import Vue from 'vue';
+import DimensionEditor from '../components/DimensionsEditor/DimensionsEditor.vue';
+import EditorNavBar from '../components/EditorNavBar.vue';
 
 export default {
-  name: 'Proprietary',
+  name: 'SCEditor',
   components: {
-    RuleEditor,
     DimensionEditor,
+    EditorNavBar,
+  },
+  props: {
+    policy: {
+      type: Object,
+      default: () => ({
+        name: '',
+        odrl: {},
+        options: {
+          timeframes: ['unbegrenzt'],
+          state: [false],
+          county: [false],
+          school: [false],
+          teacher: [false],
+          pupil: [false],
+        },
+      }),
+    },
   },
   data() {
-    return {
-      mode: 'rules',
-      policies: [],
-    };
+    return {};
   },
   methods: {
-    abort() {
-      if (this.policies.length === 0) {
-        // there is nothing to go back to
-        this.$router.push({ name: 'start' });
-      }
+    back() {
+      this.$router.go(-1);
     },
-    goForth(policy) {
-      this.policies.push({
-        label: `Lizenz ${this.policies.length + 1}`,
-        odrl: policy,
-        options: {
-          timeframes: [],
-          state: [],
-          county: [],
-          school: [],
-          teacher: [],
-          pupil: [],
-        },
-      });
+    goForth(odrl) {
+      Vue.set(this.policy, 'odrl', odrl);
       this.editDimensions();
     },
     editDimensions() {
