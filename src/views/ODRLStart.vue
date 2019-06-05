@@ -44,7 +44,7 @@ export default {
       const setStateNoConnection = () => {
         this.state = 'noConnection';
       };
-      fetch('http://51.15.86.82:5050/odrl-licenses')
+      fetch('https://51.15.86.82:5050/odrl-licenses')
         .then((result) => {
           result.json()
             .then((json) => {

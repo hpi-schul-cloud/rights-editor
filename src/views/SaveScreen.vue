@@ -90,7 +90,7 @@ export default {
       this.$router.push({ name: 'odrl-editor', params: { policy: this.policy } });
     },
     postLicense(policy) {
-      return fetch('http://51.15.86.82:5050/odrl-licenses', {
+      return fetch('https://51.15.86.82:5050/odrl-licenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -107,7 +107,7 @@ export default {
           console.log(response);
           this.problemWhileSaving = true;
         });
-    },
+   },
   },
 };
 </script>

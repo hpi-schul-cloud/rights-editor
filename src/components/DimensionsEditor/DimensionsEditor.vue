@@ -163,7 +163,7 @@ export default {
       if (this.duplicates.length > 0) {
         return;
       }
-      fetch('http://51.15.86.82:5050/sc-licenses', {
+      fetch('https://51.15.86.82:5050/sc-licenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.policy),
