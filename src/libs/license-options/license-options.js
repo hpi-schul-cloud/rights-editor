@@ -1,42 +1,42 @@
 export const ruleOptions = [
   {
     name: 'Nicht-gewerbliche öffentliche Vorführung',
-    description: 'TODO: Dies ist die Beschreibung von ',
+    description: 'Die nicht-gewerbliche öffentliche Vorführung im Bildungsbereich ist erlaubt.',
     id: 'http://schul-could.org/license-vocabulary/nicht-gewerbliche-oeffentliche-vorfuehrung',
   },
   {
     name: 'Download',
-    description: 'TODO: Dies ist die Beschreibung von ',
+    description: 'Der Download des Inhalts ist erlaubt.',
     id: 'http://schul-could.org/license-vocabulary/download',
   },
   {
     name: 'Streaming',
-    description: 'TODO: Dies ist die Beschreibung von ',
+    description: 'Das Streaming des Inhalts ist erlaubt.',
     id: 'http://schul-could.org/license-vocabulary/streaming',
   },
   {
     name: 'Speichern',
-    description: 'TODO: Dies ist die Beschreibung von ',
+    description: 'Das permanente Speichern des Inhaltes ist erlaubt.',
     id: 'http://schul-could.org/license-vocabulary/speichern',
   },
   {
     name: 'Bearbeitung',
-    description: 'TODO: Dies ist die Beschreibung von ',
+    description: 'Bearbeitungen des Inhalts dürfen angefertigt werden.',
     id: 'http://schul-could.org/license-vocabulary/bearbeiten',
   },
   {
     name: 'Remix',
-    description: 'TODO: Dies ist die Beschreibung von ',
+    description: 'Der Remix des Inhalts ist erlaubt.',
     id: 'http://schul-could.org/license-vocabulary/remix',
   },
   {
     name: 'Öffentliche Zugänglichmachung bearbeiteter Materialien',
-    description: 'TODO: Dies ist die Beschreibung von ',
+    description: 'Bearbeitungen des Inhalts dürfen veröffentlicht werden.',
     id: 'http://schul-could.org/license-vocabulary/eoffentliche-zugaenglichmachung-von-bearbeitungen',
   },
   {
     name: 'Thumbnailerzeugung',
-    description: 'TODO: Dies ist die Beschreibung von ',
+    description: 'Es dürfen Thumbnails aus dem Inhalt erzeugt werden.',
     id: 'http://schul-could.org/license-vocabulary/thumbnailerzeugung',
   },
 ];
