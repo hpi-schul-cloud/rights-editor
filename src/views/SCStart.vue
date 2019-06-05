@@ -39,7 +39,7 @@ export default {
       const setStateNoConnection = () => {
         this.state = 'noConnection';
       };
-      fetch('http://localhost:5050/sc-licenses')
+      fetch('http://51.15.86.82:5050/sc-licenses')
         .then((result) => {
           result.json()
             .then((json) => {
