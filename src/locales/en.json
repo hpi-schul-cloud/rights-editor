@@ -147,10 +147,10 @@
   "http://www.w3.org/ns/odrl/2/reproduce": "Reproducing",
   "http://www.w3.org/ns/odrl/2/distribute": "Distributing",
   "http://www.w3.org/ns/odrl/2/compensate": "Compensating",
-  "http://www.w3.org/ns/odrl/2/present": "Presenting",
+  "http://www.w3.org/ns/odrl/2/present": "Presenting (in private)",
 
-  "http://www.w3.org/ns/odrl/2/public-screening": "Pulic Screening",
-  "http://www.w3.org/ns/odrl/2/download": "Download",
+  "http://www.w3.org/ns/odrl/2/public-screening": "Public Screening",
+  "http://www.w3.org/ns/odrl/2/download": "Downloading",
   "http://www.w3.org/ns/odrl/2/streaming": "Streaming",
   "http://www.w3.org/ns/odrl/2/save": "Saving",
 

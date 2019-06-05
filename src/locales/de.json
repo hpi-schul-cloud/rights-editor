@@ -146,11 +146,11 @@
   "http://www.w3.org/ns/odrl/2/reproduce": "Vervielfältigen",
   "http://www.w3.org/ns/odrl/2/distribute": "Verbreiten",
   "http://www.w3.org/ns/odrl/2/compensate": "Bezahlen",
-  "http://www.w3.org/ns/odrl/2/present": "Vorführen",
+  "http://www.w3.org/ns/odrl/2/present": "Vorführen (privat)",
 
-  "http://www.w3.org/ns/odrl/2/public-screening": "Öffentliches Vorführen",
-  "http://www.w3.org/ns/odrl/2/download": "Download",
-  "http://www.w3.org/ns/odrl/2/streaming": "Streaming",
+  "http://www.w3.org/ns/odrl/2/public-screening": "Vorführen (öffentlich)",
+  "http://www.w3.org/ns/odrl/2/download": "Downloaden",
+  "http://www.w3.org/ns/odrl/2/streaming": "Streamen",
   "http://www.w3.org/ns/odrl/2/save": "Speichern",
 
   "http://www.example.org/state": "Bundesland",

@@ -188,13 +188,13 @@ export const actionToRefinements = Object.freeze({
     operands: [operandList[6], operandList[7], operandList[9]],
   },
   'http://www.w3.org/ns/odrl/2/public-screening': {
-    operands: [operandList[1], operandList[6], operandList[13]],
+    operands: [operandList[6], operandList[13]],
   },
   'http://www.w3.org/ns/odrl/2/download': {
-    operands: [operandList[1], operandList[6]],
+    operands: [operandList[6]],
   },
   'http://www.w3.org/ns/odrl/2/streaming': {
-    operands: [operandList[1], operandList[6], operandList[13]],
+    operands: [operandList[6], operandList[13]],
   },
   'http://www.w3.org/ns/odrl/2/save': {
     operands: [operandList[5], operandList[11]],
