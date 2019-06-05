@@ -5,6 +5,7 @@
       Hier geht es darum, welche Aktionen später mit den Medien erlaubt sein sollen.
       Suchen Sie aus der Liste links die Regeln, die Sie erlauben.
     </p>
+    <br>
     <table
       v-for="rule in rules"
       :key="rule.id"
@@ -62,6 +63,10 @@ export default {
 };
 </script>
 <style scoped>
+.section-heading {
+  margin-top: 40px;
+}
+
 h3 {
     font-weight: bold;
     font-size: inherit;
