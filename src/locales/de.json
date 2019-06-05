@@ -148,6 +148,11 @@
   "http://www.w3.org/ns/odrl/2/compensate": "Kompensieren",
   "http://www.w3.org/ns/odrl/2/present": "Vorführen",
 
+  "http://www.w3.org/ns/odrl/2/public-screening": "Öffentliches Vorführen",
+  "http://www.w3.org/ns/odrl/2/download": "Download",
+  "http://www.w3.org/ns/odrl/2/streaming": "Streaming",
+  "http://www.w3.org/ns/odrl/2/save": "Speichern",
+
   "http://www.example.org/state": "Bundesland",
   "http://www.example.org/group-identity": "Gruppenzugehörigkeit",
   "http://www.example.org/age": "Alter",
@@ -161,6 +166,7 @@
   "http://www.example.org/distribution-method": "Verbreitungsmethode",
   "http://www.example.org/file-format": "Dateiformat",
   "http://www.example.org/pay-amount": "Geldbetrag",
+  "http://www.example.org/tv-resolution": "Auflösung",
 
   "http://www.example.org/resource/year": "Jahre",
   "http://www.example.org/resource/day": "Tage",
@@ -209,5 +215,9 @@
   "http://schema.org/State/Germany/Sachsen": "Sachsen",
   "http://schema.org/State/Germany/Sachsen-Anhalt": "Sachsen-Anhalt",
   "http://schema.org/State/Germany/Schleswig-Holstein": "Schleswig-Holstein",
-  "http://schema.org/State/Germany/Thüringen": "Thüringen"
+  "http://schema.org/State/Germany/Thüringen": "Thüringen",
+
+  "http://www.example.org/resolution/tv/hd": "720p (HD)",
+  "http://www.example.org/resolution/tv/full-hd": "1080p (FULL HD)",
+  "http://www.example.org/resolition/tv/4k": "4K"
 }
