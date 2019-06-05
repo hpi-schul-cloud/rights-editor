@@ -45,6 +45,12 @@ const states = [
   'http://schema.org/State/Germany/Thüringen',
 ];
 
+const resolutions = [
+  'http://www.example.org/resolution/tv/hd',
+  'http://www.example.org/resolution/tv/full-hd',
+  'http://www.example.org/resolition/tv/4k',
+];
+
 export const operandList = [
   'http://www.example.org/state',
   'http://www.example.org/group-identity',
@@ -59,6 +65,7 @@ export const operandList = [
   'http://www.example.org/distribution-method',
   'http://www.example.org/file-format',
   'http://www.example.org/pay-amount',
+  'http://www.example.org/tv-resolution',
 ];
 
 export const constraintOnlyOperandList = [
@@ -149,6 +156,10 @@ export const operandMapping = Object.freeze({
     operators: operatorList,
     units: [unitList[8], unitList[9]],
   },
+  'http://www.example.org/tv-resolution': {
+    operators: operatorList,
+    list: resolutions,
+  },
 });
 
 export const actionToRefinements = Object.freeze({
@@ -168,12 +179,24 @@ export const actionToRefinements = Object.freeze({
     operands: [operandList[7], operandList[11]],
   },
   'http://www.w3.org/ns/odrl/2/distribute': {
-    operands: [operandList[6], operandList[7], operandList[9], operandList[10], operandList[11]],
+    operands: [operandList[6], operandList[7], operandList[1], operandList[10], operandList[11]],
   },
   'http://www.w3.org/ns/odrl/2/compensate': {
     operands: [operandList[12]],
   },
   'http://www.w3.org/ns/odrl/2/present': {
     operands: [operandList[6], operandList[7], operandList[9]],
+  },
+  'http://www.w3.org/ns/odrl/2/public-screening': {
+    operands: [operandList[1], operandList[6], operandList[13]],
+  },
+  'http://www.w3.org/ns/odrl/2/download': {
+    operands: [operandList[1], operandList[6]],
+  },
+  'http://www.w3.org/ns/odrl/2/streaming': {
+    operands: [operandList[1], operandList[6], operandList[13]],
+  },
+  'http://www.w3.org/ns/odrl/2/save': {
+    operands: [operandList[5], operandList[11]],
   },
 });

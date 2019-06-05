@@ -74,13 +74,6 @@
       />
     </div>
 
-    <div class="policy-meaning">
-      <h2>Was bedeutet diese Lizenz?</h2>
-      <p v-html="licenceText" />
-      <h2>Provisorische Lizenz</h2>
-      <pre>{{ policy }}</pre>
-    </div>
-
   </div>
 </template>
 

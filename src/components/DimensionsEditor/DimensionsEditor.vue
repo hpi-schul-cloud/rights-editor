@@ -54,8 +54,6 @@
         <td />
       </tr>
     </table>
-
-    <pre>{{ policy }}</pre>
   </div>
 </template>
 
@@ -187,6 +185,10 @@ export default {
 </script>
 
 <style scoped>
+.section-heading {
+  margin-top: 40px;
+}
+
 .name-input {
   display: block;
   width: 100%;
@@ -197,8 +199,8 @@ export default {
 }
 
 table.prices-table {
+  margin-top: 15px;
   border-collapse: collapse;
-  margin: 0px auto;
 }
 th {
   font-weight: normal;
