@@ -4,7 +4,10 @@ export const actionList = [
   'http://www.w3.org/ns/odrl/2/streaming',
   'http://www.w3.org/ns/odrl/2/save',
   'http://www.w3.org/ns/odrl/2/derive',
+  'http://www.w3.org/ns/odrl/2/print',
+  'http://www.w3.org/ns/odrl/2/reproduce',
   'http://www.w3.org/ns/odrl/2/distribute',
+  'http://www.w3.org/ns/odrl/2/compensate',
 ];
 
 class Action {
