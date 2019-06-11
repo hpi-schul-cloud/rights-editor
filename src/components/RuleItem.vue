@@ -105,12 +105,9 @@
         {{ subruleNameArticle }}
         {{ $tc(subruleDynamicName, subrules.length) }}
 
-        <!-- this is still kind of ugly
-        @Ivan: do better! -->
         <template v-if="lang == 'de'">diese{{ ruleInfo.gender === 'f' ? 'r' : 's' }} {{ ruleLanguageInfo.name }}{{ ruleInfo.gender === 'f' ? '' : 's' }}</template>
         <template v-if="lang == 'en'">of this {{ ruleLanguageInfo.name }}</template>
         {{ $tc('is_are', subrules.length) }}:<br>
-        <!-- this is still kind of ugly -->
 
         <span v-for="(subrule, index) in subrules" :key="index">
           <a href="#" @click="$emit('followLink', [...path, ruleInfo.subrule, index])">{{ getSubruleActionLabel(subrule) }}</a>
@@ -447,9 +444,10 @@ p.constraints {
 .logical-operator {
   text-decoration: none;
   padding: 8px;
-  margin: 2px;
+  margin: 3px;
   font-weight: bold;
   color: #1f3b70;
+  border: 1px solid #1f3b70;
 
   /* disable text selection highlighting */
   -webkit-touch-callout: none; /* iOS Safari */
