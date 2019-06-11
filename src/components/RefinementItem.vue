@@ -166,6 +166,7 @@ export default {
   margin-top: 4px;
   margin-bottom: 4px;
   max-width: 500px;
+  cursor: pointer;
 }
 
 .remove-refinement {
