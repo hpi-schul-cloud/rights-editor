@@ -303,7 +303,8 @@ ul {
 }
 
 .constraints-container {
-  margin-top: 40px;
+  margin-top: 50px;
+  margin-left: 220px;
 }
 
 .add-constraint {
@@ -349,6 +350,11 @@ ul {
   .input {
     margin-left: 15px;
     width: 175px;
+  }
+
+  .constraints-container {
+    margin-top: 40px;
+    margin-left: 0px;
   }
 }
 

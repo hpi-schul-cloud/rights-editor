@@ -30,13 +30,13 @@
 
       <div class="add-rule-container">
         {{ $t('addRule') }}: <br>
-        <BaseButton @click="newRule('permission')">
+        <BaseButton class="add-rule-button" @click="newRule('permission')">
           {{ $t('permissionButtonText') }}
         </BaseButton>
-        <BaseButton @click="newRule('obligation')">
+        <BaseButton class="add-rule-button" @click="newRule('obligation')">
           {{ $t('obligationButtonText') }}
         </BaseButton>
-        <BaseButton @click="newRule('prohibition')">
+        <BaseButton class="add-rule-button" @click="newRule('prohibition')">
           {{ $t('prohibitionButtonText') }}
         </BaseButton>
       </div>
@@ -255,6 +255,11 @@ export default {
   padding-bottom: 12px;
   padding-top: 0px;
   margin-top: 20px;
+}
+
+.add-rule-button {
+  margin-left: 0px;
+  margin-right: 15px;
 }
 
 .language-container {
