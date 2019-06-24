@@ -1,6 +1,7 @@
 <template>
   <div>
     <BaseButton class="save-button" @click="save()">Speichern</BaseButton>
+    <BaseButton class="details-button" @click="{}">Detailansicht</BaseButton>
     <h1>Lizenz zusammenstellen</h1>
 
     <p v-if="problemWhileSaving" class="warning">Während des Speicherns ist ein Problem aufgetreten</p>
@@ -193,9 +194,9 @@ export default {
   display: block;
   width: 100%;
 }
-.save-button {
+.save-button,
+.details-button {
   float: right;
-  background-color: green;
 }
 
 table.prices-table {
