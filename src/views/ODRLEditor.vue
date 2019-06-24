@@ -6,7 +6,7 @@
 import RuleEditor from '../components/RuleEditor.vue';
 
 export default {
-  name: 'FullEditor',
+  name: 'ODRLEditor',
   components: {
     RuleEditor,
   },
