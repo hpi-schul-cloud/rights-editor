@@ -47,32 +47,8 @@ export default {
   },
   methods: {
     save() {
-<<<<<<< HEAD
-      if (this.policy.name.length === 0) {
-        this.problemNoName = true;
-        return;
-      }
-      if (this.duplicates.length > 0) {
-        return;
-      }
-      fetch('http://51.15.86.82:5050/sc-licenses', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.policy),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(response.statusText);
-          }
-          return response;
-        }).then((response) => {
-          console.log(response);
-          this.problemWhileSaving = false;
-          this.$router.push({ name: 'sc-start' });
-        }).catch((error) => {
-          console.error(error);
-          this.problemWhileSaving = true;
-        });
+      console.error('check at least one rule is selected MISSING');
+      this.$router.push({ name: 'sc-save', params: { policy: this.policy } });
     },
     goToDetails() {
       console.log(JSON.stringify(this.policy));
@@ -80,12 +56,6 @@ export default {
       this.$router.push({ name: 'odrl-editor', params: { policy } });
     },
   },
-=======
-      console.error("check at least one rule is selected MISSING");
-      this.$router.push({name: 'sc-save', params: { policy: this.policy }});
-    }
-  }
->>>>>>> 5fb36d226a41e9f55e40f95369fcb8cd47f48f87
 };
 </script>
 

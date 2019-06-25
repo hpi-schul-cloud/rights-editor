@@ -15,7 +15,7 @@
     <!-- {{ $t('name_the_license') }}: <BaseInput v-model="name" placeholder="Name" />
     <BaseButton @click="save">{{ $t('save') }}</BaseButton>
     <p v-if="problemWhileSaving" class="problem">{{ $t('problem_cannot_save_license') }}</p> -->
-    
+
     <h1>Lizenz zusammenstellen</h1>
 
     <p v-if="problemWhileSaving" class="warning">Während des Speicherns ist ein Problem aufgetreten</p>
@@ -71,10 +71,10 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import BaseButton from '../components/BaseComponents/BaseButton.vue';
 import BaseInput from '../components/BaseComponents/BaseInput.vue';
 import { actionList } from '../libs/odrl/actions.js';
-import Vue from 'vue';
 
 import SubheadingCell from '../components/DimensionsEditor/SubheadingCell.vue';
 import TimeframeCell from '../components/DimensionsEditor/TimeframeCell.vue';

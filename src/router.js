@@ -59,7 +59,7 @@ export default new Router({
       name: 'sc-save',
       component: SCSaveScreen,
       props: true,
-    },    
+    },
     {
       path: '/filmsortiment-case-study',
       name: 'filmsortiment-case-study',
