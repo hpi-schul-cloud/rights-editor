@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseButton class="save-button" @click="save()">Speichern</BaseButton>
-    <BaseButton class="details-button" @click="{}">Detailansicht</BaseButton>
+    <BaseButton class="details-button" @click="goToDetails()">Detailansicht</BaseButton>
     <h1>Lizenz zusammenstellen</h1>
 
     <p v-if="problemWhileSaving" class="warning">Während des Speicherns ist ein Problem aufgetreten</p>
@@ -93,7 +93,12 @@ export default {
       type: Object,
       default: () => ({
         name: '',
-        odrl: {},
+        odrl: {
+          uid: '',
+          target: '',
+          assigner: '',
+          assignee: '',
+        },
         options: {
           timeframes: ['unbegrenzt'],
           state: [false],
@@ -180,6 +185,11 @@ export default {
           console.error(error);
           this.problemWhileSaving = true;
         });
+    },
+    goToDetails() {
+      console.log(JSON.stringify(this.policy));
+      const policy = this.policy.odrl;
+      this.$router.push({ name: 'odrl-editor', params: { policy } });
     },
   },
 };
