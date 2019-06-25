@@ -58,6 +58,7 @@ export default new Router({
       path: '/schul-cloud-save',
       name: 'sc-save',
       component: SCSaveScreen,
+      props: true,
     },    
     {
       path: '/filmsortiment-case-study',
