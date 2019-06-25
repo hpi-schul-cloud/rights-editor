@@ -51,9 +51,9 @@ export default {
       this.$router.push({ name: 'sc-save', params: { policy: this.policy } });
     },
     goToDetails() {
-      console.log(JSON.stringify(this.policy));
-      const policy = this.policy.odrl;
-      this.$router.push({ name: 'odrl-editor', params: { policy } });
+      console.log('after SCStart and SCEditor in DimensionsEditor:');
+      console.log(this.policy);
+      this.$router.push({ name: 'odrl-editor', params: { policy: this.policy, contextSC: true } });
     },
   },
 };

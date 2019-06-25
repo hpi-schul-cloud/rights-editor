@@ -153,6 +153,9 @@ export default {
       return licenseEntities;
     },
     duplicates() {
+      console.log('in SCSaveScreen');
+      console.log(this.policy);
+
       const attachIndex = ((timeframe, index) => ({ timeframe, index }));
       const onlyDuplicates = (counts => (timeframeInfo) => {
         // counts is a map the function closes over
