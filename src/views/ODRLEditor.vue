@@ -1,5 +1,5 @@
 <template>
-  <RuleEditor :outset-policy="policy.odrl" @abort="abort()" @goForth="goForth()" />
+  <RuleEditor :outset-policy="odrlPolicy" @abort="abort()" @goForth="goForth($event)" />
 </template>
 
 <script>
@@ -23,14 +23,21 @@ export default {
   data() {
     return {};
   },
+  computed: {
+    odrlPolicy() {
+      if (this.contextSC) {
+        return this.policy.odrl;
+      }
+      return this.policy;
+    },
+  },
   methods: {
     abort() {
       this.$router.push({ name: 'start' });
     },
-    goForth() {
-      const policy = this.policy;
+    goForth(policy) {
       if (this.contextSC) {
-        this.$router.push({ name: 'sc-save', params: { policy } });
+        this.$router.push({ name: 'sc-save', params: { policy: this.policy } });
       } else {
         this.$router.push({ name: 'odrl-save', params: { policy } });
       }
