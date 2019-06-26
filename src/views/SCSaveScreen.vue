@@ -8,15 +8,11 @@
       </template>
     </EditorNavBar> -->
     <div>
+      <BaseButton class="save-button" @click="save()">Speichern</BaseButton>
       <h1>{{ $t('check_before_save') }}</h1>
-      <h2>{{ $t('summarization') }}</h2>
-      <p>{{ summarization }}</p>
+      <!-- <h2>{{ $t('summarization') }}</h2>
+      <p>{{ summarization }}</p> -->
     </div>
-    <!-- {{ $t('name_the_license') }}: <BaseInput v-model="name" placeholder="Name" />
-    <BaseButton @click="save">{{ $t('save') }}</BaseButton>
-    <p v-if="problemWhileSaving" class="problem">{{ $t('problem_cannot_save_license') }}</p> -->
-
-    <h1>Lizenz zusammenstellen</h1>
 
     <p v-if="problemWhileSaving" class="warning">Während des Speicherns ist ein Problem aufgetreten</p>
 
@@ -226,7 +222,51 @@ export default {
 </script>
 
 <style scoped>
-.problem {
-  color: darkred;
+.section-heading {
+  margin-top: 40px;
+}
+
+.name-input {
+  display: block;
+  width: 100%;
+}
+
+table.prices-table {
+  margin-top: 15px;
+  border-collapse: collapse;
+}
+th {
+  font-weight: normal;
+  vertical-align: bottom;
+}
+td, th {
+  padding: 8px;
+}
+
+.save-button {
+  float: right;
+}
+
+.warning {
+  background-color: rgb(255, 219, 219);
+  border-radius: 3px 3px;
+  color: rgb(204, 0, 0);
+  padding: 8px;
+}
+th.duplicate {
+  background-color: rgb(255, 219, 219);
+}
+
+.subheading-cell:first-child, .timeframe-cell, .add-timeframe-cell, .price-cell {
+  border-bottom: 1px solid black;
+}
+.timeframe-cell, .price-cell{
+  border-right: 1px solid black;
+}
+.timeframe-cell, .price-cell {
+  border-left: 1px solid black;
+}
+.timeframe-cell, .add-timeframe-cell, .subheading-cell:first-child {
+  padding-top: 0px;
 }
 </style>

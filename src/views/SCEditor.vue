@@ -6,19 +6,19 @@
           <i class="fas fa-arrow-circle-left" /> Zurück zur Übersicht</a>
       </template>
     </EditorNavBar>
-    <DimensionEditor :policy="policy" @addPolicy="editRules()" />
+    <RuleEditor :policy="policy" @addPolicy="editRules()" />
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import DimensionEditor from '../components/DimensionsEditor/DimensionsEditor.vue';
+import RuleEditor from '../components/DimensionsEditor/RuleEditor.vue';
 import EditorNavBar from '../components/EditorNavBar.vue';
 
 export default {
   name: 'SCEditor',
   components: {
-    DimensionEditor,
+    RuleEditor,
     EditorNavBar,
   },
   props: {

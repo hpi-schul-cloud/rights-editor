@@ -15,7 +15,7 @@ import BaseButton from '../BaseComponents/BaseButton.vue';
 import RuleSection from './RuleSection.vue';
 
 export default {
-  name: 'DimensionEditor',
+  name: 'RuleEditor',
   components: {
     BaseButton,
     RuleSection,
@@ -60,52 +60,8 @@ export default {
 </script>
 
 <style scoped>
-.section-heading {
-  margin-top: 40px;
-}
-
-.name-input {
-  display: block;
-  width: 100%;
-}
 .save-button,
 .details-button {
   float: right;
-}
-
-table.prices-table {
-  margin-top: 15px;
-  border-collapse: collapse;
-}
-th {
-  font-weight: normal;
-  vertical-align: bottom;
-}
-td, th {
-  padding: 8px;
-}
-
-.warning {
-  background-color: rgb(255, 219, 219);
-  border-radius: 3px 3px;
-  color: rgb(204, 0, 0);
-  padding: 8px;
-}
-th.duplicate {
-  background-color: rgb(255, 219, 219);
-}
-
-
-.subheading-cell:first-child, .timeframe-cell, .add-timeframe-cell, .price-cell {
-  border-bottom: 1px solid black;
-}
-.timeframe-cell, .price-cell{
-  border-right: 1px solid black;
-}
-.timeframe-cell, .price-cell {
-  border-left: 1px solid black;
-}
-.timeframe-cell, .add-timeframe-cell, .subheading-cell:first-child {
-  padding-top: 0px;
 }
 </style>
