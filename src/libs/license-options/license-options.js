@@ -1,16 +1,16 @@
 export const ruleOptions = [
   {
-    name: 'Nicht-gewerbliche öffentliche Vorführung',
+    name: 'Vorführen (öffentlich)',
     description: 'Die nicht-gewerbliche öffentliche Vorführung im Bildungsbereich ist erlaubt.',
     id: 'http://www.w3.org/ns/odrl/2/public-screening',
   },
   {
-    name: 'Download',
+    name: 'Downloaden',
     description: 'Der Download des Inhalts ist erlaubt.',
     id: 'http://www.w3.org/ns/odrl/2/download',
   },
   {
-    name: 'Streaming',
+    name: 'Streamen',
     description: 'Das Streaming des Inhalts ist erlaubt.',
     id: 'http://www.w3.org/ns/odrl/2/streaming',
   },
@@ -20,22 +20,37 @@ export const ruleOptions = [
     id: 'http://www.w3.org/ns/odrl/2/save',
   },
   {
-    name: 'Bearbeitung',
+    name: 'Bearbeiten',
     description: 'Bearbeitungen des Inhalts dürfen angefertigt werden.',
     id: 'http://www.w3.org/ns/odrl/2/derive',
   },
   {
-    name: 'Remix',
+    name: 'Drucken',
+    description: 'Das Drucken des Inhalts ist erlaubt.',
+    id: 'http://www.w3.org/ns/odrl/2/print',
+  },
+  {
+    name: 'Vervielfältigen',
+    description: 'Kopien des Inhalts dürfen erstellt werden.',
+    id: 'http://www.w3.org/ns/odrl/2/reproduce',
+  },
+  {
+    name: 'Verbreiten',
+    description: 'Kopien des Inhalts dürfen weitergegeben werden.',
+    id: 'http://www.w3.org/ns/odrl/2/distribute',
+  },
+  {
+    name: 'Remixen',
     description: 'Der Remix des Inhalts ist erlaubt.',
     id: 'http://schul-could.org/license-vocabulary/remix',
   },
   {
-    name: 'Öffentliche Zugänglichmachung bearbeiteter Materialien',
+    name: 'Veröffentlichen des Bearbeiteten',
     description: 'Bearbeitungen des Inhalts dürfen veröffentlicht werden.',
     id: 'http://schul-could.org/license-vocabulary/oeffentliche-zugaenglichmachung-von-bearbeitungen',
   },
   {
-    name: 'Thumbnailerzeugung',
+    name: 'Erzeugen von Thumbnails',
     description: 'Es dürfen Thumbnails aus dem Inhalt erzeugt werden.',
     id: 'http://schul-could.org/license-vocabulary/thumbnailerzeugung',
   },
