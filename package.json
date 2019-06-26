@@ -1,10 +1,12 @@
 {
-  "name": "ledit2",
+  "name": "@schul-cloud/rights-editor",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build:demo": "vue-cli-service build --dest dist/demo",
+    "build:lib": "vue-cli-service build --target lib --name RightsEditor ./src/App.vue --mode production --dest dist/lib",
+    "build": "run-s build:*",
     "lint": "vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
@@ -27,9 +29,20 @@
     "eslint-plugin-jsx-a11y": "6.2.1",
     "eslint-plugin-react": "7.12.4",
     "eslint-plugin-vue": "^5.0.0",
+    "npm-run-all": "^4.1.5",
     "vue-cli-plugin-i18n": "^0.6.0",
     "vue-template-compiler": "^2.6.2"
   },
+  "main": "dist/lib/RightsEditor.umd.min.js",
+  "module": "dist/lib/RightsEditor.common.js",
+  "style": "dist/lib/RightsEditor.css",
+  "files": [
+    "dist/lib/*",
+    "dist/wc/*",
+    "src/*",
+    "package.json",
+    "package-lock.json"
+  ],
   "eslintConfig": {
     "root": true,
     "env": {

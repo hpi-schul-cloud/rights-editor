@@ -1,8 +1,8 @@
 <template>
   <div class="oer-page">
-    <router-link to="/">
-      <a><i class="fas fa-arrow-circle-left" /> Start</a>
-    </router-link>
+    <a href="#" @click="$router.go('-1')">
+      <i class="fas fa-arrow-circle-left" /> Start
+    </a>
     <CCEditor
       class="cc-editor"
       :active-license="license"

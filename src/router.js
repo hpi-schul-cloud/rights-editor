@@ -11,59 +11,59 @@ import SCStart from './views/SCStart.vue';
 import SCSaveScreen from './views/SCSaveScreen.vue';
 
 Vue.use(Router);
+export const routes = [
+  {
+    path: '/',
+    name: 'start',
+    component: Start,
+  },
+  {
+    path: '/oer',
+    name: 'oer',
+    component: OER,
+  },
+  {
+    path: '/odrl-start',
+    name: 'odrl-start',
+    component: ODRLStart,
+  },
+  {
+    path: '/odrl-editor',
+    name: 'odrl-editor',
+    component: ODRLEditor,
+    props: true,
+  },
+  {
+    path: '/odrl-save',
+    name: 'odrl-save',
+    component: ODRLSaveScreen,
+    props: true,
+  },
+  {
+    path: '/schul-cloud-start',
+    name: 'sc-start',
+    component: SCStart,
+  },
+  {
+    path: '/schul-cloud-editor',
+    name: 'sc-editor',
+    component: SCEditor,
+    props: true,
+  },
+  {
+    path: '/schul-cloud-save',
+    name: 'sc-save',
+    component: SCSaveScreen,
+  },
+  {
+    path: '/filmsortiment-case-study',
+    name: 'filmsortiment-case-study',
+    component: BuyCaseStudy,
+  },
+]
 
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/',
-      name: 'start',
-      component: Start,
-    },
-    {
-      path: '/oer',
-      name: 'oer',
-      component: OER,
-    },
-    {
-      path: '/odrl-start',
-      name: 'odrl-start',
-      component: ODRLStart,
-    },
-    {
-      path: '/odrl-editor',
-      name: 'odrl-editor',
-      component: ODRLEditor,
-      props: true,
-    },
-    {
-      path: '/odrl-save',
-      name: 'odrl-save',
-      component: ODRLSaveScreen,
-      props: true,
-    },
-    {
-      path: '/schul-cloud-start',
-      name: 'sc-start',
-      component: SCStart,
-    },
-    {
-      path: '/schul-cloud-editor',
-      name: 'sc-editor',
-      component: SCEditor,
-      props: true,
-    },
-    {
-      path: '/schul-cloud-save',
-      name: 'sc-save',
-      component: SCSaveScreen,
-    },    
-    {
-      path: '/filmsortiment-case-study',
-      name: 'filmsortiment-case-study',
-      component: BuyCaseStudy,
-    },
-    
-  ],
+  routes,
 });
