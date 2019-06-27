@@ -24,7 +24,7 @@
 
 <script>
 import Vue from 'vue';
-import { ruleOptions } from '../../libs/license-options/license-options';
+import { ruleOptions } from '../../libs/odrl/rules';
 
 export default {
   name: 'RuleSection',

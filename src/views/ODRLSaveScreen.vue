@@ -46,8 +46,6 @@ export default {
   computed: {
     summarization() {
       const text = [];
-      console.log('3');
-      console.log(this.policy);
       if (this.policy.permission) {
         text.push(`${this.$t('rule.permission.name')}: ${this.policy.permission
           .map((p) => {

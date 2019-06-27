@@ -12,7 +12,7 @@
 
 <script>
 import Vue from 'vue';
-import RuleEditor from '../components/DimensionsEditor/RuleEditor.vue';
+import RuleEditor from '../components/SCEditor/RuleEditor.vue';
 import EditorNavBar from '../components/EditorNavBar.vue';
 
 export default {
