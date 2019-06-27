@@ -15,7 +15,7 @@ import BaseButton from '../BaseComponents/BaseButton.vue';
 import RuleSection from './RuleSection.vue';
 
 export default {
-  name: 'RuleEditor',
+  name: 'SimpleRuleEditor',
   components: {
     BaseButton,
     RuleSection,
