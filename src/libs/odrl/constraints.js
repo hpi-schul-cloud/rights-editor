@@ -199,4 +199,13 @@ export const actionToRefinements = Object.freeze({
   'http://www.w3.org/ns/odrl/2/save': {
     operands: [operandList[5], operandList[11]],
   },
+  'http://schul-could.org/license-vocabulary/thumbnailerzeugung': {
+    operands: [operandList[6]],
+  },
+  'http://schul-could.org/license-vocabulary/oeffentliche-zugaenglichmachung-von-bearbeitungen': {
+    operands: [operandList[6]],
+  },
+  'http://schul-could.org/license-vocabulary/remix': {
+    operands: [operandList[6]],
+  },
 });
