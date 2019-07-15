@@ -15,7 +15,7 @@ import BaseButton from '../BaseComponents/BaseButton.vue';
 import RuleSection from './RuleSection.vue';
 
 export default {
-  name: 'RuleEditor',
+  name: 'SimpleRuleEditor',
   components: {
     BaseButton,
     RuleSection,
@@ -51,8 +51,6 @@ export default {
       this.$router.push({ name: 'sc-save', params: { policy: this.policy } });
     },
     goToDetails() {
-      console.log('after SCStart and SCEditor in DimensionsEditor:');
-      console.log(this.policy);
       this.$router.push({ name: 'odrl-editor', params: { policy: this.policy, contextSC: true } });
     },
   },

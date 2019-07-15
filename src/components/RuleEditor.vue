@@ -74,7 +74,7 @@
       />
     </div>
 
-    <p>{{ licenseText }}</p>
+    <p v-html="licenseText" />
     <pre>{{ policy }}</pre>
 
   </div>

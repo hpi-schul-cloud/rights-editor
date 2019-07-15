@@ -72,10 +72,10 @@ import BaseButton from '../components/BaseComponents/BaseButton.vue';
 import BaseInput from '../components/BaseComponents/BaseInput.vue';
 import { actionList } from '../libs/odrl/actions.js';
 
-import SubheadingCell from '../components/DimensionsEditor/SubheadingCell.vue';
-import TimeframeCell from '../components/DimensionsEditor/TimeframeCell.vue';
-import PriceCell from '../components/DimensionsEditor/PriceCell.vue';
-import AddCell from '../components/DimensionsEditor/AddCell.vue';
+import SubheadingCell from '../components/SCEditor/SubheadingCell.vue';
+import TimeframeCell from '../components/SCEditor/TimeframeCell.vue';
+import PriceCell from '../components/SCEditor/PriceCell.vue';
+import AddCell from '../components/SCEditor/AddCell.vue';
 
 import { backendAddr } from '../settings';
 
@@ -151,9 +151,6 @@ export default {
       return licenseEntities;
     },
     duplicates() {
-      console.log('in SCSaveScreen');
-      console.log(this.policy);
-
       const attachIndex = ((timeframe, index) => ({ timeframe, index }));
       const onlyDuplicates = (counts => (timeframeInfo) => {
         // counts is a map the function closes over
