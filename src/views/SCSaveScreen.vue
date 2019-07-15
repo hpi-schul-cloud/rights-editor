@@ -77,6 +77,8 @@ import TimeframeCell from '../components/DimensionsEditor/TimeframeCell.vue';
 import PriceCell from '../components/DimensionsEditor/PriceCell.vue';
 import AddCell from '../components/DimensionsEditor/AddCell.vue';
 
+import { backendAddr } from '../settings';
+
 const licenseEntities = [
   { key: 'state', label: 'Land' },
   { key: 'county', label: 'Kreis' },
@@ -198,7 +200,7 @@ export default {
       if (this.duplicates.length > 0) {
         return;
       }
-      fetch('http://51.15.86.82:5050/sc-licenses', {
+      fetch(backendAddr + '/sc-licenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.policy),
