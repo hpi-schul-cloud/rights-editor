@@ -147,11 +147,13 @@
   "http://www.w3.org/ns/odrl/2/distribute": "Verbreiten",
   "http://www.w3.org/ns/odrl/2/compensate": "Bezahlen",
   "http://www.w3.org/ns/odrl/2/present": "Vorführen (privat)",
-
   "http://www.w3.org/ns/odrl/2/public-screening": "Vorführen (öffentlich)",
   "http://www.w3.org/ns/odrl/2/download": "Downloaden",
   "http://www.w3.org/ns/odrl/2/streaming": "Streamen",
   "http://www.w3.org/ns/odrl/2/save": "Speichern",
+  "http://schul-could.org/license-vocabulary/thumbnailerzeugung": "Erzeugen von Thumbnails",
+  "http://schul-could.org/license-vocabulary/oeffentliche-zugaenglichmachung-von-bearbeitungen": "Veröffentlichen des Bearbeiteten",
+  "http://schul-could.org/license-vocabulary/remix": "Remixen",
 
   "http://www.example.org/state": "Bundesland",
   "http://www.example.org/group-identity": "Gruppenzugehörigkeit",

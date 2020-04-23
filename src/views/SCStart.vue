@@ -18,6 +18,7 @@
 
 <script>
 import BaseButton from '../components/BaseComponents/BaseButton.vue';
+import { backendAddr } from '../settings';
 
 export default {
   name: 'SCStart',
@@ -39,7 +40,7 @@ export default {
       const setStateNoConnection = () => {
         this.state = 'noConnection';
       };
-      fetch('http://51.15.86.82:5050/sc-licenses')
+      fetch(backendAddr + '/sc-licenses')
         .then((result) => {
           result.json()
             .then((json) => {

@@ -8,6 +8,9 @@ export const actionList = [
   'http://www.w3.org/ns/odrl/2/reproduce',
   'http://www.w3.org/ns/odrl/2/distribute',
   'http://www.w3.org/ns/odrl/2/compensate',
+  'http://schul-could.org/license-vocabulary/thumbnailerzeugung',
+  'http://schul-could.org/license-vocabulary/oeffentliche-zugaenglichmachung-von-bearbeitungen',
+  'http://schul-could.org/license-vocabulary/remix',
 ];
 
 class Action {

@@ -3,7 +3,7 @@
     <h2 class="section-heading">Regeln</h2>
     <p>
       Hier geht es darum, welche Aktionen später mit den Medien erlaubt sein sollen.
-      Suchen Sie aus der Liste links die Regeln, die Sie erlauben.
+      Suchen Sie die Regeln aus der Liste, die Sie erlauben.
     </p>
     <br>
     <table
@@ -24,7 +24,7 @@
 
 <script>
 import Vue from 'vue';
-import { ruleOptions } from '../../libs/license-options/license-options';
+import { ruleOptions } from '../../libs/odrl/rules';
 
 export default {
   name: 'RuleSection',

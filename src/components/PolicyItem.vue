@@ -155,6 +155,9 @@ export default {
     },
     assetId: {
       get() {
+        if (this.policy.target == null) {
+          Vue.set(this.policy, 'target', '');
+        }
         if (this.assetIsString) {
           return this.policy.target;
         }
@@ -173,6 +176,9 @@ export default {
     },
     assigner: {
       get() {
+        if (this.policy.assigner == null) {
+          Vue.set(this.policy, 'assigner', '');
+        }
         if (this.assignerIsString) {
           return this.policy.assigner;
         }
@@ -191,6 +197,9 @@ export default {
     },
     assignee: {
       get() {
+        if (this.policy.assignee == null) {
+          Vue.set(this.policy, 'assignee', '');
+        }
         if (this.assigneeIsString) {
           return this.policy.assignee;
         }

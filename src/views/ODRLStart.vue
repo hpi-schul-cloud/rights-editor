@@ -18,6 +18,7 @@
 
 <script>
 import BaseButton from '../components/BaseComponents/BaseButton.vue';
+import { backendAddr } from '../settings';
 
 export default {
   name: 'RecentsScreen',
@@ -44,7 +45,7 @@ export default {
       const setStateNoConnection = () => {
         this.state = 'noConnection';
       };
-      fetch('http://51.15.86.82:5050/odrl-licenses')
+      fetch(backendAddr + '/odrl-licenses')
         .then((result) => {
           result.json()
             .then((json) => {

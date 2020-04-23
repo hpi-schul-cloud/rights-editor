@@ -1,4 +1,4 @@
-## Project setup
+## NPM Project setup
 ```
 npm install
 ```
@@ -25,3 +25,7 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Additionally needed
+The [backend server](https://github.com/schul-cloud/schulcloud-licenses) that stores the licenses is additionally needed. Its address can be set in `src/settings.js`. To start everything consider using [backend servers](https://github.com/schul-cloud/schulcloud-licenses) `docker-compose-dev.yml` file.
+

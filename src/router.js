@@ -54,16 +54,16 @@ export const routes = [
     path: '/schul-cloud-save',
     name: 'sc-save',
     component: SCSaveScreen,
+    props: true,
   },
   {
     path: '/filmsortiment-case-study',
     name: 'filmsortiment-case-study',
     component: BuyCaseStudy,
   },
-]
+];
 
 export default new Router({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
-  routes,
 });

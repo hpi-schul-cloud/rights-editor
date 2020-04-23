@@ -74,6 +74,9 @@
       />
     </div>
 
+    <p v-html="licenseText" />
+    <pre>{{ policy }}</pre>
+
   </div>
 </template>
 
@@ -133,7 +136,7 @@ export default {
     showRulePane() {
       return this.editPath.length > 0;
     },
-    licenceText() {
+    licenseText() {
       let text = '';
 
       if (this.policy.permission) {
@@ -227,7 +230,7 @@ export default {
 <style scoped>
 .policy-tree {
   float: left;
-  width: 250px;
+  width: 310px;
   padding: 0px 8px;
   box-sizing: border-box;
   box-shadow: 3px 0px 2px -3px gray;
@@ -235,13 +238,8 @@ export default {
 }
 
 .policy-detail {
-  margin-left: 270px;
+  margin-left: 330px;
   padding: 0px 0px 0px 15px;
-}
-
-.policy-meaning {
-  margin-left: 250px;
-  padding: 10px;
 }
 
 .header-wrapper {

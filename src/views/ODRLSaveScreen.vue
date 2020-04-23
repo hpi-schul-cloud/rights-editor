@@ -12,7 +12,7 @@
       <h2>{{ $t('summarization') }}</h2>
       <p>{{ summarization }}</p>
     </div>
-    {{ $t('name_the_license') }}: <BaseInput v-model="name" placeholder="Name" />
+    {{ $t('name_the_license') }}: <BaseInput v-model="name" class="license-name-input" placeholder="Name" />
     <BaseButton @click="save">{{ $t('save') }}</BaseButton>
     <p v-if="problemWhileSaving" class="problem">{{ $t('problem_cannot_save_license') }}</p>
   </div>
@@ -23,6 +23,7 @@ import BaseButton from '../components/BaseComponents/BaseButton.vue';
 import BaseInput from '../components/BaseComponents/BaseInput.vue';
 import EditorNavBar from '../components/EditorNavBar.vue';
 import { actionList } from '../libs/odrl/actions.js';
+import { backendAddr } from '../settings';
 
 export default {
   name: 'SaveScreen',
@@ -90,7 +91,7 @@ export default {
       this.$router.push({ name: 'odrl-editor', params: { policy: this.policy } });
     },
     postLicense(policy) {
-      return fetch('http://51.15.86.82:5050/odrl-licenses', {
+      return fetch(backendAddr + '/odrl-licenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -113,6 +114,10 @@ export default {
 </script>
 
 <style scoped>
+.license-name-input {
+  margin-left: 15px;
+}
+
 .problem {
   color: darkred;
 }
